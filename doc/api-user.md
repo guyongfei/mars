@@ -13,13 +13,12 @@
   - email ：用户的邮箱，用于收取验证码
 - response body
 
-```json
-{
-  "message": "",
-  "success": true
-  }
-
-```
+  ```json
+    {
+      "message": "",
+      "success": true
+    }
+  ```
 
 ## 2.注册
 
@@ -27,23 +26,22 @@
 - method:post
 - request body
 
-```json
-{
-  "email":"",
-  "password":"",
-  "verifyCode":""
-}
-```
+  ```json
+    {
+      "email":"",
+      "password":"",
+      "verifyCode":""
+    }
+  ```
 
 - response body
 
-```json
-{
-  "message": "",
-  "success": true
-  }
-
-```
+  ```json
+    {
+      "message": "",
+      "success": true
+    }
+  ```
 
 ## 3.登录
 
@@ -51,26 +49,26 @@
 - method:post
 - request body
 
-```json
-    {
-      "email":"",
-      "password":""
-    }
-```
+  ```json
+      {
+        "email":"",
+        "password":""
+      }
+  ```
 
 - response body
 
-```json
-    {
-      "message": "",
-      "success": true,
-      "data":{
-          "admin":true,
-          "email":"",
-          "managementPage":""
+  ```json
+      {
+        "message": "",
+        "success": true,
+        "data":{
+            "admin":true,
+            "email":"",
+            "managementPage":""
+        }
       }
-    }
-```
+  ```
 
 >data参数说明
 
@@ -86,12 +84,12 @@
 - method:post
 - response body
 
-```json
-  {
-    "message": "",
-    "success": true
-  }
-```
+  ```json
+    {
+      "message": "",
+      "success": true
+    }
+  ```
 
 ## 4.修改重置密码
 
@@ -116,50 +114,9 @@
 
 - response body
 
-```json
-{
-  "message": "",
-  "success": true
-}
-
-```
-
-## 6.修改昵称
-
-- url：/user/nickname
-- method:post
-- request body
-    ```json
+  ```json
     {
-       "nickname":""
+      "message": "",
+      "success": true
     }
-    ```
-- response body
-
-```json
-{
-  "message": "",
-  "success": true
-}
-
-```
-
-## 7.修改头像
-
-- url：/user/avatar
-- method:post
-- request body
-    ```json
-    {
-       "avatar":""
-    }
-    ```
-- response body
-
-```json
-{
-  "message": "",
-  "success": true
-}
-
-```
+  ```

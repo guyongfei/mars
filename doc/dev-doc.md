@@ -10,13 +10,13 @@ npm install gitbook-cli -g
 
 ```
 > doc/
-	|-> README.md 
-	|-> SUMMARY.md   	//文档目录文件
-	|-> GLOSSARY.md  	//默认词汇表文件
-	|-> book.json   	//gitbook配置文件，包含插件引用
-	|-> _book/  	    //编译之后的html文件目录
-	|-> node_modules/	//node package安装目录
-	|-> .gitignore		//忽略文件
+|-> README.md
+|-> SUMMARY.md   //文档目录文件
+|-> GLOSSARY.md  //默认词汇表文件
+|-> book.json   //gitbook配置文件，包含插件引用
+|-> _book/      //编译之后的html文件目录
+|-> node_modules///node package安装目录
+|-> .gitignore//忽略文件
 ```
 
 ## 操作

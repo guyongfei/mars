@@ -7,46 +7,45 @@
 - url : /project/list
 - method:get
 - request param
-  - ascOrDesc  ：排序方式 1-正序，-1 - 倒序
-  - orderCondition：排序字段 项目名排序，修改日
-  - pageNum ：页码
-  - pageSize ：每页大小
-  - projectName ：项目名
-  - projectToken ：项目token
-  - pageNum ：用户的邮箱，用于收取验证码
-  - pageNum ：用户的邮箱，用于收取验证码
-  - response body
+  - ascOrDesc：排序方式 1-正序，-1 - 倒序
+  - orderCondition：排序字段 项目名排序，修改日期
+  - pageNum：页码
+  - pageSize：每页大小
+  - projectName：项目名
+  - projectToken：项目token
+  - projectStatus：项目状态
+- response body
 
-```json
-{
-      "message": "",
-      "success": true,
-      "data":{
-          "pageNum":12,
-          "pageSize":10,
-          "total":20,
-          "list":[
-              {
-                "projectGid":"",
-                "projectStatus":"",
-                "projectName":"",
-                "projectToken":"",
-                "projectLogoLink":"",
-                "projectInstruction":"",
-                "startTime":"",
-                "endTime":""
-              }
-          ]
-      }
- }
-```
+    ```json
+    {
+        "message": "",
+        "success": true,
+        "data":{
+            "pageNum":12,
+            "pageSize":10,
+            "total":20,
+            "list":[
+                {
+                    "projectGid":"",
+                    "projectStatus":"",
+                    "projectName":"",
+                    "projectToken":"",
+                    "projectLogoLink":"",
+                    "projectInstruction":"",
+                    "startTime":"",
+                    "endTime":""
+                }
+            ]
+        }
+    }
+    ```
 
 > data.list参数说明
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
 |projectGid|string|是|项目唯一标识|
-|projectStatus|number|是|项目状态(0-未开始 1-开始认筹还未到软顶 2-开始认筹还未到硬顶 3-认筹完成且成功 4-认筹完成但是失败)|
+|projectStatus|number|是|项目状态(0-未开始、1-开始认筹还未到软顶、2-开始认筹还未到硬顶、3-认筹完成且成功、4-认筹完成但是失败)|
 |projectName|string|是|项目名称|
 |projectToken|string|是|项目token|
 |projectLogoLink|string|是|项目logo地址|
@@ -60,42 +59,42 @@
 - method:get
 - response body
 
-```json
-{
-      "message": "",
-      "success": true,
-      "data":{
-         "projectGid":"",
-         "projectStatus":1,
-         "projectName":"",
-         "projectToken":"",
-         "projectLogoLink":"",
-         "projectImgLink":"",
-         "projectInstruction":"",
-         "projectContent":"",
-         "officialLink":"",
-         "whitePaperLink":"",
-         "socialList":[
-             {
-                  "linkName":"",
-                  "linkUrl":""
-             }
-         ],
-         "price":0.00,
-         "soldAmount":"",
-         "nextPriceInterval":"",
-         "startTime":"",
-         "endTime":""
-      }
- }
-```
+    ```json
+    {
+        "message": "",
+        "success": true,
+        "data":{
+            "projectGid":"",
+            "projectStatus":1,
+            "projectName":"",
+            "projectToken":"",
+            "projectLogoLink":"",
+            "projectImgLink":"",
+            "projectInstruction":"",
+            "projectContent":"",
+            "officialLink":"",
+            "whitePaperLink":"",
+            "socialList":[
+                {
+                    "linkName":"",
+                    "linkUrl":""
+                }
+            ],
+            "price":0.00,
+            "soldAmount":"",
+            "nextPriceInterval":"",
+            "startTime":"",
+            "endTime":""
+        }
+    }
+    ```
 
 > data参数说明
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
 |projectGid|string|是|项目唯一标识|
-|projectStatus|number|是|项目状态(0-未开始 1-开始认筹还未到软顶 2-开始认筹还未到硬顶 3-认筹完成且成功 4-认筹完成但是失败)|
+|projectStatus|number|是|项目状态(0-未开始、1-开始认筹还未到软顶、2-开始认筹还未到硬顶、3-认筹完成且成功、4-认筹完成但是失败)|
 |projectName|string|是|项目名称|
 |projectToken|string|是|项目token|
 |projectLogoLink|string|是|项目logo地址|
