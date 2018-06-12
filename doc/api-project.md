@@ -23,7 +23,7 @@
   - pageSize：每页大小
   - projectName：项目名
   - projectToken：项目token
-  - projectStatus：项目状态|
+  - projectStatus：项目状态
 - response body
 
     ```json
@@ -78,6 +78,7 @@
             "projectStatus":1,
             "projectName":"",
             "projectToken":"",
+            "projectAddress":"",
             "projectLogoLink":"",
             "projectImgLink":"",
             "projectInstruction":"",
@@ -107,6 +108,7 @@
 |projectStatus|number|是|项目状态|
 |projectName|string|是|项目名称|
 |projectToken|string|是|项目token|
+|projectAddress|string|是|项目方地址|
 |projectLogoLink|string|是|项目logo地址|
 |projectImgLink|string|是|项目大图地址|
 |projectInstruction|string|是|项目简介|

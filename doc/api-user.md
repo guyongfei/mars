@@ -62,11 +62,12 @@
   ```json
       {
         "message": "",
-        "success": true,
+        "success": true
       }
   ```
 
 > response说明
+
 |字段|类型|是否必须|说明|
 |---|---|---|---|
 |success|bool|是|是否登陆成功，当登陆成功后 X-WITSHARE-TOKEN 将会置于Cookie中|
@@ -145,7 +146,7 @@
 |userGid|string|是|用户唯一标识|
 |email|string|是|邮箱|
 |nickname|string|是|昵称|
-|head_img_url|string|是|头像地址|
-|project_num|string|是|认购项目数|
+|headImgUrl|string|是|头像地址|
+|projectNum|string|是|实际认购项目数|
 |admin|boolean|是|是否是管理员|
 |managementPage|string|否|后台管理页面|
