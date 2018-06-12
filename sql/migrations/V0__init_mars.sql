@@ -179,7 +179,7 @@ CREATE TABLE `sys_project` (
   `end_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '结束时间',
   `start_price` DECIMAL(20,10) NOT NULL DEFAULT '0.0000000000' COMMENT '开始单价(ETH)',
   `end_price` DECIMAL(20,10) NOT NULL DEFAULT '0.0000000000' COMMENT '结束单价(ETH)',
-  `project_status` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '项目状态(0-未开始 1-开始认筹还未到数量 2-认筹完成且成功 3-认筹完成但是失败)',
+  `project_status` TINYINT(1) NOT NULL DEFAULT '0' COMMENT '项目状态(0-未开始 1-开始认筹还未到软顶 2-开始认筹还未到硬顶 3-认筹完成且成功 4-认筹完成但是失败)',
   `is_available` TINYINT(1) NOT NULL DEFAULT '1' COMMENT '是否有效(0-->无效,1-->有效)',
   `create_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   `update_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
