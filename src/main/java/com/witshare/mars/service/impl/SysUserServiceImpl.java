@@ -1,0 +1,521 @@
+package com.witshare.mars.service.impl;
+
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
+import com.witshare.mars.config.CurrentThreadContext;
+import com.witshare.mars.constant.*;
+import com.witshare.mars.dao.mysql.StaticSysUserMapper;
+import com.witshare.mars.dao.mysql.SysUserMapper;
+import com.witshare.mars.dao.redis.RedisCommonDao;
+import com.witshare.mars.exception.WitshareException;
+import com.witshare.mars.pojo.domain.SysUser;
+import com.witshare.mars.pojo.domain.SysUserExample;
+import com.witshare.mars.pojo.dto.SysUserBean;
+import com.witshare.mars.pojo.vo.LoginVo;
+import com.witshare.mars.service.QingyunStorageService;
+import com.witshare.mars.service.SysProjectService;
+import com.witshare.mars.service.SysUserService;
+import com.witshare.mars.service.VerifyCodeService;
+import com.witshare.mars.util.JsonUtils;
+import com.witshare.mars.util.RedisKeyUtil;
+import com.witshare.mars.util.WitshareUtils;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.servlet.http.Cookie;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import static com.witshare.mars.constant.CacheConsts.*;
+import static com.witshare.mars.pojo.dto.SysProjectBean.ID;
+import static com.witshare.mars.pojo.dto.SysUserBean.*;
+
+/**
+ * @see SysUserService
+ */
+@Service
+public class SysUserServiceImpl implements SysUserService {
+
+    private final static Gson GSON = new Gson();
+    private final static String MANAGEMENT_PAGE = "/management/page";
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+    @Autowired
+    private SysUserMapper sysUserMapper;
+    @Autowired
+    private StartupRunnerDefault startupRunnerDefault;
+    @Autowired
+    private StaticSysUserMapper staticSysUserMapper;
+    @Autowired
+    private VerifyCodeService verifyCodeService;
+    @Autowired
+    private QingyunStorageService qingyunStorageService;
+    @Autowired
+    private RedisCommonDao redisCommonDao;
+    @Autowired
+    private PropertiesConfig propertiesConfig;
+    @Autowired
+    private SysProjectService sysProjectServiceImpl;
+    @Autowired
+    private SysUserService sysUserService;
+
+    /**
+     * @see SysUserService#register(Map)
+     */
+    @Override
+    public void register(Map<String, String> requestBody) {
+        if (requestBody == null || requestBody.size() < 3) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String email = requestBody.get(EMAIL);
+        String password = requestBody.get(PASSWORD);
+        String verifyCode = requestBody.get(VERIFY_CODE);
+        if (StringUtils.isEmpty(email) || StringUtils.isEmpty(password) || StringUtils.isEmpty(verifyCode)) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        SysUserBean userBean = getByEmail(email, null);
+        if (userBean != null && EnumStatus.Valid.getValue() == userBean.getUserStatus() && StringUtils.equals(email, userBean.getEmail())) {
+            throw new WitshareException(EnumResponseText.ExistEmail);
+        }
+        boolean match = verifyCodeService.checkRegisterVerifyCode(email, verifyCode);
+        if (userBean == null || !match) {
+            throw new WitshareException(EnumResponseText.ErrorVerifyCode);
+        }
+        String salt = WitshareUtils.getUUID();
+        String userPassword = WitshareUtils.encryptPassword(email, salt, password);
+        SysUser sysUser = new SysUser();
+        sysUser.setId(userBean.getId());
+        sysUser.setUserPassword(userPassword);
+        sysUser.setSalt(salt);
+        sysUser.setUserStatus(EnumStatus.Valid.getValue());
+        sysUserMapper.updateByPrimaryKeySelective(sysUser);
+
+        this.login(requestBody);
+    }
+
+
+    /**
+     * @see SysUserService#login(Map)
+     */
+    @Override
+    public LoginVo login(Map<String, String> requestBody) {
+        if (requestBody == null || requestBody.size() < 2) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String email = requestBody.get(EMAIL);
+        String password = requestBody.get(PASSWORD);
+        if (StringUtils.isEmpty(email) || StringUtils.isEmpty(password)) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        SysUserBean userBean = getByEmail(email, EnumStatus.Valid);
+        if (userBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorEmailOrPassword);
+        }
+        String userPassword = WitshareUtils.encryptPassword(email, userBean.getSalt(), password);
+        if (!StringUtils.equals(userPassword, userBean.getUserPassword())) {
+            throw new WitshareException(EnumResponseText.ErrorEmailOrPassword);
+        }
+        String token = WitshareUtils.getUUID();
+        //删除原有的token
+        String originToken = redisCommonDao.getHash(RedisKeyUtil.getEmailTokenKey(), email);
+        if (!StringUtils.isEmpty(originToken)) {
+            redisCommonDao.delHash(RedisKeyUtil.getTokenEmailKey(), originToken);
+        }
+        redisCommonDao.putHash(RedisKeyUtil.getEmailTokenKey(), email, token);
+        redisCommonDao.putHash(RedisKeyUtil.getTokenEmailKey(), token, email);
+
+        //将token置入cookie
+        Cookie cookie = new Cookie(KEY_COOKIE_NAME, token);
+        cookie.setMaxAge(SHIRO_SESSION_EXPIRE_TIME);
+        CurrentThreadContext.getResponse().addCookie(cookie);
+
+        //缓存用户数据到redis
+        String callApiInfoKey = RedisKeyUtil.getCallApiInfo(email);
+        redisCommonDao.setString(callApiInfoKey, new Gson().toJson(userBean));
+        //  检验该email是否是管理员账户
+        boolean isAdmin = startupRunnerDefault.getAdminUserSet().contains(email);
+        LoginVo loginVo = new LoginVo(email, isAdmin, isAdmin ? MANAGEMENT_PAGE : null);
+        return loginVo;
+    }
+
+    /**
+     * @see SysUserService#postPassword(Map)
+     */
+    @Override
+    public void postPassword(Map<String, String> requestBody) {
+        if (requestBody == null || requestBody.size() < 2) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String password = requestBody.get(PASSWORD);
+        String originPassword = requestBody.get(ORIGIN_PASSWORD);
+
+        if (StringUtils.isEmpty(password)) {
+            throw new WitshareException(EnumResponseText.ErrorPassword);
+        }
+        if (StringUtils.isEmpty(originPassword)) {
+            throw new WitshareException(EnumResponseText.ErrorOriginPassword);
+        }
+        SysUserBean userBean = this.getCurrentUser();
+        String salt = userBean.getSalt();
+        String email = userBean.getEmail();
+        String dbPassword = userBean.getUserPassword();
+        String userPassword = WitshareUtils.encryptPassword(email, salt, originPassword);
+        if (!StringUtils.equals(userPassword, dbPassword)) {
+            throw new WitshareException(EnumResponseText.ErrorOriginPassword);
+        }
+        dbPassword = WitshareUtils.encryptPassword(email, salt, password);
+        redisCommonDao.delRedisKey(RedisKeyUtil.getCallApiInfo(email));
+        updatePassword(userBean.getId(), dbPassword);
+
+    }
+
+    /**
+     * @see SysUserService#getCurrentUser()
+     */
+    public SysUserBean getCurrentUser() {
+        String token = CurrentThreadContext.getToken();
+        if (!StringUtils.isEmpty(token)) {
+            String email = redisCommonDao.getHash(RedisKeyUtil.getTokenEmailKey(), token);
+            if (!StringUtils.isEmpty(email)) {
+                String userBeanJson = redisCommonDao.getString(RedisKeyUtil.getCallApiInfo(email));
+                SysUserBean userBean = null;
+                if (StringUtils.isEmpty(userBeanJson)) {
+                    userBean = getByEmail(email, null);
+                } else {
+                    userBean = JsonUtils.jsonToObjByGson(userBeanJson, SysUserBean.class);
+                }
+                return userBean;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @see SysUserService#putPassword(Map)
+     */
+    @Override
+    public void putPassword(Map<String, String> requestBody) {
+        if (requestBody == null || requestBody.size() < 3) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String email = requestBody.get(EMAIL);
+        String password = requestBody.get(PASSWORD);
+        String verifyCode = requestBody.get(VERIFY_CODE);
+
+        SysUserBean userBean = this.getByEmail(email, null);
+        if (StringUtils.isEmpty(email) || userBean == null) {
+            throw new WitshareException(EnumResponseText.NeedLogUp);
+        }
+
+        if (EnumStatus.InValid.getValue() == userBean.getUserStatus()) {
+            throw new WitshareException(EnumResponseText.AccountSuspended);
+        }
+
+        if (StringUtils.isEmpty(password)) {
+            throw new WitshareException(EnumResponseText.ErrorPassword);
+        }
+        boolean verifyCodeMatch = verifyCodeService.checkVerifyCode(email, verifyCode);
+        if (!verifyCodeMatch) {
+            throw new WitshareException(EnumResponseText.ErrorVerifyCode);
+        }
+        String userPassword = WitshareUtils.encryptPassword(email, userBean.getSalt(), password);
+        updatePassword(userBean.getId(), userPassword);
+
+    }
+
+    /**
+     * @see SysUserService#postNickname(Map)
+     */
+    @Override
+    public void postNickname(Map<String, String> requestBody) {
+        if (requestBody == null || requestBody.size() < 1) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String nickname = requestBody.get(NICKNAME);
+        if (StringUtils.isEmpty(nickname) || nickname.length() > 30) {
+            throw new WitshareException(EnumResponseText.ErrorNickname);
+        }
+
+        SysUserBean currentUser = this.getCurrentUser();
+        if (StringUtils.equals(nickname, currentUser.getNickname())) {
+            return;
+        }
+        Long currentUserId = currentUser.getId();
+        SysUser sysUser = new SysUser();
+        sysUser.setId(currentUserId);
+        sysUser.setNickname(nickname);
+        sysUser.setUpdateTime(new Timestamp(new Date().getTime()));
+        try {
+            sysUserMapper.updateByPrimaryKeySelective(sysUser);
+        } catch (Exception e) {
+            LOGGER.error("postNickname fail.nickname:{},userDb:{}", nickname, GSON.toJson(sysUser), e);
+            throw new WitshareException(EnumResponseText.ExistNickname);
+        }
+        if (redisCommonDao.isMember(RedisKeyUtil.getIndexUserSetKey(), currentUserId.toString())) {
+            redisCommonDao.delRedisKey(RedisKeyUtil.getIndexUserKey());
+        }
+        redisCommonDao.delRedisKey(RedisKeyUtil.getCallApiInfo(currentUser.getEmail()));
+    }
+
+    /**
+     * @see SysUserService#postAvatar(Map)
+     */
+    @Override
+    public void postAvatar(Map<String, String> requestBody) {
+        if (requestBody == null || requestBody.size() < 1) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String avatarStr = requestBody.get(AVATAR);
+        if (StringUtils.isEmpty(avatarStr)) {
+            throw new WitshareException(EnumResponseText.ErrorPicture);
+        }
+
+        SysUserBean currentUser = this.getCurrentUser();
+        SysUser sysUser = new SysUser();
+        Long currentUserId = currentUser.getId();
+        sysUser.setId(currentUserId);
+        String headImgUrl = qingyunStorageService.uploadToQingyun(avatarStr, currentUserId.toString(), EnumStorage.Avatar);
+        sysUser.setHeadImgUrl(headImgUrl);
+        sysUser.setUpdateTime(new Timestamp(new Date().getTime()));
+        sysUserMapper.updateByPrimaryKeySelective(sysUser);
+        if (redisCommonDao.isMember(RedisKeyUtil.getIndexUserSetKey(), currentUserId.toString())) {
+            redisCommonDao.delRedisKey(RedisKeyUtil.getIndexUserKey());
+        }
+        redisCommonDao.delRedisKey(RedisKeyUtil.getCallApiInfo(currentUser.getEmail()));
+    }
+
+    /**
+     * @see SysUserService#logout()
+     */
+    @Override
+    public void logout() {
+        String token = CurrentThreadContext.getToken();
+        String email = CurrentThreadContext.getEmail();
+        if (StringUtils.isEmpty(token)) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        //删除 cookie
+        Cookie cookie = new Cookie(KEY_COOKIE_NAME, token);
+        cookie.setMaxAge(0);
+        CurrentThreadContext.getResponse().addCookie(cookie);
+
+        redisCommonDao.delHash(RedisKeyUtil.getTokenEmailKey(), token);
+        redisCommonDao.delHash(RedisKeyUtil.getEmailTokenKey(), email);
+    }
+
+
+    /**
+     * 更新密码
+     *
+     * @param userId
+     * @param password
+     */
+    private void updatePassword(Long userId, String password) {
+        SysUser sysUser = new SysUser();
+        sysUser.setId(userId);
+        sysUser.setUserPassword(password);
+        sysUser.setUserStatus(EnumStatus.Valid.getValue());
+        sysUser.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        sysUserMapper.updateByPrimaryKeySelective(sysUser);
+    }
+
+    /**
+     * @see SysUserService#getByNickname(String, EnumStatus)
+     */
+    @Override
+    public SysUserBean getByNickname(String nickname, EnumStatus status) {
+        if (StringUtils.isEmpty(nickname)) {
+            return null;
+        }
+        SysUserExample sysUserExample = new SysUserExample();
+        if (status != null) {
+            sysUserExample.or().andNicknameEqualTo(nickname).andUserStatusEqualTo(status.getValue());
+        } else {
+            sysUserExample.or().andNicknameEqualTo(nickname);
+        }
+        List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
+        if (sysUsers != null && sysUsers.size() > 0) {
+            SysUserBean sysUserBean = new SysUserBean();
+            BeanUtils.copyProperties(sysUsers.get(0), sysUserBean);
+            return sysUserBean;
+        }
+        return null;
+    }
+
+    /**
+     * @see SysUserService#getByEmail(String, EnumStatus)
+     */
+    @Override
+    public SysUserBean getByEmail(String email, EnumStatus status) {
+        if (StringUtils.isEmpty(email)) {
+            return null;
+        }
+        SysUserExample sysUserExample = new SysUserExample();
+        if (status != null) {
+            sysUserExample.or().andEmailEqualTo(email).andUserStatusEqualTo(status.getValue());
+        } else {
+            sysUserExample.or().andEmailEqualTo(email);
+        }
+        List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
+        if (sysUsers != null && sysUsers.size() > 0) {
+            SysUserBean sysUserBean = new SysUserBean();
+            BeanUtils.copyProperties(sysUsers.get(0), sysUserBean);
+            return sysUserBean;
+        }
+        return null;
+    }
+
+    /**
+     * @see SysUserService#getByNickname(String, EnumStatus)
+     */
+    @Override
+    public PageInfo<Map<String, Object>> getProjectUsers(Map<String, String> requestBody) {
+        if (requestBody == null || requestBody.size() < 3)
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        Integer pageNum = Integer.valueOf(requestBody.getOrDefault(PAGE_NUM, DEFAULT_PAGE_NUM_STR));
+        Integer pageSize = Integer.valueOf(requestBody.getOrDefault(PAGE_SIZE, DEFAULT_PAGE_SIZE_STR));
+        if (requestBody.get(ID) == null)
+            throw new WitshareException(EnumResponseText.ErrorId);
+        Long id = Long.valueOf(requestBody.get(ID));
+        PageInfo<Map<String, Object>> objectPageInfo = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(() -> staticSysUserMapper.selectProjectUsers(id));
+        List<Map<String, Object>> list = objectPageInfo.getList();
+
+        SysUserBean currentUser = getCurrentUser();
+
+        for (Map m : list) {
+            m.put(HEAD_IMG_URL, this.getAvatar((String) m.get(HEAD_IMG_URL)));
+            if (currentUser == null) {
+                m.put(IS_MYSELF, null);
+            } else {
+                if (currentUser.getId() == m.get(ID)) {
+                    m.put(IS_MYSELF, true);
+                } else {
+                    m.put(IS_MYSELF, false);
+                }
+            }
+        }
+        return objectPageInfo;
+    }
+
+
+    /**
+     * @see SysUserService#getAvatar(String)
+     */
+    @Override
+    public String getAvatar(String headImgUrl) {
+        if (StringUtils.isEmpty(headImgUrl)) {
+            return propertiesConfig.defaultAvatar;
+        }
+        return sysProjectServiceImpl.getPictureUrl(headImgUrl);
+    }
+
+    /**
+     * @see SysUserService#hideUser(Long)
+     */
+    @Override
+    public void hideUser(Long id) {
+        if (id == null) {
+            throw new WitshareException(EnumResponseText.ErrorId);
+        }
+        SysUser sysUser = sysUserMapper.selectByPrimaryKey(id);
+        if (sysUser == null) {
+            throw new WitshareException(EnumResponseText.ErrorId);
+        }
+        SysUserBean currentUser = sysUserService.getCurrentUser();
+        if (id == currentUser.getId()) {
+            throw new WitshareException(EnumResponseText.CANNOTBLOCKEDYOURSELF);
+        }
+        staticSysUserMapper.modifyUserStatus(id);
+        //清缓存
+        redisCommonDao.delRedisKey(RedisKeyUtil.getIndexUserKey());
+        redisCommonDao.delRedisKey(RedisKeyUtil.getUserStatisticKey(id));
+        //剔除用户
+        String email = sysUser.getEmail();
+        String token = redisCommonDao.getHash(RedisKeyUtil.getEmailTokenKey(), email);
+        redisCommonDao.delHash(RedisKeyUtil.getTokenEmailKey(), token);
+        redisCommonDao.delHash(RedisKeyUtil.getEmailTokenKey(), email);
+
+    }
+
+    /**
+     * @see SysUserService#getByUserId(Long, EnumStatus)
+     */
+    @Override
+    public SysUserBean getByUserId(Long userId, EnumStatus status) {
+        if (userId == null) {
+            return null;
+        }
+        SysUserExample sysUserExample = new SysUserExample();
+        if (status != null) {
+            sysUserExample.or().andIdEqualTo(userId).andUserStatusEqualTo(status.getValue());
+        } else {
+            sysUserExample.or().andIdEqualTo(userId);
+        }
+        List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
+        if (sysUsers != null && sysUsers.size() > 0) {
+            SysUserBean sysUserBean = new SysUserBean();
+            BeanUtils.copyProperties(sysUsers.get(0), sysUserBean);
+            return sysUserBean;
+        }
+        return null;
+    }
+
+    /**
+     * @see SysUserService#modifyUserInfo(Long, Map)
+     */
+    @Override
+    public void modifyUserInfo(Long id, Map<String, String> requestBody) {
+        if (requestBody == null || requestBody.size() < 1) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String nickname = requestBody.get(NICKNAME);
+        String password = requestBody.get(PASSWORD);
+
+        if (id == null) {
+            throw new WitshareException(EnumResponseText.ErrorId);
+        }
+        SysUser sysUser = sysUserMapper.selectByPrimaryKey(id);
+        if (sysUser == null) {
+            throw new WitshareException(EnumResponseText.ErrorId);
+        }
+        if (StringUtils.isEmpty(nickname) && StringUtils.isEmpty(password)) {
+            throw new WitshareException(EnumResponseText.ErrorId);
+        }
+        if (!StringUtils.isEmpty(password)) {
+            String salt = sysUser.getSalt();
+            String email = sysUser.getEmail();
+            String newPassword = WitshareUtils.encryptPassword(email, salt, password);
+            sysUser.setUserPassword(newPassword);
+        }
+        if (!StringUtils.isEmpty(nickname)) {
+
+            //重名检测
+            SysUserExample sysUserExample = new SysUserExample();
+            sysUserExample.or().andNicknameEqualTo(nickname);
+            List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
+            if (!CollectionUtils.isEmpty(sysUsers) && id != sysUsers.get(0).getId()) {
+                throw new WitshareException(EnumResponseText.ExistNickname);
+            }
+            sysUser.setNickname(nickname);
+        }
+        sysUser.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+        sysUserMapper.updateByPrimaryKeySelective(sysUser);
+
+        String email = sysUser.getEmail();
+        //清缓存
+        redisCommonDao.delRedisKey(RedisKeyUtil.getIndexUserKey());
+        redisCommonDao.delRedisKey(RedisKeyUtil.getUserStatisticKey(id));
+        String token = redisCommonDao.getHash(RedisKeyUtil.getEmailTokenKey(), email);
+        redisCommonDao.delHash(RedisKeyUtil.getEmailTokenKey(), email);
+        redisCommonDao.delHash(RedisKeyUtil.getTokenEmailKey(), token);
+
+    }
+}

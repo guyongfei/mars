@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <title>首页</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <link th:href="@{/js/layui/css/layui.css}" rel="stylesheet" media="screen">
+    <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" media="screen">
+    <link th:href="@{/css/bootstrap-table.css}" rel="stylesheet" media="screen">
+    <link th:href="@{/css/amazeui.min.css?a=2}" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/toastr.min.css}" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/app.css}" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/bootstrapValidator.css}" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/ztree/demo.css}" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/ztree/zTreeStyle/zTreeStyle.css}" rel="stylesheet" media="screen"/>
+
+    <style>
+        #scrollUp {
+            position: fixed;
+            right: 10px;
+            bottom: 10px;
+            color: #2ebfcc;
+            font-size: 25px;
+            display: none;
+            cursor: pointer;
+        }
+
+        @media only screen and (max-width: 800px) {
+            .am-topbar-inverse .am-topbar-nav > li > .right-a, .am-topbar-inverse .am-topbar-nav > li > a {
+                height: 34px;
+                line-height: 34px;
+                padding: 0 12px;
+            }
+
+            #scrollUp {
+                display: block;
+            }
+        }
+
+        li {
+            margin: 10px
+        }
+
+    </style>
+
+</head>
+<body data-type="index">
+<span th:text="${contextPath}" id="contextPath" style="display: none;"></span>
+<span th:text="${frontPath}" id="frontPath" style="display: none;"></span>
+
+<div class="tpl-page-container tpl-page-header-fixed">
+    <!--侧边栏-->
+    <div class="tpl-left-nav tpl-left-nav-hover left-slidebar" th:fragment="menu" style="height:100%; width: 15%">
+        <div class="tpl-left-nav-list " style="padding:0 0 0 50px">
+            <ul class="tpl-left-nav-menu" id="menu">
+                <li style="margin:10px">
+                    <a id="indexPage" class="left-slidebar-a btn btn-default">
+                        <span th:text="'首页'"></span>
+                    </a>
+                </li>
+                <li>
+                    <a id="gotoProjectPage" class="left-slidebar-a btn btn-default">
+                        <span th:text="'项目列表'"></span>
+                    </a>
+                </li>
+                <li>
+                    <a id="gotoStarProject" class="left-slidebar-a btn btn-default">
+                        <span th:text="'首页项目'"></span>
+                    </a>
+                </li>
+                <li>
+                    <a id="gotoStarUser" class="left-slidebar-a btn btn-default">
+                        <span th:text="'首页用户'"></span>
+                    </a>
+                </li>
+                <li>
+                    <a id="gotoBillBoard" class="left-slidebar-a btn btn-default">
+                        <span th:text="'首页广告'"></span>
+                    </a>
+                </li>
+                <li>
+                    <a id="gotoComment" class="left-slidebar-a btn btn-default">
+                        <span th:text="'评论管理'"></span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="gotoProjectType" class="left-slidebar-a btn btn-default">
+                        <span th:text="'项目类型'"></span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="gotoBaseConfig" class="left-slidebar-a btn btn-default">
+                        <span th:text="'基本设置'"></span>
+                    </a>
+                </li>
+
+                <li>
+                    <a id="gotoSensitive" class="left-slidebar-a btn btn-default">
+                        <span th:text="'敏感词'"></span>
+                    </a>
+                </li>
+
+
+            </ul>
+            </li>
+            </ul>
+        </div>
+    </div>
+    <!--主体部分-->
+    <div id="content"></div>
+</div>
+<i id="scrollUp" data-am-smooth-scroll="{position: 0}" class="am-icon-arrow-up am-icon-fa-arrow-up"
+   aria-hidden="true"></i>
+
+
+<script th:src="@{/js/jquery.min.js}"></script>
+<!--<script th:src="@{/js/amazeui.min.js}"></script>-->
+<script th:src='@{/js/bootstrap.min.js}'></script>
+<script th:src="@{/js/toastr.min.js}"></script>
+<script th:src='@{/js/bootstrap-table.js}'></script>
+<script th:src='@{/js/bootstrap-table-zh-CN.js}'></script>
+<script th:src="@{/js/layer/layer.js}"></script>
+<script th:src="@{/js/layui/layui.js}"></script>
+<script th:src="@{/js/multiselect.min.js}"></script>
+<script th:src="@{/js/bootbox.js}"></script>
+<script th:src="@{/js/app.js}"></script>
+<script th:src="@{/js/ztree/jquery.ztree.core.js}"></script>
+<script th:src="@{/js/ztree/jquery.ztree.excheck.js}"></script>
+<script th:src="@{/js/ztree/jquery.ztree.exedit.js}"></script>
+<script th:src="@{/js/bootstrapValidator.js}"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        $('.left-slidebar-a').click(function () {
+            $('.left-slidebar-a').each(function () {
+                $(this).removeClass('btn-info');
+            })
+            $(this).addClass('btn btn-info left').css("text-align", "left");
+        })
+
+        $('#gotoProjectPage').click();
+    })
+
+
+</script>
+
+
+</body>
+</html>

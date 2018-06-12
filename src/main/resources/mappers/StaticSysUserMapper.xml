@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.witshare.mars.dao.mysql.StaticSysUserMapper">
+
+    <select id="getUserList" resultType="com.witshare.mars.pojo.vo.SysUserViewVo">
+        SELECT *
+        FROM `sys_user`
+        <where>
+            <if test="emailLike != null and emailLike != ''">
+                AND email LIKE CONCAT('%','${emailLike}','%' )
+            </if>
+            <if test="start != null and start != 'null' and start != ''">
+                AND star_user = #{start}
+            </if>
+        </where>
+    </select>
+
+
+    <update id="saveOrUpdate" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `sys_user`
+        (`nickname`,`email`,head_img_url,
+        create_time,update_time)
+        VALUES
+        ( #{nickname},#{email},#{headImgUrl},
+        NOW(),NOW())
+        ON DUPLICATE KEY UPDATE
+        update_time=VALUES(update_time);
+    </update>
+
+    <select id="selectProjectUsers" parameterType="java.lang.Long" resultType="map">
+        SELECT
+        temp.user_id AS id,
+        u.nickname as nickname,
+        u.head_img_url as headImgUrl,
+        temp.comment_count as commentCount
+        FROM
+            (SELECT
+                count(t.id) AS comment_count,
+                t.user_id AS user_id
+            FROM
+                (
+                SELECT id, comment_user_id AS user_id
+                            FROM sys_comment
+                            WHERE project_id = #{id} AND comment_status = 1
+                        UNION ALL
+                SELECT id, from_user_id AS user_id
+                            FROM sys_reply
+                            WHERE project_id = #{id} AND reply_status = 1
+                )t
+            GROUP BY t.user_id)temp
+        LEFT JOIN
+        sys_user u
+        ON u.id = temp.user_id
+        ORDER BY temp.comment_count DESC
+    </select>
+
+
+    <select id="selectShowUserList" parameterType="map" resultType="com.witshare.mars.pojo.dto.GlobalSimpleBean">
+
+        SELECT
+        id AS id,
+        CONCAT(email, ' - ', nickname, if(user_status = 0, '(已冻结)', '')) AS title,
+        star_user AS indexShow
+        FROM sys_user
+        <where>
+            <if test="indexShow == 0">
+                star_user = 0
+            </if>
+            <if test="indexShow == 1">
+                star_user > 0
+            </if>
+            AND salt != ''
+            <if test="name != null and name != ''">
+                AND (email like '%${name}%'
+                OR nickname like '%${name}%')
+            </if>
+        </where>
+        ORDER BY star_user, nickname
+
+    </select>
+
+    <update id="updateShowUsers">
+
+        UPDATE sys_user SET star_user = 0, update_time = now()
+        WHERE star_user > 0;
+        <if test="list.size() > 0">
+            <foreach collection="list" item="id" index="index" separator=";">
+                UPDATE sys_user SET star_user = #{index}+1, update_time = now()
+                <where>
+                    id = #{id}
+                </where>
+            </foreach>
+        </if>
+
+    </update>
+
+
+    <update id="updateUserFollowAndComment" parameterType="map">
+
+        UPDATE sys_user
+            SET project_num = #{followCount},
+            comment_num = #{commentCount}
+        WHERE id = #{userId}
+
+    </update>
+
+
+    <update id="modifyUserStatus" parameterType="java.lang.Long">
+        UPDATE `sys_user` SET `user_status` = !`user_status`  WHERE `id` = #{id}
+    </update>
+
+</mapper>

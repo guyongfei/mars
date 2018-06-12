@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.witshare.mars.dao.mysql.StaticProjectDescriptionMapper">
+    <resultMap id="BaseResultMap" type="com.witshare.mars.pojo.dto.StaticProjectDescription">
+
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="project_id" jdbcType="INTEGER" property="projectId"/>
+        <result column="project_name" jdbcType="VARCHAR" property="projectName"/>
+        <result column="project_instruction" jdbcType="VARCHAR" property="projectInstruction"/>
+        <result column="grade_report_link" jdbcType="VARCHAR" property="gradeReportLink"/>
+        <result column="project_location" jdbcType="VARCHAR" property="projectLocation"/>
+        <result column="white_paper_link" jdbcType="VARCHAR" property="whitePaperLink"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="com.witshare.mars.pojo.dto.StaticProjectDescription">
+
+        <result column="project_content" jdbcType="LONGVARCHAR" property="projectContent"/>
+    </resultMap>
+    <sql id="Example_Where_Clause">
+
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" prefixOverrides="and" suffix=")">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach close=")" collection="criterion.value" item="listItem" open="("
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        id, project_id, project_name, project_instruction, grade_report_link, project_location,
+        white_paper_link, create_time, update_time
+    </sql>
+    <sql id="Blob_Column_List">
+        project_content
+    </sql>
+    <select id="selectByExampleWithBLOBs" parameterType="com.witshare.mars.pojo.domain.ProjectDescriptionCnExample"
+            resultMap="ResultMapWithBLOBs">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from ${tableName}
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+        <if test="limitClause != null">
+            limit ${limitClause}
+        </if>
+    </select>
+    <select id="selectByExample" parameterType="com.witshare.mars.pojo.domain.ProjectDescriptionCnExample"
+            resultMap="BaseResultMap">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        'true' as QUERYID,
+        <include refid="Base_Column_List"/>
+        from ${tableName}
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from ${tableName}
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from ${tableName}
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.witshare.mars.pojo.domain.ProjectDescriptionCnExample">
+        delete from ${tableName}
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id"
+            parameterType="com.witshare.mars.pojo.domain.ProjectDescriptionCn" useGeneratedKeys="true">
+        insert into ${tableName} (project_id, project_name, project_instruction,
+        grade_report_link, project_location, white_paper_link,
+        create_time, update_time, project_content
+        )
+        values (#{record.projectId,jdbcType=INTEGER}, #{record.projectName,jdbcType=VARCHAR},
+        #{record.projectInstruction,jdbcType=VARCHAR},
+        #{record.gradeReportLink,jdbcType=VARCHAR}, #{record.projectLocation,jdbcType=VARCHAR},
+        #{record.whitePaperLink,jdbcType=VARCHAR},
+        #{record.createTime,jdbcType=TIMESTAMP}, #{record.updateTime,jdbcType=TIMESTAMP},
+        #{record.projectContent,jdbcType=LONGVARCHAR}
+        )
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id"
+            parameterType="com.witshare.mars.pojo.domain.ProjectDescriptionCn" useGeneratedKeys="true">
+        insert into ${tableName}
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="record.projectId != null">
+                project_id,
+            </if>
+            <if test="record.projectName != null">
+                project_name,
+            </if>
+            <if test="record.projectInstruction != null">
+                project_instruction,
+            </if>
+            <if test="record.gradeReportLink != null">
+                grade_report_link,
+            </if>
+            <if test="record.projectLocation != null">
+                project_location,
+            </if>
+            <if test="record.whitePaperLink != null">
+                white_paper_link,
+            </if>
+            <if test="record.createTime != null">
+                create_time,
+            </if>
+            <if test="record.updateTime != null">
+                update_time,
+            </if>
+            <if test="record.projectContent != null">
+                project_content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="record.projectId != null">
+                #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="record.projectName != null">
+                #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.projectInstruction != null">
+                #{projectInstruction,jdbcType=VARCHAR},
+            </if>
+            <if test="record.gradeReportLink != null">
+                #{gradeReportLink,jdbcType=VARCHAR},
+            </if>
+            <if test="record.projectLocation != null">
+                #{projectLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="record.whitePaperLink != null">
+                #{whitePaperLink,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.projectContent != null">
+                #{projectContent,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.witshare.mars.pojo.domain.ProjectDescriptionCnExample"
+            resultType="java.lang.Long">
+        select count(*) from ${tableName}
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update ${example.tableName}
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.projectId != null">
+                project_id = #{record.projectId,jdbcType=INTEGER},
+            </if>
+            <if test="record.projectName != null">
+                project_name = #{record.projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.projectInstruction != null">
+                project_instruction = #{record.projectInstruction,jdbcType=VARCHAR},
+            </if>
+            <if test="record.gradeReportLink != null">
+                grade_report_link = #{record.gradeReportLink,jdbcType=VARCHAR},
+            </if>
+            <if test="record.projectLocation != null">
+                project_location = #{record.projectLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="record.whitePaperLink != null">
+                white_paper_link = #{record.whitePaperLink,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.projectContent != null">
+                project_content = #{record.projectContent,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExampleWithBLOBs" parameterType="map">
+        update ${example.tableName}
+        set id = #{record.id,jdbcType=INTEGER},
+        project_id = #{record.projectId,jdbcType=INTEGER},
+        project_name = #{record.projectName,jdbcType=VARCHAR},
+        project_instruction = #{record.projectInstruction,jdbcType=VARCHAR},
+        grade_report_link = #{record.gradeReportLink,jdbcType=VARCHAR},
+        project_location = #{record.projectLocation,jdbcType=VARCHAR},
+        white_paper_link = #{record.whitePaperLink,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        project_content = #{record.projectContent,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update ${tableName}
+        set id = #{record.id,jdbcType=INTEGER},
+        project_id = #{record.projectId,jdbcType=INTEGER},
+        project_name = #{record.projectName,jdbcType=VARCHAR},
+        project_instruction = #{record.projectInstruction,jdbcType=VARCHAR},
+        grade_report_link = #{record.gradeReportLink,jdbcType=VARCHAR},
+        project_location = #{record.projectLocation,jdbcType=VARCHAR},
+        white_paper_link = #{record.whitePaperLink,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.witshare.mars.pojo.domain.ProjectDescriptionCn">
+        update ${tableName}
+        <set>
+            <if test="record.projectId != null">
+                project_id = #{record.projectId,jdbcType=INTEGER},
+            </if>
+            <if test="record.projectName != null">
+                project_name = #{record.projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.projectInstruction != null">
+                project_instruction = #{record.projectInstruction,jdbcType=VARCHAR},
+            </if>
+            <if test="record.gradeReportLink != null">
+                grade_report_link = #{record.gradeReportLink,jdbcType=VARCHAR},
+            </if>
+            <if test="record.projectLocation != null">
+                project_location = #{record.projectLocation,jdbcType=VARCHAR},
+            </if>
+            <if test="record.whitePaperLink != null">
+                white_paper_link = #{record.whitePaperLink,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.projectContent != null">
+                project_content = #{record.projectContent,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{record.id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.witshare.mars.pojo.domain.ProjectDescriptionCn">
+        update ${tableName}
+        set project_id = #{record.projectId,jdbcType=INTEGER},
+        project_name = #{record.projectName,jdbcType=VARCHAR},
+        project_instruction = #{record.projectInstruction,jdbcType=VARCHAR},
+        grade_report_link = #{record.gradeReportLink,jdbcType=VARCHAR},
+        project_location = #{record.projectLocation,jdbcType=VARCHAR},
+        white_paper_link = #{record.whitePaperLink,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        project_content = #{record.projectContent,jdbcType=LONGVARCHAR}
+        where id = #{record.id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.witshare.mars.pojo.domain.ProjectDescriptionCn">
+        update ${tableName}
+        set project_id = #{record.projectId,jdbcType=INTEGER},
+        project_name = #{record.projectName,jdbcType=VARCHAR},
+        project_instruction = #{record.projectInstruction,jdbcType=VARCHAR},
+        grade_report_link = #{record.gradeReportLink,jdbcType=VARCHAR},
+        project_location = #{record.projectLocation,jdbcType=VARCHAR},
+        white_paper_link = #{record.whitePaperLink,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+        where id = #{record.id,jdbcType=INTEGER}
+    </update>
+
+
+    <insert id="saveOrUpdate" parameterType="com.witshare.mars.pojo.dto.SysProjectBean">
+        INSERT INTO `project_description_en`
+        (`project_id`,
+        `project_name`,`project_instruction`,`project_content`,
+        `grade_report_link`,`project_location`,`white_paper_link`,
+        `create_time`,`update_time`)
+        values
+        (#{id},
+        #{projectNameEn}, #{instructionEn}, #{contentEn},
+        #{pdfEn}, #{locationEn}, #{whitePaperLinkEn},
+        now(),now());
+
+        INSERT INTO `project_description_zh`
+        (`project_id`,
+        `project_name`,`project_instruction`,`project_content`,
+        `grade_report_link`,`project_location`,`white_paper_link`,
+        `create_time`,`update_time`)
+         values
+        (#{id},
+        #{projectNameZh}, #{instructionZh}, #{contentZh},
+        #{pdfZh}, #{locationZh}, #{whitePaperLinkZh},
+        now(),now());
+    </insert>
+
+
+</mapper>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd ">
+    <!-- datasource -->
+    <bean id="primaryDatasource" class="com.zaxxer.hikari.HikariDataSource" destroy-method="close" primary="true">
+        <property name="driverClassName" value="${spring.datasource.primary.driver-class-name}"/>
+        <property name="jdbcUrl" value="${spring.datasource.primary.url}"/>
+        <property name="username" value="${spring.datasource.primary.username}"/>
+        <property name="password" value="${spring.datasource.primary.password}"/>
+        <property name="maximumPoolSize" value="${spring.datasource.primary.pool.maximumPoolSize}"/>
+    </bean>
+
+
+    <bean id="dynamicDataSource" class="com.witshare.mars.config.DynamicDataSource">
+        <property name="targetDataSources">
+            <map key-type="java.lang.String">
+                <!-- 指定lookupKey和与之对应的数据源 -->
+                <entry key="shpDatasource" value-ref="primaryDatasource"></entry>
+            </map>
+        </property>
+        <!-- 这里可以指定默认的数据源 -->
+        <property name="defaultTargetDataSource" ref="primaryDatasource"/>
+    </bean>
+
+
+    <!-- session factory -->
+    <bean id="shpSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dynamicDataSource"/>
+        <property name="configLocation" value="classpath:config/mybatis/mybatis-config.xml"/>
+        <property name="typeAliasesPackage" value="com.witshare.mars.pojo.dto"/>
+        <property name="mapperLocations" value="classpath*:mappers/*Mapper.xml"/>
+        <!-- 配置mybatis分页插件PageHelper -->
+        <property name="plugins">
+            <array>
+                <!--配置拦截器-->
+                <bean class="com.github.pagehelper.PageInterceptor">
+                    <property name="properties">
+                        <value>
+                            helperDialect=mysql
+                            reasonable=true
+                            supportMethodsArguments=true
+                            params=count=countSql
+                            autoRuntimeDialect=true
+                        </value>
+                    </property>
+                </bean>
+            </array>
+        </property>
+    </bean>
+    <!-- mapper scanner -->
+    <bean id="shpMapperScannerConfig" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.witshare.mars.dao.mysql"/>
+        <property name="sqlSessionFactoryBeanName" value="shpSqlSessionFactory"/>
+    </bean>
+    <!-- transaction manager -->
+    <bean id="shpTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="primaryDatasource"/>
+    </bean>
+    <!-- enable annotation driven of transaction manager -->
+    <tx:annotation-driven transaction-manager="shpTransactionManager"/>
+</beans>

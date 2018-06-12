@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.witshare.mars.dao.mysql.StaticSysProjectMapper">
+
+    <select id="checkExist" parameterType="com.witshare.mars.pojo.dto.SysProjectBean" resultType="int">
+        SELECT (
+        (SELECT COUNT(0)
+        FROM `sys_project`
+        WHERE `project_token`=#{token}
+        <if test="id !=null and id > 0">
+            and id !=#{id}
+        </if>
+        )+
+        (SELECT COUNT(0)
+        FROM `project_description_en`
+        WHERE `project_name`=#{projectNameEn}
+        <if test="id !=null and id > 0">
+            and project_id !=#{id}
+        </if>
+        )+
+        (SELECT COUNT(0)
+        FROM `project_description_zh`
+        WHERE `project_name`=#{projectNameZh}
+        <if test="id !=null and id > 0">
+            and project_id !=#{id}
+        </if>
+        )
+        )
+    </select>
+
+
+    <insert id="saveOrUpdate" parameterType="com.witshare.mars.pojo.dto.SysProjectBean">
+        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO `sys_project`
+        (`project_token`,`project_ico`,`official_link`,`project_accepting`,
+        `team_score`,`product_score`,`schedule_score`,`commercial_substance_score`,
+        `tokens_operation_score`,`project_grade`,`project_logo_link`,`project_img_link`,
+        project_type_id,
+        `create_time`,`update_time`)
+        VALUES
+        (#{token},#{ico},#{officialLink},#{accepting},
+        #{teamScore},#{productScore},#{scheduleScore},#{commercialSubstanceScore},
+        #{tokensOperationScore},#{grade},#{log},#{view},
+        #{projectType},
+        now(),now() );
+    </insert>
+
+    <select id="selectPdfById" resultType="com.witshare.mars.pojo.dto.ProjectPdfBean">
+        SELECT pd.`grade_report_link` linkName ,p.project_token token
+        FROM ${tableName} pd
+        LEFT JOIN `sys_project` p  ON p.`id`=pd.`project_id`
+        WHERE pd.`project_id` = #{projectId}
+    </select>
+
+    <select id="selectProjectType" resultType="com.witshare.mars.pojo.dto.ConfProjectTypeBean">
+        SELECT c.id id, CONCAT(p.zh,'/',c.`project_type_zh`) projectTypeZh, CONCAT(p.en,'/',c.`project_type_en`) projectTypeEn FROM `conf_project_type` c
+        LEFT JOIN (SELECT `id`,`project_type_zh` zh,`project_type_en` en FROM `conf_project_type`) p ON c.`pid` = p.`id`
+        WHERE c.pid != 0 AND c.id IN (SELECT DISTINCT `project_type_id` FROM `sys_project`)
+        ORDER BY p.id
+    </select>
+
+    <select id="selectManagementById" resultType="com.witshare.mars.pojo.vo.SysProjectBeanVo">
+        SELECT
+        p.id id,
+        p.`project_token` token,
+        p.`project_ico` ico,
+        p.`project_grade` grade,
+        p.`official_link` officialLink,
+        p.`project_accepting` accepting,
+        p.`team_score` teamScore,
+        p. `product_score` productScore,
+        p.`schedule_score` scheduleScore,
+        p.`commercial_substance_score` commercialSubstanceScore,
+        p.`tokens_operation_score` tokensOperationScore,
+        p.`project_type_id` typeId,
+        p.`project_logo_link` log,
+        p.`project_img_link` view,
+
+        pe.`grade_report_link` pdfEn,
+        pe.`project_content` contentEn,
+        pe.`project_instruction` instructionEn,
+        pe.`project_location` locationEn,
+        pe.`project_name` projectNameEn,
+        pe.`white_paper_link` whitePaperLinkEn,
+
+        pz.`grade_report_link` pdfZh,
+        pz.`project_content` contentZh,
+        pz.`project_instruction` instructionZh,
+        pz.`project_location` locationZh,
+        pz.`project_name` projectNameZh,
+        pz.`white_paper_link` whitePaperLinkZh
+
+        FROM `sys_project` p
+        LEFT JOIN `project_description_en` pe ON p.`id`=pe.`project_id`
+        LEFT JOIN `project_description_zh` pz ON p.`id`=pz.`project_id`
+        WHERE p.`id` = #{id}
+    </select>
+
+    <select id="selectManagementList" resultType="com.witshare.mars.pojo.vo.SysProjectListVo">
+        SELECT p.`id` id,
+        p.`project_token` token,
+        pe.`project_name` projectNameEn,
+        pz.`project_name` projectNameZh,
+        p.project_status projectStatus
+        FROM `sys_project` p
+        LEFT JOIN `project_description_en` pe ON p.`id`=pe.`project_id`
+        LEFT JOIN `project_description_zh` pz ON p.`id` = pz.`project_id`
+        <where>
+            <if test="queryStr != null and queryStr!=''">
+                CONCAT(p.`project_token`,' ',pe.`project_name`,' ',pz.`project_name`) LIKE '%${queryStr}%'
+            </if>
+        </where>
+        ORDER BY p.`update_time` desc
+    </select>
+
+    <select id="selectProjectList" parameterType="com.witshare.mars.pojo.dto.ProjectReqBean"
+            resultType="com.witshare.mars.pojo.dto.ProjectPageBean">
+
+        SELECT
+        sp.id AS id,
+        pd.project_name AS projectName,
+        sp.project_token AS projectToken,
+        pd.project_instruction AS projectInstruction,
+        sp.project_logo_link AS projectLogoLink,
+        sp.project_img_link AS projectImgLink,
+        sp.project_ico AS projectIco,
+        sp.project_type_id AS projectTypeId,
+        sp.project_grade AS projectGradeScore,
+        sp.comment_count AS commentCount,
+        sp.follower_count AS followerCount,
+        sp.create_time AS createTime
+        FROM sys_project sp
+        LEFT JOIN ${tableName} pd
+        ON sp.id = pd.project_id
+        <where>
+            AND sp.project_status = 1
+            <choose>
+                <when test="starProject == true">
+                    AND sp.star_project > 0
+                </when>
+                <otherwise>
+                    <if test="projectName != null and projectName != ''">
+                        AND pd.project_name like '%${projectName}%'
+                    </if>
+                    <if test="projectToken != null and projectToken != ''">
+                        AND sp.project_token = #{projectToken}
+                    </if>
+                    <if test="projectIco != null">
+                        AND sp.project_ico = #{projectIco}
+                    </if>
+                    <if test="projectTypeId != null">
+                        AND sp.project_type_id = #{projectTypeId}
+                    </if>
+                    <if test="projectTypeList != null and projectTypeList.size() > 0">
+                        AND sp.project_type_id IN
+                        <foreach collection="projectTypeList" item="id" open="(" separator="," close=")">
+                            #{id}
+                        </foreach>
+                    </if>
+                    <if test="projectGradeScore != null">
+                        AND sp.project_grade &lt; (#{projectGradeScore} + 1)
+                        AND sp.project_grade &gt;= #{projectGradeScore}
+                    </if>
+                </otherwise>
+            </choose>
+        </where>
+        ORDER BY
+        <choose>
+            <when test="orderCondition != null and orderCondition != ''">
+                ${orderCondition}
+                <if test="ascOrdesc == -1">
+                    DESC
+                </if>
+            </when>
+            <when test="starProject == true">
+                sp.star_project
+            </when>
+            <otherwise>
+                pd.project_name, sp.update_time, sp.project_grade
+            </otherwise>
+        </choose>
+
+
+    </select>
+
+    <select id="selectMyProjects" parameterType="map" resultType="com.witshare.mars.pojo.dto.ProjectPageBean">
+
+        SELECT
+        sp.id AS id,
+        pd.project_name AS projectName,
+        sp.project_token AS projectToken,
+        pd.project_instruction AS projectInstruction,
+        sp.project_logo_link AS projectLogoLink,
+        sp.project_type_id AS projectTypeId,
+        sp.project_img_link AS projectImgLink,
+        sp.project_ico AS projectIco,
+        sp.project_grade AS projectGradeScore,
+        sp.comment_count AS commentCount,
+        sp.follower_count AS followerCount,
+        1 AS followOrNot,
+        sp.create_time AS createTime
+        FROM sys_project sp
+        LEFT JOIN ${tableName} pd
+        ON sp.id = pd.project_id
+        INNER JOIN project_follow_user pfu
+        ON sp.id = pfu.project_id
+        <where>
+            pfu.user_id = #{userId}
+            AND sp.project_status = 1
+        </where>
+        ORDER BY
+        pfu.create_time DESC
+
+    </select>
+
+    <select id="selectSimpleProjectList" parameterType="map"
+            resultType="com.witshare.mars.pojo.dto.GlobalSimpleBean">
+
+        SELECT p.`id` AS id,
+        CONCAT(pz.`project_name`, ' - ', pe.`project_name`, ' - ', p.`project_token`,if(project_status = 0, '(已隐藏)',
+        '')) AS title,
+        star_project AS showIndex
+        FROM `sys_project` p
+        LEFT JOIN `project_description_en` pe ON p.`id`=pe.`project_id`
+        LEFT JOIN `project_description_zh` pz ON p.`id` = pz.`project_id`
+        <where>
+            <if test="indexShow == 0">
+                star_project = 0
+            </if>
+            <if test="indexShow == 1">
+                star_project &gt; 0
+            </if>
+            <if test="name != null and name != ''">
+                AND (pz.`project_name` like '%${name}%'
+                OR pe.`project_name` like '%${name}%'
+                OR p.`project_token` like '%${name}%')
+            </if>
+        </where>
+        ORDER BY p.`star_project`, pe.`project_name`
+
+    </select>
+
+
+    <update id="updateStarProject">
+
+        UPDATE sys_project SET star_project = 0, update_time = now()
+        WHERE star_project > 1;
+        <if test="list.size() > 0">
+            <foreach collection="list" item="id" index="index" separator=";">
+                UPDATE sys_project SET star_project = #{index}+1, update_time = now()
+                <where>
+                    id = #{id}
+                </where>
+            </foreach>
+        </if>
+
+    </update>
+
+    <select id="getStarProjectIds" parameterType="map" resultType="java.lang.Long">
+
+        SELECT id
+        FROM sys_project
+        WHERE star_project > 0
+
+    </select>
+
+    <update id="updateProjectFollowCommentCount" parameterType="map">
+
+        UPDATE sys_project
+        SET follower_count = #{followCount},
+        comment_count = #{commentCount}
+        WHERE id = #{projectId}
+
+    </update>
+
+    <update id="modifyProjectStatus" parameterType="java.lang.Long">
+          UPDATE `sys_project` SET `project_status` = !`project_status` WHERE `id` = #{id}
+    </update>
+
+
+    <select id="selectAllProjectId" parameterType="map" resultType="java.lang.String">
+
+        SELECT project_gid
+          FROM sys_project
+          ORDER BY id
+        LIMIT #{offSet}, #{limit}
+
+    </select>
+
+</mapper>

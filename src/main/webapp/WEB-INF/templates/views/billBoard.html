@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>广告牌</title>
+    <style>
+
+        .surebutton {
+            width: 100px;
+            height: 50px;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<center><h2>首页广告设置</h2></center>
+
+
+<div class=" am-popup-inner am-modal-active ">
+    <div class="row">
+
+        <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style="width:80%;height:auto;">
+                <div class="modal-content" style="padding: 30px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">首页广告</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" id="addEvent" method="post" data-toggle="validator" role="form">
+                            <fieldset>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">广告标题</label>
+                                    <div class="col-md-5">
+                                        <input class="form-control" type="text" id="titleZh" name="titleZh"
+                                               style="border-left:none;"
+                                               autocomplete="off" placeholder="ZH">
+                                    </div>
+                                    <div class="col-md-5">
+                                        <input class="form-control" type="text" id="titleEn" name="titleEn"
+                                               style="border-left:none;"
+                                               autocomplete="off" placeholder="EN">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">广告内容</label>
+                                    <div class="col-md-10 control-label">
+                          <textarea class="form-control" id="contentZh" name="contentZh" style="border-left:none;"
+                                    autocomplete="off" placeholder="ZH"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-10 col-lg-offset-1 control-label">
+                          <textarea class="form-control" id="contentEn" name="contentEn" style="border-left:none;"
+                                    autocomplete="off" placeholder="EN"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">链接地址</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class="form-control" type="text" id="linkUrl" name="linkUrl"
+                                               style="border-left:none;"
+                                               autocomplete="off" placeholder="">
+                                    </div>
+                                </div>
+
+                                <hr>
+                                <span class="col-md-12"
+                                      style="color: #9eacb4;text-align: left">新增广告时，图片必填；修改广告时，如不修改可不传</span>
+
+                                <div class="form-group">
+
+                                    <label class="col-md-1 col-sm-1 control-label">展示图片</label>
+                                    <div class="col-md-10">
+                                        <input type="file" id="view" name="view">
+                                    </div>
+                                </div>
+
+                            </fieldset>
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary col-lg-offset-4 col-md-2">保存</button>
+                                <button onclick="clearEvent()" type="reset"
+                                        class="btn btn-danger col-lg-offset-2 col-md-2">重置
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin: 20px;">
+            <button type="button" class="btn btn-info" data-toggle="modal"
+                    data-target="#addModal">新增
+            </button>
+            <button type="button" id="updateBillboard" class="btn btn-warning" data-toggle="tooltip"
+                    data-placement="top" title="多选时默认第一条">修改
+            </button>
+            <!--<span style="color: #9eacb4;text-align:left;font-size:10px">多选时默认第一条</span>-->
+            <button type="button" id="deleteBillboard" class="btn btn-danger">删除</button>
+        </div>
+        <div class="form-group">
+            <div class="col-md-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <center>未展示广告</center>
+
+                        </h3>
+
+                    </div>
+                    <div class="panel-body select-contain">
+                        <div class="input-group">
+                            <input id="searchthis" type="text" class="form-control" placeholder="Search...">
+                            <div class="input-group-btn">
+                                <button type="button" id="searchthat" class="btn btn-block">查询</button>
+                            </div>
+                        </div>
+                        <select name="from" id="undo_redo" class="form-control" size="17" multiple="multiple">
+                        </select>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!--<button type="button" id="undo_redo_move_up" class="btn btn-block"><i class="glyphicon glyphicon-arrow-up"></i></button>-->
+                                <input type="hidden" id="pageNum" value="0"/>
+                                <h5> 总条数：<span class="label label-default" id="totalNum"></span></h5>
+                            </div>
+                            <div class="col-sm-6">
+                                <button type="button" id="loadMore" class="btn btn-block">加载更多</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div style="height: 100px">
+                    <div class="input-group">
+                        <span class="input-group-addon">展示</span>
+                        <input type="text" name="maxNum" value="8" class="form-control" placeholder="展示多少"
+                               aria-describedby="basic-addon2">
+                        <span class="input-group-addon" id="basic-addon2">条</span>
+                    </div>
+                </div>
+                <div>
+                    <!--<button type="button" id="undo_redo_undo" class="btn btn-primary btn-block">回退</button>-->
+                    <button type="button" id="undo_redo_rightAll" class="btn btn-block"><i
+                            class="glyphicon glyphicon-forward"></i></button>
+                    <button type="button" id="undo_redo_rightSelected" class="btn btn-block"><i
+                            class="glyphicon glyphicon-chevron-right"></i></button>
+                    <button type="button" id="undo_redo_leftSelected" class="btn btn-block"><i
+                            class="glyphicon glyphicon-chevron-left"></i></button>
+                    <button type="button" id="undo_redo_leftAll" class="btn btn-block"><i
+                            class="glyphicon glyphicon-backward"></i></button>
+                    <!--<button type="button" id="undo_redo_redo" class="btn btn-warning btn-block">前进</button>-->
+                </div>
+                <div style="height: 20px"></div>
+            </div>
+
+            <div class="col-md-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            <center>已展示广告</center>
+                        </h3>
+                    </div>
+                    <div class="panel-body select-contain">
+                        <!--<input type="text" name="q" class="form-control" placeholder="Search...">-->
+                        <select name="to" id="undo_redo_to" class="form-control" size="18" multiple="multiple">
+                        </select>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <button type="button" id="undo_redo_move_up" class="btn btn-block"><i
+                                        class="glyphicon glyphicon-arrow-up"></i></button>
+                            </div>
+                            <div class="col-sm-4">
+                                <button type="button" id="submit_order" class="btn btn-block">提交当前顺序</button>
+                            </div>
+                            <div class="col-sm-4">
+                                <button type="button" id="undo_redo_move_down" class="btn btn-block col-sm-6"><i
+                                        class="glyphicon glyphicon-arrow-down"></i></button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6" style="margin-top: 12px">
+                                <h5>已选条数：<span class="label label-default" id="selectNum"></span></h5>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<script th:src="@{/js/custom/updateshow.js}"></script>
+<script th:src="@{/js/custom/billBoard.js}"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        thefinalFuc(1)
+    });
+</script>
+
+</body>
+</html>

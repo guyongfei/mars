@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+    <bean id="office365MailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host.office365}"/>
+        <property name="username" value="${mail.account.office365}"/>
+        <property name="password" value="${mail.password.office365}"/>
+        <property name="protocol" value="${mail.protocol}"/>
+        <property name="port" value="${mail.port.office365}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.ssl.socketFactory.class">
+                    com.witshare.mars.config.AlwaysTrustSSLContextFactory
+                </prop>
+                <prop key="mail.smtp.ssl.socketFactory.port">587</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.timeout">30000</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
+        </property>
+    </bean>
+    <bean id="hotmailMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+        <property name="host" value="${mail.host.hotmail}"/>
+        <property name="username" value="${mail.account.hotmail}"/>
+        <property name="password" value="${mail.password.hotmail}"/>
+        <property name="protocol" value="${mail.protocol}"/>
+        <property name="port" value="${mail.port.hotmail}"/>
+        <property name="javaMailProperties">
+            <props>
+                <prop key="mail.smtp.auth">true</prop>
+                <prop key="mail.smtp.ssl.socketFactory.class">
+                    com.witshare.mars.config.AlwaysTrustSSLContextFactory
+                </prop>
+                <prop key="mail.smtp.ssl.socketFactory.port">587</prop>
+                <prop key="mail.smtp.starttls.enable">true</prop>
+                <prop key="mail.smtp.timeout">30000</prop>
+                <prop key="mail.debug">true</prop>
+            </props>
+        </property>
+    </bean>
+</beans>
