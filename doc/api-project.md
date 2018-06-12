@@ -1,18 +1,21 @@
 <!-- toc -->
 
+# 项目相关
+
 ## 1.获取项目列表
+
 - url : /project/list
 - method:get
 - request param
-    - ascOrDesc  ：排序方式 1-正序，-1 - 倒序
-    - orderCondition：排序字段 项目名排序，修改日
-    - pageNum ：页码
-    - pageSize ：每页大小
-    - projectName ：项目名
-    - projectToken ：项目token
-    - pageNum ：用户的邮箱，用于收取验证码
-    - pageNum ：用户的邮箱，用于收取验证码
-- response body
+  - ascOrDesc  ：排序方式 1-正序，-1 - 倒序
+  - orderCondition：排序字段 项目名排序，修改日
+  - pageNum ：页码
+  - pageSize ：每页大小
+  - projectName ：项目名
+  - projectToken ：项目token
+  - pageNum ：用户的邮箱，用于收取验证码
+  - pageNum ：用户的邮箱，用于收取验证码
+  - response body
 
 ```json
 {
@@ -37,7 +40,8 @@
       }
  }
 ```
->data.list参数说明
+
+> data.list参数说明
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
@@ -50,10 +54,8 @@
 |startTime|date|是|开始时间|
 |endTime|date|是|结束时间|
 
+## 2.获取项目详情
 
-
-
-## 1.获取项目详情
 - url : /project/{projectGid}
 - method:get
 - response body
@@ -87,7 +89,8 @@
       }
  }
 ```
->data参数说明
+
+> data参数说明
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
@@ -107,7 +110,3 @@
 |nextPriceInterval|number|是|距下一个价格开始时间的间隔，单位ms|
 |startTime|string|是|开始时间|
 |endTime|string|是|结束时间|
-
-
-
-
