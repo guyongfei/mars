@@ -2,18 +2,28 @@
 
 # 项目相关
 
+> 项目状态
+
+|代号|描述|备注|
+|---|---|---|
+|0|未开始||
+|1|开始认筹还未到软顶||
+|2|开始认筹还未到硬顶||
+|3|认筹完成且成功||
+|4|认筹完成但失败||
+
 ## 1.获取项目列表
 
 - url : /project/list
 - method:get
 - request param
-  - ascOrDesc：排序方式 1-正序，-1 - 倒序
-  - orderCondition：排序字段 项目名排序，修改日期
+  - ascOrDesc：排序方式 （-1 - 倒序，1-正序）
+  - orderCondition：排序字段
   - pageNum：页码
   - pageSize：每页大小
   - projectName：项目名
   - projectToken：项目token
-  - projectStatus：项目状态
+  - projectStatus：项目状态|
 - response body
 
     ```json
@@ -45,7 +55,7 @@
 |字段|类型|是否必须|说明|
 |---|---|---|---|
 |projectGid|string|是|项目唯一标识|
-|projectStatus|number|是|项目状态(0-未开始、1-开始认筹还未到软顶、2-开始认筹还未到硬顶、3-认筹完成且成功、4-认筹完成但是失败)|
+|projectStatus|number|是|项目状态|
 |projectName|string|是|项目名称|
 |projectToken|string|是|项目token|
 |projectLogoLink|string|是|项目logo地址|
@@ -94,7 +104,7 @@
 |字段|类型|是否必须|说明|
 |---|---|---|---|
 |projectGid|string|是|项目唯一标识|
-|projectStatus|number|是|项目状态(0-未开始、1-开始认筹还未到软顶、2-开始认筹还未到硬顶、3-认筹完成且成功、4-认筹完成但是失败)|
+|projectStatus|number|是|项目状态|
 |projectName|string|是|项目名称|
 |projectToken|string|是|项目token|
 |projectLogoLink|string|是|项目logo地址|
