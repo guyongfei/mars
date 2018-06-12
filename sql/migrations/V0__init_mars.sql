@@ -105,7 +105,7 @@ CREATE TABLE `project_token_distribution` (
 CREATE TABLE `project_website` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `project_gid` CHAR(32) NOT NULL COMMENT '项目唯一标识',
-  `website_type` INT(11) UNSIGNED NOT NULL COMMENT '网站类型(官网、facebook、twitter等)',
+  `website_type` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '网站类型(官网、facebook、twitter等)',
   `link_url` VARCHAR(255) NOT NULL DEFAULT '' COMMENT '链接地址',
   `create_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   `update_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
@@ -153,7 +153,7 @@ CREATE TABLE `record_user_tx` (
   `platform_tx` VARCHAR(68) NOT NULL COMMENT '打币交易号',
   `eth_fee` DECIMAL(20,10) NOT NULL DEFAULT '0.0000000000' COMMENT '手续费',
   `platform_tx_status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '状态(0-->初始状态,1-校验成功，2-校验失败)',
-  `distrubition_time` TIMESTAMP NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '打币时间',
+  `distribution_time` TIMESTAMP NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '打币时间',
   `create_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   `update_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
   PRIMARY KEY (`id`),
