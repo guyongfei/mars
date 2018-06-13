@@ -2,7 +2,7 @@
 
 # 项目相关
 
-> 项目状态
+> projectStatus 项目状态
 
 |代号|描述|备注|
 |---|---|---|
@@ -17,10 +17,6 @@
 - url : /project/list
 - method:get
 - request param
-  - ascOrDesc：排序方式 （-1 - 倒序，1-正序）
-  - orderCondition：排序字段
-  - pageNum：页码
-  - pageSize：每页大小
   - projectName：项目名
   - projectToken：项目token
   - projectStatus：项目状态
@@ -83,19 +79,22 @@
             "projectImgLink":"",
             "projectInstruction":"",
             "projectContent":"",
-            "officialLink":"",
-            "whitePaperLink":"",
-            "socialList":[
+            "webSites":
                 {
-                    "linkName":"",
-                    "linkUrl":""
-                }
-            ],
+                    "officialLink":"",
+                    "whitePaperLink":"",
+                    "facebook":"",
+                    "twitter":"",
+                    "biYong":"",
+                    "gitHub":"",
+                    "telegram":"",
+                    "reddit":""
+                },
             "price":0.00,
-            "soldAmount":"",
-            "nextPriceInterval":"",
-            "startTime":"",
-            "endTime":""
+            "soldAmount":3215456,
+            "nextPriceInterval":32156420,
+            "startTime":1523212345600,
+            "endTime":1523212345600
         }
     }
     ```
@@ -113,11 +112,9 @@
 |projectImgLink|string|是|项目大图地址|
 |projectInstruction|string|是|项目简介|
 |projectContent|string|是|项目详情|
-|officialLink|string|是|官网链接|
-|whitePaperLink|string|是|白皮书连接|
-|socialList|array|是|社交网站链接|
+|webSites|object|是|网站链接集合|
 |price|number|是|当前价格（ETH）|
 |soldAmount|number|是|已售数量|
 |nextPriceInterval|number|是|距下一个价格开始时间的间隔，单位ms|
-|startTime|string|是|开始时间|
-|endTime|string|是|结束时间|
+|startTime|number|是|开始时间，单位ms|
+|endTime|number|是|结束时间，单位ms|

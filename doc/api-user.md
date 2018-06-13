@@ -22,7 +22,7 @@
 
 ## 2.注册
 
-> 注册成功后，后台会直接处理登录,前端需通过请求userInfo接口来获取该用户的相关信息；
+> 注册成功后，后台会直接处理登录,前端需通过请求 /user/user-info 接口来获取该用户的相关信息；
 - url：/register
 - method:post
 - request body
@@ -70,8 +70,7 @@
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
-|success|bool|是|是否登陆成功，当登陆成功后 X-WITSHARE-TOKEN 将会置于Cookie中|
-
+|success|bool|是|是否登陆成功，当登陆成功后 witshare_mars_token 将会置于Cookie中|
 
 ## 4.登出
 
@@ -131,7 +130,7 @@
         "email":"",
         "nickname":"",
         "head_img_url":"",
-        "project_num":"",
+        "project_num":5,
         "admin":true,
         "managementPage":""
       }
@@ -147,6 +146,6 @@
 |email|string|是|邮箱|
 |nickname|string|是|昵称|
 |headImgUrl|string|是|头像地址|
-|projectNum|string|是|实际认购项目数|
+|projectNum|number|是|实际认购项目数|
 |admin|boolean|是|是否是管理员|
 |managementPage|string|否|后台管理页面|
