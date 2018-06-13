@@ -34,26 +34,17 @@
 - method:post
 - request body
 
-  ``` json
+  ```json
   {
     "token":"SLN",
     "payAmount":123.45,
-    "payCoinType":0| 1,
+    "payCoinType":0,
     "payTx":"0xdc9f30b716597999eafa0cabaa0b33423845e2f13d4c30d845018d4cf7bad959",
     "hopeGetAmount":12354.123,
     "userAddress":"0x01a52D062B7425E6D60ed1f553c4E743136a8F07"
   }
 
   ```
-
-  |字段|类型|是否必须|说明|
-  |---|---|---|---|
-  |token|string|是|认筹项目token|
-  |payAmount|number|是|支付数量|
-  |payCoinType|number|是|支付类型|
-  |payTx|number|是|交易号|
-  |hopeGetAmount|number|是|期望得到的token数量|
-  |userAddress|string|是|用户地址|
 
 - response body
 
@@ -63,6 +54,17 @@
       "success": true
     }
   ```
+
+> 请求字段详解
+
+|字段|类型|是否必须|说明|
+|---|---|---|---|
+|token|string|是|认筹项目token|
+|payAmount|number|是|支付数量|
+|payCoinType|number|是|支付类型|
+|payTx|number|是|交易号|
+|hopeGetAmount|number|是|期望得到的token数量|
+|userAddress|string|是|用户地址|
 
 ## 2.个人交易列表
 

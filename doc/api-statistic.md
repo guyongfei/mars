@@ -120,9 +120,11 @@
 |---|---|---|---|
 |projectGid|string|是|项目唯一标识|
 |token|string|是|项目token|
-|price|number|是|今日价格(ETH)|
-|getEthAmount|number|是|今日认筹数量(ETH)|
-|actualGetEthAmount|number|是|今日实际认筹数量(ETH)|
-|txUserAmount|number|是|认筹人数|
-|actualTxUserAmount|number|是|实际认筹人数|
+|price|number|是|价格(ETH)|
+|getEthAmount|number|是|认购数量(ETH)|
+|actualGetEthAmount|number|是|实际认购数量(ETH)|
+|distributeAmount|number|是|应分发token数|
+|actualDistributeAmount|number|是|实际应分发token数量|
+|txUserAmount|number|是|认购人数|
+|actualTxUserAmount|number|是|实际认购人数|
 |dayTime|number|是|时间戳|
