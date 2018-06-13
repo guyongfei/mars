@@ -40,7 +40,7 @@ public class ManagementProjectController {
     @RequestMapping(value = "/project", method = RequestMethod.POST)
     public ResponseBean addProject(HttpServletRequest request,
                                    HttpServletResponse response,
-                                   @RequestBody Map<String, Object> requestBody) {
+                                   @RequestBody String requestBody) {
         ResponseBean responseBean;
         try {
             sysProjectService.save(requestBody);

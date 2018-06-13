@@ -16,4 +16,6 @@ public interface StaticProjectWebsiteMapper {
     List<WebSiteManagementBean> selectManagementWebsite(Long id);
 
     int saveOrUpdate(LinkedList list);
+
+    int saveOrUpdate(SysProjectBean sysProjectBean);
 }

@@ -5,7 +5,7 @@ import com.witshare.mars.dao.mysql.ProjectWebsiteMapper;
 import com.witshare.mars.dao.mysql.StaticProjectWebsiteMapper;
 import com.witshare.mars.pojo.domain.ProjectWebsite;
 import com.witshare.mars.pojo.domain.ProjectWebsiteExample;
-import com.witshare.mars.pojo.dto.ProjectWebsiteBean;
+import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.pojo.dto.WebSiteManagementBean;
 import com.witshare.mars.service.ProjectWebSiteService;
 import org.apache.commons.lang3.StringUtils;
@@ -44,11 +44,11 @@ public class ProjectWebSiteServiceImpl implements ProjectWebSiteService {
 
 
     @Override
-    public int saveOrUpdate(LinkedList<ProjectWebsiteBean> projectWebsiteBeans) {
-        if (CollectionUtils.isEmpty(projectWebsiteBeans)) {
+    public int saveOrUpdate(SysProjectBean sysProjectBean) {
+        if (sysProjectBean == null) {
             return 0;
         }
-        return staticProjectWebsiteMapper.saveOrUpdate(projectWebsiteBeans);
+        return staticProjectWebsiteMapper.saveOrUpdate(sysProjectBean);
     }
 
 

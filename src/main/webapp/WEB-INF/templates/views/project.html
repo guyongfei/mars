@@ -41,24 +41,104 @@
                         <form class="form-horizontal" id="addEvent" method="post" data-toggle="validator" role="form">
                             <fieldset>
                                 <div class="form-group">
-                                    <label class="col-md-1 control-label">项目名称(中)</label>
-                                    <div class="col-md-3">
-                                        <input class="form-control" type="text" id="projectNameZh" name="projectNameZh"
-                                               style="border-left:none;"
-                                               autocomplete="off" placeholder="ZH">
+
+                                    <div class="form-group">
+                                        <label class="col-md-1 control-label">TOKEN</label>
+                                        <div class="col-md-3 control-label">
+                                            <input class="form-control" type="text" id="token" name="token"
+                                                   style="border-left:none;"
+                                                   autocomplete="off">
+                                        </div>
                                     </div>
-                                    <label class="col-md-1 control-label">项目名称(英)</label>
-                                    <div class="col-md-3">
+
+                                    <label class="col-md-1 control-label">名称(英)</label>
+                                    <div class="col-md-2">
                                         <input class="form-control" type="text" id="projectNameEn" name="projectNameEn"
                                                style="border-left:none;"
                                                autocomplete="off" placeholder="EN">
                                     </div>
+
+                                    <label class="col-md-1 control-label">名称(繁)</label>
+                                    <div class="col-md-2">
+                                        <input class="form-control" type="text" id="projectNameCn" name="projectNameCn"
+                                               style="border-left:none;"
+                                               autocomplete="off" placeholder="CN">
+                                    </div>
+
+                                    <label class="col-md-1 control-label">名称(韩)</label>
+                                    <div class="col-md-2">
+                                        <input class="form-control" type="text" id="projectNameKo" name="projectNameKo"
+                                               style="border-left:none;"
+                                               autocomplete="off" placeholder="KO">
+                                    </div>
+
+                                    <label class="col-md-1 control-label">名称(日)</label>
+                                    <div class="col-md-2">
+                                        <input class="form-control" type="text" id="projectNameJa" name="projectNameJa"
+                                               style="border-left:none;"
+                                               autocomplete="off" placeholder="JA">
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-md-1 control-label">TOKEN</label>
-                                    <div class="col-md-3 control-label">
-                                        <input class="form-control" type="text" id="token" name="token"
+                                    <label class="col-md-1 control-label">合约地址</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class="form-control" type="text" id="tokenAddress" name="tokenAddress"
+                                               style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">项目地址</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class="form-control" type="text" id="projectAddress"
+                                               name="projectAddress"
+                                               style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">软顶数量</label>
+                                    <div class="col-md-5 control-label">
+                                        <input class="form-control thousands cap" type="text" id="softCap"
+                                               name="softCap"
+                                               style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+
+                                    <label class="col-md-1 control-label">硬顶数量</label>
+                                    <div class="col-md-5 control-label">
+                                        <input class="form-control thousands cap" type="text" id="hardCap"
+                                               name="hardCap"
+                                               style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">最低认购数量</label>
+                                    <div class="col-md-5 control-label">
+                                        <input class="form-control thousands cap " type="text" id="minPurchaseAmount"
+                                               name="minPurchaseAmount"
+                                               style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">开始单价（ETH）</label>
+                                    <div class="col-md-5 control-label">
+                                        <input class="form-control thousands price" type="text" id="startPrice"
+                                               name="startPrice" style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">结束单价（ETH）</label>
+                                    <div class="col-md-5 control-label">
+                                        <input class="form-control thousands price" type="text" id="endPrice"
+                                               name="endPrice"
                                                style="border-left:none;"
                                                autocomplete="off">
                                     </div>
@@ -66,68 +146,23 @@
 
 
                                 <div class="form-group">
-                                    <label class="col-md-1 control-label">评级</label>
-                                    <div class="col-md-3">
-                                        <select class="form-control frequency" id="grade" name="grade">
-                                            <option value="">请选择</option>
-                                            <option value="AAA">AAA</option>
-                                            <option value="AA">AA</option>
-                                            <option value="A">A</option>
-                                            <option value="BBB">BBB</option>
-                                            <option value="BB">BB</option>
-                                            <option value="B">B</option>
-                                            <option value="C">C</option>
-                                            <option value="D">D</option>
-                                            <option value="NP">NP</option>
-                                        </select>
+                                    <label class="col-md-1 control-label">开始时间</label>
+                                    <div class="col-md-5 control-label">
+                                        <input class="form-control time" type="text" value=""
+                                               id="startTimePicker" name="startTimePicker"
+                                               data-date-format="yyyy/mm/dd hh:ii">
                                     </div>
-                                </div>
-                                <div class="form-group">
-                                    <label class="col-md-1  control-label">ICO</label>
-                                    <div class="col-md-4">
-                                        <label class="radio-inline">
-                                            <input type="radio" name="icoV" id="ico0" value="0">未上市
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="icoV" id="ico1" value="1"> 已上市
-                                        </label>
-                                        <label class="radio-inline">
-                                            <input type="radio" name="icoV" id="ico2" value="2"> 认筹中
-                                        </label>
+
+                                    <label class="col-md-1 control-label">结束时间</label>
+                                    <div class="col-md-5 control-label">
+                                        <input class="form-control time" type="text" value=""
+                                               id="endTimePicker" name="endTimePicker"
+                                               data-date-format="yyyy/mm/dd hh:ii">
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="col-md-1  control-label ">项目类型</label>
-                                    <div class="col-md-2">
-                                        <select class="form-control frequency" id="projectTypeP" name="projectTypeP">
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <select class="form-control frequency" id="projectTypeC" name="projectTypeC"
-                                        >
-                                        </select>
-                                    </div>
-                                </div>
 
-                                <div class="form-group">
-                                    <label class="col-md-1 control-label">官网地址</label>
-                                    <div class="col-md-10 control-label">
-                                        <input class="form-control" type="text" id="officialLink" name="officialLink"
-                                               style="border-left:none;"
-                                               autocomplete="off" placeholder="" maxlength="200">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-1 control-label">项目简介(中)</label>
-                                    <div class="col-md-10 control-label">
-                                              <textarea class="form-control" type="text" id="instructionZh"
-                                                        name="instructionZh" style="border-left:none;"
-                                                        autocomplete="off"
-                                                        placeholder="ZH"></textarea>
-                                    </div>
-                                </div>
+                                <hr/>
                                 <div class="form-group">
                                     <label class="col-md-1 control-label">项目简介(英)</label>
                                     <div class="col-md-10 control-label">
@@ -139,12 +174,36 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-md-1 control-label">项目详情(中)</label>
+                                    <label class="col-md-1 control-label">项目简介(繁)</label>
                                     <div class="col-md-10 control-label">
-                          <textarea class="form-control" id="contentZh" name="contentZh" style="border-left:none;"
-                                    autocomplete="off" placeholder="ZH"></textarea>
+                                              <textarea class="form-control" type="text" id="instructionCn"
+                                                        name="instructionCn" style="border-left:none;"
+                                                        autocomplete="off"
+                                                        placeholder="ZH"></textarea>
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">项目简介(韩)</label>
+                                    <div class="col-md-10 control-label">
+                                              <textarea class="form-control" type="text" id="instructionKo"
+                                                        name="instructionKo" style="border-left:none;"
+                                                        autocomplete="off"
+                                                        placeholder="EN"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">项目简介(日)</label>
+                                    <div class="col-md-10 control-label">
+                                              <textarea class="form-control" type="text" id="instructionJa"
+                                                        name="instructionJa" style="border-left:none;"
+                                                        autocomplete="off"
+                                                        placeholder="EN"></textarea>
+                                    </div>
+                                </div>
+
+                                <hr/>
+
                                 <div class="form-group">
                                     <label class="col-md-1 control-label">项目详情(英)</label>
                                     <div class="col-md-10  control-label">
@@ -153,16 +212,31 @@
                                     </div>
                                 </div>
 
-
                                 <div class="form-group">
-                                    <label class="col-md-1 control-label">白皮书地址(中)</label>
+                                    <label class="col-md-1 control-label">项目详情(繁)</label>
                                     <div class="col-md-10 control-label">
-                                        <input class="form-control" type="text" id="whitePaperLinkZh"
-                                               name="whitePaperLinkZh"
-                                               style="border-left:none;"
-                                               autocomplete="off" placeholder="ZH" maxlength="200">
+                          <textarea class="form-control" id="contentCn" name="contentCn" style="border-left:none;"
+                                    autocomplete="off" placeholder="CN"></textarea>
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">项目详情(韩)</label>
+                                    <div class="col-md-10  control-label">
+                          <textarea class="form-control" id="contentKo" name="contentKo" style="border-left:none;"
+                                    autocomplete="off" placeholder="KO"></textarea>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">项目详情(日)</label>
+                                    <div class="col-md-10  control-label">
+                          <textarea class="form-control" id="contentJa" name="contentJa" style="border-left:none;"
+                                    autocomplete="off" placeholder="JA"></textarea>
+                                    </div>
+                                </div>
+
+                                <hr/>
+
+
                                 <div class="form-group">
                                     <label class="col-md-1 control-label">白皮书地址(英)</label>
                                     <div class="col-md-10  control-label">
@@ -172,124 +246,96 @@
                                                autocomplete="off" placeholder="EN" maxlength="200">
                                     </div>
                                 </div>
-
-                                <div class="form-group ">
-                                    <div class="col-md-11 control-label">
-                                        <div class="form-group">
-                                            <label class="col-md-1 control-label "
-                                                   style="text-align: right">社交网站</label>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">Twitter</label>
-                                            <div class="col-md-10 control-label">
-                                                <input class=" form-control" type="text" id="Twitter" ids="#"
-                                                       name="socialWebsite" style="border-left:none;"
-                                                       autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">Facebook</label>
-                                            <div class="col-md-10 control-label">
-                                                <input class=" form-control" type="text" id="Facebook" ids=""
-                                                       name="socialWebsite" style="border-left:none;"
-                                                       autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">Telegram</label>
-                                            <div class="col-md-10 control-label">
-                                                <input class=" form-control" type="text" id="Telegram" ids=""
-                                                       name="socialWebsite" style="border-left:none;"
-                                                       autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">Reddit</label>
-                                            <div class="col-md-10 control-label">
-                                                <input class=" form-control" type="text" id="Reddit" ids=""
-                                                       name="socialWebsite" style="border-left:none;"
-                                                       autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">币用</label>
-                                            <div class="col-md-10 control-label">
-                                                <input class=" form-control" type="text" id="BiYong" ids=""
-                                                       name="socialWebsite" style="border-left:none;"
-                                                       autocomplete="off">
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">Github</label>
-                                            <div class="col-md-10 control-label">
-                                                <input class=" form-control" type="text" id="GitHub" ids=""
-                                                       name="socialWebsite" style="border-left:none;"
-                                                       autocomplete="off">
-                                            </div>
-                                        </div>
-
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">白皮书地址(繁)</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class="form-control" type="text" id="whitePaperLinkCn"
+                                               name="whitePaperLinkCn"
+                                               style="border-left:none;"
+                                               autocomplete="off" placeholder="ZH" maxlength="200">
                                     </div>
                                 </div>
-                                <div class="form-group ">
-                                    <div class="col-md-11  control-label">
-                                        <div class="form-group">
-                                            <label class="col-md-1 control-label" style="text-align: right">得分</label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">商业实质(40%)</label>
-                                            <div class="col-md-10 control-label">
-                                                <input class="form-control numScore" type="text"
-                                                       id="commercialSubstanceScore"
-                                                       name="commercialSubstanceScore"
-                                                       style="border-left:none;"
-                                                       autocomplete="off" placeholder="0-40">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">团队(20%)</label>
-                                            <div class="col-md-10 control-label">
-                                                <input class="form-control numScore" type="text" id="teamScore"
-                                                       name="teamScore"
-                                                       style="border-left:none;"
-                                                       autocomplete="off" placeholder="0-20">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">技术及应用(15%)</label>
-                                            <div class="col-md-10 control-label">
-                                                <input class="form-control numScore" type="text" id="productScore"
-                                                       name="productScore"
-                                                       style="border-left:none;"
-                                                       autocomplete="off" placeholder="0-15">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">项目进展(15%)</label>
-                                            <div class="col-md-10 control-label">
-                                                <input class=" form-control numScore" type="text" id="scheduleScore"
-                                                       name="scheduleScore"
-                                                       style="border-left:none;"
-                                                       autocomplete="off" placeholder="0-15"
-                                                >
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="col-md-2 control-label">代币运营(10%)</label>
-                                            <div class="col-md-10 control-label">
-                                                <input class=" form-control numScore" type="text"
-                                                       id="tokensOperationScore"
-                                                       name="tokensOperationScore"
-                                                       style="border-left:none;"
-                                                       autocomplete="off" placeholder="0-10">
-                                            </div>
-                                        </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">白皮书地址(韩)</label>
+                                    <div class="col-md-10  control-label">
+                                        <input class="form-control" type="text" id="whitePaperLinkKo"
+                                               name="whitePaperLinkKo"
+                                               style="border-left:none;"
+                                               autocomplete="off" placeholder="EN" maxlength="200">
                                     </div>
                                 </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">白皮书地址(日)</label>
+                                    <div class="col-md-10  control-label">
+                                        <input class="form-control" type="text" id="whitePaperLinkJa"
+                                               name="whitePaperLinkJa"
+                                               style="border-left:none;"
+                                               autocomplete="off" placeholder="EN" maxlength="200">
+                                    </div>
+                                </div>
+
+                                <hr/>
+
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">官网地址</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class="form-control" type="text" id="officialLink" name="officialLink"
+                                               style="border-left:none;"
+                                               autocomplete="off" placeholder="" maxlength="200">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">Twitter</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class=" form-control" type="text" id="twitter" name="twitter"
+                                               style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">Facebook</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class=" form-control" type="text" id="facebook" name="facebook"
+                                               style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">Telegram</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class=" form-control" type="text" id="telegram"
+                                               name="telegram" style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">Reddit</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class=" form-control" type="text" id="reddit" ids=""
+                                               name="reddit" style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">币用</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class=" form-control" type="text" id="biYong"
+                                               name="biYong" style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">Github</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class=" form-control" type="text" id="gitHub" ids=""
+                                               name="gitHub" style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+
                                 <hr>
+
                                 <span class="col-md-12" style="color: #9eacb4;text-align: left">新增项目时，下面四项必填；修改项目时，如不修改可不传</span>
 
                                 <div class="form-group">
@@ -304,13 +350,23 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-md-1  control-label">PDF(ZH)</label>
-                                    <div class="col-md-3">
-                                        <input type="file" id="pdfZh" name="pdfZh">
-                                    </div>
-                                    <label class="col-md-1 control-label">PDF(EN)</label>
+                                    <label class="col-md-1 control-label">PDF(英)</label>
                                     <div class="col-md-3">
                                         <input type="file" id="pdfEn" name="pdfEn">
+                                    </div>
+                                    <label class="col-md-1  control-label">PDF(繁)</label>
+                                    <div class="col-md-3">
+                                        <input type="file" id="pdfCn" name="pdfCn">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-md-1 control-label">PDF(韩)</label>
+                                    <div class="col-md-3">
+                                        <input type="file" id="pdfKo" name="pdfKo">
+                                    </div>
+                                    <label class="col-md-1 control-label">PDF(日)</label>
+                                    <div class="col-md-3">
+                                        <input type="file" id="pdfJa" name="pdfJa">
                                     </div>
                                 </div>
                             </fieldset>

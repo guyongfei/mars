@@ -1,6 +1,7 @@
 package com.witshare.mars.service.impl;
 
 
+import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.model.Bucket;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.witshare.mars.constant.EnumStorage;
@@ -94,7 +95,10 @@ public class QingyunStorageServiceImpl implements QingyunStorageService {
      * @param ismd
      */
     private void uploadToQingyunStorage(QingyunStorageBean qingyunStorageBean, InputStreamAndMetadata ismd) {
-        qingObjStoreAWS3.uploadObject(propertiesConfig.qingyunBucket, qingyunStorageBean.getObjectName(), ismd.getInputStream(), ismd.getObjectMetadata());
+        boolean success = qingObjStoreAWS3.uploadObject(propertiesConfig.qingyunBucket, qingyunStorageBean.getObjectName(), ismd.getInputStream(), ismd.getObjectMetadata());
+        if (!success) {
+            throw new AmazonServiceException("");
+        }
     }
 
 

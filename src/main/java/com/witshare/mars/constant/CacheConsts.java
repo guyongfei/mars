@@ -5,7 +5,7 @@ public class CacheConsts {
     public static final int RETRY_TIMES = 3;
     public static final int SHIRO_SESSION_EXPIRE_TIME = -1;
     public static final int PHONE_NO_VERIFY_CODE_EXPIRE_MINUTE = 15;
-    public static final String PROJECT_NAME = "witshare_api";
+    public static final String PROJECT_NAME = "mars";
     public static final String KEY_DATA = "data";
     public static final String CONFIG_BILLBOARD_NUM = "billBoardNum";
     public static final String KEY_COOKIE_NAME = PROJECT_NAME;

@@ -1,9 +1,13 @@
 var logStr;
 var view;
-var pdfZh;
-var pdfZhName;
 var pdfEn;
 var pdfEnName;
+var pdfCn;
+var pdfCnName;
+var pdfKo;
+var pdfKoName;
+var pdfJa;
+var pdfJaName;
 var projectNow;
 var addMethod = true;
 var projectTypeArr = new Array();
@@ -288,60 +292,6 @@ function reloadTable(pageNum) {
     $('#inner_table').bootstrapTable('refresh', {pageNumber: pageNum});
 }
 
-//初始化加载下拉框
-$(function () {
-    //项目类型
-    $.get(contextPath + "/management/projecttype/list", function (data) {
-        projectTypeArr = data.data;
-        if (projectTypeArr) {
-            $("#projectTypeP").empty();
-            $("#projectTypeC").empty();
-            $("#projectTypeP").append("<option value=''>请选择</option>");
-            $.each(projectTypeArr, function (index, obj) {
-                if (obj) {
-                    if (obj.pId == 0) {
-                        $("#projectTypeP").append("<option value='" + obj.id + "'>" + obj.projectTypeZh + "</option>");
-                    }
-                }
-            });
-        }
-    });
-    $("#projectTypeP").bind("change", function () {
-        var id = $(this).val();
-        var childrenArr = projectTypeArr[id]
-        $("#projectTypeC").empty();
-        $("#projectTypeC").append("<option value=''>请选择</option>");
-        if (childrenArr) {
-            $.each(childrenArr.children, function (index, obj) {
-                if (obj) {
-                    $("#projectTypeC").append("<option value='" + obj.id + "'>" + obj.projectTypeZh + "</option>");
-                }
-            });
-        }
-    })
-});
-
-//项目类型
-$.get(contextPath + "/project/type", function (data) {
-    var list = data.data;
-    if (list) {
-        $("#projectType").empty();
-        $.each(list, function (index, obj) {
-            $("#projectType").append();
-        });
-    }
-});
-
-//社交网站
-$.get(contextPath + "/management/social/list", function (data) {
-    var list = data.data;
-    if (list) {
-        $("#socialWebSite").empty();
-        $.each(list, function (index, obj) {
-            $('#' + obj.linkName).attr('ids', obj.id);
-        });
-    }
-});
 //查询按钮
 $('#btn_query').click(function () {
     reloadTable(1);
@@ -355,10 +305,14 @@ $('#addModal').on('hidden.bs.modal', function () {
 
     logStr = "";
     view = "";
-    pdfZh = "";
     pdfEn = "";
-    pdfZhName = "";
     pdfEnName = "";
+    pdfCn = "";
+    pdfCnName = "";
+    pdfKo = "";
+    pdfKoName = "";
+    pdfJa = "";
+    pdfJaName = "";
     addMethod = true;
 
     $('#addEvent').bootstrapValidator("resetForm", true);
@@ -385,18 +339,6 @@ $('#addModal').on('hidden.bs.modal', function () {
                 type: 'image/jpg,image/jpeg,image/bmp,image/gif,image/png',
                 maxSize: 10 * 1024 * 1024,
                 message: '请上传10M以内的图像（jpg,jpeg,bmp,gif,png）'
-            }
-        }
-    }).bootstrapValidator('addField', 'pdfZh', {
-        validators: {
-            notEmpty: {
-                message: 'pdf不能为空'
-            },
-            file: {
-                extension: 'pdf',
-                type: 'application/pdf',
-                maxSize: 10 * 1024 * 1024,
-                message: '请上传10M以内的pdf文件'
             }
         }
     }).bootstrapValidator('addField', 'pdfEn', {
@@ -429,7 +371,7 @@ $('input[type=file]').on('change', function (e) {
     if (file) {
         var fileName = file.name;
         fileName = fileName.replace(".pdf", "").replace(/[^\dA-Za-z\.]/g, "_");
-        console.log(fileName)
+        console.log(fileName);
         var reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onloadend = function () {
@@ -440,13 +382,21 @@ $('input[type=file]').on('change', function (e) {
                 case 'view':
                     view = reader.result;
                     break;
-                case 'pdfZh':
-                    pdfZh = reader.result;
-                    pdfZhName = fileName;
+                case 'pdfCn':
+                    pdfCn = reader.result;
+                    pdfCnName = fileName;
                     break;
                 case 'pdfEn':
                     pdfEn = reader.result;
                     pdfEnName = fileName;
+                    break;
+                case 'pdfKo':
+                    pdfKo = reader.result;
+                    pdfKoName = fileName;
+                    break;
+                case 'pdfJa':
+                    pdfJa = reader.result;
+                    pdfJaName = fileName;
                     break;
                 default:
                     break;
@@ -461,12 +411,20 @@ $('input[type=file]').on('change', function (e) {
                 view = "";
                 break;
             case 'pdfZh':
-                pdfZh = "";
-                pdfZhName = "";
+                pdfCn = "";
+                pdfCnName = "";
                 break;
             case 'pdfEn':
                 pdfEn = "";
                 pdfEnName = "";
+                break;
+            case 'pdfKo':
+                pdfKo = "";
+                pdfKoName = "";
+                break;
+            case 'pdfJa':
+                pdfJa = "";
+                pdfJaName = "";
                 break;
             default:
                 break;
@@ -489,30 +447,7 @@ $(function () {
         },
         excluded: [':disabled'],
         fields: {
-            projectNameZh: {
-                validators: {
-                    notEmpty: {
-                        message: '中文项目名称不能为空'
-                    },
-                    stringLength: {
-                        min: 1,
-                        max: 16,
-                        message: '请输入1-16个字符'
-                    }
-                }
-            },
-            projectNameEn: {
-                validators: {
-                    notEmpty: {
-                        message: '英文项目名称不能为空'
-                    },
-                    stringLength: {
-                        min: 1,
-                        max: 32,
-                        message: '请输入1-32个字符'
-                    }
-                }
-            },
+
             token: {
                 validators: {
                     notEmpty: {
@@ -529,35 +464,228 @@ $(function () {
                     }
                 }
             },
-            grade: {
+
+            projectNameEn: {
                 validators: {
                     notEmpty: {
-                        message: '项目评级不能为空'
+                        message: '英文项目名称不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 32,
+                        message: '请输入1-32个字符'
+                    }
+                }
+            },
+            projectNameCn: {
+                validators: {
+                    stringLength: {
+                        min: 1,
+                        max: 32,
+                        message: '请输入1-32个字符'
+                    }
+                }
+            },
+            projectNameKo: {
+                validators: {
+                    stringLength: {
+                        min: 1,
+                        max: 32,
+                        message: '请输入1-32个字符'
+                    }
+                }
+            },
+            projectNameJa: {
+                validators: {
+                    stringLength: {
+                        min: 1,
+                        max: 32,
+                        message: '请输入1-32个字符'
                     }
                 }
             },
 
-            icoV: {
+
+            tokenAddress: {
                 validators: {
                     notEmpty: {
-                        message: 'ICO不能为空'
+                        message: '合约地址不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 1,
+                        message: ''
                     }
                 }
             },
-            projectTypeP: {
+
+            projectAddress: {
                 validators: {
                     notEmpty: {
-                        message: '项目一级类型不能为空'
+                        message: '项目地址不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 1,
+                        message: ''
                     }
                 }
             },
-            projectTypeC: {
+            softCap: {
                 validators: {
                     notEmpty: {
-                        message: '项目二级类型不能为空'
+                        message: '软顶数量不能为空'
                     }
                 }
             },
+            hardCap: {
+                validators: {
+                    notEmpty: {
+                        message: '硬顶数量不能为空'
+                    }
+                }
+            },
+
+            minPurchaseAmount: {
+                validators: {
+                    notEmpty: {
+                        message: '最低认购数量不能为空'
+                    }
+                }
+            },
+            startTimePicker: {
+                validators: {
+                    notEmpty: {
+                        message: '开始时间不能为空'
+                    }
+                }
+            },
+            endTimePicker: {
+                validators: {
+                    notEmpty: {
+                        message: '结束时间不能为空'
+                    }
+                }
+            },
+            startPrice: {
+                validators: {
+                    notEmpty: {
+                        message: '开始单价（ETH）不能为空'
+                    }
+                }
+            },
+            endPrice: {
+                validators: {
+                    notEmpty: {
+                        message: '结束单价（ETH）不能为空'
+                    }
+                }
+            },
+
+
+            instructionEn: {
+                validators: {
+                    notEmpty: {
+                        message: '项目简介不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的内容'
+                    }
+                }
+            },
+
+            instructionCn: {
+                validators: {
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的内容'
+                    }
+                }
+            },
+
+            instructionKo: {
+                validators: {
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的内容'
+                    }
+                }
+            },
+
+            instructionJa: {
+                validators: {
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的内容'
+                    }
+                }
+            },
+
+
+            contentEn: {
+                validators: {
+                    notEmpty: {
+                        message: '英文项目详情不能为空'
+                    }
+                }
+            },
+            contentCn: {
+                validators: {}
+            },
+            contentKo: {
+                validators: {}
+            },
+            contentJa: {
+                validators: {}
+            },
+
+
+            whitePaperLinkEn: {
+                validators: {
+                    notEmpty: {
+                        message: '英文白皮书地址不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
+                    }
+                }
+            },
+
+            whitePaperLinkCn: {
+                validators: {
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
+                    }
+                }
+            },
+            whitePaperLinkJa: {
+                validators: {
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
+                    }
+                }
+            },
+            whitePaperLinkKo: {
+                validators: {
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
+                    }
+                }
+            },
+
             officialLink: {
                 validators: {
                     notEmpty: {
@@ -571,71 +699,7 @@ $(function () {
                 }
             },
 
-            instructionZh: {
-                validators: {
-                    notEmpty: {
-                        message: '项目简介不能为空'
-                    },
-                    stringLength: {
-                        min: 1,
-                        max: 250,
-                        message: '请输入250个字符以下的网址'
-                    }
-                }
-            },
-            instructionEn: {
-                validators: {
-                    notEmpty: {
-                        message: '项目简介不能为空'
-                    },
-                    stringLength: {
-                        min: 1,
-                        max: 250,
-                        message: '请输入250个字符以下的网址'
-                    }
-                }
-            },
-
-            contentZh: {
-                validators: {
-                    notEmpty: {
-                        message: '中文项目详情不能为空'
-                    }
-                }
-            },
-            contentEn: {
-                validators: {
-                    notEmpty: {
-                        message: '英文项目详情不能为空'
-                    }
-                }
-            },
-
-            whitePaperLinkZh: {
-                validators: {
-                    notEmpty: {
-                        message: '中文白皮书地址不能为空'
-                    },
-                    stringLength: {
-                        min: 1,
-                        max: 250,
-                        message: '请输入250个字符以下的网址'
-                    }
-                }
-            },
-            whitePaperLinkEn: {
-                validators: {
-                    notEmpty: {
-                        message: '英文白皮书地址不能为空'
-                    },
-                    stringLength: {
-                        min: 1,
-                        max: 250,
-                        message: '请输入250个字符以下的网址'
-                    }
-                }
-            },
-            socialWebsite: {
+            twitter: {
                 validators: {
                     notEmpty: {
                         message: '链接地址不能为空'
@@ -647,70 +711,67 @@ $(function () {
                     }
                 }
             },
-            scheduleScore: {
+            facebook: {
                 validators: {
                     notEmpty: {
-                        message: '项目进展得分不能为空'
+                        message: '链接地址不能为空'
                     },
-                    regexp: {
-                        regexp: /^15$|^(\d|1[0-4])$|^(\d|1[0-4])\.\d$/,
-                        message: '请输入0-15之间的整数或小数，小数保留一位'
-                    }
-                }
-            }, commercialSubstanceScore: {
-                validators: {
-                    notEmpty: {
-                        message: '商业实质得分不能为空'
-                    },
-                    regexp: {
-                        regexp: /^40$|^(\d|[1-3]\d)$|^(\d|[1-3]\d)\.\d$/,
-                        message: '请输入0-40之间的整数或小数，小数保留一位'
-                    }
-                }
-            }, tokensOperationScore: {
-                validators: {
-                    notEmpty: {
-                        message: '代币运营得分不能为空'
-                    },
-                    regexp: {
-                        regexp: /^10$|^(\d)$|^(\d)\.\d$/,
-                        message: '请输入0-10之间的整数或小数，小数保留一位'
-                    }
-                }
-            }, productScore: {
-                validators: {
-                    notEmpty: {
-                        message: '技术及应用得分不能为空'
-                    },
-                    regexp: {
-                        regexp: /^15$|^(\d|1[0-4])$|^(\d|1[0-4])\.\d$/,
-                        message: '请输入0-15之间的整数或小数，小数保留一位'
-                    }
-                }
-            }, teamScore: {
-                validators: {
-                    notEmpty: {
-                        message: '团队得分不能为空'
-                    },
-                    regexp: {
-                        regexp: /^20$|^(\d|1\d)$|^(\d|1\d)\.\d$/,
-                        message: '请输入0-20之间的整数或小数，小数保留一位'
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
                     }
                 }
             },
-            pdfZh: {
+            telegram: {
                 validators: {
                     notEmpty: {
-                        message: 'pdf不能为空'
+                        message: '链接地址不能为空'
                     },
-                    file: {
-                        extension: 'pdf',
-                        type: 'application/pdf',
-                        maxSize: 10 * 1024 * 1024,
-                        message: '请上传10M以内的pdf文件'
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
                     }
                 }
             },
+            reddit: {
+                validators: {
+                    notEmpty: {
+                        message: '链接地址不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
+                    }
+                }
+            },
+            biYong: {
+                validators: {
+                    notEmpty: {
+                        message: '链接地址不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
+                    }
+                }
+            },
+            gitHub: {
+                validators: {
+                    notEmpty: {
+                        message: '链接地址不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
+                    }
+                }
+            },
+
             pdfEn: {
                 validators: {
                     notEmpty: {
@@ -724,6 +785,38 @@ $(function () {
                     }
                 }
             },
+
+            pdfCn: {
+                validators: {
+                    file: {
+                        extension: 'pdf',
+                        type: 'application/pdf',
+                        maxSize: 10 * 1024 * 1024,
+                        message: '请上传10M以内的pdf文件'
+                    }
+                }
+            },
+            pdfKo: {
+                validators: {
+                    file: {
+                        extension: 'pdf',
+                        type: 'application/pdf',
+                        maxSize: 10 * 1024 * 1024,
+                        message: '请上传10M以内的pdf文件'
+                    }
+                }
+            },
+            pdfJa: {
+                validators: {
+                    file: {
+                        extension: 'pdf',
+                        type: 'application/pdf',
+                        maxSize: 10 * 1024 * 1024,
+                        message: '请上传10M以内的pdf文件'
+                    }
+                }
+            },
+
             log: {
                 validators: {
                     notEmpty: {
@@ -752,6 +845,9 @@ $(function () {
             }
         }
     }).on('success.form.bv', function (e) {
+
+
+
         // Prevent form submission
         e.preventDefault();
 
@@ -764,61 +860,66 @@ $(function () {
 
         // Use Ajax to submit form data
         var id = addMethod ? 0 : projectNow.id;
-
+        if (!checkPrice() || !checkCap()) {
+            return;
+        }
         var dataJson = {
             'id': id,
-            'projectNameZh': $(' #projectNameZh').val(),
-            'projectNameEn': $(' #projectNameEn').val(),
             'token': $(' #token').val(),
-            'ico': $("input[name='icoV']:checked").val(),
-            'gradeStr': $(' [name=grade]').val(),
-            'projectType': $(' [name=projectTypeC]').val(),
-            'instructionZh': $(' #instructionZh').val(),
-            'instructionEn': $(' #instructionEn').val(),
-            'contentZh': $(' #contentZh').val(),
-            'contentEn': $(' #contentEn').val(),
-            'officialLink': $(' #officialLink').val(),
-            'whitePaperLinkZh': $(' #whitePaperLinkZh').val(),
-            'whitePaperLinkEn': $(' #whitePaperLinkEn').val(),
+            'projectNameEn': $(' #projectNameEn').val(),
+            'projectNameCn': $(' #projectNameCn').val(),
+            'projectNameKo': $(' #projectNameKo').val(),
+            'projectNameJa': $(' #projectNameJa').val(),
 
-            'teamScore': $(' #teamScore').val(),
-            'productScore': $(' #productScore').val(),
-            'scheduleScore': $(' #scheduleScore').val(),
-            'commercialSubstanceScore': $(' #commercialSubstanceScore').val(),
-            'tokensOperationScore': $(' #tokensOperationScore').val(),
+            'tokenAddress': $(' #tokenAddress').val(),
+            'projectAddress': $(' #projectAddress').val(),
+            'softCap': numeral($('#softCap').val()).value(),
+            'hardCap': numeral($('#hardCap').val()).value(),
+            'minPurchaseAmount': numeral($('#minPurchaseAmount').val()).value(),
+
+            'startPrice': numeral($('#startPrice').val()).value(),
+            'endPrice': numeral($('#endPrice').val()).value(),
+            'startTimeLong': new Date($('#startTimePicker').val()).getMilliseconds(),
+            'endTimeLong': new Date($('#endTimePicker').val()).getMilliseconds(),
+
+            'instructionEn': $(' #instructionEn').val(),
+            'instructionCn': $(' #instructionCn').val(),
+            'instructionKo': $(' #instructionKo').val(),
+            'instructionJa': $(' #instructionJa').val(),
+
+            'contentEn': $(' #contentEn').val(),
+            'contentCn': $(' #contentCn').val(),
+            'contentKo': $(' #contentKo').val(),
+            'contentJa': $(' #contentJa').val(),
+
+            'whitePaperLinkEn': $(' #whitePaperLinkEn').val(),
+            'whitePaperLinkCn': $(' #whitePaperLinkCn').val(),
+            'whitePaperLinkKo': $(' #whitePaperLinkKo').val(),
+            'whitePaperLinkJa': $(' #whitePaperLinkJa').val(),
+
+            'officialLink': $(' #officialLink').val(),
+            'twitter': $(' #twitter').val(),
+            'facebook': $(' #facebook').val(),
+            'telegram': $(' #telegram').val(),
+            'reddit': $(' #reddit').val(),
+            'biYong': $(' #biYong').val(),
+            'gitHub': $(' #gitHub').val(),
 
             'logStr': logStr,
             'view': view,
-            'pdfZh': pdfZh,
-            'pdfZhName': pdfZhName,
+
             'pdfEn': pdfEn,
-            'pdfEnName': pdfEnName
+            'pdfEnName': pdfEnName,
+            'pdfCn': pdfCn,
+            'pdfCnName': pdfCnName,
+            'pdfKo': pdfKo,
+            'pdfKoName': pdfKoName,
+            'pdfJa': pdfJa,
+            'pdfJaName': pdfJaName
         };
 
         console.log(dataJson);
 
-
-        //获取社交网站和交易所网站
-        var socialList = new Array()
-        var socialId = 0;
-        $.each($("input[name='socialWebsite']"), function () {
-            var typeId = $(this).attr('ids')
-            var linkUrl = $(this).val()
-            if (linkUrl) {
-                var social = {}
-                social.typeId = typeId;
-                social.linkUrl = linkUrl;
-                socialList[socialId++] = social;
-            }
-        });
-        dataJson.socialList = socialList;
-        dataJson.exchangeList = new Array();
-        dataJson.locationEn = 'ZH';
-        dataJson.locationZh = '中国';
-        dataJson.accepting = 'btc';
-
-
-        console.log(dataJson);
         var requestType = addMethod ? "post" : "put";
         $.ajax({
             url: contextPath + "/management/project",
@@ -853,6 +954,121 @@ $(function () {
             }
         })
     });
+
+
+    $(function () {
+        //  时间选择器
+        $('.form_datetime').datetimepicker({
+            language: 'zh-CN',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            forceParse: 0,
+            showMeridian: 1
+        });
+
+        $('#startTimePicker').datetimepicker().val(getNowFormatDate(getAddDay(1))).datetimepicker('update');
+        $('#endTimePicker').datetimepicker().val(getNowFormatDate(getAddDay(3))).datetimepicker('update');
+
+        $('.time').change(function () {
+            var start = new Date($('#startTimePicker').val());
+            var end = new Date($('#endTimePicker').val());
+            if (start >= end || start < new Date()) {
+                layer.msg("时间设置有误", {
+                    time: 2000,
+                    icon: 0,
+                    shift: 1
+                });
+                if ('startTimePicker' == $(this).attr('id')) {
+                    $(this).val(getNowFormatDate()).datetimepicker('update');
+                } else {
+                    $(this).val(getNowFormatDate(getAddDay(3))).datetimepicker('update');
+                }
+            }
+        });
+
+
+        //将数字转化为千分位形式
+        $('.thousands').change(function () {
+
+            var val = $(this).val();
+            var txt = numeral(val);
+            if (!txt) {
+                $(this).val(0);
+            }
+            var formatStr = '0,0';
+            var value = txt.value();
+            if (!value || value < 0) {
+                $(this).val(0);
+            }
+            var split = value.toString().split('.');
+            if (split.length > 1) {
+                formatStr = formatStr + "." + split[1].toString().replace(/\d/g, '0');
+            }
+            var result = txt.format(formatStr);
+            $(this).val(result)
+        });
+
+
+    });
+    function checkPrice() {
+        var startPrice = numeral($('#startPrice').val()).value();
+        var endPrice = numeral($('#endPrice').val()).value();
+
+        if (!startPrice || !endPrice || startPrice > endPrice) {
+            layer.msg("价格设置有误", {
+                time: 2000,
+                icon: 0,
+                shift: 1
+            });
+            return false;
+        }
+        return true;
+    };
+
+    function checkCap() {
+        var softCap = numeral($('#softCap').val()).value();
+        var hardCap = numeral($('#hardCap').val()).value();
+        var minPurchaseAmount = numeral($('#minPurchaseAmount').val()).value();
+
+        if (!hardCap || !softCap || !minPurchaseAmount || hardCap <= softCap || minPurchaseAmount >= softCap) {
+            layer.msg("软硬顶或认购数量设置有误", {
+                time: 2000,
+                icon: 0,
+                shift: 1
+            });
+            return false;
+        }
+        return true;
+    };
+
+
+    function getNowFormatDate(date) {
+        if (!date) {
+            date = new Date();
+        }
+        var seperator1 = "-";
+        var seperator2 = ":";
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+            + " " + date.getHours() + seperator2 + date.getMinutes();
+        return currentdate;
+    }
+
+    function getAddDay(addDay) {
+        var current = new Date();
+        current.setTime(current.getTime() + addDay * 24 * 60 * 60 * 1000);
+        return current;
+    }
 
 
 })

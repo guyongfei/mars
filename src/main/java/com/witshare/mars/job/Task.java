@@ -70,7 +70,6 @@ public class Task {
             case Log:
                 objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getToken(), type);
                 sysProjectBean.setLog(objectName);
-
                 break;
             case View:
                 objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getToken(), type);
@@ -80,9 +79,17 @@ public class Task {
                 objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getPdfEnName(), type);
                 sysProjectBean.setPdfEn(objectName);
                 break;
-            case PdfZh:
-                objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getPdfZhName(), type);
-                sysProjectBean.setPdfZh(objectName);
+            case PdfCn:
+                objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getPdfCnName(), type);
+                sysProjectBean.setPdfCn(objectName);
+                break;
+            case PdfKo:
+                objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getPdfKoName(), type);
+                sysProjectBean.setPdfKo(objectName);
+                break;
+            case PdfJa:
+                objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getPdfCnName(), type);
+                sysProjectBean.setPdfJa(objectName);
                 break;
             default:
                 break;

@@ -2,6 +2,7 @@ package com.witshare.mars.pojo.dto;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -9,91 +10,129 @@ public class SysProjectBean {
 
     public static String ID = "id";
     public static String PROJECT_GID = "projectGid";
-    public static String PROJECT_NAME_ZH = "projectNameZh";
-    public static String PROJECT_NAME_EN = "projectNameEn";
-    public static String PROJECT_TYPE = "projectType";
     public static String TOKEN = "token";
-    public static String ICO = "ico";
-    public static String LOG = "log";
-    public static String LOG_STR = "logStr";
-    public static String GRADE = "grade";
-    public static String GRADE_STR = "gradeStr";
-    public static String PDF_ZH = "pdfZh";
-    public static String PDF_ZH_NAME = "pdfZhName";
+
+    public static String PROJECT_NAME_CN = "projectNameCN";
+    public static String PROJECT_NAME_EN = "projectNameEn";
+    public static String PROJECT_NAME_KO = "projectNameKo";
+    public static String PROJECT_NAME_JA = "projectNameJa";
+
+    public static String INSTRUCTION_CN = "instructionCn";
+    public static String INSTRUCTION_EN = "instructionEn";
+    public static String INSTRUCTION_KO = "instructionEn";
+    public static String INSTRUCTION_JA = "instructionEn";
+
+    public static String CONTENT_CN = "contentCn";
+    public static String CONTENT_EN = "contentEn";
+    public static String CONTENT_KO = "contentKo";
+    public static String CONTENT_JA = "contentJa";
+
     public static String PDF_EN = "pdfEn";
     public static String PDF_EN_NAME = "pdfEnName";
-    public static String VIEW = "view";
-    public static String INSTRUCTION_ZH = "instructionZh";
-    public static String INSTRUCTION_EN = "instructionEn";
-    public static String CONTENT_ZH = "contentZh";
-    public static String CONTENT_EN = "contentEn";
-    public static String OFFICIAL_LINK = "officialLink";
-    public static String WHITE_PAPER_LINK_ZH = "whitePaperLinkZh";
+    public static String PDF_CN = "pdfCn";
+    public static String PDF_CN_NAME = "pdfCnName";
+    public static String PDF_KO = "pdfKo";
+    public static String PDF_KO_NAME = "pdfKoName";
+    public static String PDF_JA = "pdfJa";
+    public static String PDF_JA_NAME = "pdfJaName";
+
+    public static String WHITE_PAPER_LINK_CN = "whitePaperLinkCn";
     public static String WHITE_PAPER_LINK_EN = "whitePaperLinkEn";
-    public static String LOCATION_ZH = "locationZh";
-    public static String LOCATION_EN = "locationEn";
-    public static String ACCEPTING = "accepting";
+    public static String WHITE_PAPER_LINK_JA = "whitePaperLinkJa";
+    public static String WHITE_PAPER_LINK_KO = "whitePaperLinkko";
 
-    public static String EXCHANGE_LIST = "exchangeList";
-    public static String SOCIAL_LIST = "socialList";
-
-    public static String TEAM_SCORE = "teamScore";
-    public static String PRODUCT_SCORE = "productScore";
-    public static String SCHEDULE_SCORE = "scheduleScore";
-    public static String COMMERCIAL_SUBSTANCE_SCORE = "commercialSubstanceScore";
-    public static String TOKENS_OPERATION_SCORE = "tokensOperationScore";
+    public static String OFFICIAL_LINK = "officialLink";
+    public static String TWITTER = "twitter";
+    public static String FACEBOOK = "facebook";
+    public static String TELEGRAM = "telegram";
+    public static String REDDIT = "reddit";
+    public static String BI_YONG = "biYong";
+    public static String GIT_HUB = "gitHub";
 
 
+    public static String TOKEN_ADDRESS = "tokenAddress";
+    public static String PROJECT_ADDRESS = "projectAddress";
+    public static String START_TIME = "startTime";
+    public static String END_TIME = "endTime";
+    public static String START_PRICE = "startPrice";
+    public static String END_PRICE = "endPrice";
+    public static String MIN_PURCHASE_AMOUNT = "minPurchaseAmount";
+    public static String HARD_CAP = "hardCap";
+    public static String SOFT_CAP = "softCap";
+
+    public static String LOG = "log";
+
+    public static String LOG_STR = "logStr";
+    public static String VIEW = "view";
+
+    public static String PLATFORM_ADDRESS = "platformAddress";
     public static String PICTURE_URL = "pictureUrl";
 
-    private Integer scheduleScore;
-    private String projectNameZh;
+    private Date startTime;
+    private Date endTime;
+    private Long startTimeLong;
+    private Long endTimeLong;
+
+    private String tokenAddress;
+    private String projectAddress;
+    private BigDecimal startPrice;
+    private BigDecimal endPrice;
+    private BigDecimal minPurchaseAmount;
+    private BigDecimal hardCap;
+    private BigDecimal softCap;
+
     private String projectNameEn;
-    private Integer ico;
-    private Integer icoDb;
+    private String projectNameCn;
+    private String projectNameKo;
+    private String projectNameJa;
+
+
     private String log;
-    private BigDecimal grade;
-    private String gradeStr;
-    private String pdfZh;
-    private String pdfZhName;
+    private String logStr;
+
+    private String pdfCn;
+    private String pdfCnName;
     private String pdfEn;
     private String pdfEnName;
+    private String pdfKo;
+    private String pdfKoName;
+    private String pdfJa;
+    private String pdfJaName;
+
     private String view;
-    private String instructionZh;
+
+    private String instructionCn;
     private String instructionEn;
-    private String contentZh;
+    private String instructionJa;
+    private String instructionKo;
+
+    private String contentCn;
     private String contentEn;
+    private String contentKo;
+    private String contentJa;
+
     private String whitePaperLinkZh;
     private String whitePaperLinkEn;
-    private String locationZh;
-    private String locationEn;
-    private String accepting;
+    private String whitePaperLinkKo;
+    private String whitePaperLinkJa;
+
     private String gitHub;
     private String twitter;
     private String facebook;
-    private String weibo;
-    private String bitCoin;
-    private String Binance;
+    private String telegram;
+    private String reddit;
+    private String officialLink;
+    private String biYong;
+
     private String projectName;
     private String objectName;
     private String token;
     private String whitePaperLink;
-    private Integer projectType;
-    private Integer projectAnonymous;
     private String projectContent;
     private Long id;
     private String projectGid;
     private Long idDb;
-    private String officialLink;
-    private String projectAccepting;
-    private Integer commentCount;
-    private Integer followerCount;
-    private Integer teamScore;
-    private Integer productScore;
-    private Integer commercialSubstanceScore;
-    private Integer tokensOperationScore;
-    private BigDecimal projectGrade;
-    private Boolean starProject;
+
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -102,23 +141,355 @@ public class SysProjectBean {
     private Integer pageSize;
     private Integer pageNum;
     private Integer typeId;
-    private List<WebSiteManagementBean> socialList = new LinkedList<>();
     private List<WebSiteManagementBean> websiteList = new LinkedList<>();
 
-    public static String getICO() {
-        return ICO;
+    public SysProjectBean() {
     }
 
-    public static void setICO(String ICO) {
-        SysProjectBean.ICO = ICO;
+    public static SysProjectBean newInstance() {
+        return new SysProjectBean();
     }
 
-    public static String getGRADE() {
-        return GRADE;
+    public String getProjectNameEn() {
+        return projectNameEn;
     }
 
-    public static void setGRADE(String GRADE) {
-        SysProjectBean.GRADE = GRADE;
+    public SysProjectBean setProjectNameEn(String projectNameEn) {
+        this.projectNameEn = projectNameEn;
+        return this;
+    }
+
+    public String getProjectNameCn() {
+        return projectNameCn;
+    }
+
+    public SysProjectBean setProjectNameCn(String projectNameCn) {
+        this.projectNameCn = projectNameCn;
+        return this;
+    }
+
+    public String getProjectNameKo() {
+        return projectNameKo;
+    }
+
+    public SysProjectBean setProjectNameKo(String projectNameKo) {
+        this.projectNameKo = projectNameKo;
+        return this;
+    }
+
+    public String getProjectNameJa() {
+        return projectNameJa;
+    }
+
+    public SysProjectBean setProjectNameJa(String projectNameJa) {
+        this.projectNameJa = projectNameJa;
+        return this;
+    }
+
+    public String getLog() {
+        return log;
+    }
+
+    public SysProjectBean setLog(String log) {
+        this.log = log;
+        return this;
+    }
+
+    public String getPdfCn() {
+        return pdfCn;
+    }
+
+    public SysProjectBean setPdfCn(String pdfCn) {
+        this.pdfCn = pdfCn;
+        return this;
+    }
+
+    public String getPdfCnName() {
+        return pdfCnName;
+    }
+
+    public SysProjectBean setPdfCnName(String pdfCnName) {
+        this.pdfCnName = pdfCnName;
+        return this;
+    }
+
+    public String getPdfEn() {
+        return pdfEn;
+    }
+
+    public SysProjectBean setPdfEn(String pdfEn) {
+        this.pdfEn = pdfEn;
+        return this;
+    }
+
+    public String getPdfEnName() {
+        return pdfEnName;
+    }
+
+    public SysProjectBean setPdfEnName(String pdfEnName) {
+        this.pdfEnName = pdfEnName;
+        return this;
+    }
+
+    public String getPdfKo() {
+        return pdfKo;
+    }
+
+    public SysProjectBean setPdfKo(String pdfKo) {
+        this.pdfKo = pdfKo;
+        return this;
+    }
+
+    public String getPdfKoName() {
+        return pdfKoName;
+    }
+
+    public SysProjectBean setPdfKoName(String pdfKoName) {
+        this.pdfKoName = pdfKoName;
+        return this;
+    }
+
+    public String getPdfJa() {
+        return pdfJa;
+    }
+
+    public SysProjectBean setPdfJa(String pdfJa) {
+        this.pdfJa = pdfJa;
+        return this;
+    }
+
+    public String getPdfJaName() {
+        return pdfJaName;
+    }
+
+    public SysProjectBean setPdfJaName(String pdfJaName) {
+        this.pdfJaName = pdfJaName;
+        return this;
+    }
+
+    public String getView() {
+        return view;
+    }
+
+    public SysProjectBean setView(String view) {
+        this.view = view;
+        return this;
+    }
+
+    public String getInstructionCn() {
+        return instructionCn;
+    }
+
+    public SysProjectBean setInstructionCn(String instructionCn) {
+        this.instructionCn = instructionCn;
+        return this;
+    }
+
+    public String getInstructionEn() {
+        return instructionEn;
+    }
+
+    public SysProjectBean setInstructionEn(String instructionEn) {
+        this.instructionEn = instructionEn;
+        return this;
+    }
+
+    public String getInstructionJa() {
+        return instructionJa;
+    }
+
+    public SysProjectBean setInstructionJa(String instructionJa) {
+        this.instructionJa = instructionJa;
+        return this;
+    }
+
+    public String getInstructionKo() {
+        return instructionKo;
+    }
+
+    public SysProjectBean setInstructionKo(String instructionKo) {
+        this.instructionKo = instructionKo;
+        return this;
+    }
+
+    public String getContentCn() {
+        return contentCn;
+    }
+
+    public SysProjectBean setContentCn(String contentCn) {
+        this.contentCn = contentCn;
+        return this;
+    }
+
+    public String getContentEn() {
+        return contentEn;
+    }
+
+    public SysProjectBean setContentEn(String contentEn) {
+        this.contentEn = contentEn;
+        return this;
+    }
+
+    public String getContentKo() {
+        return contentKo;
+    }
+
+    public SysProjectBean setContentKo(String contentKo) {
+        this.contentKo = contentKo;
+        return this;
+    }
+
+    public String getContentJa() {
+        return contentJa;
+    }
+
+    public SysProjectBean setContentJa(String contentJa) {
+        this.contentJa = contentJa;
+        return this;
+    }
+
+    public String getWhitePaperLinkZh() {
+        return whitePaperLinkZh;
+    }
+
+    public SysProjectBean setWhitePaperLinkZh(String whitePaperLinkZh) {
+        this.whitePaperLinkZh = whitePaperLinkZh;
+        return this;
+    }
+
+    public String getWhitePaperLinkEn() {
+        return whitePaperLinkEn;
+    }
+
+    public SysProjectBean setWhitePaperLinkEn(String whitePaperLinkEn) {
+        this.whitePaperLinkEn = whitePaperLinkEn;
+        return this;
+    }
+
+    public String getWhitePaperLinkKo() {
+        return whitePaperLinkKo;
+    }
+
+    public SysProjectBean setWhitePaperLinkKo(String whitePaperLinkKo) {
+        this.whitePaperLinkKo = whitePaperLinkKo;
+        return this;
+    }
+
+    public String getWhitePaperLinkJa() {
+        return whitePaperLinkJa;
+    }
+
+    public SysProjectBean setWhitePaperLinkJa(String whitePaperLinkJa) {
+        this.whitePaperLinkJa = whitePaperLinkJa;
+        return this;
+    }
+
+    public String getGitHub() {
+        return gitHub;
+    }
+
+    public SysProjectBean setGitHub(String gitHub) {
+        this.gitHub = gitHub;
+        return this;
+    }
+
+    public String getTwitter() {
+        return twitter;
+    }
+
+    public SysProjectBean setTwitter(String twitter) {
+        this.twitter = twitter;
+        return this;
+    }
+
+    public String getFacebook() {
+        return facebook;
+    }
+
+    public SysProjectBean setFacebook(String facebook) {
+        this.facebook = facebook;
+        return this;
+    }
+
+    public String getTelegram() {
+        return telegram;
+    }
+
+    public SysProjectBean setTelegram(String telegram) {
+        this.telegram = telegram;
+        return this;
+    }
+
+    public String getReddit() {
+        return reddit;
+    }
+
+    public SysProjectBean setReddit(String reddit) {
+        this.reddit = reddit;
+        return this;
+    }
+
+    public String getBiYong() {
+        return biYong;
+    }
+
+    public SysProjectBean setBiYong(String biYong) {
+        this.biYong = biYong;
+        return this;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public SysProjectBean setProjectName(String projectName) {
+        this.projectName = projectName;
+        return this;
+    }
+
+    public String getObjectName() {
+        return objectName;
+    }
+
+    public SysProjectBean setObjectName(String objectName) {
+        this.objectName = objectName;
+        return this;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public SysProjectBean setToken(String token) {
+        this.token = token;
+        return this;
+    }
+
+    public String getWhitePaperLink() {
+        return whitePaperLink;
+    }
+
+    public SysProjectBean setWhitePaperLink(String whitePaperLink) {
+        this.whitePaperLink = whitePaperLink;
+        return this;
+    }
+
+    public String getProjectContent() {
+        return projectContent;
+    }
+
+    public SysProjectBean setProjectContent(String projectContent) {
+        this.projectContent = projectContent;
+        return this;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public SysProjectBean setId(Long id) {
+        this.id = id;
+        return this;
     }
 
     public String getProjectGid() {
@@ -130,445 +501,84 @@ public class SysProjectBean {
         return this;
     }
 
-    public String getPdfZhName() {
-        return pdfZhName;
-    }
-
-    public void setPdfZhName(String pdfZhName) {
-        this.pdfZhName = pdfZhName;
-    }
-
-    public String getPdfEnName() {
-        return pdfEnName;
-    }
-
-    public void setPdfEnName(String pdfEnName) {
-        this.pdfEnName = pdfEnName;
-    }
-
-    public Integer getIcoDb() {
-        return icoDb;
-    }
-
-    public void setIcoDb(Integer icoDb) {
-        this.icoDb = icoDb;
-    }
-
     public Long getIdDb() {
         return idDb;
     }
 
-    public void setIdDb(Long idDb) {
+    public SysProjectBean setIdDb(Long idDb) {
         this.idDb = idDb;
-    }
-
-    public String getGradeStr() {
-        return gradeStr;
-    }
-
-    public void setGradeStr(String gradeStr) {
-        this.gradeStr = gradeStr;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public void setImg(String img) {
-        this.img = img;
-    }
-
-    public Integer getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Integer typeId) {
-        this.typeId = typeId;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public Integer getPageNum() {
-        return pageNum;
-    }
-
-    public void setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-    }
-
-
-    public Integer getScheduleScore() {
-        return scheduleScore;
-    }
-
-    public void setScheduleScore(Integer scheduleScore) {
-        this.scheduleScore = scheduleScore;
-    }
-
-    public String getProjectNameZh() {
-        return projectNameZh;
-    }
-
-    public void setProjectNameZh(String projectNameZh) {
-        this.projectNameZh = projectNameZh;
-    }
-
-    public String getProjectNameEn() {
-        return projectNameEn;
-    }
-
-    public void setProjectNameEn(String projectNameEn) {
-        this.projectNameEn = projectNameEn;
-    }
-
-    public Integer getIco() {
-        return ico;
-    }
-
-    public void setIco(Integer ico) {
-        this.ico = ico;
-    }
-
-    public String getView() {
-        return view;
-    }
-
-    public void setView(String view) {
-        this.view = view;
-    }
-
-    public String getLog() {
-        return log;
-    }
-
-    public void setLog(String log) {
-        this.log = log;
-    }
-
-    public BigDecimal getGrade() {
-        return grade;
-    }
-
-    public void setGrade(BigDecimal grade) {
-        this.grade = grade;
-    }
-
-    public String getPdfZh() {
-        return pdfZh;
-    }
-
-    public void setPdfZh(String pdfZh) {
-        this.pdfZh = pdfZh;
-    }
-
-    public String getPdfEn() {
-        return pdfEn;
-    }
-
-    public void setPdfEn(String pdfEn) {
-        this.pdfEn = pdfEn;
-    }
-
-    public String getInstructionZh() {
-        return instructionZh;
-    }
-
-    public void setInstructionZh(String instructionZh) {
-        this.instructionZh = instructionZh;
-    }
-
-    public String getInstructionEn() {
-        return instructionEn;
-    }
-
-    public void setInstructionEn(String instructionEn) {
-        this.instructionEn = instructionEn;
-    }
-
-    public String getContentZh() {
-        return contentZh;
-    }
-
-    public void setContentZh(String contentZh) {
-        this.contentZh = contentZh;
-    }
-
-    public String getContentEn() {
-        return contentEn;
-    }
-
-    public void setContentEn(String contentEn) {
-        this.contentEn = contentEn;
-    }
-
-    public String getWhitePaperLinkZh() {
-        return whitePaperLinkZh;
-    }
-
-    public void setWhitePaperLinkZh(String whitePaperLinkZh) {
-        this.whitePaperLinkZh = whitePaperLinkZh;
-    }
-
-    public String getWhitePaperLinkEn() {
-        return whitePaperLinkEn;
-    }
-
-    public void setWhitePaperLinkEn(String whitePaperLinkEn) {
-        this.whitePaperLinkEn = whitePaperLinkEn;
-    }
-
-    public String getLocationZh() {
-        return locationZh;
-    }
-
-    public void setLocationZh(String locationZh) {
-        this.locationZh = locationZh;
-    }
-
-    public String getLocationEn() {
-        return locationEn;
-    }
-
-    public void setLocationEn(String locationEn) {
-        this.locationEn = locationEn;
-    }
-
-    public String getAccepting() {
-        return accepting;
-    }
-
-    public void setAccepting(String accepting) {
-        this.accepting = accepting;
-    }
-
-    public String getGitHub() {
-        return gitHub;
-    }
-
-    public void setGitHub(String gitHub) {
-        this.gitHub = gitHub;
-    }
-
-    public String getTwitter() {
-        return twitter;
-    }
-
-    public void setTwitter(String twitter) {
-        this.twitter = twitter;
-    }
-
-    public String getFacebook() {
-        return facebook;
-    }
-
-    public void setFacebook(String facebook) {
-        this.facebook = facebook;
-    }
-
-    public String getWeibo() {
-        return weibo;
-    }
-
-    public void setWeibo(String weibo) {
-        this.weibo = weibo;
-    }
-
-    public String getBitCoin() {
-        return bitCoin;
-    }
-
-    public void setBitCoin(String bitCoin) {
-        this.bitCoin = bitCoin;
-    }
-
-    public String getBinance() {
-        return Binance;
-    }
-
-    public void setBinance(String binance) {
-        Binance = binance;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public void setObjectName(String objectName) {
-        this.objectName = objectName;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public String getWhitePaperLink() {
-        return whitePaperLink;
-    }
-
-    public void setWhitePaperLink(String whitePaperLink) {
-        this.whitePaperLink = whitePaperLink;
-    }
-
-    public Integer getProjectType() {
-        return projectType;
-    }
-
-    public void setProjectType(Integer projectType) {
-        this.projectType = projectType;
-    }
-
-    public Integer getProjectAnonymous() {
-        return projectAnonymous;
-    }
-
-    public void setProjectAnonymous(Integer projectAnonymous) {
-        this.projectAnonymous = projectAnonymous;
-    }
-
-    public String getProjectContent() {
-        return projectContent;
-    }
-
-    public void setProjectContent(String projectContent) {
-        this.projectContent = projectContent;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        return this;
     }
 
     public String getOfficialLink() {
         return officialLink;
     }
 
-    public void setOfficialLink(String officialLink) {
+    public SysProjectBean setOfficialLink(String officialLink) {
         this.officialLink = officialLink;
-    }
-
-    public String getProjectAccepting() {
-        return projectAccepting;
-    }
-
-    public void setProjectAccepting(String projectAccepting) {
-        this.projectAccepting = projectAccepting;
-    }
-
-    public Integer getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(Integer commentCount) {
-        this.commentCount = commentCount;
-    }
-
-    public Integer getFollowerCount() {
-        return followerCount;
-    }
-
-    public void setFollowerCount(Integer followerCount) {
-        this.followerCount = followerCount;
-    }
-
-    public Integer getTeamScore() {
-        return teamScore;
-    }
-
-    public void setTeamScore(Integer teamScore) {
-        this.teamScore = teamScore;
-    }
-
-    public Integer getProductScore() {
-        return productScore;
-    }
-
-    public void setProductScore(Integer productScore) {
-        this.productScore = productScore;
-    }
-
-    public Integer getCommercialSubstanceScore() {
-        return commercialSubstanceScore;
-    }
-
-    public void setCommercialSubstanceScore(Integer commercialSubstanceScore) {
-        this.commercialSubstanceScore = commercialSubstanceScore;
-    }
-
-    public Integer getTokensOperationScore() {
-        return tokensOperationScore;
-    }
-
-    public void setTokensOperationScore(Integer tokensOperationScore) {
-        this.tokensOperationScore = tokensOperationScore;
-    }
-
-    public BigDecimal getProjectGrade() {
-        return projectGrade;
-    }
-
-    public void setProjectGrade(BigDecimal projectGrade) {
-        this.projectGrade = projectGrade;
-    }
-
-    public Boolean getStarProject() {
-        return starProject;
-    }
-
-    public void setStarProject(Boolean starProject) {
-        this.starProject = starProject;
+        return this;
     }
 
     public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public SysProjectBean setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+        return this;
     }
 
     public Timestamp getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public SysProjectBean setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+        return this;
     }
 
     public String getQueryStr() {
         return queryStr;
     }
 
-    public void setQueryStr(String queryStr) {
+    public SysProjectBean setQueryStr(String queryStr) {
         this.queryStr = queryStr;
+        return this;
     }
 
-    public List<WebSiteManagementBean> getSocialList() {
-        return socialList;
+    public String getImg() {
+        return img;
     }
 
-    public SysProjectBean setSocialList(List<WebSiteManagementBean> socialList) {
-        this.socialList = socialList;
+    public SysProjectBean setImg(String img) {
+        this.img = img;
+        return this;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public SysProjectBean setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+        return this;
+    }
+
+    public Integer getPageNum() {
+        return pageNum;
+    }
+
+    public SysProjectBean setPageNum(Integer pageNum) {
+        this.pageNum = pageNum;
+        return this;
+    }
+
+    public Integer getTypeId() {
+        return typeId;
+    }
+
+    public SysProjectBean setTypeId(Integer typeId) {
+        this.typeId = typeId;
         return this;
     }
 
@@ -581,26 +591,111 @@ public class SysProjectBean {
         return this;
     }
 
-    public class ProjectWebSiteBean {
-        private Long typeId;
-        private String linkUrl;
-
-        public Long getTypeId() {
-            return typeId;
-        }
-
-        public void setTypeId(Long typeId) {
-            this.typeId = typeId;
-        }
-
-        public String getLinkUrl() {
-            return linkUrl;
-        }
-
-        public void setLinkUrl(String linkUrl) {
-            this.linkUrl = linkUrl;
-        }
+    public Date getStartTime() {
+        return startTime;
     }
 
+    public SysProjectBean setStartTime(Date startTime) {
+        this.startTime = startTime;
+        return this;
+    }
 
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public SysProjectBean setEndTime(Date endTime) {
+        this.endTime = endTime;
+        return this;
+    }
+
+    public String getTokenAddress() {
+        return tokenAddress;
+    }
+
+    public SysProjectBean setTokenAddress(String tokenAddress) {
+        this.tokenAddress = tokenAddress;
+        return this;
+    }
+
+    public String getProjectAddress() {
+        return projectAddress;
+    }
+
+    public SysProjectBean setProjectAddress(String projectAddress) {
+        this.projectAddress = projectAddress;
+        return this;
+    }
+
+    public BigDecimal getStartPrice() {
+        return startPrice;
+    }
+
+    public SysProjectBean setStartPrice(BigDecimal startPrice) {
+        this.startPrice = startPrice;
+        return this;
+    }
+
+    public BigDecimal getEndPrice() {
+        return endPrice;
+    }
+
+    public SysProjectBean setEndPrice(BigDecimal endPrice) {
+        this.endPrice = endPrice;
+        return this;
+    }
+
+    public BigDecimal getMinPurchaseAmount() {
+        return minPurchaseAmount;
+    }
+
+    public SysProjectBean setMinPurchaseAmount(BigDecimal minPurchaseAmount) {
+        this.minPurchaseAmount = minPurchaseAmount;
+        return this;
+    }
+
+    public BigDecimal getHardCap() {
+        return hardCap;
+    }
+
+    public SysProjectBean setHardCap(BigDecimal hardCap) {
+        this.hardCap = hardCap;
+        return this;
+    }
+
+    public BigDecimal getSoftCap() {
+        return softCap;
+    }
+
+    public SysProjectBean setSoftCap(BigDecimal softCap) {
+        this.softCap = softCap;
+        return this;
+    }
+
+    public Long getStartTimeLong() {
+        return startTimeLong;
+    }
+
+    public SysProjectBean setStartTimeLong(Long startTimeLong) {
+        this.startTimeLong = startTimeLong;
+        return this;
+    }
+
+    public Long getEndTimeLong() {
+        return endTimeLong;
+    }
+
+    public SysProjectBean setEndTimeLong(Long endTimeLong) {
+        this.endTimeLong = endTimeLong;
+        return this;
+    }
+
+    public String getLogStr() {
+        return logStr;
+    }
+
+    public SysProjectBean setLogStr(String logStr) {
+        this.logStr = logStr;
+        return this;
+    }
 }

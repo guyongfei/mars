@@ -1,6 +1,6 @@
 package com.witshare.mars.service;
 
-import com.witshare.mars.pojo.dto.ProjectWebsiteBean;
+import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.pojo.dto.WebSiteManagementBean;
 
 import java.util.LinkedList;
@@ -12,5 +12,7 @@ public interface ProjectWebSiteService {
 
     LinkedList<WebSiteManagementBean> select(String projectGid);
 
-    int saveOrUpdate(LinkedList<ProjectWebsiteBean> projectWebsiteBeans);
+//    int saveOrUpdate(LinkedList<ProjectWebsiteBean> projectWebsiteBeans);
+
+    int saveOrUpdate(SysProjectBean sysProjectBean);
 }
