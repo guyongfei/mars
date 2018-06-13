@@ -30,21 +30,16 @@
 
 
     <insert id="saveOrUpdate" parameterType="com.witshare.mars.pojo.dto.SysProjectBean">
-        <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="id">
-            SELECT LAST_INSERT_ID()
-        </selectKey>
         INSERT INTO `sys_project`
-        (`project_token`,`project_ico`,`official_link`,`project_accepting`,
-        `team_score`,`product_score`,`schedule_score`,`commercial_substance_score`,
-        `tokens_operation_score`,`project_grade`,`project_logo_link`,`project_img_link`,
-        project_type_id,
+        (`project_gid`, `project_token`,`token_address`,`platform_address`,`project_address`,
+        `project_logo_link`,`project_img_link`,
+        `soft_cap`,`hard_cap`,`min_purchase_amount`,`start_time`,`end_time`,`start_price`,`end_price`,
         `create_time`,`update_time`)
         VALUES
-        (#{token},#{ico},#{officialLink},#{accepting},
-        #{teamScore},#{productScore},#{scheduleScore},#{commercialSubstanceScore},
-        #{tokensOperationScore},#{grade},#{log},#{view},
-        #{projectType},
-        now(),now() );
+        (#{projectGid},#{projectToken},#{tokenAddress},#{platformAddress},#{projectAddress},
+        #{projectLogoLink},#{projectImgLink},
+        #{softCap},#{hardCap},#{minPurchaseAmount},#{startTime},#{endPime},#{startPrice},#{endPrice},
+        NOW(),NOW() );
     </insert>
 
     <select id="selectPdfById" resultType="com.witshare.mars.pojo.dto.ProjectPdfBean">

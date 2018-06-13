@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <link th:href="@{/js/layui/css/layui.css}" rel="stylesheet" media="screen">
     <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet" media="screen">
+    <link th:href="@{/css/bootstrap-datetimepicker.min.css}" rel="stylesheet" media="screen">
     <link th:href="@{/css/bootstrap-table.css}" rel="stylesheet" media="screen">
     <link th:href="@{/css/amazeui.min.css?a=2}" rel="stylesheet" media="screen"/>
     <link th:href="@{/css/toastr.min.css}" rel="stylesheet" media="screen"/>
@@ -60,49 +61,14 @@
                 </li>
                 <li>
                     <a id="gotoProjectPage" class="left-slidebar-a btn btn-default">
-                        <span th:text="'项目列表'"></span>
-                    </a>
-                </li>
-                <li>
-                    <a id="gotoStarProject" class="left-slidebar-a btn btn-default">
-                        <span th:text="'首页项目'"></span>
+                        <span th:text="'项目'"></span>
                     </a>
                 </li>
                 <li>
                     <a id="gotoStarUser" class="left-slidebar-a btn btn-default">
-                        <span th:text="'首页用户'"></span>
+                        <span th:text="'用户'"></span>
                     </a>
                 </li>
-                <li>
-                    <a id="gotoBillBoard" class="left-slidebar-a btn btn-default">
-                        <span th:text="'首页广告'"></span>
-                    </a>
-                </li>
-                <li>
-                    <a id="gotoComment" class="left-slidebar-a btn btn-default">
-                        <span th:text="'评论管理'"></span>
-                    </a>
-                </li>
-
-                <li>
-                    <a id="gotoProjectType" class="left-slidebar-a btn btn-default">
-                        <span th:text="'项目类型'"></span>
-                    </a>
-                </li>
-
-                <li>
-                    <a id="gotoBaseConfig" class="left-slidebar-a btn btn-default">
-                        <span th:text="'基本设置'"></span>
-                    </a>
-                </li>
-
-                <li>
-                    <a id="gotoSensitive" class="left-slidebar-a btn btn-default">
-                        <span th:text="'敏感词'"></span>
-                    </a>
-                </li>
-
-
             </ul>
             </li>
             </ul>
@@ -116,8 +82,9 @@
 
 
 <script th:src="@{/js/jquery.min.js}"></script>
-<!--<script th:src="@{/js/amazeui.min.js}"></script>-->
 <script th:src='@{/js/bootstrap.min.js}'></script>
+<script th:src='@{/js/datatimepicker/bootstrap-datetimepicker.js}'></script>
+<script th:src='@{/js/datatimepicker/locales/bootstrap-datetimepicker.zh-CN.js}'></script>
 <script th:src="@{/js/toastr.min.js}"></script>
 <script th:src='@{/js/bootstrap-table.js}'></script>
 <script th:src='@{/js/bootstrap-table-zh-CN.js}'></script>
@@ -130,6 +97,7 @@
 <script th:src="@{/js/ztree/jquery.ztree.excheck.js}"></script>
 <script th:src="@{/js/ztree/jquery.ztree.exedit.js}"></script>
 <script th:src="@{/js/bootstrapValidator.js}"></script>
+<script th:src="@{/js/numeral/numeral.js}"></script>
 
 <script type="text/javascript">
 

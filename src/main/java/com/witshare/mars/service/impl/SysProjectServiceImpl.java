@@ -13,7 +13,8 @@ import com.witshare.mars.dao.mysql.*;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.job.Task;
-import com.witshare.mars.pojo.domain.*;
+import com.witshare.mars.pojo.domain.SysProject;
+import com.witshare.mars.pojo.domain.SysProjectExample;
 import com.witshare.mars.pojo.dto.*;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.pojo.vo.SysProjectListVo;
@@ -23,7 +24,6 @@ import com.witshare.mars.service.SysUserService;
 import com.witshare.mars.util.JsonUtils;
 import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.WitshareUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +39,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -250,128 +251,95 @@ public class SysProjectServiceImpl implements SysProjectService {
             return propertiesConfig.qingyunHttpUrl + source;
     }
 
-    /**
-     * @see SysProjectService#save(Map)
-     */
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(Map<String, Object> requestBody) {
-        if (requestBody == null || requestBody.size() < 10) {
+    public void save(String jsonBody) {
+        if (StringUtils.isEmpty(jsonBody)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        String projectNameZh = (String) requestBody.get(SysProjectBean.PROJECT_NAME_ZH);
-        String projectNameEn = (String) requestBody.get(SysProjectBean.PROJECT_NAME_EN);
 
-        String token = (String) requestBody.get(SysProjectBean.TOKEN);
-        SysProjectBean sysProjectBean1 = new SysProjectBean();
-        String gradeStr = (String) requestBody.get(SysProjectBean.GRADE_STR);
-        String log = (String) requestBody.get(SysProjectBean.LOG_STR);//need storage
-        String pdfZh = (String) requestBody.get(SysProjectBean.PDF_ZH);//need storage
-        String pdfZhName = (String) requestBody.get(SysProjectBean.PDF_ZH_NAME);
-        String pdfEn = (String) requestBody.get(SysProjectBean.PDF_EN);//need storage
-        String pdfEnName = (String) requestBody.get(SysProjectBean.PDF_EN_NAME);
-        String view = (String) requestBody.get(SysProjectBean.VIEW);//need storage
-        String instructionZh = (String) requestBody.get(SysProjectBean.INSTRUCTION_ZH);
-        String instructionEn = (String) requestBody.get(SysProjectBean.INSTRUCTION_EN);
-        String contentZh = (String) requestBody.get(SysProjectBean.CONTENT_ZH);
-        String contentEn = (String) requestBody.get(SysProjectBean.CONTENT_EN);
-        String officialLink = (String) requestBody.get(SysProjectBean.OFFICIAL_LINK);
-        String whitePaperLinkZh = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_ZH);
-        String whitePaperLinkEn = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_EN);
-        String locationZh = (String) requestBody.get(SysProjectBean.LOCATION_ZH);
-        String locationEn = (String) requestBody.get(SysProjectBean.LOCATION_EN);
-        String accepting = (String) requestBody.get(SysProjectBean.ACCEPTING);
-
-        Integer projectType = Integer.parseInt((String) requestBody.get(SysProjectBean.PROJECT_TYPE));
-        Integer ico = Integer.parseInt((String) requestBody.get(SysProjectBean.ICO));
-        Integer teamScore = Integer.parseInt((String) requestBody.get(SysProjectBean.TEAM_SCORE));
-        double productScore = Double.parseDouble((String) requestBody.get(SysProjectBean.PRODUCT_SCORE));
-        double scheduleScore = Double.parseDouble((String) requestBody.get(SysProjectBean.SCHEDULE_SCORE));
-        double commercialSubstanceScore = Double.parseDouble((String) requestBody.get(SysProjectBean.COMMERCIAL_SUBSTANCE_SCORE));
-        double tokensOperationScore = Double.parseDouble((String) requestBody.get(SysProjectBean.TOKENS_OPERATION_SCORE));
-
-        List<WebSiteManagementBean> exchangeList = (List<WebSiteManagementBean>) requestBody.get(SysProjectBean.EXCHANGE_LIST);
-        List<WebSiteManagementBean> socialList = (List<WebSiteManagementBean>) requestBody.get(SysProjectBean.SOCIAL_LIST);
-        LinkedList<WebSiteManagementBean> websiteList = new LinkedList<>();
-        websiteList.addAll(exchangeList);
-        websiteList.addAll(socialList);
-
-        EnumProjectGrade proGrade = EnumProjectGrade.getProGradeBygrade(gradeStr);
+        SysProjectBean sysProjectBean = new Gson().fromJson(jsonBody, SysProjectBean.class);
+        BigDecimal softCap = sysProjectBean.getSoftCap();
+        BigDecimal startPrice = sysProjectBean.getStartPrice();
+        Date endTime = new Date(sysProjectBean.getEndTimeLong());
+        Date startTime = new Date(sysProjectBean.getStartTimeLong());
+        BigDecimal endPrice = sysProjectBean.getEndPrice();
+        BigDecimal hardCap = sysProjectBean.getHardCap();
+        BigDecimal minPurchaseAmount = sysProjectBean.getMinPurchaseAmount();
+        String token = sysProjectBean.getToken();
+        String log = sysProjectBean.getLog();
+        String view = sysProjectBean.getView();
+        String pdfEn = sysProjectBean.getPdfEn();
+        String pdfCn = sysProjectBean.getPdfCn();
+        String pdfKo = sysProjectBean.getPdfKo();
+        String pdfJa = sysProjectBean.getPdfJa();
+        String pdfEnName = sysProjectBean.getPdfEnName();
+        String instructionEn = sysProjectBean.getInstructionEn();
+        String contentEn = sysProjectBean.getContentEn();
+        String officialLink = sysProjectBean.getOfficialLink();
+        String facebook = sysProjectBean.getFacebook();
+        String twitter = sysProjectBean.getTwitter();
+        String biYong = sysProjectBean.getBiYong();
+        String gitHub = sysProjectBean.getGitHub();
+        String reddit = sysProjectBean.getReddit();
+        String telegram = sysProjectBean.getTelegram();
+        String whitePaperLinkEn = sysProjectBean.getWhitePaperLinkEn();
+        Timestamp current = new Timestamp(System.currentTimeMillis());
         //校验必要项是否完整
-        if (StringUtils.isEmpty(projectNameZh)
-                || StringUtils.isEmpty(projectNameEn)
+        if (StringUtils.isEmpty(sysProjectBean.getProjectNameEn())
+                || StringUtils.isEmpty(sysProjectBean.getTokenAddress())
+                || StringUtils.isEmpty(sysProjectBean.getProjectAddress())
+                || startTime == null || current.before(startTime)
+                || endTime == null || startTime.before(endTime)
+                || startPrice == null || startPrice.compareTo(BigDecimal.ZERO) < 0
+                || endPrice == null || startPrice.compareTo(endPrice) > 0
+                || softCap == null || softCap.compareTo(BigDecimal.ZERO) <= 0
+                || hardCap == null || softCap.compareTo(hardCap) > 0
+                || minPurchaseAmount == null || softCap.compareTo(minPurchaseAmount) <= 0
                 || StringUtils.isEmpty(token)
                 || StringUtils.isEmpty(log)
-                || proGrade == null
-                || StringUtils.isEmpty(pdfZh)
-                || StringUtils.isEmpty(pdfZhName)
+                || StringUtils.isEmpty(view)
                 || StringUtils.isEmpty(pdfEn)
                 || StringUtils.isEmpty(pdfEnName)
-                || StringUtils.isEmpty(view)
-                || StringUtils.isEmpty(instructionZh)
                 || StringUtils.isEmpty(instructionEn)
-                || StringUtils.isEmpty(contentZh)
                 || StringUtils.isEmpty(contentEn)
                 || StringUtils.isEmpty(officialLink)
-                || StringUtils.isEmpty(whitePaperLinkZh)
-                || StringUtils.isEmpty(whitePaperLinkEn)
-                || StringUtils.isEmpty(locationZh)
-                || StringUtils.isEmpty(locationEn)
-                || StringUtils.isEmpty(accepting)
-                || projectType <= 0
-                || !WitshareUtils.rangeInDefined(ico, 0, 2)
-                || !WitshareUtils.rangeInDefined(teamScore, 0, 100)
-                || !WitshareUtils.rangeInDefined(productScore, 0, 100)
-                || !WitshareUtils.rangeInDefined(scheduleScore, 0, 100)
-                || !WitshareUtils.rangeInDefined(commercialSubstanceScore, 0, 100)
-                || !WitshareUtils.rangeInDefined(tokensOperationScore, 0, 100)) {
+                || StringUtils.isEmpty(facebook)
+                || StringUtils.isEmpty(twitter)
+                || StringUtils.isEmpty(biYong)
+                || StringUtils.isEmpty(gitHub)
+                || StringUtils.isEmpty(reddit)
+                || StringUtils.isEmpty(telegram)
+                || StringUtils.isEmpty(whitePaperLinkEn)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        SysProjectBean sysProjectBean = new SysProjectBean();
-        sysProjectBean.setProjectType(projectType);
-        sysProjectBean.setIco(ico);
-        sysProjectBean.setTeamScore(teamScore);
-        sysProjectBean.setProductScore((int) (productScore * 10));
-        sysProjectBean.setScheduleScore((int) (scheduleScore * 10));
-        sysProjectBean.setCommercialSubstanceScore((int) (commercialSubstanceScore * 10));
-        sysProjectBean.setTokensOperationScore((int) (tokensOperationScore * 10));
-        sysProjectBean.setToken(token);
-        sysProjectBean.setProjectNameZh(projectNameZh);
-        sysProjectBean.setProjectNameEn(projectNameEn);
-        sysProjectBean.setGrade(new BigDecimal(proGrade.getMin() + "." + RandomUtils.nextInt(0, 9)));
-        sysProjectBean.setInstructionZh(instructionZh);
-        sysProjectBean.setInstructionEn(instructionEn);
-        sysProjectBean.setContentZh(contentZh);
-        sysProjectBean.setContentEn(contentEn);
-        sysProjectBean.setOfficialLink(officialLink);
-        sysProjectBean.setWhitePaperLinkZh(whitePaperLinkZh);
-        sysProjectBean.setWhitePaperLinkEn(whitePaperLinkEn);
-        sysProjectBean.setLocationEn(locationEn);
-        sysProjectBean.setLocationZh(locationZh);
-        sysProjectBean.setAccepting(accepting);
-        sysProjectBean.setWebsiteList(websiteList);
-        sysProjectBean.setPdfEnName(pdfEnName);
-        sysProjectBean.setPdfZhName(pdfZhName);
+
         //检验是否有主键重复的
-        checkExist(sysProjectBean);
+//        checkExist(sysProjectBean);
         //多线程提交对象存储，返回link
-        CountDownLatch countDownLatch = new CountDownLatch(4);
+        CountDownLatch countDownLatch = new CountDownLatch(6);
         task.qingYunStorage(sysProjectBean, pdfEn, EnumStorage.PdfEn, countDownLatch);
-        task.qingYunStorage(sysProjectBean, pdfZh, EnumStorage.PdfZh, countDownLatch);
+        task.qingYunStorage(sysProjectBean, pdfCn, EnumStorage.PdfCn, countDownLatch);
+        task.qingYunStorage(sysProjectBean, pdfKo, EnumStorage.PdfKo, countDownLatch);
+        task.qingYunStorage(sysProjectBean, pdfJa, EnumStorage.PdfJa, countDownLatch);
         task.qingYunStorage(sysProjectBean, log, EnumStorage.Log, countDownLatch);
         task.qingYunStorage(sysProjectBean, view, EnumStorage.View, countDownLatch);
         try {
             countDownLatch.await();
         } catch (Exception e) {
-            LOGGER.error("qingYunStorage,error", e);
             throw new WitshareException(e.getMessage());
         }
+        //todo 获取平台地址
+        sysProjectBean.setProjectAddress("");
+        sysProjectBean.setProjectGid(WitshareUtils.getUUID());
+
         //存表
         staticSysProjectMapper.saveOrUpdate(sysProjectBean);
 
         staticProjectDescriptionMapper.saveOrUpdate(sysProjectBean);
 
-        staticProjectWebsiteMapper.save(sysProjectBean);
+        staticProjectWebsiteMapper.saveOrUpdate(sysProjectBean);
     }
 
     /**
@@ -389,149 +357,149 @@ public class SysProjectServiceImpl implements SysProjectService {
      */
     @Override
     public void update(Map<String, Object> requestBody) {
-        if (requestBody == null || requestBody.size() < 10) {
-            throw new WitshareException(EnumResponseText.ErrorRequest);
-        }
-        String projectGid = (String) requestBody.get(SysProjectBean.PROJECT_GID);
-        String projectNameZh = (String) requestBody.get(SysProjectBean.PROJECT_NAME_ZH);
-        String projectNameEn = (String) requestBody.get(SysProjectBean.PROJECT_NAME_EN);
-        String token = (String) requestBody.get(SysProjectBean.TOKEN);
-
-        String gradeStr = (String) requestBody.get(SysProjectBean.GRADE_STR);
-        String instructionZh = (String) requestBody.get(SysProjectBean.INSTRUCTION_ZH);
-        String instructionEn = (String) requestBody.get(SysProjectBean.INSTRUCTION_EN);
-        String contentZh = (String) requestBody.get(SysProjectBean.CONTENT_ZH);
-        String contentEn = (String) requestBody.get(SysProjectBean.CONTENT_EN);
-        String officialLink = (String) requestBody.get(SysProjectBean.OFFICIAL_LINK);
-        String whitePaperLinkZh = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_ZH);
-        String whitePaperLinkEn = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_EN);
-        String locationZh = (String) requestBody.get(SysProjectBean.LOCATION_ZH);
-        String locationEn = (String) requestBody.get(SysProjectBean.LOCATION_EN);
-        String accepting = (String) requestBody.get(SysProjectBean.ACCEPTING);
-        Long projectType = Long.parseLong(requestBody.get(SysProjectBean.PROJECT_TYPE) + "");
-
-        Integer ico = Integer.parseInt(requestBody.get(SysProjectBean.ICO) + "");
-        double teamScore = Double.parseDouble(requestBody.get(SysProjectBean.TEAM_SCORE) + "");
-        double productScore = Double.parseDouble(requestBody.get(SysProjectBean.PRODUCT_SCORE) + "");
-        double scheduleScore = Double.parseDouble(requestBody.get(SysProjectBean.SCHEDULE_SCORE) + "");
-        double commercialSubstanceScore = Double.parseDouble(requestBody.get(SysProjectBean.COMMERCIAL_SUBSTANCE_SCORE) + "");
-        double tokensOperationScore = Double.parseDouble(requestBody.get(SysProjectBean.TOKENS_OPERATION_SCORE) + "");
-
-        List<WebSiteManagementBean> exchangeList = (List<WebSiteManagementBean>) requestBody.get(SysProjectBean.EXCHANGE_LIST);
-        List<WebSiteManagementBean> socialList = (List<WebSiteManagementBean>) requestBody.get(SysProjectBean.SOCIAL_LIST);
-        LinkedList<WebSiteManagementBean> websiteList = new LinkedList<>();
-        websiteList.addAll(exchangeList);
-        websiteList.addAll(socialList);
-        EnumProjectGrade proGrade = EnumProjectGrade.getProGradeBygrade(gradeStr);
-        //校验必要项是否完整
-        if (StringUtils.isEmpty(projectNameZh)
-                || StringUtils.isEmpty(projectNameEn)
-                || StringUtils.isEmpty(token)
-                || proGrade == null
-                || StringUtils.isEmpty(instructionZh)
-                || StringUtils.isEmpty(instructionEn)
-                || StringUtils.isEmpty(contentZh)
-                || StringUtils.isEmpty(contentEn)
-                || StringUtils.isEmpty(officialLink)
-                || StringUtils.isEmpty(whitePaperLinkZh)
-                || StringUtils.isEmpty(whitePaperLinkEn)
-                || StringUtils.isEmpty(locationZh)
-                || StringUtils.isEmpty(locationEn)
-                || StringUtils.isEmpty(accepting)
-                || projectType == null
-                || !WitshareUtils.rangeInDefined(ico, 0, 2)
-                || !WitshareUtils.rangeInDefined(teamScore, 0, 100)
-                || !WitshareUtils.rangeInDefined(productScore, 0, 100)
-                || !WitshareUtils.rangeInDefined(scheduleScore, 0, 100)
-                || !WitshareUtils.rangeInDefined(commercialSubstanceScore, 0, 100)
-                || !WitshareUtils.rangeInDefined(tokensOperationScore, 0, 100)) {
-            throw new WitshareException(EnumResponseText.ErrorRequest);
-        }
-
-        SysProjectExample sysProjectExample = new SysProjectExample();
-        sysProjectExample.or().andProjectGidEqualTo(projectGid);
-        List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
-        if (CollectionUtils.isEmpty(sysProjects)) {
-            throw new WitshareException(EnumResponseText.ErrorId);
-        }
-        Timestamp current = new Timestamp(System.currentTimeMillis());
-        SysProjectBean sysProjectBean = new SysProjectBean();
-        sysProjectBean.setProjectGid(projectGid);
-        sysProjectBean.setProjectNameEn(projectNameEn);
-        sysProjectBean.setProjectNameZh(projectNameZh);
-        sysProjectBean.setToken(token);
-        //检验是否有主键重复的
-        checkExist(sysProjectBean);
-        String log = (String) requestBody.get(SysProjectBean.LOG_STR);//need storage
-        String pdfZh = (String) requestBody.get(SysProjectBean.PDF_ZH);//need storage
-        String pdfEn = (String) requestBody.get(SysProjectBean.PDF_EN);//need storage
-        String view = (String) requestBody.get(SysProjectBean.VIEW);//need storage
-        String pdfZhName = (String) requestBody.get(SysProjectBean.PDF_ZH_NAME);
-        String pdfEnName = (String) requestBody.get(SysProjectBean.PDF_EN_NAME);
-        CountDownLatch countDownLatch = new CountDownLatch(4);
-        if (!StringUtils.isEmpty(pdfEn) && !StringUtils.isEmpty(pdfEnName)) {
-            sysProjectBean.setPdfEnName(pdfEnName);
-            task.qingYunStorage(sysProjectBean, pdfEn, EnumStorage.PdfEn, countDownLatch);
-        } else {
-            countDownLatch.countDown();
-        }
-        if (!StringUtils.isEmpty(pdfZh) && !StringUtils.isEmpty(pdfZhName)) {
-            sysProjectBean.setPdfZhName(pdfZhName);
-            task.qingYunStorage(sysProjectBean, pdfZh, EnumStorage.PdfZh, countDownLatch);
-        } else {
-            countDownLatch.countDown();
-        }
-        if (!StringUtils.isEmpty(log)) {
-            task.qingYunStorage(sysProjectBean, log, EnumStorage.Log, countDownLatch);
-        } else {
-            countDownLatch.countDown();
-        }
-        if (!StringUtils.isEmpty(view)) {
-            task.qingYunStorage(sysProjectBean, view, EnumStorage.View, countDownLatch);
-        } else {
-            countDownLatch.countDown();
-        }
-        try {
-            countDownLatch.await();
-        } catch (Exception e) {
-            LOGGER.error("qingYunStorage,error", e);
-            throw new WitshareException(e.getMessage());
-        }
-        sysProjectBean.setWebsiteList(websiteList);
-        SysProject sysProject = new SysProject();
-        sysProject.setProjectGid(projectGid);
-        sysProject.setProjectToken(token);
-        sysProject.setProjectLogoLink(sysProjectBean.getLog());
-        sysProject.setProjectImgLink(sysProjectBean.getView());
-        sysProject.setUpdateTime(current);
-        sysProjectMapper.updateByPrimaryKeySelective(sysProject);
-
-        ProjectDescriptionCnExample projectDescriptionZhExample = new ProjectDescriptionCnExample();
-        projectDescriptionZhExample.or().andProjectGidEqualTo(projectGid);
-        ProjectDescriptionCn projectDescriptionZh = new ProjectDescriptionCn();
-        projectDescriptionZh.setProjectName(projectNameZh);
-        projectDescriptionZh.setProjectInstruction(instructionZh);
-        projectDescriptionZh.setProjectContent(contentZh);
-        projectDescriptionZh.setWhitePaperLink(whitePaperLinkZh);
-        projectDescriptionZh.setGradeReportLink(sysProjectBean.getPdfZh());
-        projectDescriptionZh.setUpdateTime(current);
-        projectDescriptionZhMapper.updateByExampleSelective(projectDescriptionZh, projectDescriptionZhExample);
-
-        ProjectDescriptionEnExample projectDescriptionEnExample = new ProjectDescriptionEnExample();
-        projectDescriptionEnExample.or().andProjectGidEqualTo(projectGid);
-        ProjectDescriptionEn projectDescriptionEn = new ProjectDescriptionEn();
-        projectDescriptionEn.setProjectName(projectNameEn);
-        projectDescriptionEn.setProjectInstruction(instructionEn);
-        projectDescriptionEn.setProjectContent(contentEn);
-        projectDescriptionEn.setWhitePaperLink(whitePaperLinkEn);
-        projectDescriptionEn.setGradeReportLink(sysProjectBean.getPdfEn());
-        projectDescriptionEn.setUpdateTime(current);
-        projectDescriptionEnMapper.updateByExampleSelective(projectDescriptionEn, projectDescriptionEnExample);
-        staticProjectWebsiteMapper.save(sysProjectBean);
-
-        //清缓存
-        redisCommonDao.delRedisKey(RedisKeyUtil.getIndexProjectKey());
-        redisCommonDao.delRedisKey(RedisKeyUtil.getProjectStatisticKey(projectGid));
+//        if (requestBody == null || requestBody.size() < 10) {
+//            throw new WitshareException(EnumResponseText.ErrorRequest);
+//        }
+//        String projectGid = (String) requestBody.get(SysProjectBean.PROJECT_GID);
+//        String projectNameZh = (String) requestBody.get(SysProjectBean.PROJECT_NAME_ZH);
+//        String projectNameEn = (String) requestBody.get(SysProjectBean.PROJECT_NAME_EN);
+//        String token = (String) requestBody.get(SysProjectBean.TOKEN);
+//
+//        String gradeStr = (String) requestBody.get(SysProjectBean.GRADE_STR);
+//        String instructionZh = (String) requestBody.get(SysProjectBean.INSTRUCTION_ZH);
+//        String instructionEn = (String) requestBody.get(SysProjectBean.INSTRUCTION_EN);
+//        String contentZh = (String) requestBody.get(SysProjectBean.CONTENT_ZH);
+//        String contentEn = (String) requestBody.get(SysProjectBean.CONTENT_EN);
+//        String officialLink = (String) requestBody.get(SysProjectBean.OFFICIAL_LINK);
+//        String whitePaperLinkZh = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_ZH);
+//        String whitePaperLinkEn = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_EN);
+//        String locationZh = (String) requestBody.get(SysProjectBean.LOCATION_ZH);
+//        String locationEn = (String) requestBody.get(SysProjectBean.LOCATION_EN);
+//        String accepting = (String) requestBody.get(SysProjectBean.ACCEPTING);
+//        Long projectType = Long.parseLong(requestBody.get(SysProjectBean.PROJECT_TYPE) + "");
+//
+//        Integer ico = Integer.parseInt(requestBody.get(SysProjectBean.ICO) + "");
+//        double teamScore = Double.parseDouble(requestBody.get(SysProjectBean.TEAM_SCORE) + "");
+//        double productScore = Double.parseDouble(requestBody.get(SysProjectBean.PRODUCT_SCORE) + "");
+//        double scheduleScore = Double.parseDouble(requestBody.get(SysProjectBean.SCHEDULE_SCORE) + "");
+//        double commercialSubstanceScore = Double.parseDouble(requestBody.get(SysProjectBean.COMMERCIAL_SUBSTANCE_SCORE) + "");
+//        double tokensOperationScore = Double.parseDouble(requestBody.get(SysProjectBean.TOKENS_OPERATION_SCORE) + "");
+//
+//        List<WebSiteManagementBean> exchangeList = (List<WebSiteManagementBean>) requestBody.get(SysProjectBean.EXCHANGE_LIST);
+//        List<WebSiteManagementBean> socialList = (List<WebSiteManagementBean>) requestBody.get(SysProjectBean.SOCIAL_LIST);
+//        LinkedList<WebSiteManagementBean> websiteList = new LinkedList<>();
+//        websiteList.addAll(exchangeList);
+//        websiteList.addAll(socialList);
+//        EnumProjectGrade proGrade = EnumProjectGrade.getProGradeBygrade(gradeStr);
+//        //校验必要项是否完整
+//        if (StringUtils.isEmpty(projectNameZh)
+//                || StringUtils.isEmpty(projectNameEn)
+//                || StringUtils.isEmpty(token)
+//                || proGrade == null
+//                || StringUtils.isEmpty(instructionZh)
+//                || StringUtils.isEmpty(instructionEn)
+//                || StringUtils.isEmpty(contentZh)
+//                || StringUtils.isEmpty(contentEn)
+//                || StringUtils.isEmpty(officialLink)
+//                || StringUtils.isEmpty(whitePaperLinkZh)
+//                || StringUtils.isEmpty(whitePaperLinkEn)
+//                || StringUtils.isEmpty(locationZh)
+//                || StringUtils.isEmpty(locationEn)
+//                || StringUtils.isEmpty(accepting)
+//                || projectType == null
+//                || !WitshareUtils.rangeInDefined(ico, 0, 2)
+//                || !WitshareUtils.rangeInDefined(teamScore, 0, 100)
+//                || !WitshareUtils.rangeInDefined(productScore, 0, 100)
+//                || !WitshareUtils.rangeInDefined(scheduleScore, 0, 100)
+//                || !WitshareUtils.rangeInDefined(commercialSubstanceScore, 0, 100)
+//                || !WitshareUtils.rangeInDefined(tokensOperationScore, 0, 100)) {
+//            throw new WitshareException(EnumResponseText.ErrorRequest);
+//        }
+//
+//        SysProjectExample sysProjectExample = new SysProjectExample();
+//        sysProjectExample.or().andProjectGidEqualTo(projectGid);
+//        List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
+//        if (CollectionUtils.isEmpty(sysProjects)) {
+//            throw new WitshareException(EnumResponseText.ErrorId);
+//        }
+//        Timestamp current = new Timestamp(System.currentTimeMillis());
+//        SysProjectBean sysProjectBean = new SysProjectBean();
+//        sysProjectBean.setProjectGid(projectGid);
+//        sysProjectBean.setProjectNameEn(projectNameEn);
+//        sysProjectBean.setProjectNameZh(projectNameZh);
+//        sysProjectBean.setToken(token);
+//        //检验是否有主键重复的
+//        checkExist(sysProjectBean);
+//        String log = (String) requestBody.get(SysProjectBean.LOG_STR);//need storage
+//        String pdfZh = (String) requestBody.get(SysProjectBean.PDF_ZH);//need storage
+//        String pdfEn = (String) requestBody.get(SysProjectBean.PDF_EN);//need storage
+//        String view = (String) requestBody.get(SysProjectBean.VIEW);//need storage
+//        String pdfZhName = (String) requestBody.get(SysProjectBean.PDF_ZH_NAME);
+//        String pdfEnName = (String) requestBody.get(SysProjectBean.PDF_EN_NAME);
+//        CountDownLatch countDownLatch = new CountDownLatch(4);
+//        if (!StringUtils.isEmpty(pdfEn) && !StringUtils.isEmpty(pdfEnName)) {
+//            sysProjectBean.setPdfEnName(pdfEnName);
+//            task.qingYunStorage(sysProjectBean, pdfEn, EnumStorage.PdfEn, countDownLatch);
+//        } else {
+//            countDownLatch.countDown();
+//        }
+//        if (!StringUtils.isEmpty(pdfZh) && !StringUtils.isEmpty(pdfZhName)) {
+//            sysProjectBean.setPdfZhName(pdfZhName);
+//            task.qingYunStorage(sysProjectBean, pdfZh, EnumStorage.PdfZh, countDownLatch);
+//        } else {
+//            countDownLatch.countDown();
+//        }
+//        if (!StringUtils.isEmpty(log)) {
+//            task.qingYunStorage(sysProjectBean, log, EnumStorage.Log, countDownLatch);
+//        } else {
+//            countDownLatch.countDown();
+//        }
+//        if (!StringUtils.isEmpty(view)) {
+//            task.qingYunStorage(sysProjectBean, view, EnumStorage.View, countDownLatch);
+//        } else {
+//            countDownLatch.countDown();
+//        }
+//        try {
+//            countDownLatch.await();
+//        } catch (Exception e) {
+//            LOGGER.error("qingYunStorage,error", e);
+//            throw new WitshareException(e.getMessage());
+//        }
+//        sysProjectBean.setWebsiteList(websiteList);
+//        SysProject sysProject = new SysProject();
+//        sysProject.setProjectGid(projectGid);
+//        sysProject.setProjectToken(token);
+//        sysProject.setProjectLogoLink(sysProjectBean.getLog());
+//        sysProject.setProjectImgLink(sysProjectBean.getView());
+//        sysProject.setUpdateTime(current);
+//        sysProjectMapper.updateByPrimaryKeySelective(sysProject);
+//
+//        ProjectDescriptionCnExample projectDescriptionZhExample = new ProjectDescriptionCnExample();
+//        projectDescriptionZhExample.or().andProjectGidEqualTo(projectGid);
+//        ProjectDescriptionCn projectDescriptionZh = new ProjectDescriptionCn();
+//        projectDescriptionZh.setProjectName(projectNameZh);
+//        projectDescriptionZh.setProjectInstruction(instructionZh);
+//        projectDescriptionZh.setProjectContent(contentZh);
+//        projectDescriptionZh.setWhitePaperLink(whitePaperLinkZh);
+//        projectDescriptionZh.setGradeReportLink(sysProjectBean.getPdfZh());
+//        projectDescriptionZh.setUpdateTime(current);
+//        projectDescriptionZhMapper.updateByExampleSelective(projectDescriptionZh, projectDescriptionZhExample);
+//
+//        ProjectDescriptionEnExample projectDescriptionEnExample = new ProjectDescriptionEnExample();
+//        projectDescriptionEnExample.or().andProjectGidEqualTo(projectGid);
+//        ProjectDescriptionEn projectDescriptionEn = new ProjectDescriptionEn();
+//        projectDescriptionEn.setProjectName(projectNameEn);
+//        projectDescriptionEn.setProjectInstruction(instructionEn);
+//        projectDescriptionEn.setProjectContent(contentEn);
+//        projectDescriptionEn.setWhitePaperLink(whitePaperLinkEn);
+//        projectDescriptionEn.setGradeReportLink(sysProjectBean.getPdfEn());
+//        projectDescriptionEn.setUpdateTime(current);
+//        projectDescriptionEnMapper.updateByExampleSelective(projectDescriptionEn, projectDescriptionEnExample);
+//        staticProjectWebsiteMapper.save(sysProjectBean);
+//
+//        //清缓存
+//        redisCommonDao.delRedisKey(RedisKeyUtil.getIndexProjectKey());
+//        redisCommonDao.delRedisKey(RedisKeyUtil.getProjectStatisticKey(projectGid));
     }
 
 
@@ -647,4 +615,56 @@ public class SysProjectServiceImpl implements SysProjectService {
     }
 
 }
-
+//
+//    String token = (String) requestBody.get(SysProjectBean.TOKEN);
+//
+//    String projectNameEn = (String) requestBody.get(SysProjectBean.PROJECT_NAME_EN);
+//    String projectNameCn = (String) requestBody.get(SysProjectBean.PROJECT_NAME_CN);
+//    String projectNameKo = (String) requestBody.get(SysProjectBean.PROJECT_NAME_KO);
+//    String projectNameJa = (String) requestBody.get(SysProjectBean.PROJECT_NAME_JA);
+//
+//
+//    String pdfEn = (String) requestBody.get(SysProjectBean.PDF_EN);//need storage
+//    String pdfEnName = (String) requestBody.get(SysProjectBean.PDF_EN_NAME);
+//    String pdfCn = (String) requestBody.get(SysProjectBean.PDF_CN);//need storage
+//    String pdfCnName = (String) requestBody.get(SysProjectBean.PDF_CN_NAME);
+//    String pdfKo = (String) requestBody.get(SysProjectBean.PDF_KO);//need storage
+//    String pdfKoName = (String) requestBody.get(SysProjectBean.PDF_KO_NAME);
+//    String pdfJa = (String) requestBody.get(SysProjectBean.PDF_JA);//need storage
+//    String pdfJaName = (String) requestBody.get(SysProjectBean.PDF_JA_NAME);
+//
+//    String log = (String) requestBody.get(SysProjectBean.LOG_STR);//need storage
+//    String view = (String) requestBody.get(SysProjectBean.VIEW);//need storage
+//
+//    String instructionEn = (String) requestBody.get(SysProjectBean.INSTRUCTION_EN);
+//    String instructionCn = (String) requestBody.get(SysProjectBean.INSTRUCTION_CN);
+//    String instructionKo = (String) requestBody.get(SysProjectBean.INSTRUCTION_KO);
+//    String instructionJa = (String) requestBody.get(SysProjectBean.INSTRUCTION_JA);
+//
+//    String contentEn = (String) requestBody.get(SysProjectBean.CONTENT_EN);
+//    String contentCn = (String) requestBody.get(SysProjectBean.CONTENT_CN);
+//    String contentJa = (String) requestBody.get(SysProjectBean.CONTENT_JA);
+//    String contentKo = (String) requestBody.get(SysProjectBean.CONTENT_KO);
+//
+//    String whitePaperLinkEn = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_EN);
+//    String whitePaperLinkCn = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_CN);
+//    String whitePaperLinkKo = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_KO);
+//    String whitePaperLinkJa = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_JA);
+//
+//    String officialLink = (String) requestBody.get(SysProjectBean.OFFICIAL_LINK);
+//    String facebook = (String) requestBody.get(SysProjectBean.FACEBOOK);
+//    String twitter = (String) requestBody.get(SysProjectBean.TWITTER);
+//    String biYong = (String) requestBody.get(SysProjectBean.BI_YONG);
+//    String gitHub = (String) requestBody.get(SysProjectBean.GIT_HUB);
+//    String reddit = (String) requestBody.get(SysProjectBean.REDDIT);
+//    String telegram = (String) requestBody.get(SysProjectBean.TELEGRAM);
+//
+//    String tokenAddress = (String) requestBody.get(SysProjectBean.TOKEN_ADDRESS);
+//    String projectAddress = (String) requestBody.get(SysProjectBean.PROJECT_ADDRESS);
+//    Timestamp startTime = (Timestamp) requestBody.get(SysProjectBean.START_TIME);
+//    Timestamp endTime = (Timestamp) requestBody.get(SysProjectBean.END_TIME);
+//    BigDecimal startPrice = (BigDecimal) requestBody.get(SysProjectBean.START_PRICE);
+//    BigDecimal endPrice = (BigDecimal) requestBody.get(SysProjectBean.END_PRICE);
+//    BigDecimal minPurchaseAmount = (BigDecimal) requestBody.get(SysProjectBean.MIN_PURCHASE_AMOUNT);
+//    BigDecimal hardCap = (BigDecimal) requestBody.get(SysProjectBean.HARD_CAP);
+//    BigDecimal softCap = (BigDecimal) requestBody.get(SysProjectBean.SOFT_CAP);

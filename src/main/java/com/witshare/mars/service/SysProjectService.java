@@ -39,7 +39,7 @@ public interface SysProjectService {
      *
      * @param requestBody
      */
-    void save(Map<String, Object> requestBody);
+    void save(String requestBody);
 
     /**
      * 更新项目

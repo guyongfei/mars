@@ -356,27 +356,47 @@
 
     <insert id="saveOrUpdate" parameterType="com.witshare.mars.pojo.dto.SysProjectBean">
         INSERT INTO `project_description_en`
-        (`project_id`,
+        (`project_gid`,
         `project_name`,`project_instruction`,`project_content`,
-        `grade_report_link`,`project_location`,`white_paper_link`,
+        `white_paper_link`,
         `create_time`,`update_time`)
         values
-        (#{id},
+        (#{projectGid},
         #{projectNameEn}, #{instructionEn}, #{contentEn},
-        #{pdfEn}, #{locationEn}, #{whitePaperLinkEn},
+        #{whitePaperLinkEn},
         now(),now());
 
-        INSERT INTO `project_description_zh`
-        (`project_id`,
+        INSERT INTO `project_description_cn`
+        (`project_gid`,
         `project_name`,`project_instruction`,`project_content`,
-        `grade_report_link`,`project_location`,`white_paper_link`,
+        `white_paper_link`,
         `create_time`,`update_time`)
-         values
-        (#{id},
-        #{projectNameZh}, #{instructionZh}, #{contentZh},
-        #{pdfZh}, #{locationZh}, #{whitePaperLinkZh},
+        values
+        (#{projectGid},
+        #{projectNameCn}, #{instructionCn}, #{contentCn},
+        #{whitePaperLinkCn},
+        now(),now());
+
+        INSERT INTO `project_description_ko`
+        (`project_gid`,
+        `project_name`,`project_instruction`,`project_content`,
+        `white_paper_link`,
+        `create_time`,`update_time`)
+        values
+        (#{projectGid},
+        #{projectNameKo}, #{instructionKo}, #{contentKo},
+        #{whitePaperLinkKo},
+        now(),now());
+
+        INSERT INTO `project_description_ja`
+        (`project_gid`,
+        `project_name`,`project_instruction`,`project_content`,
+        `white_paper_link`,
+        `create_time`,`update_time`)
+        values
+        (#{projectGid},
+        #{projectNameJa}, #{instructionJa}, #{contentJa},
+        #{whitePaperLinkJa},
         now(),now());
     </insert>
-
-
 </mapper>

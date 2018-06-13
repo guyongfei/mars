@@ -30,8 +30,8 @@
 
 |编号|名称|时效|描述|备注|
 |---|---|---|---|---|
-|1|witshare_mars_token|-1|鉴权token，用来关联一个用户|登陆后在后台置入|
-|2|witshare_mars_language|-1|国际化,值为en、cn、ko、ja|前端置入，默认为en|
+|1|witshare.user.token|-1|鉴权token，用来关联一个用户|登陆后在后台置入|
+|2|witshare.i18n.language|-1|国际化,值为en、cn、ko、ja|前端置入，默认为en|
 
 > 分页必带参数
 
