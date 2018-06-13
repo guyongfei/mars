@@ -4,4 +4,6 @@
 * [请求规范](api-doc.md)
 * [用户](api-user.md)
 * [项目](api-project.md)
+* [交易](api-transaction.md)
+* [统计](api-statistic.md)
 
