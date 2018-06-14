@@ -353,6 +353,9 @@
         where id = #{record.id,jdbcType=INTEGER}
     </update>
 
+    <select id="selectByTableName" resultType="com.witshare.mars.pojo.dto.ProjectDescriptionBean">
+        select * from ${tableName} where project_gid = #{projectGid}
+    </select>
 
     <insert id="saveOrUpdate" parameterType="com.witshare.mars.pojo.dto.SysProjectBean">
         INSERT INTO `project_description_en`

@@ -1226,63 +1226,63 @@ public class SysProjectExample {
             return (Criteria) this;
         }
 
-        public Criteria andAvailableIsNull() {
+        public Criteria andIsAvailableIsNull() {
             addCriterion("is_available is null");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableIsNotNull() {
+        public Criteria andIsAvailableIsNotNull() {
             addCriterion("is_available is not null");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableEqualTo(int value) {
-            addCriterion("is_available =", value, "available");
+        public Criteria andIsAvailableEqualTo(int value) {
+            addCriterion("is_available =", value, "isAvailable");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableNotEqualTo(int value) {
-            addCriterion("is_available <>", value, "available");
+        public Criteria andIsAvailableNotEqualTo(int value) {
+            addCriterion("is_available <>", value, "isAvailable");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableGreaterThan(int value) {
-            addCriterion("is_available >", value, "available");
+        public Criteria andIsAvailableGreaterThan(int value) {
+            addCriterion("is_available >", value, "isAvailable");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableGreaterThanOrEqualTo(int value) {
-            addCriterion("is_available >=", value, "available");
+        public Criteria andIsAvailableGreaterThanOrEqualTo(int value) {
+            addCriterion("is_available >=", value, "isAvailable");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableLessThan(int value) {
-            addCriterion("is_available <", value, "available");
+        public Criteria andIsAvailableLessThan(int value) {
+            addCriterion("is_available <", value, "isAvailable");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableLessThanOrEqualTo(int value) {
-            addCriterion("is_available <=", value, "available");
+        public Criteria andIsAvailableLessThanOrEqualTo(int value) {
+            addCriterion("is_available <=", value, "isAvailable");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableIn(List<Integer> values) {
-            addCriterion("is_available in", values, "available");
+        public Criteria andIsAvailableIn(List<Integer> values) {
+            addCriterion("is_available in", values, "isAvailable");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableNotIn(List<Integer> values) {
-            addCriterion("is_available not in", values, "available");
+        public Criteria andIsAvailableNotIn(List<Integer> values) {
+            addCriterion("is_available not in", values, "isAvailable");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableBetween(int value1, int value2) {
-            addCriterion("is_available between", value1, value2, "available");
+        public Criteria andIsAvailableBetween(int value1, int value2) {
+            addCriterion("is_available between", value1, value2, "isAvailable");
             return (Criteria) this;
         }
 
-        public Criteria andAvailableNotBetween(int value1, int value2) {
-            addCriterion("is_available not between", value1, value2, "available");
+        public Criteria andIsAvailableNotBetween(int value1, int value2) {
+            addCriterion("is_available not between", value1, value2, "isAvailable");
             return (Criteria) this;
         }
 

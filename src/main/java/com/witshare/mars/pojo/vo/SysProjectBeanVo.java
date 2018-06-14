@@ -1,395 +1,179 @@
 package com.witshare.mars.pojo.vo;
 
-import com.witshare.mars.pojo.dto.WebSiteManagementBean;
+import com.witshare.mars.pojo.dto.ProjectDescriptionBean;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class SysProjectBeanVo {
 
 
-    private Integer scheduleScore;
-    private String projectNameZh;
-    private String projectNameEn;
-    private Integer ico;
-    private String log;
-    private BigDecimal grade;
-    private String gradeStr;
-    private String pdfZh;
-    private String pdfEn;
-    private String view;
-    private String instructionZh;
-    private String instructionEn;
-    private String contentZh;
-    private String contentEn;
-    private String whitePaperLinkZh;
-    private String whitePaperLinkEn;
-    private String locationZh;
-    private String locationEn;
-    private String accepting;
-    private String projectName;
-    private String objectName;
-    private String token;
-    private String whitePaperLink;
-    private Integer projectType;
-    private Integer projectAnonymous;
-    private String projectContent;
-    private Long id;
-    private String officialLink;
-    private String projectAccepting;
-    private Integer commentCount;
-    private Integer followerCount;
-    private Integer teamScore;
-    private Integer productScore;
-    private Integer commercialSubstanceScore;
-    private Integer tokensOperationScore;
-    private BigDecimal projectGrade;
-    private Boolean starProject;
+    private String projectGid;
+    private String projectToken;
+    private String tokenAddress;
+    private String platformAddress;
+    private String projectAddress;
+    private String projectLogoLink;
+    private String projectImgLink;
+    private BigDecimal softCap;
+    private BigDecimal hardCap;
+    private BigDecimal minPurchaseAmount;
+    private Timestamp startTime;
+    private Timestamp endTime;
+    private BigDecimal startPrice;
+    private BigDecimal endPrice;
+    private int projectStatus;
+    private int isAvailable;
+
     private Timestamp createTime;
     private Timestamp updateTime;
 
-    private List<WebSiteManagementBean> websiteList = new LinkedList<>();
+    private Map<String, ProjectDescriptionBean> descriptions = new LinkedHashMap<>();
+    private Map<String, String> websites = new LinkedHashMap<>();
 
-    private String projectGid;
-    private String queryStr;
-    private String img;
-    private Integer pageSize;
-    private Integer pageNum;
-    private Integer typeId;
-    private Integer typePId;
-
-    public Integer getScheduleScore() {
-        return scheduleScore;
+    public String getProjectGid() {
+        return projectGid;
     }
 
-    public SysProjectBeanVo setScheduleScore(Integer scheduleScore) {
-        this.scheduleScore = scheduleScore;
+    public SysProjectBeanVo setProjectGid(String projectGid) {
+        this.projectGid = projectGid;
         return this;
     }
 
-    public String getProjectNameZh() {
-        return projectNameZh;
+    public String getProjectToken() {
+        return projectToken;
     }
 
-    public SysProjectBeanVo setProjectNameZh(String projectNameZh) {
-        this.projectNameZh = projectNameZh;
+    public SysProjectBeanVo setProjectToken(String projectToken) {
+        this.projectToken = projectToken;
         return this;
     }
 
-    public String getProjectNameEn() {
-        return projectNameEn;
+    public String getTokenAddress() {
+        return tokenAddress;
     }
 
-    public SysProjectBeanVo setProjectNameEn(String projectNameEn) {
-        this.projectNameEn = projectNameEn;
+    public SysProjectBeanVo setTokenAddress(String tokenAddress) {
+        this.tokenAddress = tokenAddress;
         return this;
     }
 
-    public Integer getIco() {
-        return ico;
+    public String getPlatformAddress() {
+        return platformAddress;
     }
 
-    public SysProjectBeanVo setIco(Integer ico) {
-        this.ico = ico;
+    public SysProjectBeanVo setPlatformAddress(String platformAddress) {
+        this.platformAddress = platformAddress;
         return this;
     }
 
-    public String getLog() {
-        return log;
+    public String getProjectAddress() {
+        return projectAddress;
     }
 
-    public SysProjectBeanVo setLog(String log) {
-        this.log = log;
+    public SysProjectBeanVo setProjectAddress(String projectAddress) {
+        this.projectAddress = projectAddress;
         return this;
     }
 
-    public BigDecimal getGrade() {
-        return grade;
+    public String getProjectLogoLink() {
+        return projectLogoLink;
     }
 
-    public SysProjectBeanVo setGrade(BigDecimal grade) {
-        this.grade = grade;
+    public SysProjectBeanVo setProjectLogoLink(String projectLogoLink) {
+        this.projectLogoLink = projectLogoLink;
         return this;
     }
 
-    public String getGradeStr() {
-        return gradeStr;
+    public String getProjectImgLink() {
+        return projectImgLink;
     }
 
-    public SysProjectBeanVo setGradeStr(String gradeStr) {
-        this.gradeStr = gradeStr;
+    public SysProjectBeanVo setProjectImgLink(String projectImgLink) {
+        this.projectImgLink = projectImgLink;
         return this;
     }
 
-    public String getPdfZh() {
-        return pdfZh;
+    public BigDecimal getSoftCap() {
+        return softCap;
     }
 
-    public SysProjectBeanVo setPdfZh(String pdfZh) {
-        this.pdfZh = pdfZh;
+    public SysProjectBeanVo setSoftCap(BigDecimal softCap) {
+        this.softCap = softCap;
         return this;
     }
 
-    public String getPdfEn() {
-        return pdfEn;
+    public BigDecimal getHardCap() {
+        return hardCap;
     }
 
-    public SysProjectBeanVo setPdfEn(String pdfEn) {
-        this.pdfEn = pdfEn;
+    public SysProjectBeanVo setHardCap(BigDecimal hardCap) {
+        this.hardCap = hardCap;
         return this;
     }
 
-    public String getView() {
-        return view;
+    public BigDecimal getMinPurchaseAmount() {
+        return minPurchaseAmount;
     }
 
-    public SysProjectBeanVo setView(String view) {
-        this.view = view;
+    public SysProjectBeanVo setMinPurchaseAmount(BigDecimal minPurchaseAmount) {
+        this.minPurchaseAmount = minPurchaseAmount;
         return this;
     }
 
-    public String getInstructionZh() {
-        return instructionZh;
+    public Timestamp getStartTime() {
+        return startTime;
     }
 
-    public SysProjectBeanVo setInstructionZh(String instructionZh) {
-        this.instructionZh = instructionZh;
+    public SysProjectBeanVo setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
         return this;
     }
 
-    public String getInstructionEn() {
-        return instructionEn;
+    public Timestamp getEndTime() {
+        return endTime;
     }
 
-    public SysProjectBeanVo setInstructionEn(String instructionEn) {
-        this.instructionEn = instructionEn;
+    public SysProjectBeanVo setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
         return this;
     }
 
-    public String getContentZh() {
-        return contentZh;
+    public BigDecimal getStartPrice() {
+        return startPrice;
     }
 
-    public SysProjectBeanVo setContentZh(String contentZh) {
-        this.contentZh = contentZh;
+    public SysProjectBeanVo setStartPrice(BigDecimal startPrice) {
+        this.startPrice = startPrice;
         return this;
     }
 
-    public String getContentEn() {
-        return contentEn;
+    public BigDecimal getEndPrice() {
+        return endPrice;
     }
 
-    public SysProjectBeanVo setContentEn(String contentEn) {
-        this.contentEn = contentEn;
+    public SysProjectBeanVo setEndPrice(BigDecimal endPrice) {
+        this.endPrice = endPrice;
         return this;
     }
 
-    public String getWhitePaperLinkZh() {
-        return whitePaperLinkZh;
+    public int getProjectStatus() {
+        return projectStatus;
     }
 
-    public SysProjectBeanVo setWhitePaperLinkZh(String whitePaperLinkZh) {
-        this.whitePaperLinkZh = whitePaperLinkZh;
+    public SysProjectBeanVo setProjectStatus(int projectStatus) {
+        this.projectStatus = projectStatus;
         return this;
     }
 
-    public String getWhitePaperLinkEn() {
-        return whitePaperLinkEn;
+    public int getIsAvailable() {
+        return isAvailable;
     }
 
-    public SysProjectBeanVo setWhitePaperLinkEn(String whitePaperLinkEn) {
-        this.whitePaperLinkEn = whitePaperLinkEn;
-        return this;
-    }
-
-    public String getLocationZh() {
-        return locationZh;
-    }
-
-    public SysProjectBeanVo setLocationZh(String locationZh) {
-        this.locationZh = locationZh;
-        return this;
-    }
-
-    public String getLocationEn() {
-        return locationEn;
-    }
-
-    public SysProjectBeanVo setLocationEn(String locationEn) {
-        this.locationEn = locationEn;
-        return this;
-    }
-
-    public String getAccepting() {
-        return accepting;
-    }
-
-    public SysProjectBeanVo setAccepting(String accepting) {
-        this.accepting = accepting;
-        return this;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public SysProjectBeanVo setProjectName(String projectName) {
-        this.projectName = projectName;
-        return this;
-    }
-
-    public String getObjectName() {
-        return objectName;
-    }
-
-    public SysProjectBeanVo setObjectName(String objectName) {
-        this.objectName = objectName;
-        return this;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public SysProjectBeanVo setToken(String token) {
-        this.token = token;
-        return this;
-    }
-
-    public String getWhitePaperLink() {
-        return whitePaperLink;
-    }
-
-    public SysProjectBeanVo setWhitePaperLink(String whitePaperLink) {
-        this.whitePaperLink = whitePaperLink;
-        return this;
-    }
-
-    public Integer getProjectType() {
-        return projectType;
-    }
-
-    public SysProjectBeanVo setProjectType(Integer projectType) {
-        this.projectType = projectType;
-        return this;
-    }
-
-    public Integer getProjectAnonymous() {
-        return projectAnonymous;
-    }
-
-    public SysProjectBeanVo setProjectAnonymous(Integer projectAnonymous) {
-        this.projectAnonymous = projectAnonymous;
-        return this;
-    }
-
-    public String getProjectContent() {
-        return projectContent;
-    }
-
-    public SysProjectBeanVo setProjectContent(String projectContent) {
-        this.projectContent = projectContent;
-        return this;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public SysProjectBeanVo setId(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getOfficialLink() {
-        return officialLink;
-    }
-
-    public SysProjectBeanVo setOfficialLink(String officialLink) {
-        this.officialLink = officialLink;
-        return this;
-    }
-
-    public String getProjectAccepting() {
-        return projectAccepting;
-    }
-
-    public SysProjectBeanVo setProjectAccepting(String projectAccepting) {
-        this.projectAccepting = projectAccepting;
-        return this;
-    }
-
-    public Integer getCommentCount() {
-        return commentCount;
-    }
-
-    public SysProjectBeanVo setCommentCount(Integer commentCount) {
-        this.commentCount = commentCount;
-        return this;
-    }
-
-    public Integer getFollowerCount() {
-        return followerCount;
-    }
-
-    public SysProjectBeanVo setFollowerCount(Integer followerCount) {
-        this.followerCount = followerCount;
-        return this;
-    }
-
-    public Integer getTeamScore() {
-        return teamScore;
-    }
-
-    public SysProjectBeanVo setTeamScore(Integer teamScore) {
-        this.teamScore = teamScore;
-        return this;
-    }
-
-    public Integer getProductScore() {
-        return productScore;
-    }
-
-    public SysProjectBeanVo setProductScore(Integer productScore) {
-        this.productScore = productScore;
-        return this;
-    }
-
-    public Integer getCommercialSubstanceScore() {
-        return commercialSubstanceScore;
-    }
-
-    public SysProjectBeanVo setCommercialSubstanceScore(Integer commercialSubstanceScore) {
-        this.commercialSubstanceScore = commercialSubstanceScore;
-        return this;
-    }
-
-    public Integer getTokensOperationScore() {
-        return tokensOperationScore;
-    }
-
-    public SysProjectBeanVo setTokensOperationScore(Integer tokensOperationScore) {
-        this.tokensOperationScore = tokensOperationScore;
-        return this;
-    }
-
-    public BigDecimal getProjectGrade() {
-        return projectGrade;
-    }
-
-    public SysProjectBeanVo setProjectGrade(BigDecimal projectGrade) {
-        this.projectGrade = projectGrade;
-        return this;
-    }
-
-    public Boolean getStarProject() {
-        return starProject;
-    }
-
-    public SysProjectBeanVo setStarProject(Boolean starProject) {
-        this.starProject = starProject;
+    public SysProjectBeanVo setIsAvailable(int isAvailable) {
+        this.isAvailable = isAvailable;
         return this;
     }
 
@@ -411,75 +195,22 @@ public class SysProjectBeanVo {
         return this;
     }
 
-    public List<WebSiteManagementBean> getWebsiteList() {
-        return websiteList;
+    public Map<String, ProjectDescriptionBean> getDescriptions() {
+        return descriptions;
     }
 
-    public SysProjectBeanVo setWebsiteList(List<WebSiteManagementBean> websiteList) {
-        this.websiteList = websiteList;
+    public SysProjectBeanVo setDescriptions(Map<String, ProjectDescriptionBean> descriptions) {
+        this.descriptions = descriptions;
         return this;
     }
 
-    public String getProjectGid() {
-        return projectGid;
+    public Map<String, String> getWebsites() {
+        return websites;
     }
 
-    public SysProjectBeanVo setProjectGid(String projectGid) {
-        this.projectGid = projectGid;
+    public SysProjectBeanVo setWebsites(Map<String, String> websites) {
+        this.websites = websites;
         return this;
     }
 
-    public String getQueryStr() {
-        return queryStr;
-    }
-
-    public SysProjectBeanVo setQueryStr(String queryStr) {
-        this.queryStr = queryStr;
-        return this;
-    }
-
-    public String getImg() {
-        return img;
-    }
-
-    public SysProjectBeanVo setImg(String img) {
-        this.img = img;
-        return this;
-    }
-
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public SysProjectBeanVo setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-        return this;
-    }
-
-    public Integer getPageNum() {
-        return pageNum;
-    }
-
-    public SysProjectBeanVo setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-        return this;
-    }
-
-    public Integer getTypeId() {
-        return typeId;
-    }
-
-    public SysProjectBeanVo setTypeId(Integer typeId) {
-        this.typeId = typeId;
-        return this;
-    }
-
-    public Integer getTypePId() {
-        return typePId;
-    }
-
-    public SysProjectBeanVo setTypePId(Integer typePId) {
-        this.typePId = typePId;
-        return this;
-    }
 }

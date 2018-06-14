@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(value = 1)
 public class PropertiesConfig extends RuntimeException implements CommandLineRunner {
+
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     @Value("${project.name}")

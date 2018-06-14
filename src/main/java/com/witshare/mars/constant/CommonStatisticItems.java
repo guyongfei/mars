@@ -26,9 +26,17 @@ public class CommonStatisticItems {
 
     public static final String PROJECT_DETAIL_EN = "projectDetail-EN";
 
-    public static final String PROJECT_DES_TABLE_CN = "project_description_zh";
+    public static final String PROJECT_DETAIL_KO = "projectDetail-KO";
+
+    public static final String PROJECT_DETAIL_JA = "projectDetail-JA";
+
+    public static final String PROJECT_DES_TABLE_CN = "project_description_cn";
 
     public static final String PROJECT_DES_TABLE_EN = "project_description_en";
+
+    public static final String PROJECT_DES_TABLE_KO = "project_description_ko";
+
+    public static final String PROJECT_DES_TABLE_JA = "project_description_ja";
 
 
 }

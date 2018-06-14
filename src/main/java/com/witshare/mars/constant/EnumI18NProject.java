@@ -3,8 +3,7 @@ package com.witshare.mars.constant;
 
 import org.apache.commons.lang3.StringUtils;
 
-import static com.witshare.mars.constant.CacheConsts.LANGUAGE_CN;
-import static com.witshare.mars.constant.CacheConsts.LANGUAGE_EN;
+import static com.witshare.mars.constant.CacheConsts.*;
 import static com.witshare.mars.constant.CommonStatisticItems.*;
 
 /**
@@ -13,7 +12,9 @@ import static com.witshare.mars.constant.CommonStatisticItems.*;
 public enum EnumI18NProject {
 
     PROJECT_DESCRIPTION_CN(LANGUAGE_CN, PROJECT_DES_TABLE_CN, PROJECT_DETAIL_CN),
-    PROJECT_DESCRIPTION_EN(LANGUAGE_EN, PROJECT_DES_TABLE_EN, PROJECT_DETAIL_EN);
+    PROJECT_DESCRIPTION_EN(LANGUAGE_EN, PROJECT_DES_TABLE_EN, PROJECT_DETAIL_EN),
+    PROJECT_DESCRIPTION_KO(LANGUAGE_KO, PROJECT_DES_TABLE_KO, PROJECT_DETAIL_KO),
+    PROJECT_DESCRIPTION_JA(LANGUAGE_JA, PROJECT_DES_TABLE_JA, PROJECT_DETAIL_JA);
 
     private String requestLanguage;
     private String tableName;

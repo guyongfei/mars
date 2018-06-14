@@ -84,18 +84,15 @@ public class ManagementProjectController {
 
 
     /**
-     * \
-     * 获取单个项目详情
      *
-     * @param id
-     * @return
+     * 获取单个项目详情
      */
     @ResponseBody
-    @RequestMapping(value = "/project/{id}", method = RequestMethod.GET)
-    public ResponseBean getProjectById(@PathVariable Long id) {
+    @RequestMapping(value = "/project/{projectGid}", method = RequestMethod.GET)
+    public ResponseBean getProjectById(@PathVariable String projectGid) {
         ResponseBean responseBean;
         try {
-            SysProjectBeanVo sysProjectBeanVo = sysProjectService.selectManagementById(id);
+            SysProjectBeanVo sysProjectBeanVo = sysProjectService.selectManagementByGid(projectGid);
             responseBean = new ResponseBean(Boolean.TRUE, "", sysProjectBeanVo);
         } catch (WitshareException e) {
             LOGGER.error("getProjectById fail,{}", e);
@@ -109,11 +106,11 @@ public class ManagementProjectController {
 
 
     @ResponseBody
-    @RequestMapping(value = "/project/hide/{id}", method = RequestMethod.PUT)
-    public ResponseBean hideProject(@PathVariable Long id) {
+    @RequestMapping(value = "/project/hide/{projectGid}", method = RequestMethod.PUT)
+    public ResponseBean hideProject(@PathVariable String projectGid) {
         ResponseBean responseBean;
         try {
-            sysProjectService.hideProject(id);
+            sysProjectService.hideProject(projectGid);
             responseBean = new ResponseBean(Boolean.TRUE);
         } catch (WitshareException e) {
             LOGGER.error("hideProject fail,{}", e);

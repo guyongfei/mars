@@ -9,7 +9,10 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.witshare.mars.config.CurrentThreadContext;
 import com.witshare.mars.constant.*;
-import com.witshare.mars.dao.mysql.*;
+import com.witshare.mars.dao.mysql.StaticProjectDescriptionMapper;
+import com.witshare.mars.dao.mysql.StaticProjectWebsiteMapper;
+import com.witshare.mars.dao.mysql.StaticSysProjectMapper;
+import com.witshare.mars.dao.mysql.SysProjectMapper;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.job.Task;
@@ -39,8 +42,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
@@ -60,10 +63,6 @@ public class SysProjectServiceImpl implements SysProjectService {
     private static Gson gson = new Gson();
     @Autowired
     private SysProjectMapper sysProjectMapper;
-    @Autowired
-    private ProjectDescriptionCnMapper projectDescriptionZhMapper;
-    @Autowired
-    private ProjectDescriptionEnMapper projectDescriptionEnMapper;
     @Autowired
     private StaticProjectDescriptionMapper staticProjectDescriptionMapper;
     @Autowired
@@ -144,9 +143,6 @@ public class SysProjectServiceImpl implements SysProjectService {
             project.setProjectGrade(getPictureUrl(project.getProjectGrade()));
             project.setProjectLogoLink(getPictureUrl(project.getProjectLogoLink()));
             project.setProjectImgLink(getPictureUrl(project.getProjectImgLink()));
-            //设置评级
-            project.setProjectGrade(EnumProjectGrade.getProGradeByScore(project.getProjectGradeScore()).getGradeStr());
-
 
         }
         //存缓存
@@ -267,14 +263,9 @@ public class SysProjectServiceImpl implements SysProjectService {
         BigDecimal endPrice = sysProjectBean.getEndPrice();
         BigDecimal hardCap = sysProjectBean.getHardCap();
         BigDecimal minPurchaseAmount = sysProjectBean.getMinPurchaseAmount();
-        String token = sysProjectBean.getToken();
+        String token = sysProjectBean.getProjectToken();
         String log = sysProjectBean.getLog();
         String view = sysProjectBean.getView();
-        String pdfEn = sysProjectBean.getPdfEn();
-        String pdfCn = sysProjectBean.getPdfCn();
-        String pdfKo = sysProjectBean.getPdfKo();
-        String pdfJa = sysProjectBean.getPdfJa();
-        String pdfEnName = sysProjectBean.getPdfEnName();
         String instructionEn = sysProjectBean.getInstructionEn();
         String contentEn = sysProjectBean.getContentEn();
         String officialLink = sysProjectBean.getOfficialLink();
@@ -290,8 +281,8 @@ public class SysProjectServiceImpl implements SysProjectService {
         if (StringUtils.isEmpty(sysProjectBean.getProjectNameEn())
                 || StringUtils.isEmpty(sysProjectBean.getTokenAddress())
                 || StringUtils.isEmpty(sysProjectBean.getProjectAddress())
-                || startTime == null || current.before(startTime)
-                || endTime == null || startTime.before(endTime)
+                || current.before(startTime)
+                || startTime.before(endTime)
                 || startPrice == null || startPrice.compareTo(BigDecimal.ZERO) < 0
                 || endPrice == null || startPrice.compareTo(endPrice) > 0
                 || softCap == null || softCap.compareTo(BigDecimal.ZERO) <= 0
@@ -300,8 +291,6 @@ public class SysProjectServiceImpl implements SysProjectService {
                 || StringUtils.isEmpty(token)
                 || StringUtils.isEmpty(log)
                 || StringUtils.isEmpty(view)
-                || StringUtils.isEmpty(pdfEn)
-                || StringUtils.isEmpty(pdfEnName)
                 || StringUtils.isEmpty(instructionEn)
                 || StringUtils.isEmpty(contentEn)
                 || StringUtils.isEmpty(officialLink)
@@ -316,13 +305,9 @@ public class SysProjectServiceImpl implements SysProjectService {
         }
 
         //检验是否有主键重复的
-//        checkExist(sysProjectBean);
+        checkExist(sysProjectBean);
         //多线程提交对象存储，返回link
-        CountDownLatch countDownLatch = new CountDownLatch(6);
-        task.qingYunStorage(sysProjectBean, pdfEn, EnumStorage.PdfEn, countDownLatch);
-        task.qingYunStorage(sysProjectBean, pdfCn, EnumStorage.PdfCn, countDownLatch);
-        task.qingYunStorage(sysProjectBean, pdfKo, EnumStorage.PdfKo, countDownLatch);
-        task.qingYunStorage(sysProjectBean, pdfJa, EnumStorage.PdfJa, countDownLatch);
+        CountDownLatch countDownLatch = new CountDownLatch(2);
         task.qingYunStorage(sysProjectBean, log, EnumStorage.Log, countDownLatch);
         task.qingYunStorage(sysProjectBean, view, EnumStorage.View, countDownLatch);
         try {
@@ -331,7 +316,7 @@ public class SysProjectServiceImpl implements SysProjectService {
             throw new WitshareException(e.getMessage());
         }
         //todo 获取平台地址
-        sysProjectBean.setProjectAddress("");
+        sysProjectBean.setPlatformAddress("");
         sysProjectBean.setProjectGid(WitshareUtils.getUUID());
 
         //存表
@@ -514,22 +499,47 @@ public class SysProjectServiceImpl implements SysProjectService {
                 .doSelectPageInfo(() -> staticSysProjectMapper.selectManagementList(sysProjectBean));
     }
 
-    /**
-     * @see SysProjectService#selectManagementById(Long)
-     */
     @Override
-    public SysProjectBeanVo selectManagementById(Long id) {
-        SysProjectBeanVo sysProjectBeanVo = staticSysProjectMapper.selectManagementById(id);
-        //加载所有网站
-        String projectGid = sysProjectBeanVo.getProjectGid();
-        LinkedList<WebSiteManagementBean> webSiteManagementBeans = projectWebSiteService.select(projectGid);
-        sysProjectBeanVo.getWebsiteList().addAll(webSiteManagementBeans);
+    public SysProjectBeanVo selectManagementByGid(String projectGid) {
+        //查询主表
+        SysProjectBean sysProjectBean = this.selectByGid(projectGid);
+        if (sysProjectBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
+        }
+        SysProjectBeanVo sysProjectBeanVo = new SysProjectBeanVo();
+        BeanUtils.copyProperties(sysProjectBean, sysProjectBeanVo);
         //图片
-        sysProjectBeanVo.setLog(getPictureUrl(sysProjectBeanVo.getLog()));
-        sysProjectBeanVo.setView(getPictureUrl(sysProjectBeanVo.getView()));
-        sysProjectBeanVo.setPdfZh(getPictureUrl(sysProjectBeanVo.getPdfZh()));
-        sysProjectBeanVo.setPdfEn(getPictureUrl(sysProjectBeanVo.getPdfEn()));
+        sysProjectBeanVo.setProjectLogoLink(getPictureUrl(sysProjectBeanVo.getProjectLogoLink()));
+        sysProjectBeanVo.setProjectImgLink(getPictureUrl(sysProjectBeanVo.getProjectImgLink()));
+        //依此查询描述表
+        Map<String, ProjectDescriptionBean> description = sysProjectBeanVo.getDescriptions();
+        Arrays.stream(EnumI18NProject.values()).forEach(p -> {
+            String tableName = p.getTableName();
+            String language = p.getRequestLanguage();
+            ProjectDescriptionBean projectDescriptionBean = staticProjectDescriptionMapper.selectByTableName(tableName, projectGid);
+            description.put(language, projectDescriptionBean);
+        });
+        //查询关联网站
+        Map<String, String> webSiteMap = projectWebSiteService.select(projectGid);
+        sysProjectBeanVo.setWebsites(webSiteMap);
         return sysProjectBeanVo;
+    }
+
+
+    @Override
+    public SysProjectBean selectByGid(String projectGid) {
+        if (StringUtils.isEmpty(projectGid)) {
+            return null;
+        }
+        SysProjectExample sysProjectExample = new SysProjectExample();
+        sysProjectExample.or().andProjectGidEqualTo(projectGid);
+        List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
+        if (CollectionUtils.isNotEmpty(sysProjects)) {
+            SysProjectBean sysProjectBean = new SysProjectBean();
+            BeanUtils.copyProperties(sysProjects.get(0), sysProjectBean);
+            return sysProjectBean;
+        }
+        return null;
 
     }
 
@@ -598,18 +608,17 @@ public class SysProjectServiceImpl implements SysProjectService {
 
 
     @Override
-    public void hideProject(Long id) {
-        if (id == null) {
-            throw new WitshareException(EnumResponseText.ErrorId);
+    public void hideProject(String projectGid) {
+        if (StringUtils.isEmpty(projectGid)) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
-        SysProjectBeanVo sysProjectBeanVo = selectManagementById(id);
-        if (sysProjectBeanVo == null) {
-            throw new WitshareException(EnumResponseText.ErrorId);
+        SysProjectBean sysProjectBean = this.selectByGid(projectGid);
+        if (sysProjectBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
-        String projectGid = sysProjectBeanVo.getProjectGid();
+        Long id = sysProjectBean.getId();
         staticSysProjectMapper.modifyProjectStatus(id);
         //清缓存
-        redisCommonDao.delRedisKey(RedisKeyUtil.getIndexProjectKey());
         redisCommonDao.delRedisKey(RedisKeyUtil.getProjectStatisticKey(projectGid));
 
     }

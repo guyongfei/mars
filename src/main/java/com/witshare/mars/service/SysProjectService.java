@@ -68,10 +68,9 @@ public interface SysProjectService {
     /**
      * 管理页面获取单个项目详情
      *
-     * @param id
      * @return
      */
-    SysProjectBeanVo selectManagementById(Long id);
+    SysProjectBeanVo selectManagementByGid(String projectGid);
 
 
     /**
@@ -87,6 +86,8 @@ public interface SysProjectService {
      */
     void delAllProjectCache();
 
-    void hideProject(Long id);
+    void hideProject(String projectGid);
+
+    SysProjectBean selectByGid(String projectGid);
 
 }

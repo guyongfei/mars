@@ -6,25 +6,34 @@
         SELECT (
         (SELECT COUNT(0)
         FROM `sys_project`
-        WHERE `project_token`=#{token}
-        <if test="id !=null and id > 0">
-            and id !=#{id}
-        </if>
+        WHERE `project_token`=#{projectToken}
+
         )+
         (SELECT COUNT(0)
         FROM `project_description_en`
         WHERE `project_name`=#{projectNameEn}
-        <if test="id !=null and id > 0">
-            and project_id !=#{id}
-        </if>
-        )+
-        (SELECT COUNT(0)
-        FROM `project_description_zh`
-        WHERE `project_name`=#{projectNameZh}
-        <if test="id !=null and id > 0">
-            and project_id !=#{id}
-        </if>
+
         )
+        <if test="projectNameCn != null and projectNameCn!=''">
+            + (SELECT COUNT(0)
+            FROM `project_description_cn`
+            WHERE `project_name`=#{projectNameCn}
+            )
+        </if>
+        <if test="projectNameKo != null and projectNameKo!=''">
+            + (SELECT COUNT(0)
+            FROM `project_description_ko`
+            WHERE `project_name`=#{projectNameKo}
+            )
+        </if>
+        <if test="projectNameJa != null and projectNameJa!=''">
+            + (SELECT COUNT(0)
+            FROM `project_description_ja`
+            WHERE `project_name`=#{projectNameJa}
+            )
+        </if>
+
+
         )
     </select>
 
@@ -38,7 +47,7 @@
         VALUES
         (#{projectGid},#{projectToken},#{tokenAddress},#{platformAddress},#{projectAddress},
         #{projectLogoLink},#{projectImgLink},
-        #{softCap},#{hardCap},#{minPurchaseAmount},#{startTime},#{endPime},#{startPrice},#{endPrice},
+        #{softCap},#{hardCap},#{minPurchaseAmount},#{startTime},#{endTime},#{startPrice},#{endPrice},
         NOW(),NOW() );
     </insert>
 
@@ -94,20 +103,20 @@
     </select>
 
     <select id="selectManagementList" resultType="com.witshare.mars.pojo.vo.SysProjectListVo">
-        SELECT p.`id` id,
-        p.`project_token` token,
-        pe.`project_name` projectNameEn,
-        pz.`project_name` projectNameZh,
-        p.project_status projectStatus
-        FROM `sys_project` p
-        LEFT JOIN `project_description_en` pe ON p.`id`=pe.`project_id`
-        LEFT JOIN `project_description_zh` pz ON p.`id` = pz.`project_id`
-        <where>
-            <if test="queryStr != null and queryStr!=''">
-                CONCAT(p.`project_token`,' ',pe.`project_name`,' ',pz.`project_name`) LIKE '%${queryStr}%'
-            </if>
-        </where>
-        ORDER BY p.`update_time` desc
+        SELECT `project_gid`,`project_token`,`start_time`,`end_time`,`project_status`,`is_available`
+        FROM `sys_project`
+        ORDER BY
+        <choose>
+            <when test="orderCondition != null and orderCondition != ''">
+                ${orderCondition}
+                <if test="ascOrdesc == -1">
+                    DESC
+                </if>
+            </when>
+            <otherwise>
+                end_time,start_time,project_status
+            </otherwise>
+        </choose>
     </select>
 
     <select id="selectProjectList" parameterType="com.witshare.mars.pojo.dto.ProjectReqBean"
@@ -271,7 +280,7 @@
     </update>
 
     <update id="modifyProjectStatus" parameterType="java.lang.Long">
-          UPDATE `sys_project` SET `project_status` = !`project_status` WHERE `id` = #{id}
+        UPDATE `sys_project` SET `is_available` = !`is_available` WHERE `id` = #{id}
     </update>
 
 

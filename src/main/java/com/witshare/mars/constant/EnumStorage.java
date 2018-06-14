@@ -7,10 +7,6 @@ public enum EnumStorage {
 
     Log(0, "log", "log图片"),
     View(1, "view", "展示图片"),
-    PdfEn(2, "pdfEn", "英文pdf"),
-    PdfCn(3, "pdfCn", "繁体pdf"),
-    PdfKo(4, "pdfKo", "韩文pdf"),
-    PdfJa(5, "pdfJa", "日文pdf"),
     Avatar(6, "avatar", "用户头像");
 
     public static final String PDF = "pdf";
