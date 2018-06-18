@@ -28,9 +28,9 @@
 |1|校验成功||
 |2|校验失败||
 
-## 1.设置交易钱包
+## 1.设置用户交易地址
 
-- url：/transaction/wallet
+- url：/transaction/user-address
 - method:post
 - request body
 
