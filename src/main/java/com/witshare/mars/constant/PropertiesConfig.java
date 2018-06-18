@@ -1,7 +1,6 @@
 package com.witshare.mars.constant;
 
 
-import com.witshare.mars.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -64,8 +63,29 @@ public class PropertiesConfig extends RuntimeException implements CommandLineRun
 
     @Override
     public void run(String... args) {
-        LOGGER.info("PropertiesConfig:{}", JsonUtils.toGsonPretty(this));
+
+        LOGGER.info("PropertiesConfig:{}", toString());
     }
 
-
+    @Override
+    public String toString() {
+        return "PropertiesConfig{" +
+                "projectName='" + projectName + '\'' +
+                ", writeApiLog='" + writeApiLog + '\'' +
+                ", qingyunBucket='" + qingyunBucket + '\'' +
+                ", qingyunZoneKey='" + qingyunZoneKey + '\'' +
+                ", qingyunHost='" + qingyunHost + '\'' +
+                ", qingyunHttpUrl='" + qingyunHttpUrl + '\'' +
+                ", qingyunObjectName='" + qingyunObjectName + '\'' +
+                ", mailSubjectName='" + mailSubjectName + '\'' +
+                ", mailAccountOffice365='" + mailAccountOffice365 + '\'' +
+                ", mailAccountHotmail='" + mailAccountHotmail + '\'' +
+                ", authFree='" + authFree + '\'' +
+                ", authAdminPath='" + authAdminPath + '\'' +
+                ", authAdminUser='" + authAdminUser + '\'' +
+                ", contextPath='" + contextPath + '\'' +
+                ", frontPath='" + frontPath + '\'' +
+                ", defaultAvatar='" + defaultAvatar + '\'' +
+                '}';
+    }
 }
