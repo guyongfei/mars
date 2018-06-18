@@ -12,6 +12,31 @@ var projectNow;
 var addMethod = true;
 var projectTypeArr = new Array();
 
+function getNowFormatDate(date) {
+    if (!date) {
+        date = new Date();
+    }
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+        + " " + date.getHours() + seperator2 + date.getMinutes();
+    return currentdate;
+}
+
+function getAddDay(addDay) {
+    var current = new Date();
+    current.setTime(current.getTime() + addDay * 24 * 60 * 60 * 1000);
+    return current;
+}
+
 var TableInit = function () {
     var oTableInit = new Object();
     //初始化Table
@@ -37,7 +62,7 @@ var TableInit = function () {
             minimumCountColumns: 1,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
 //                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-            uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+            uniqueId: "projectGid",                     //每一行的唯一标识，一般为主键列
             showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
             detailView: false,                   //是否显示父子表
@@ -59,20 +84,27 @@ var TableInit = function () {
                     return pageSize * (pageNumber - 1) + index + 1;
                 }
             }, {
-                field: 'token',
+                field: 'projectToken',
                 align: 'center',
                 title: 'TOKEN'
             }, {
-                field: 'projectNameZh',
+                field: 'startTime',
                 align: 'center',
-                title: '项目名称'
+                title: '开始时间',
+                formatter: timeFormatter
             }, {
-                field: 'projectNameEn',
+                field: 'endTime',
                 align: 'center',
-                title: 'ProjectName'
+                title: '结束时间',
+                formatter: timeFormatter
+            }, {
+                field: 'projectStatus',
+                align: 'center',
+                title: '项目状态',
+                formatter: projectStatusFormatter
             }, {
                 title: '是否启用',
-                field: 'projectStatus',
+                field: 'isAvailable',
                 align: 'center',
                 valign: 'middle',
                 events: lockEvents,
@@ -117,12 +149,45 @@ function lockFormatter(value, row, index) {
     ].join('');
 }
 
+function projectStatusFormatter(value, row, index) {
+    var state = '--';
+    var color = '#000';
+    var color_green = 'btn-danger';
+    switch (value) {
+        case 0:
+            state = '未开始';
+            break;
+        case 1:
+            state = '未到软顶';
+            break;
+        case 2:
+            state = '未到硬顶';
+            break;
+        case 3:
+            state = '成功';
+            break;
+        case 4:
+            state = '失败';
+            break;
+    }
+    return [
+        '<button class="btn ' + color + '" >' + state + '</button>'
+    ].join('');
+}
+
+function timeFormatter(value, row, index) {
+    return [
+        '<label  >' + getNowFormatDate(new Date(value)) + '</label>'
+    ].join('');
+}
+
 window.lockEvents = {
     'click .lock': function (e, value, row, index) {
         bootbox.confirm("确认要更改状态", function (result) {
             if (result) {
+                console.log(row);
                 $.ajax({
-                    url: contextPath + "/management/project/hide/" + row.id,
+                    url: contextPath + "/management/project/hide/" + row.projectGid,
                     type: "put",
                     contentType: "application/json;charset=UTF-8",
                     beforeSend: function () {
@@ -217,7 +282,7 @@ function getProject(row) {
 
 
     $.ajax({
-        url: contextPath + "/management/project/" + row.id,
+        url: contextPath + "/management/project/" + row.projectGid,
         type: "get",
         contentType: "application/json;charset=UTF-8",
         beforeSend: function () {
@@ -232,47 +297,63 @@ function getProject(row) {
             if (data.success) {
                 var project = data.data;
                 projectNow = project;
-                $(' #projectNameZh').val(project.projectNameZh);
-                $(' #projectNameEn').val(project.projectNameEn);
-                $(' #token').val(project.token);
-                $('#grade').val(project.gradeStr);
-                $('#projectTypeP').val(project.typePId);
-                $(":radio[name='icoV'][value='" + project.ico + "']").prop("checked", "checked");
-                $(' #instructionZh').val(project.instructionZh);
-                $(' #instructionEn').val(project.instructionEn);
-                $(' #contentZh').val(project.contentZh);
-                $(' #contentEn').val(project.contentEn);
-                $(' #officialLink').val(project.officialLink);
-                $(' #whitePaperLinkZh').val(project.whitePaperLinkZh);
-                $(' #whitePaperLinkEn').val(project.whitePaperLinkEn);
 
-                $(' #teamScore').val(project.teamScore / 10.0);
-                $(' #productScore').val(project.productScore / 10.0);
-                $(' #scheduleScore').val(project.scheduleScore / 10.0);
-                $(' #commercialSubstanceScore').val(project.commercialSubstanceScore / 10.0);
-                $(' #tokensOperationScore').val(project.tokensOperationScore / 10.0);
-                //  社交网站列表
-                $.each(project.socialList, function (index, value) {
-                    var linkUrl = value.linkUrl;
-                    var id = value.typeId;
-                    console.log(value)
-                    if (linkUrl) {
-                        $("input[name='socialWebsite'][ids='" + id + "']").val(linkUrl)
-                    }
-                });
-                //项目类型
-                var childrenArr = projectTypeArr[project.typePId]
-                $("#projectTypeC").empty();
-                if (childrenArr) {
-                    $.each(childrenArr.children, function (index, obj) {
-                        if (obj) {
-                            $("#projectTypeC").append("<option value='" + obj.id + "'>" + obj.projectTypeZh + "</option>");
-                        }
-                    });
+                $('#tokenAddress').val(project.tokenAddress);
+                $('#projectToken').val(project.projectToken);
+                $('#projectAddress').val(project.projectAddress);
+                $('#softCap').val(project.softCap);
+                $('#hardCap').val(project.hardCap);
+                $('#minPurchaseAmount').val(project.minPurchaseAmount);
+                $('#startPriceRate').val(project.startPriceRate);
+                $('#endPriceRate').val(project.endPriceRate);
+                $('#startTimePicker').val(getNowFormatDate(new Date(project.startTime)));
+                $('#endTimePicker').val(getNowFormatDate(new Date(project.endTime)));
+
+                $(' #instructionEn').val(project.descriptions.en.projectInstruction);
+                $(' #instructionCn').val(project.descriptions.cn.projectInstruction);
+                $(' #instructionKo').val(project.descriptions.ko.projectInstruction);
+                $(' #instructionJa').val(project.descriptions.ja.projectInstruction);
+
+                $(' #contentEn').val(project.descriptions.en.projectContent);
+                $(' #contentCn').val(project.descriptions.cn.projectContent);
+                $(' #contentKo').val(project.descriptions.ko.projectContent);
+                $(' #contentJa').val(project.descriptions.ja.projectContent);
+
+                $(' #officialLink').val(project.websites.officialLink);
+                $(' #twitter').val(project.websites.twitter);
+                $(' #facebook').val(project.websites.facebook);
+                $(' #telegram').val(project.websites.telegram);
+                $(' #reddit').val(project.websites.reddit);
+                $(' #biYong').val(project.websites.biYong);
+                $(' #gitHub').val(project.websites.gitHub);
+
+                $(' #whitePaperLinkCn').val(project.descriptions.cn.whitePaperLink);
+                $(' #whitePaperLinkEn').val(project.descriptions.en.whitePaperLink);
+                $(' #whitePaperLinkKo').val(project.descriptions.ko.whitePaperLink);
+                $(' #whitePaperLinkJa').val(project.descriptions.ja.whitePaperLink);
+
+                $(' #projectNameCn').val(project.descriptions.cn.projectName);
+                $(' #projectNameEn').val(project.descriptions.en.projectName);
+                $(' #projectNameJa').val(project.descriptions.ja.projectName);
+                $(' #projectNameKo').val(project.descriptions.ko.projectName);
+
+                //根据项目状态判断是否能更改
+                var projectStatus = project.projectStatus;
+                if (projectStatus > 0) {
+                    // $('#startPrice').disable();
+                    // $('#startTimePicker').disable();
                 }
-                $('#projectTypeC').val(project.typeId);
+                if (projectStatus > 1) {
+                    // $('#softCap').disable();
+                }
+                if (projectStatus > 2) {
+                    // $('#hardCap').disable();
+                    // $('#endPrice').disable();
+                    // $('#endTimePicker').disable();
+                    // $('#minPurchaseAmount').disable();
+                }
 
-                $('#addModal').modal('show')
+                $('#addModal').modal('show');
                 addMethod = false
             } else {
                 layer.msg(data.message, {
@@ -567,14 +648,14 @@ $(function () {
                     }
                 }
             },
-            startPrice: {
+            startPriceRate: {
                 validators: {
                     notEmpty: {
                         message: '开始单价（ETH）不能为空'
                     }
                 }
             },
-            endPrice: {
+            endPriceRate: {
                 validators: {
                     notEmpty: {
                         message: '结束单价（ETH）不能为空'
@@ -859,13 +940,13 @@ $(function () {
         console.log($form.serialize())
 
         // Use Ajax to submit form data
-        var id = addMethod ? 0 : projectNow.id;
+        var projectGid = addMethod ? "" : projectNow.projectGid;
         if (!checkPrice() || !checkCap()) {
             return;
         }
         var dataJson = {
-            'id': id,
-            'token': $(' #token').val(),
+            'projectGid': projectGid,
+            'projectToken': $(' #projectToken').val(),
             'projectNameEn': $(' #projectNameEn').val(),
             'projectNameCn': $(' #projectNameCn').val(),
             'projectNameKo': $(' #projectNameKo').val(),
@@ -877,8 +958,8 @@ $(function () {
             'hardCap': numeral($('#hardCap').val()).value(),
             'minPurchaseAmount': numeral($('#minPurchaseAmount').val()).value(),
 
-            'startPrice': numeral($('#startPrice').val()).value(),
-            'endPrice': numeral($('#endPrice').val()).value(),
+            'startPriceRate': numeral($('#startPriceRate').val()).value(),
+            'endPriceRate': numeral($('#endPriceRate').val()).value(),
             'startTimeLong': new Date($('#startTimePicker').val()).getMilliseconds(),
             'endTimeLong': new Date($('#endTimePicker').val()).getMilliseconds(),
 
@@ -905,17 +986,9 @@ $(function () {
             'biYong': $(' #biYong').val(),
             'gitHub': $(' #gitHub').val(),
 
-            'logStr': logStr,
-            'view': view,
+            'log': logStr,
+            'view': view
 
-            'pdfEn': pdfEn,
-            'pdfEnName': pdfEnName,
-            'pdfCn': pdfCn,
-            'pdfCnName': pdfCnName,
-            'pdfKo': pdfKo,
-            'pdfKoName': pdfKoName,
-            'pdfJa': pdfJa,
-            'pdfJaName': pdfJaName
         };
 
         console.log(dataJson);
@@ -1014,10 +1087,10 @@ $(function () {
 
     });
     function checkPrice() {
-        var startPrice = numeral($('#startPrice').val()).value();
-        var endPrice = numeral($('#endPrice').val()).value();
+        var startPriceRate = numeral($('#startPriceRate').val()).value();
+        var endPriceRate = numeral($('#endPriceRate').val()).value();
 
-        if (!startPrice || !endPrice || startPrice > endPrice) {
+        if (!startPriceRate || !endPriceRate || startPriceRate < endPriceRate) {
             layer.msg("价格设置有误", {
                 time: 2000,
                 icon: 0,
@@ -1043,32 +1116,6 @@ $(function () {
         }
         return true;
     };
-
-
-    function getNowFormatDate(date) {
-        if (!date) {
-            date = new Date();
-        }
-        var seperator1 = "-";
-        var seperator2 = ":";
-        var month = date.getMonth() + 1;
-        var strDate = date.getDate();
-        if (month >= 1 && month <= 9) {
-            month = "0" + month;
-        }
-        if (strDate >= 0 && strDate <= 9) {
-            strDate = "0" + strDate;
-        }
-        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-            + " " + date.getHours() + seperator2 + date.getMinutes();
-        return currentdate;
-    }
-
-    function getAddDay(addDay) {
-        var current = new Date();
-        current.setTime(current.getTime() + addDay * 24 * 60 * 60 * 1000);
-        return current;
-    }
 
 
 })

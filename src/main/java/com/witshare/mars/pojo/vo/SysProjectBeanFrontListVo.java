@@ -7,7 +7,7 @@ import java.sql.Timestamp;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class SysProjectBeanVo {
+public class SysProjectBeanFrontListVo {
 
 
     private String projectGid;
@@ -25,7 +25,9 @@ public class SysProjectBeanVo {
     private BigDecimal startPrice;
     private BigDecimal endPrice;
     private int projectStatus;
-    private int isAvailable;
+    private String projectInstruction;
+    private String whitePaperLink;
+    private String projectContent;
 
     private Timestamp createTime;
     private Timestamp updateTime;
@@ -37,7 +39,7 @@ public class SysProjectBeanVo {
         return projectGid;
     }
 
-    public SysProjectBeanVo setProjectGid(String projectGid) {
+    public SysProjectBeanFrontListVo setProjectGid(String projectGid) {
         this.projectGid = projectGid;
         return this;
     }
@@ -46,7 +48,7 @@ public class SysProjectBeanVo {
         return projectToken;
     }
 
-    public SysProjectBeanVo setProjectToken(String projectToken) {
+    public SysProjectBeanFrontListVo setProjectToken(String projectToken) {
         this.projectToken = projectToken;
         return this;
     }
@@ -55,7 +57,7 @@ public class SysProjectBeanVo {
         return tokenAddress;
     }
 
-    public SysProjectBeanVo setTokenAddress(String tokenAddress) {
+    public SysProjectBeanFrontListVo setTokenAddress(String tokenAddress) {
         this.tokenAddress = tokenAddress;
         return this;
     }
@@ -64,7 +66,7 @@ public class SysProjectBeanVo {
         return platformAddress;
     }
 
-    public SysProjectBeanVo setPlatformAddress(String platformAddress) {
+    public SysProjectBeanFrontListVo setPlatformAddress(String platformAddress) {
         this.platformAddress = platformAddress;
         return this;
     }
@@ -73,7 +75,7 @@ public class SysProjectBeanVo {
         return projectAddress;
     }
 
-    public SysProjectBeanVo setProjectAddress(String projectAddress) {
+    public SysProjectBeanFrontListVo setProjectAddress(String projectAddress) {
         this.projectAddress = projectAddress;
         return this;
     }
@@ -82,7 +84,7 @@ public class SysProjectBeanVo {
         return projectLogoLink;
     }
 
-    public SysProjectBeanVo setProjectLogoLink(String projectLogoLink) {
+    public SysProjectBeanFrontListVo setProjectLogoLink(String projectLogoLink) {
         this.projectLogoLink = projectLogoLink;
         return this;
     }
@@ -91,7 +93,7 @@ public class SysProjectBeanVo {
         return projectImgLink;
     }
 
-    public SysProjectBeanVo setProjectImgLink(String projectImgLink) {
+    public SysProjectBeanFrontListVo setProjectImgLink(String projectImgLink) {
         this.projectImgLink = projectImgLink;
         return this;
     }
@@ -100,7 +102,7 @@ public class SysProjectBeanVo {
         return softCap;
     }
 
-    public SysProjectBeanVo setSoftCap(BigDecimal softCap) {
+    public SysProjectBeanFrontListVo setSoftCap(BigDecimal softCap) {
         this.softCap = softCap;
         return this;
     }
@@ -109,7 +111,7 @@ public class SysProjectBeanVo {
         return hardCap;
     }
 
-    public SysProjectBeanVo setHardCap(BigDecimal hardCap) {
+    public SysProjectBeanFrontListVo setHardCap(BigDecimal hardCap) {
         this.hardCap = hardCap;
         return this;
     }
@@ -118,7 +120,7 @@ public class SysProjectBeanVo {
         return minPurchaseAmount;
     }
 
-    public SysProjectBeanVo setMinPurchaseAmount(BigDecimal minPurchaseAmount) {
+    public SysProjectBeanFrontListVo setMinPurchaseAmount(BigDecimal minPurchaseAmount) {
         this.minPurchaseAmount = minPurchaseAmount;
         return this;
     }
@@ -127,7 +129,7 @@ public class SysProjectBeanVo {
         return startTime;
     }
 
-    public SysProjectBeanVo setStartTime(Timestamp startTime) {
+    public SysProjectBeanFrontListVo setStartTime(Timestamp startTime) {
         this.startTime = startTime;
         return this;
     }
@@ -136,7 +138,7 @@ public class SysProjectBeanVo {
         return endTime;
     }
 
-    public SysProjectBeanVo setEndTime(Timestamp endTime) {
+    public SysProjectBeanFrontListVo setEndTime(Timestamp endTime) {
         this.endTime = endTime;
         return this;
     }
@@ -145,7 +147,7 @@ public class SysProjectBeanVo {
         return startPrice;
     }
 
-    public SysProjectBeanVo setStartPrice(BigDecimal startPrice) {
+    public SysProjectBeanFrontListVo setStartPrice(BigDecimal startPrice) {
         this.startPrice = startPrice;
         return this;
     }
@@ -154,7 +156,7 @@ public class SysProjectBeanVo {
         return endPrice;
     }
 
-    public SysProjectBeanVo setEndPrice(BigDecimal endPrice) {
+    public SysProjectBeanFrontListVo setEndPrice(BigDecimal endPrice) {
         this.endPrice = endPrice;
         return this;
     }
@@ -163,25 +165,17 @@ public class SysProjectBeanVo {
         return projectStatus;
     }
 
-    public SysProjectBeanVo setProjectStatus(int projectStatus) {
+    public SysProjectBeanFrontListVo setProjectStatus(int projectStatus) {
         this.projectStatus = projectStatus;
         return this;
     }
 
-    public int getIsAvailable() {
-        return isAvailable;
-    }
-
-    public SysProjectBeanVo setIsAvailable(int isAvailable) {
-        this.isAvailable = isAvailable;
-        return this;
-    }
 
     public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public SysProjectBeanVo setCreateTime(Timestamp createTime) {
+    public SysProjectBeanFrontListVo setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
         return this;
     }
@@ -190,7 +184,7 @@ public class SysProjectBeanVo {
         return updateTime;
     }
 
-    public SysProjectBeanVo setUpdateTime(Timestamp updateTime) {
+    public SysProjectBeanFrontListVo setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
         return this;
     }
@@ -199,7 +193,7 @@ public class SysProjectBeanVo {
         return descriptions;
     }
 
-    public SysProjectBeanVo setDescriptions(Map<String, ProjectDescriptionBean> descriptions) {
+    public SysProjectBeanFrontListVo setDescriptions(Map<String, ProjectDescriptionBean> descriptions) {
         this.descriptions = descriptions;
         return this;
     }
@@ -208,9 +202,35 @@ public class SysProjectBeanVo {
         return websites;
     }
 
-    public SysProjectBeanVo setWebsites(Map<String, String> websites) {
+    public SysProjectBeanFrontListVo setWebsites(Map<String, String> websites) {
         this.websites = websites;
         return this;
     }
 
+    public String getProjectInstruction() {
+        return projectInstruction;
+    }
+
+    public SysProjectBeanFrontListVo setProjectInstruction(String projectInstruction) {
+        this.projectInstruction = projectInstruction;
+        return this;
+    }
+
+    public String getWhitePaperLink() {
+        return whitePaperLink;
+    }
+
+    public SysProjectBeanFrontListVo setWhitePaperLink(String whitePaperLink) {
+        this.whitePaperLink = whitePaperLink;
+        return this;
+    }
+
+    public String getProjectContent() {
+        return projectContent;
+    }
+
+    public SysProjectBeanFrontListVo setProjectContent(String projectContent) {
+        this.projectContent = projectContent;
+        return this;
+    }
 }

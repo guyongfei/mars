@@ -7,17 +7,20 @@ public class CacheConsts {
     public static final int PHONE_NO_VERIFY_CODE_EXPIRE_MINUTE = 15;
     public static final String PROJECT_NAME = "mars";
     public static final String KEY_DATA = "data";
-    public static final String CONFIG_BILLBOARD_NUM = "billBoardNum";
-    public static final String KEY_COOKIE_NAME = PROJECT_NAME;
-    public static final String INTERNATIONAL_LANGUAGE = "international.language";
+
+    public static final String COOKIE_USER_TOKEN = "witshare.user.token";
+    public static final String COOKIE_I18N_LANGUAGE = "witshare.i18n.language";
     public static final String LANGUAGE_CN = "cn";
     public static final String LANGUAGE_EN = "en";
+    public static final String LANGUAGE_KO = "ko";
+    public static final String LANGUAGE_JA = "ja";
+
     public static final String PAGE_NUM = "pageNum";
     public static final String PAGE_SIZE = "pageSize";
+    public static final String WHITE_PAPER_LINK = "whitePaperLink";
     public static final String DEFAULT_PAGE_NUM_STR = "1";
     public static final String DEFAULT_PAGE_SIZE_STR = "10";
-    public static final String DELETED_COMMENT_COMMENT_CN = "该评论已被删除";
-    public static final String DELETED_COMMENT_COMMENT_EN = "The comment has been deleted";
+
 
     public static final String PARAM_PASSWORD_ENCRYPTION_ALGORITHM = "md5";
     public static final int PARAM_PASSWORD_ENCRYPTION_TIMES = 3;

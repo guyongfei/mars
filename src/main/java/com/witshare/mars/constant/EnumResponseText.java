@@ -12,6 +12,7 @@ public enum EnumResponseText {
     ErrorOriginPassword(3, "原密码错误", "Error originPassword."),
     ErrorEmail(4, "邮箱不合法", "Error email."),
     ErrorId(5, "id错误", "Error id."),
+    ErrorProjectGId(5, "项目唯一标识错误", "Error projectGid."),
     ErrorLinkName(6, "名称错误", "Error linkName."),
     ErrorPicture(7, "图片错误", "Error picture."),
     ErrorNickname(8, "昵称不合法", "Error nickname."),
@@ -31,7 +32,10 @@ public enum EnumResponseText {
     HasRelate(22, "存在关联项", "Existence Association term."),
     AccountSuspended(22, "账户被冻结", "Account Suspended."),
     HAVEFOLLOWEDBEFORE(23, "已经关注过了", "have already followed"),
-    CANNOTBLOCKEDYOURSELF(24, "不能冻结自己", "can't blocked yourself");
+    CANNOTBLOCKEDYOURSELF(24, "不能冻结自己", "can't blocked yourself"),
+    CannotRepeatSetting(25, "已有值，不能重复设置", "can't repeat setting"),
+    ErrorPriceRate(25, "错误的价格", "error price rate."),
+    ErrorPayTx(25, "错误的交易号", "error pay tx."),;
 
     private int value;
     private String zh;

@@ -3,7 +3,6 @@ package com.witshare.mars.controller;
 import com.witshare.mars.constant.EnumWitshare;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.util.ResponseBean;
-import com.witshare.mars.pojo.vo.LoginVo;
 import com.witshare.mars.service.SysUserService;
 import org.apache.shiro.authc.AccountException;
 import org.apache.shiro.authc.CredentialsException;
@@ -43,8 +42,8 @@ public class LoginController {
                               @RequestBody Map<String, String> requestBody) {
         ResponseBean responseBean;
         try {
-            LoginVo loginVo = sysUserService.login(requestBody);
-            responseBean = new ResponseBean(Boolean.TRUE, "", loginVo);
+            sysUserService.login(requestBody);
+            responseBean = new ResponseBean(Boolean.TRUE);
         } catch (CredentialsException e) {
             LOGGER.info("login fail.Error password.", e);
             responseBean = new ResponseBean(Boolean.FALSE, "Error password.");

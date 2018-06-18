@@ -33,7 +33,7 @@ public class ControllerAdviceAspect {
         logger = LoggerFactory.getLogger(declaringType);
         Object result = null;
         if (e instanceof WitshareException) {
-            result = ResponseBean.newInstanceError(((WitshareException) e).getCode());
+            result = ResponseBean.newInstanceError(e.getMessage());
         } else {
             result = ResponseBean.newInstanceError(e.getClass().getName() + ": " + e.getMessage());
             logger.error("{} fail:", signature.getDeclaringTypeName(), e);

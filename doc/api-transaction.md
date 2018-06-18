@@ -28,7 +28,37 @@
 |1|校验成功||
 |2|校验失败||
 
-## 1.提交交易
+## 1.设置交易钱包
+
+- url：/transaction/wallet
+- method:post
+- request body
+
+  ```json
+  {
+    "payEthAddress":"",
+    "getTokenAddress":""
+  }
+
+  ```
+- response body
+
+  ```json
+    {
+      "message": "",
+      "success": true
+    }
+  ```
+
+> 请求字段详解
+
+|字段|类型|是否必须|说明|
+|---|---|---|---|
+|payEthAddress|string|是|支付Eth地址|
+|getTokenAddress|string|是|获取token地址|
+
+
+## 2.提交交易
 
 - url：/transaction
 - method:post
@@ -36,12 +66,12 @@
 
   ```json
   {
-    "token":"SLN",
-    "payAmount":123.45,
+    "projectGid":"",
+    "priceRate":200,
+    "payAmount":2,
     "payCoinType":0,
     "payTx":"0xdc9f30b716597999eafa0cabaa0b33423845e2f13d4c30d845018d4cf7bad959",
-    "hopeGetAmount":12354.123,
-    "userAddress":"0x01a52D062B7425E6D60ed1f553c4E743136a8F07"
+    "hopeGetAmount":400
   }
 
   ```
@@ -59,14 +89,14 @@
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
-|token|string|是|认筹项目token|
+|projectGid|string|是|认筹项目唯一标识|
+|priceRate|number|是|当前eth:token的价格比|
 |payAmount|number|是|支付数量|
 |payCoinType|number|是|支付类型|
 |payTx|number|是|交易号|
 |hopeGetAmount|number|是|期望得到的token数量|
-|userAddress|string|是|用户地址|
 
-## 2.个人交易列表
+## 3.个人交易列表
 
 > 只能查看自己的（通过cookie）
 
@@ -85,6 +115,7 @@
       "message": "",
       "success": true,
       "data":{
+        "projectGid":"",
         "token":"",
         "payTx":"",
         "projectStatus":0,
@@ -99,13 +130,14 @@
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
+|projectGid|string|是|项目唯一标识|
 |token|string|是|项目token|
 |payTx|string|是|认筹交易号|
 |projectStatus|string|是|项目状态|
 |userTxStatus|string|是|认筹交易状态|
 |createTime|number|是|认筹时间|
 
-## 3.交易详情
+## 4.交易详情
 
 > 只能查看自己的（通过cookie）
 
@@ -120,6 +152,7 @@
       "message": "",
       "success": true,
       "data":{
+        "projectGid":"",
         "token":"",
         "payTx":"",
         "projectStatus":0,
@@ -143,6 +176,7 @@
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
+|projectGid|string|是|项目唯一标识|
 |token|string|是|项目token|
 |payTx|string|是|认筹交易号|
 |projectStatus|number|是|项目状态|

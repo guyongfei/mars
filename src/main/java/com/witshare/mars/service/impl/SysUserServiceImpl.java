@@ -1,7 +1,5 @@
 package com.witshare.mars.service.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.google.gson.Gson;
 import com.witshare.mars.config.CurrentThreadContext;
 import com.witshare.mars.constant.*;
@@ -12,7 +10,6 @@ import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.domain.SysUser;
 import com.witshare.mars.pojo.domain.SysUserExample;
 import com.witshare.mars.pojo.dto.SysUserBean;
-import com.witshare.mars.pojo.vo.LoginVo;
 import com.witshare.mars.service.QingyunStorageService;
 import com.witshare.mars.service.SysProjectService;
 import com.witshare.mars.service.SysUserService;
@@ -34,8 +31,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.witshare.mars.constant.CacheConsts.*;
-import static com.witshare.mars.pojo.dto.SysProjectBean.ID;
+import static com.witshare.mars.constant.CacheConsts.COOKIE_USER_TOKEN;
+import static com.witshare.mars.constant.CacheConsts.SHIRO_SESSION_EXPIRE_TIME;
 import static com.witshare.mars.pojo.dto.SysUserBean.*;
 
 /**
@@ -105,7 +102,7 @@ public class SysUserServiceImpl implements SysUserService {
      * @see SysUserService#login(Map)
      */
     @Override
-    public LoginVo login(Map<String, String> requestBody) {
+    public void login(Map<String, String> requestBody) {
         if (requestBody == null || requestBody.size() < 2) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
@@ -132,17 +129,14 @@ public class SysUserServiceImpl implements SysUserService {
         redisCommonDao.putHash(RedisKeyUtil.getTokenEmailKey(), token, email);
 
         //将token置入cookie
-        Cookie cookie = new Cookie(KEY_COOKIE_NAME, token);
+        Cookie cookie = new Cookie(COOKIE_USER_TOKEN, token);
         cookie.setMaxAge(SHIRO_SESSION_EXPIRE_TIME);
         CurrentThreadContext.getResponse().addCookie(cookie);
 
         //缓存用户数据到redis
         String callApiInfoKey = RedisKeyUtil.getCallApiInfo(email);
         redisCommonDao.setString(callApiInfoKey, new Gson().toJson(userBean));
-        //  检验该email是否是管理员账户
-        boolean isAdmin = startupRunnerDefault.getAdminUserSet().contains(email);
-        LoginVo loginVo = new LoginVo(email, isAdmin, isAdmin ? MANAGEMENT_PAGE : null);
-        return loginVo;
+
     }
 
     /**
@@ -181,21 +175,23 @@ public class SysUserServiceImpl implements SysUserService {
      */
     public SysUserBean getCurrentUser() {
         String token = CurrentThreadContext.getToken();
-        if (!StringUtils.isEmpty(token)) {
-            String email = redisCommonDao.getHash(RedisKeyUtil.getTokenEmailKey(), token);
-            if (!StringUtils.isEmpty(email)) {
-                String userBeanJson = redisCommonDao.getString(RedisKeyUtil.getCallApiInfo(email));
-                SysUserBean userBean = null;
-                if (StringUtils.isEmpty(userBeanJson)) {
-                    userBean = getByEmail(email, null);
-                } else {
-                    userBean = JsonUtils.jsonToObjByGson(userBeanJson, SysUserBean.class);
-                }
-                return userBean;
-            }
+        if (StringUtils.isEmpty(token)) {
+            return null;
         }
-        return null;
+        String email = redisCommonDao.getHash(RedisKeyUtil.getTokenEmailKey(), token);
+        if (StringUtils.isEmpty(email)) {
+            return null;
+        }
+        String userBeanJson = redisCommonDao.getString(RedisKeyUtil.getCallApiInfo(email));
+        SysUserBean userBean;
+        if (StringUtils.isEmpty(userBeanJson)) {
+            userBean = getByEmail(email, null);
+        } else {
+            userBean = JsonUtils.jsonToObjByGson(userBeanJson, SysUserBean.class);
+        }
+        return userBean;
     }
+
 
     /**
      * @see SysUserService#putPassword(Map)
@@ -302,7 +298,7 @@ public class SysUserServiceImpl implements SysUserService {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
         //删除 cookie
-        Cookie cookie = new Cookie(KEY_COOKIE_NAME, token);
+        Cookie cookie = new Cookie(COOKIE_USER_TOKEN, token);
         cookie.setMaxAge(0);
         CurrentThreadContext.getResponse().addCookie(cookie);
 
@@ -342,7 +338,7 @@ public class SysUserServiceImpl implements SysUserService {
         }
         List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
         if (sysUsers != null && sysUsers.size() > 0) {
-            SysUserBean sysUserBean = new SysUserBean();
+            SysUserBean sysUserBean = SysUserBean.newInstance();
             BeanUtils.copyProperties(sysUsers.get(0), sysUserBean);
             return sysUserBean;
         }
@@ -364,45 +360,16 @@ public class SysUserServiceImpl implements SysUserService {
             sysUserExample.or().andEmailEqualTo(email);
         }
         List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
-        if (sysUsers != null && sysUsers.size() > 0) {
-            SysUserBean sysUserBean = new SysUserBean();
+        if (CollectionUtils.isNotEmpty(sysUsers)) {
+            SysUserBean sysUserBean = SysUserBean.newInstance();
             BeanUtils.copyProperties(sysUsers.get(0), sysUserBean);
+            //是否是管理员
+            boolean isAdmin = startupRunnerDefault.getAdminUserSet().contains(email);
+            sysUserBean.setAdmin(isAdmin)
+                    .setManagementPage(isAdmin ? MANAGEMENT_PAGE : null);
             return sysUserBean;
         }
         return null;
-    }
-
-    /**
-     * @see SysUserService#getByNickname(String, EnumStatus)
-     */
-    @Override
-    public PageInfo<Map<String, Object>> getProjectUsers(Map<String, String> requestBody) {
-        if (requestBody == null || requestBody.size() < 3)
-            throw new WitshareException(EnumResponseText.ErrorRequest);
-        Integer pageNum = Integer.valueOf(requestBody.getOrDefault(PAGE_NUM, DEFAULT_PAGE_NUM_STR));
-        Integer pageSize = Integer.valueOf(requestBody.getOrDefault(PAGE_SIZE, DEFAULT_PAGE_SIZE_STR));
-        if (requestBody.get(ID) == null)
-            throw new WitshareException(EnumResponseText.ErrorId);
-        Long id = Long.valueOf(requestBody.get(ID));
-        PageInfo<Map<String, Object>> objectPageInfo = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPageInfo(() -> staticSysUserMapper.selectProjectUsers(id));
-        List<Map<String, Object>> list = objectPageInfo.getList();
-
-        SysUserBean currentUser = getCurrentUser();
-
-        for (Map m : list) {
-            m.put(HEAD_IMG_URL, this.getAvatar((String) m.get(HEAD_IMG_URL)));
-            if (currentUser == null) {
-                m.put(IS_MYSELF, null);
-            } else {
-                if (currentUser.getId() == m.get(ID)) {
-                    m.put(IS_MYSELF, true);
-                } else {
-                    m.put(IS_MYSELF, false);
-                }
-            }
-        }
-        return objectPageInfo;
     }
 
 
@@ -461,7 +428,7 @@ public class SysUserServiceImpl implements SysUserService {
         }
         List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
         if (sysUsers != null && sysUsers.size() > 0) {
-            SysUserBean sysUserBean = new SysUserBean();
+            SysUserBean sysUserBean = SysUserBean.newInstance();
             BeanUtils.copyProperties(sysUsers.get(0), sysUserBean);
             return sysUserBean;
         }

@@ -62,37 +62,20 @@ public class Task {
 
     @Async(TASK_EXECUTOR)
     public void qingYunStorage(SysProjectBean sysProjectBean, String content, EnumStorage type, CountDownLatch countDownLatch) {
-        if (StringUtils.isEmpty(content)) {
-            throw new WitshareException(EnumResponseText.ErrorStorageContent);
-        }
-        String objectName = "";
-        switch (type) {
-            case Log:
-                objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getToken(), type);
-                sysProjectBean.setLog(objectName);
-                break;
-            case View:
-                objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getToken(), type);
-                sysProjectBean.setView(objectName);
-                break;
-            case PdfEn:
-                objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getPdfEnName(), type);
-                sysProjectBean.setPdfEn(objectName);
-                break;
-            case PdfCn:
-                objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getPdfCnName(), type);
-                sysProjectBean.setPdfCn(objectName);
-                break;
-            case PdfKo:
-                objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getPdfKoName(), type);
-                sysProjectBean.setPdfKo(objectName);
-                break;
-            case PdfJa:
-                objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getPdfCnName(), type);
-                sysProjectBean.setPdfJa(objectName);
-                break;
-            default:
-                break;
+        if (StringUtils.isNotEmpty(content)) {
+            String objectName = "";
+            switch (type) {
+                case Log:
+                    objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getProjectGid(), type);
+                    sysProjectBean.setProjectLogoLink(objectName);
+                    break;
+                case View:
+                    objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getProjectGid(), type);
+                    sysProjectBean.setProjectImgLink(objectName);
+                    break;
+                default:
+                    break;
+            }
         }
         countDownLatch.countDown();
     }
@@ -107,7 +90,7 @@ public class Task {
             LOGGER.info("spiderCoinData pushTask-other_is_excuting");
             return;
         }
-        exchangeSpiderJob.getCoinDataJob();
+//        exchangeSpiderJob.getCoinDataJob();
     }
 
 

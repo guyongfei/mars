@@ -6,22 +6,27 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.util.StringUtil;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.witshare.mars.config.CurrentThreadContext;
 import com.witshare.mars.constant.*;
-import com.witshare.mars.dao.mysql.*;
+import com.witshare.mars.dao.mysql.StaticProjectDescriptionMapper;
+import com.witshare.mars.dao.mysql.StaticProjectWebsiteMapper;
+import com.witshare.mars.dao.mysql.StaticSysProjectMapper;
+import com.witshare.mars.dao.mysql.SysProjectMapper;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.job.Task;
 import com.witshare.mars.pojo.domain.SysProject;
 import com.witshare.mars.pojo.domain.SysProjectExample;
-import com.witshare.mars.pojo.dto.*;
+import com.witshare.mars.pojo.dto.ProjectDescriptionBean;
+import com.witshare.mars.pojo.dto.ProjectReqBean;
+import com.witshare.mars.pojo.dto.SysProjectBean;
+import com.witshare.mars.pojo.vo.SysProjectBeanFrontInfoVo;
+import com.witshare.mars.pojo.vo.SysProjectBeanFrontListVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.pojo.vo.SysProjectListVo;
+import com.witshare.mars.service.ProjectDailyInfoService;
 import com.witshare.mars.service.ProjectWebSiteService;
 import com.witshare.mars.service.SysProjectService;
-import com.witshare.mars.service.SysUserService;
-import com.witshare.mars.util.JsonUtils;
 import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.WitshareUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -32,21 +37,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.Arrays;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
-import static com.witshare.mars.constant.CommonStatisticItems.PROJECT_DETAIL_CN;
-import static com.witshare.mars.constant.CommonStatisticItems.PROJECT_DETAIL_EN;
+import static com.witshare.mars.constant.CacheConsts.WHITE_PAPER_LINK;
 
 
 /**
@@ -61,184 +60,22 @@ public class SysProjectServiceImpl implements SysProjectService {
     @Autowired
     private SysProjectMapper sysProjectMapper;
     @Autowired
-    private ProjectDescriptionCnMapper projectDescriptionZhMapper;
-    @Autowired
-    private ProjectDescriptionEnMapper projectDescriptionEnMapper;
-    @Autowired
     private StaticProjectDescriptionMapper staticProjectDescriptionMapper;
     @Autowired
     private StaticSysProjectMapper staticSysProjectMapper;
     @Autowired
     private StaticProjectWebsiteMapper staticProjectWebsiteMapper;
     @Autowired
-    private QingObjStoreAWS3 qingObjStoreAWS3;
-    @Autowired
     private PropertiesConfig propertiesConfig;
     @Autowired
-    private SysUserService sysUserService;
-    @Autowired
     private ProjectWebSiteService projectWebSiteService;
+    @Autowired
+    private ProjectDailyInfoService projectDailyInfoService;
     @Autowired
     private Task task;
     @Autowired
     private RedisCommonDao redisCommonDao;
 
-    /**
-     * @see SysProjectService#getStarProjects()
-     **/
-    @Override
-    public List<ProjectPageBean> getStarProjects() {
-        //找缓存
-        ProjectReqBean projectReqBean = new ProjectReqBean();
-        projectReqBean.setStarProject(Boolean.TRUE);
-        projectReqBean.setProjectStatus(EnumStatus.Valid.getValue());
-        projectReqBean.setPageNum(1);
-        projectReqBean.setPageSize(8);
-        PageInfo<ProjectPageBean> pageInfo = selectSysProjects(projectReqBean);
-        List<ProjectPageBean> projectPageBeans = pageInfo.getList();
-        return projectPageBeans;
-    }
-
-    /**
-     * @see SysProjectService#selectSysProjects(ProjectReqBean)
-     **/
-    @Override
-    public PageInfo<ProjectPageBean> selectSysProjects(ProjectReqBean projectReqBean) {
-        if (projectReqBean == null) {
-            throw new WitshareException(EnumResponseText.ErrorRequest);
-        }
-        String i18N = CurrentThreadContext.getI18N();
-        String indexProjectKey = RedisKeyUtil.getIndexProjectKey();
-        //首页项目 则 找缓存
-        if (projectReqBean.getStarProject() != null && projectReqBean.getStarProject()) {
-            String starProjectString = null;
-            starProjectString = redisCommonDao.getHash(indexProjectKey, i18N);
-            if (starProjectString != null) {
-                List<ProjectPageBean> projectPageBeanList = gson.fromJson(starProjectString, new TypeToken<List<ProjectPageBean>>() {
-                }.getType());
-
-                PageInfo<ProjectPageBean> pageInfo = new PageInfo<>();
-                long totalCount = sysProjectMapper.countByExample(new SysProjectExample());
-                pageInfo.setList(projectPageBeanList);
-                pageInfo.setTotal(totalCount);
-                return pageInfo;
-            }
-        }
-        if (projectReqBean.getPageNum() == null || projectReqBean.getPageSize() == null) {
-            throw new WitshareException(EnumResponseText.ErrorRequest);
-        }
-        if (StringUtil.isNotEmpty(projectReqBean.getOrderCondition())) {
-            projectReqBean.setOrderCondition(OrderCondition.getCondition(projectReqBean.getOrderCondition()));
-        }
-
-        Integer pageNum = projectReqBean.getPageNum();
-        Integer pageSize = projectReqBean.getPageSize();
-        //设置要查询的表
-        projectReqBean.setTableName(CurrentThreadContext.getInternationalTableName());
-        PageInfo<ProjectPageBean> projectPageInfo = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPageInfo(() -> staticSysProjectMapper.selectProjectList(projectReqBean));
-        List<ProjectPageBean> projectList = projectPageInfo.getList();
-        SysUserBean currentUser = sysUserService.getCurrentUser();
-        for (ProjectPageBean project : projectList) {
-            //拼接图片url
-            project.setProjectGrade(getPictureUrl(project.getProjectGrade()));
-            project.setProjectLogoLink(getPictureUrl(project.getProjectLogoLink()));
-            project.setProjectImgLink(getPictureUrl(project.getProjectImgLink()));
-            //设置评级
-            project.setProjectGrade(EnumProjectGrade.getProGradeByScore(project.getProjectGradeScore()).getGradeStr());
-
-
-        }
-        //存缓存
-        if (projectReqBean.getStarProject() != null && projectReqBean.getStarProject()) {
-            redisCommonDao.putHash(indexProjectKey, i18N, JsonUtils.objToJsonByGson(projectList));
-        }
-        return projectPageInfo;
-
-    }
-
-    /**
-     * @see SysProjectService#selectProject(String)
-     **/
-    @Override
-    public ProjectRespBean selectProject(String projectGid) {
-        if (StringUtils.isEmpty(projectGid)) {
-            throw new WitshareException(EnumResponseText.ErrorId);
-        }
-
-        String projectStatisticKey = RedisKeyUtil.getProjectStatisticKey(projectGid);
-
-        String internationalTableName = CurrentThreadContext.getInternationalTableName();
-
-        String projectDetail = null;
-
-        if (EnumI18NProject.PROJECT_DESCRIPTION_EN.getTableName().equals(internationalTableName)) {
-            projectDetail = redisCommonDao.getHash(projectStatisticKey, PROJECT_DETAIL_EN);
-        } else {
-            projectDetail = redisCommonDao.getHash(projectStatisticKey, PROJECT_DETAIL_CN);
-        }
-        if (projectDetail != null) {
-            ProjectRespBean respBean = gson.fromJson(projectDetail, ProjectRespBean.class);
-            return respBean;
-        }
-
-        SysProjectExample sysProjectExample = new SysProjectExample();
-        sysProjectExample.or().andProjectGidEqualTo(projectGid);
-        List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
-        if (CollectionUtils.isEmpty(sysProjects)) {
-            throw new WitshareException(EnumResponseText.ErrorId);
-        }
-        SysProject staticSysProject = sysProjects.get(0);
-
-
-        //查询网站链接列表
-        List<Map<String, Object>> socialWebsiteList = staticProjectWebsiteMapper.selectWebSiteList(projectGid, 0);
-        List<Map<String, Object>> exchangeWebsiteList = staticProjectWebsiteMapper.selectWebSiteList(projectGid, 1);
-        //拼接路径url
-        resolveQYUrl(socialWebsiteList);
-        resolveQYUrl(exchangeWebsiteList);
-
-        ProjectRespBean projectRespBean = new ProjectRespBean();
-        BeanUtils.copyProperties(staticSysProject, projectRespBean);
-
-
-        //设置官网图标 和 白皮书图标  以交给前端显示了
-//        projectRespBean.setOfficialLogoLink(getPictureUrl(propertiesConfig.getDefaultOfficialLogo()));
-//        projectRespBean.setWhitePaperLogoLink(getPictureUrl(propertiesConfig.getDefaultWhitepaperLogo()));
-
-
-        SysUserBean currentUser = sysUserService.getCurrentUser();
-
-
-        projectRespBean.setGradeReportLink(getPictureUrl(projectRespBean.getGradeReportLink()));
-        projectRespBean.setProjectLogoLink(getPictureUrl(projectRespBean.getProjectLogoLink()));
-        projectRespBean.setProjectImgLink(getPictureUrl(projectRespBean.getProjectImgLink()));
-
-        projectRespBean.setSocialList(socialWebsiteList);
-        projectRespBean.setExchangeList(exchangeWebsiteList);
-
-
-        if (EnumI18NProject.PROJECT_DESCRIPTION_EN.getTableName().equals(internationalTableName)) {
-            redisCommonDao.putHash(projectStatisticKey, PROJECT_DETAIL_EN, gson.toJson(projectRespBean));
-            redisCommonDao.setExpireByDay(projectStatisticKey, 7);
-        } else {
-            redisCommonDao.putHash(projectStatisticKey, PROJECT_DETAIL_CN, gson.toJson(projectRespBean));
-        }
-
-        return projectRespBean;
-    }
-
-    /**
-     * 解析图片地址为连接
-     **/
-    public void resolveQYUrl(List<Map<String, Object>> list) {
-        list.forEach(e -> {
-            String pictureUrl = (String) e.get(SysProjectBean.PICTURE_URL);
-
-            e.put(SysProjectBean.PICTURE_URL, this.getPictureUrl(pictureUrl));
-
-        });
-    }
 
     /**
      * @see SysProjectService#getPictureUrl(String)
@@ -261,20 +98,15 @@ public class SysProjectServiceImpl implements SysProjectService {
 
         SysProjectBean sysProjectBean = new Gson().fromJson(jsonBody, SysProjectBean.class);
         BigDecimal softCap = sysProjectBean.getSoftCap();
-        BigDecimal startPrice = sysProjectBean.getStartPrice();
+        BigDecimal startPriceRate = sysProjectBean.getStartPriceRate();
+        BigDecimal endPriceRate = sysProjectBean.getEndPriceRate();
         Date endTime = new Date(sysProjectBean.getEndTimeLong());
         Date startTime = new Date(sysProjectBean.getStartTimeLong());
-        BigDecimal endPrice = sysProjectBean.getEndPrice();
         BigDecimal hardCap = sysProjectBean.getHardCap();
         BigDecimal minPurchaseAmount = sysProjectBean.getMinPurchaseAmount();
-        String token = sysProjectBean.getToken();
+        String token = sysProjectBean.getProjectToken();
         String log = sysProjectBean.getLog();
         String view = sysProjectBean.getView();
-        String pdfEn = sysProjectBean.getPdfEn();
-        String pdfCn = sysProjectBean.getPdfCn();
-        String pdfKo = sysProjectBean.getPdfKo();
-        String pdfJa = sysProjectBean.getPdfJa();
-        String pdfEnName = sysProjectBean.getPdfEnName();
         String instructionEn = sysProjectBean.getInstructionEn();
         String contentEn = sysProjectBean.getContentEn();
         String officialLink = sysProjectBean.getOfficialLink();
@@ -290,18 +122,16 @@ public class SysProjectServiceImpl implements SysProjectService {
         if (StringUtils.isEmpty(sysProjectBean.getProjectNameEn())
                 || StringUtils.isEmpty(sysProjectBean.getTokenAddress())
                 || StringUtils.isEmpty(sysProjectBean.getProjectAddress())
-                || startTime == null || current.before(startTime)
-                || endTime == null || startTime.before(endTime)
-                || startPrice == null || startPrice.compareTo(BigDecimal.ZERO) < 0
-                || endPrice == null || startPrice.compareTo(endPrice) > 0
+                || current.before(startTime)
+                || startTime.before(endTime)
+                || startPriceRate == null || startPriceRate.compareTo(endPriceRate) < 0
+                || endPriceRate == null || endPriceRate.compareTo(BigDecimal.ZERO) < 0
                 || softCap == null || softCap.compareTo(BigDecimal.ZERO) <= 0
                 || hardCap == null || softCap.compareTo(hardCap) > 0
                 || minPurchaseAmount == null || softCap.compareTo(minPurchaseAmount) <= 0
                 || StringUtils.isEmpty(token)
                 || StringUtils.isEmpty(log)
                 || StringUtils.isEmpty(view)
-                || StringUtils.isEmpty(pdfEn)
-                || StringUtils.isEmpty(pdfEnName)
                 || StringUtils.isEmpty(instructionEn)
                 || StringUtils.isEmpty(contentEn)
                 || StringUtils.isEmpty(officialLink)
@@ -316,13 +146,9 @@ public class SysProjectServiceImpl implements SysProjectService {
         }
 
         //检验是否有主键重复的
-//        checkExist(sysProjectBean);
+        checkExist(sysProjectBean);
         //多线程提交对象存储，返回link
-        CountDownLatch countDownLatch = new CountDownLatch(6);
-        task.qingYunStorage(sysProjectBean, pdfEn, EnumStorage.PdfEn, countDownLatch);
-        task.qingYunStorage(sysProjectBean, pdfCn, EnumStorage.PdfCn, countDownLatch);
-        task.qingYunStorage(sysProjectBean, pdfKo, EnumStorage.PdfKo, countDownLatch);
-        task.qingYunStorage(sysProjectBean, pdfJa, EnumStorage.PdfJa, countDownLatch);
+        CountDownLatch countDownLatch = new CountDownLatch(2);
         task.qingYunStorage(sysProjectBean, log, EnumStorage.Log, countDownLatch);
         task.qingYunStorage(sysProjectBean, view, EnumStorage.View, countDownLatch);
         try {
@@ -331,7 +157,7 @@ public class SysProjectServiceImpl implements SysProjectService {
             throw new WitshareException(e.getMessage());
         }
         //todo 获取平台地址
-        sysProjectBean.setProjectAddress("");
+        sysProjectBean.setPlatformAddress("");
         sysProjectBean.setProjectGid(WitshareUtils.getUUID());
 
         //存表
@@ -514,67 +340,135 @@ public class SysProjectServiceImpl implements SysProjectService {
                 .doSelectPageInfo(() -> staticSysProjectMapper.selectManagementList(sysProjectBean));
     }
 
+    @Override
+    public SysProjectBeanVo selectManagementByGid(String projectGid) {
+        //查询主表
+        SysProjectBean sysProjectBean = this.selectByProjectGid(projectGid);
+        if (sysProjectBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
+        }
+        SysProjectBeanVo sysProjectBeanVo = new SysProjectBeanVo();
+        BeanUtils.copyProperties(sysProjectBean, sysProjectBeanVo);
+        //依此查询描述表
+        Map<String, ProjectDescriptionBean> description = sysProjectBeanVo.getDescriptions();
+        Arrays.stream(EnumI18NProject.values()).forEach(p -> {
+            String tableName = p.getTableName();
+            String language = p.getRequestLanguage();
+            ProjectDescriptionBean projectDescriptionBean = staticProjectDescriptionMapper.selectByTableName(tableName, projectGid);
+            description.put(language, projectDescriptionBean);
+        });
+        //查询关联网站
+        Map<String, String> webSiteMap = projectWebSiteService.select(projectGid);
+        sysProjectBeanVo.setWebsites(webSiteMap);
+        return sysProjectBeanVo;
+    }
+
     /**
-     * @see SysProjectService#selectManagementById(Long)
+     * TODO 通过userGid查询主表,需要动态的修改表的数据，需要存缓存
      */
     @Override
-    public SysProjectBeanVo selectManagementById(Long id) {
-        SysProjectBeanVo sysProjectBeanVo = staticSysProjectMapper.selectManagementById(id);
-        //加载所有网站
-        String projectGid = sysProjectBeanVo.getProjectGid();
-        LinkedList<WebSiteManagementBean> webSiteManagementBeans = projectWebSiteService.select(projectGid);
-        sysProjectBeanVo.getWebsiteList().addAll(webSiteManagementBeans);
-        //图片
-        sysProjectBeanVo.setLog(getPictureUrl(sysProjectBeanVo.getLog()));
-        sysProjectBeanVo.setView(getPictureUrl(sysProjectBeanVo.getView()));
-        sysProjectBeanVo.setPdfZh(getPictureUrl(sysProjectBeanVo.getPdfZh()));
-        sysProjectBeanVo.setPdfEn(getPictureUrl(sysProjectBeanVo.getPdfEn()));
-        return sysProjectBeanVo;
+    public SysProjectBean selectByProjectGid(String projectGid) {
+        if (StringUtils.isEmpty(projectGid)) {
+            return null;
+        }
+        SysProjectExample sysProjectExample = new SysProjectExample();
+        sysProjectExample.or().andProjectGidEqualTo(projectGid);
+        List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
+        if (CollectionUtils.isNotEmpty(sysProjects)) {
+            SysProjectBean sysProjectBean = new SysProjectBean();
+            BeanUtils.copyProperties(sysProjects.get(0), sysProjectBean);
+            sysProjectBean.setProjectLogoLink(getPictureUrl(sysProjectBean.getProjectLogoLink()))
+                    .setProjectImgLink(getPictureUrl(sysProjectBean.getProjectImgLink()));
+            return sysProjectBean;
+        }
+        return null;
 
     }
 
 
+
     /**
-     * @see SysProjectService#getProjectPdf(Long)
-     */
+     * @see SysProjectService#selectSysProjects(ProjectReqBean)
+     **/
     @Override
-    public void getProjectPdf(Long projectId) {
-        HttpServletResponse response = CurrentThreadContext.getResponse();
-        String internationalTableName = CurrentThreadContext.getInternationalTableName();
-        if (projectId == null) {
-            response.setStatus(HttpServletResponseWrapper.SC_PAYMENT_REQUIRED);
-            return;
+    public PageInfo<SysProjectBeanFrontListVo> selectSysProjects(ProjectReqBean projectReqBean) {
+        if (projectReqBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        ProjectPdfBean pdfBean = staticSysProjectMapper.selectPdfById(internationalTableName, projectId);
-        if (pdfBean == null) {
-            response.setStatus(HttpServletResponseWrapper.SC_PAYMENT_REQUIRED);
-            return;
+        Integer pageNum = projectReqBean.getPageNum();
+        Integer pageSize = projectReqBean.getPageSize();
+        if (pageNum == null || pageSize == null) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        String linkName = pdfBean.getLinkName();
-        //去掉时间戳
-        linkName = linkName.substring(0, linkName.lastIndexOf("?"));
-        String token = pdfBean.getToken();
-        if (StringUtils.isEmpty(linkName) || StringUtils.isEmpty(token)) {
-            response.setStatus(HttpServletResponseWrapper.SC_PAYMENT_REQUIRED);
-            return;
+        if (StringUtil.isNotEmpty(projectReqBean.getOrderCondition())) {
+            projectReqBean.setOrderCondition(OrderCondition.getCondition(projectReqBean.getOrderCondition()));
         }
-        byte[] b = new byte[1024];
-        try {
-            int namePosition = linkName.lastIndexOf("/");
-            response.setContentType("application/pdf");
-            response.addHeader("Content-Disposition", "attachment;filename=" + linkName.substring(namePosition + 1));
-            InputStream inputStream = qingObjStoreAWS3.getObjects(propertiesConfig.qingyunBucket, linkName);
-            OutputStream out = response.getOutputStream();
-            while ((inputStream.read(b)) != -1) {
-                out.write(b);
-            }
-            out.flush();
-            inputStream.close();
-            out.close();
-        } catch (IOException e) {
-            response.setStatus(HttpServletResponseWrapper.SC_PAYMENT_REQUIRED);
-            e.printStackTrace();
+        String i18N = CurrentThreadContext.getI18N();
+        projectReqBean.setTableName(EnumI18NProject.getObjByLanguage(i18N).getTableName());
+        //设置要查询的表
+        PageInfo<SysProjectBeanFrontListVo> projectPageInfo = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(() -> staticSysProjectMapper.selectProjectList(projectReqBean));
+        List<SysProjectBeanFrontListVo> projectList = projectPageInfo.getList();
+        projectList.forEach(p -> {
+            p.setProjectLogoLink(getPictureUrl(p.getProjectLogoLink()));
+            p.setProjectImgLink(getPictureUrl(p.getProjectImgLink()));
+        });
+        return projectPageInfo;
+
+//        //存缓存
+//        if (projectReqBean.getStarProject() != null && projectReqBean.getStarProject()) {
+//            redisCommonDao.putHash(indexProjectKey, i18N, JsonUtils.objToJsonByGson(projectList));
+//        }
+//        return null;
+
+    }
+
+    /**
+     * @see SysProjectService#selectProject(String)
+     **/
+    @Override
+    public SysProjectBeanFrontInfoVo selectProject(String projectGid) {
+        SysProjectBeanFrontInfoVo frontInfoVo = null;
+        if (StringUtils.isEmpty(projectGid)) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
+        EnumI18NProject i18n = EnumI18NProject.getObjByLanguage(CurrentThreadContext.getInternationalTableName());
+        String projectDetailName = i18n.getProjectDetailName();
+        //查找redis
+        String projectStatisticKey = RedisKeyUtil.getProjectStatisticKey(projectGid);
+        String projectDetail = redisCommonDao.getHash(projectStatisticKey, projectDetailName);
+        if (StringUtils.isNotEmpty(projectDetail)) {
+            frontInfoVo = gson.fromJson(projectDetail, SysProjectBeanFrontInfoVo.class);
+            return frontInfoVo;
+        }
+        //查主表
+        SysProjectBean sysProjectBean = this.selectByProjectGid(projectGid);
+        if (sysProjectBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
+        }
+        frontInfoVo = SysProjectBeanFrontInfoVo.newInstance();
+        BeanUtils.copyProperties(sysProjectBean, frontInfoVo);
+
+        // 获取des
+        ProjectDescriptionBean descriptionBean = staticProjectDescriptionMapper.selectByTableName(i18n.getTableName(), projectGid);
+        frontInfoVo.setProjectInstruction(descriptionBean.getProjectInstruction())
+                .setProjectContent(descriptionBean.getProjectContent())
+                .setProjectName(descriptionBean.getProjectName());
+
+        //获取webSite
+        Map<String, String> webSiteMap = projectWebSiteService.select(projectGid);
+        webSiteMap.put(WHITE_PAPER_LINK, descriptionBean.getWhitePaperLink());
+        frontInfoVo.setWebsites(webSiteMap);
+        //获取 价格、已售信息、下一个价格时间间隔
+        Timestamp current = new Timestamp(System.currentTimeMillis());
+        frontInfoVo.setPrice(projectDailyInfoService.getPrice(projectGid, current));
+
+        frontInfoVo.setNextPriceInterval(123456789L);
+        frontInfoVo.setSoldAmount(new BigDecimal(123456));
+
+        redisCommonDao.putHash(projectStatisticKey, projectDetailName, gson.toJson(frontInfoVo));
+
+        return frontInfoVo;
     }
 
 
@@ -598,73 +492,19 @@ public class SysProjectServiceImpl implements SysProjectService {
 
 
     @Override
-    public void hideProject(Long id) {
-        if (id == null) {
-            throw new WitshareException(EnumResponseText.ErrorId);
+    public void hideProject(String projectGid) {
+        if (StringUtils.isEmpty(projectGid)) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
-        SysProjectBeanVo sysProjectBeanVo = selectManagementById(id);
-        if (sysProjectBeanVo == null) {
-            throw new WitshareException(EnumResponseText.ErrorId);
+        SysProjectBean sysProjectBean = this.selectByProjectGid(projectGid);
+        if (sysProjectBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
-        String projectGid = sysProjectBeanVo.getProjectGid();
+        Long id = sysProjectBean.getId();
         staticSysProjectMapper.modifyProjectStatus(id);
         //清缓存
-        redisCommonDao.delRedisKey(RedisKeyUtil.getIndexProjectKey());
         redisCommonDao.delRedisKey(RedisKeyUtil.getProjectStatisticKey(projectGid));
 
     }
 
 }
-//
-//    String token = (String) requestBody.get(SysProjectBean.TOKEN);
-//
-//    String projectNameEn = (String) requestBody.get(SysProjectBean.PROJECT_NAME_EN);
-//    String projectNameCn = (String) requestBody.get(SysProjectBean.PROJECT_NAME_CN);
-//    String projectNameKo = (String) requestBody.get(SysProjectBean.PROJECT_NAME_KO);
-//    String projectNameJa = (String) requestBody.get(SysProjectBean.PROJECT_NAME_JA);
-//
-//
-//    String pdfEn = (String) requestBody.get(SysProjectBean.PDF_EN);//need storage
-//    String pdfEnName = (String) requestBody.get(SysProjectBean.PDF_EN_NAME);
-//    String pdfCn = (String) requestBody.get(SysProjectBean.PDF_CN);//need storage
-//    String pdfCnName = (String) requestBody.get(SysProjectBean.PDF_CN_NAME);
-//    String pdfKo = (String) requestBody.get(SysProjectBean.PDF_KO);//need storage
-//    String pdfKoName = (String) requestBody.get(SysProjectBean.PDF_KO_NAME);
-//    String pdfJa = (String) requestBody.get(SysProjectBean.PDF_JA);//need storage
-//    String pdfJaName = (String) requestBody.get(SysProjectBean.PDF_JA_NAME);
-//
-//    String log = (String) requestBody.get(SysProjectBean.LOG_STR);//need storage
-//    String view = (String) requestBody.get(SysProjectBean.VIEW);//need storage
-//
-//    String instructionEn = (String) requestBody.get(SysProjectBean.INSTRUCTION_EN);
-//    String instructionCn = (String) requestBody.get(SysProjectBean.INSTRUCTION_CN);
-//    String instructionKo = (String) requestBody.get(SysProjectBean.INSTRUCTION_KO);
-//    String instructionJa = (String) requestBody.get(SysProjectBean.INSTRUCTION_JA);
-//
-//    String contentEn = (String) requestBody.get(SysProjectBean.CONTENT_EN);
-//    String contentCn = (String) requestBody.get(SysProjectBean.CONTENT_CN);
-//    String contentJa = (String) requestBody.get(SysProjectBean.CONTENT_JA);
-//    String contentKo = (String) requestBody.get(SysProjectBean.CONTENT_KO);
-//
-//    String whitePaperLinkEn = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_EN);
-//    String whitePaperLinkCn = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_CN);
-//    String whitePaperLinkKo = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_KO);
-//    String whitePaperLinkJa = (String) requestBody.get(SysProjectBean.WHITE_PAPER_LINK_JA);
-//
-//    String officialLink = (String) requestBody.get(SysProjectBean.OFFICIAL_LINK);
-//    String facebook = (String) requestBody.get(SysProjectBean.FACEBOOK);
-//    String twitter = (String) requestBody.get(SysProjectBean.TWITTER);
-//    String biYong = (String) requestBody.get(SysProjectBean.BI_YONG);
-//    String gitHub = (String) requestBody.get(SysProjectBean.GIT_HUB);
-//    String reddit = (String) requestBody.get(SysProjectBean.REDDIT);
-//    String telegram = (String) requestBody.get(SysProjectBean.TELEGRAM);
-//
-//    String tokenAddress = (String) requestBody.get(SysProjectBean.TOKEN_ADDRESS);
-//    String projectAddress = (String) requestBody.get(SysProjectBean.PROJECT_ADDRESS);
-//    Timestamp startTime = (Timestamp) requestBody.get(SysProjectBean.START_TIME);
-//    Timestamp endTime = (Timestamp) requestBody.get(SysProjectBean.END_TIME);
-//    BigDecimal startPrice = (BigDecimal) requestBody.get(SysProjectBean.START_PRICE);
-//    BigDecimal endPrice = (BigDecimal) requestBody.get(SysProjectBean.END_PRICE);
-//    BigDecimal minPurchaseAmount = (BigDecimal) requestBody.get(SysProjectBean.MIN_PURCHASE_AMOUNT);
-//    BigDecimal hardCap = (BigDecimal) requestBody.get(SysProjectBean.HARD_CAP);
-//    BigDecimal softCap = (BigDecimal) requestBody.get(SysProjectBean.SOFT_CAP);

@@ -1,52 +1,76 @@
 package com.witshare.mars.pojo.vo;
 
+import java.sql.Timestamp;
+
 public class SysProjectListVo {
 
 
-    private String projectNameZh;
-    private String projectNameEn;
-    private Boolean projectStatus;
+    private String projectToken;
+    private String projectGid;
+    private Integer projectStatus;
+    private Integer isAvailable;
+    private Timestamp startTime;
+    private Timestamp endTime;
 
-    private Long id;
-    private String token;
-
-    public String getProjectNameZh() {
-        return projectNameZh;
+    public SysProjectListVo() {
     }
 
-    public void setProjectNameZh(String projectNameZh) {
-        this.projectNameZh = projectNameZh;
+    public SysProjectListVo newInstance() {
+        return new SysProjectListVo();
     }
 
-    public String getProjectNameEn() {
-        return projectNameEn;
+
+    public String getProjectToken() {
+        return projectToken;
     }
 
-    public void setProjectNameEn(String projectNameEn) {
-        this.projectNameEn = projectNameEn;
+    public SysProjectListVo setProjectToken(String projectToken) {
+        this.projectToken = projectToken;
+        return this;
     }
 
-    public Long getId() {
-        return id;
+    public String getProjectGid() {
+        return projectGid;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public SysProjectListVo setProjectGid(String projectGid) {
+        this.projectGid = projectGid;
+        return this;
     }
 
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Boolean getProjectStatus() {
+    public Integer getProjectStatus() {
         return projectStatus;
     }
 
-    public void setProjectStatus(Boolean projectStatus) {
+    public SysProjectListVo setProjectStatus(Integer projectStatus) {
         this.projectStatus = projectStatus;
+        return this;
+    }
+
+    public Integer getIsAvailable() {
+        return isAvailable;
+    }
+
+    public SysProjectListVo setIsAvailable(Integer isAvailable) {
+        this.isAvailable = isAvailable;
+        return this;
+    }
+
+    public Timestamp getStartTime() {
+        return startTime;
+    }
+
+    public SysProjectListVo setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
+        return this;
+    }
+
+    public Timestamp getEndTime() {
+        return endTime;
+    }
+
+    public SysProjectListVo setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
+        return this;
     }
 }

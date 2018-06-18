@@ -2,7 +2,6 @@ package com.witshare.mars.pojo.dto;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -68,18 +67,9 @@ public class SysProjectBean {
     public static String PLATFORM_ADDRESS = "platformAddress";
     public static String PICTURE_URL = "pictureUrl";
 
-    private Date startTime;
-    private Date endTime;
     private Long startTimeLong;
     private Long endTimeLong;
 
-    private String tokenAddress;
-    private String projectAddress;
-    private BigDecimal startPrice;
-    private BigDecimal endPrice;
-    private BigDecimal minPurchaseAmount;
-    private BigDecimal hardCap;
-    private BigDecimal softCap;
 
     private String projectNameEn;
     private String projectNameCn;
@@ -111,7 +101,7 @@ public class SysProjectBean {
     private String contentKo;
     private String contentJa;
 
-    private String whitePaperLinkZh;
+    private String whitePaperLinkCn;
     private String whitePaperLinkEn;
     private String whitePaperLinkKo;
     private String whitePaperLinkJa;
@@ -129,18 +119,38 @@ public class SysProjectBean {
     private String token;
     private String whitePaperLink;
     private String projectContent;
-    private Long id;
-    private String projectGid;
     private Long idDb;
 
-    private Timestamp createTime;
-    private Timestamp updateTime;
 
     private String queryStr;
     private String img;
     private Integer pageSize;
     private Integer pageNum;
     private Integer typeId;
+
+    private String orderCondition;
+    private Integer ascOrdesc;
+
+    private Long id;
+    private String projectGid;
+    private String projectToken;
+    private String tokenAddress;
+    private String platformAddress;
+    private String projectAddress;
+    private String projectLogoLink;
+    private String projectImgLink;
+    private BigDecimal softCap;
+    private BigDecimal hardCap;
+    private BigDecimal minPurchaseAmount;
+    private Timestamp startTime;
+    private Timestamp endTime;
+    private BigDecimal startPriceRate;
+    private BigDecimal endPriceRate;
+    private int projectStatus;
+    private int isAvailable;
+    private Timestamp createTime;
+    private Timestamp updateTime;
+
     private List<WebSiteManagementBean> websiteList = new LinkedList<>();
 
     public SysProjectBean() {
@@ -148,6 +158,15 @@ public class SysProjectBean {
 
     public static SysProjectBean newInstance() {
         return new SysProjectBean();
+    }
+
+    public Timestamp getEndTime() {
+        return endTime;
+    }
+
+    public SysProjectBean setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
+        return this;
     }
 
     public String getProjectNameEn() {
@@ -348,12 +367,12 @@ public class SysProjectBean {
         return this;
     }
 
-    public String getWhitePaperLinkZh() {
-        return whitePaperLinkZh;
+    public String getWhitePaperLinkCn() {
+        return whitePaperLinkCn;
     }
 
-    public SysProjectBean setWhitePaperLinkZh(String whitePaperLinkZh) {
-        this.whitePaperLinkZh = whitePaperLinkZh;
+    public SysProjectBean setWhitePaperLinkCn(String whitePaperLinkCn) {
+        this.whitePaperLinkCn = whitePaperLinkCn;
         return this;
     }
 
@@ -591,21 +610,12 @@ public class SysProjectBean {
         return this;
     }
 
-    public Date getStartTime() {
+    public Timestamp getStartTime() {
         return startTime;
     }
 
-    public SysProjectBean setStartTime(Date startTime) {
+    public SysProjectBean setStartTime(Timestamp startTime) {
         this.startTime = startTime;
-        return this;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public SysProjectBean setEndTime(Date endTime) {
-        this.endTime = endTime;
         return this;
     }
 
@@ -627,21 +637,21 @@ public class SysProjectBean {
         return this;
     }
 
-    public BigDecimal getStartPrice() {
-        return startPrice;
+    public BigDecimal getStartPriceRate() {
+        return startPriceRate;
     }
 
-    public SysProjectBean setStartPrice(BigDecimal startPrice) {
-        this.startPrice = startPrice;
+    public SysProjectBean setStartPriceRate(BigDecimal startPriceRate) {
+        this.startPriceRate = startPriceRate;
         return this;
     }
 
-    public BigDecimal getEndPrice() {
-        return endPrice;
+    public BigDecimal getEndPriceRate() {
+        return endPriceRate;
     }
 
-    public SysProjectBean setEndPrice(BigDecimal endPrice) {
-        this.endPrice = endPrice;
+    public SysProjectBean setEndPriceRate(BigDecimal endPriceRate) {
+        this.endPriceRate = endPriceRate;
         return this;
     }
 
@@ -698,4 +708,78 @@ public class SysProjectBean {
         this.logStr = logStr;
         return this;
     }
+
+    public String getProjectToken() {
+        return projectToken;
+    }
+
+    public SysProjectBean setProjectToken(String projectToken) {
+        this.projectToken = projectToken;
+        return this;
+    }
+
+    public String getPlatformAddress() {
+        return platformAddress;
+    }
+
+    public SysProjectBean setPlatformAddress(String platformAddress) {
+        this.platformAddress = platformAddress;
+        return this;
+    }
+
+    public String getProjectLogoLink() {
+        return projectLogoLink;
+    }
+
+    public SysProjectBean setProjectLogoLink(String projectLogoLink) {
+        this.projectLogoLink = projectLogoLink;
+        return this;
+    }
+
+    public String getProjectImgLink() {
+        return projectImgLink;
+    }
+
+    public SysProjectBean setProjectImgLink(String projectImgLink) {
+        this.projectImgLink = projectImgLink;
+        return this;
+    }
+
+    public String getOrderCondition() {
+        return orderCondition;
+    }
+
+    public SysProjectBean setOrderCondition(String orderCondition) {
+        this.orderCondition = orderCondition;
+        return this;
+    }
+
+    public Integer getAscOrdesc() {
+        return ascOrdesc;
+    }
+
+    public SysProjectBean setAscOrdesc(Integer ascOrdesc) {
+        this.ascOrdesc = ascOrdesc;
+        return this;
+    }
+
+    public int getProjectStatus() {
+        return projectStatus;
+    }
+
+    public SysProjectBean setProjectStatus(int projectStatus) {
+        this.projectStatus = projectStatus;
+        return this;
+    }
+
+    public int getIsAvailable() {
+        return isAvailable;
+    }
+
+    public SysProjectBean setIsAvailable(int isAvailable) {
+        this.isAvailable = isAvailable;
+        return this;
+    }
+
+
 }

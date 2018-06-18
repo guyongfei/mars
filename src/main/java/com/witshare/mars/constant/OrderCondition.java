@@ -6,9 +6,8 @@ package com.witshare.mars.constant;
 public enum OrderCondition {
 
     PROJECT_NAME("projectName", "pd.project_name"),
-    PROJECT_GRADE("projectGrade", "sp.project_grade"),
-    PROJECT_FOLLOW_NUM("followerCount", "sp.follower_count"),
-    PROJECT_UPDATE_TIME("createTime", "sp.update_time");
+    PROJECT_START_TIME("startTime", "sp.start_time"),
+    PROJECT_END_TIME("endTime", "sp.end_time"),;
 
 
     private String code;

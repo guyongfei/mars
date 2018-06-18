@@ -1,8 +1,6 @@
 package com.witshare.mars.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.witshare.mars.constant.EnumWitshare;
-import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.pojo.util.ResponseBean;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
@@ -24,128 +22,70 @@ import java.util.Map;
 @Controller
 @RequestMapping("/management")
 public class ManagementProjectController {
+
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
     @Autowired
     private SysProjectService sysProjectService;
 
     /**
      * 新增项目
-     *
-     * @param request
-     * @param response
-     * @param requestBody
-     * @return
      */
     @ResponseBody
     @RequestMapping(value = "/project", method = RequestMethod.POST)
     public ResponseBean addProject(HttpServletRequest request,
                                    HttpServletResponse response,
                                    @RequestBody String requestBody) {
-        ResponseBean responseBean;
-        try {
-            sysProjectService.save(requestBody);
-            responseBean = new ResponseBean(Boolean.TRUE);
-        } catch (WitshareException e) {
-            LOGGER.error("addProject fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, e.getMessage());
-        } catch (Exception e) {
-            LOGGER.error("addProject fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, EnumWitshare.SYS_ERROR.value());
-        }
-        return responseBean;
+
+        sysProjectService.save(requestBody);
+        return ResponseBean.newInstanceSuccess();
     }
 
     /**
      * 修改项目
-     *
-     * @param request
-     * @param response
-     * @param requestBody
-     * @return
      */
     @ResponseBody
     @RequestMapping(value = "/project", method = RequestMethod.PUT)
     public ResponseBean updateProject(HttpServletRequest request,
                                       HttpServletResponse response,
                                       @RequestBody Map<String, Object> requestBody) {
-        ResponseBean responseBean;
-        try {
-            sysProjectService.update(requestBody);
-            responseBean = new ResponseBean(Boolean.TRUE);
-        } catch (WitshareException e) {
-            LOGGER.error("updateProject fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, e.getMessage());
-        } catch (Exception e) {
-            LOGGER.error("updateProject fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, EnumWitshare.SYS_ERROR.value());
-        }
-        return responseBean;
+
+        sysProjectService.update(requestBody);
+        return ResponseBean.newInstanceSuccess();
     }
 
 
     /**
-     * \
      * 获取单个项目详情
-     *
-     * @param id
-     * @return
      */
     @ResponseBody
-    @RequestMapping(value = "/project/{id}", method = RequestMethod.GET)
-    public ResponseBean getProjectById(@PathVariable Long id) {
-        ResponseBean responseBean;
-        try {
-            SysProjectBeanVo sysProjectBeanVo = sysProjectService.selectManagementById(id);
-            responseBean = new ResponseBean(Boolean.TRUE, "", sysProjectBeanVo);
-        } catch (WitshareException e) {
-            LOGGER.error("getProjectById fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, e.getMessage());
-        } catch (Exception e) {
-            LOGGER.error("getProjectById fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, EnumWitshare.SYS_ERROR.value());
-        }
-        return responseBean;
+    @RequestMapping(value = "/project/{projectGid}", method = RequestMethod.GET)
+    public ResponseBean getProjectById(@PathVariable String projectGid) {
+
+        SysProjectBeanVo sysProjectBeanVo = sysProjectService.selectManagementByGid(projectGid);
+        return ResponseBean.newInstanceSuccess(sysProjectBeanVo);
     }
 
-
+    /**
+     * 修改项目是否可用状态
+     */
     @ResponseBody
-    @RequestMapping(value = "/project/hide/{id}", method = RequestMethod.PUT)
-    public ResponseBean hideProject(@PathVariable Long id) {
-        ResponseBean responseBean;
-        try {
-            sysProjectService.hideProject(id);
-            responseBean = new ResponseBean(Boolean.TRUE);
-        } catch (WitshareException e) {
-            LOGGER.error("hideProject fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, e.getMessage());
-        } catch (Exception e) {
-            LOGGER.error("hideProject fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, EnumWitshare.SYS_ERROR.value());
-        }
-        return responseBean;
+    @RequestMapping(value = "/project/hide/{projectGid}", method = RequestMethod.PUT)
+    public ResponseBean hideProject(@PathVariable String projectGid) {
+
+        sysProjectService.hideProject(projectGid);
+        return ResponseBean.newInstanceSuccess();
     }
 
     /**
      * 获取项目列表
-     *
-     * @param sysProjectBean
-     * @return
      */
     @ResponseBody
     @RequestMapping(value = "/project/list", method = RequestMethod.GET)
     public ResponseBean projectList(SysProjectBean sysProjectBean) {
-        ResponseBean responseBean;
-        try {
-            PageInfo<SysProjectListVo> pageInfo = sysProjectService.selectManagementList(sysProjectBean);
-            responseBean = new ResponseBean(Boolean.TRUE, "", pageInfo);
-        } catch (WitshareException e) {
-            LOGGER.error("projectList fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, e.getMessage());
-        } catch (Exception e) {
-            LOGGER.error("projectList fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, EnumWitshare.SYS_ERROR.value());
-        }
-        return responseBean;
+
+        PageInfo<SysProjectListVo> pageInfo = sysProjectService.selectManagementList(sysProjectBean);
+        return ResponseBean.newInstanceSuccess(pageInfo);
     }
 
 }
