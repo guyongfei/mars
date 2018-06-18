@@ -2,8 +2,6 @@ package com.witshare.mars.pojo.util;
 
 import java.io.Serializable;
 
-import static com.witshare.mars.constant.EnumWitshare.SYS_ERROR;
-
 
 public class ResponseBean implements Serializable {
 
@@ -44,7 +42,7 @@ public class ResponseBean implements Serializable {
     }
 
     public static ResponseBean newInstanceSuccess(Object data) {
-        return newInstanceError(SYS_ERROR.value()).setData(data);
+        return newInstanceSuccess().setData(data);
     }
 
     public static ResponseBean newInstanceError(String errorInfo) {

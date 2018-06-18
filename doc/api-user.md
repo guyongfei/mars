@@ -129,8 +129,10 @@
         "userGid":"",
         "email":"",
         "nickname":"",
-        "head_img_url":"",
-        "project_num":5,
+        "headImgUrl":"",
+        "projectNum":5,
+        "sendEthAddress":"",
+        "getTokenAddress":"",
         "admin":true,
         "managementPage":""
       }
@@ -147,5 +149,7 @@
 |nickname|string|是|昵称|
 |headImgUrl|string|是|头像地址|
 |projectNum|number|是|实际认购项目数|
+|sendEthAddress|string|是|支付Eth地址|
+|getTokenAddress|string|是|获取token地址|
 |admin|boolean|是|是否是管理员|
 |managementPage|string|否|后台管理页面|

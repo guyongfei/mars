@@ -1,0 +1,220 @@
+package com.witshare.mars.pojo.dto;
+
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+
+public class RecordUserTxBean {
+
+    public static final String PROJECT_GID = "projectGid";
+    public static final String PRICE_RATE = "priceRate";
+    public static final String PAY_AMOUNT = "payAmount";
+    public static final String PAY_TX = "payTx";
+    public static final String HOPE_GET_AMOUNT = "hopeGetAmount";
+    public static final String PAY_COIN_TYPE = "payCoinType";
+
+
+    private Long id;
+    private String userGid;
+    private String userEmail;
+    private String projectGid;
+    private String projectToken;
+    private int payCoinType;
+    private String payTx;
+    private BigDecimal payAmount;
+    private BigDecimal priceRate;
+    private BigDecimal hopeGetAmount;
+    private BigDecimal actualPayAmount;
+    private BigDecimal actualGetAmount;
+    private int userTxStatus;
+    private String platformTx;
+    private BigDecimal ethFee;
+    private int platformTxStatus;
+    private Timestamp distributionTime;
+    private Timestamp createTime;
+    private Timestamp updateTime;
+
+    private RecordUserTxBean() {
+    }
+
+    public static RecordUserTxBean newInstance() {
+        return new RecordUserTxBean();
+    }
+
+    public RecordUserTxBean setTime(Timestamp time) {
+        this.updateTime = time;
+        this.createTime = time;
+        this.distributionTime = time;
+        return this;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public RecordUserTxBean setId(Long id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getUserGid() {
+        return userGid;
+    }
+
+    public RecordUserTxBean setUserGid(String userGid) {
+        this.userGid = userGid;
+        return this;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public RecordUserTxBean setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+        return this;
+    }
+
+    public String getProjectGid() {
+        return projectGid;
+    }
+
+    public RecordUserTxBean setProjectGid(String projectGid) {
+        this.projectGid = projectGid;
+        return this;
+    }
+
+    public String getProjectToken() {
+        return projectToken;
+    }
+
+    public RecordUserTxBean setProjectToken(String projectToken) {
+        this.projectToken = projectToken;
+        return this;
+    }
+
+    public int getPayCoinType() {
+        return payCoinType;
+    }
+
+    public RecordUserTxBean setPayCoinType(int payCoinType) {
+        this.payCoinType = payCoinType;
+        return this;
+    }
+
+    public String getPayTx() {
+        return payTx;
+    }
+
+    public RecordUserTxBean setPayTx(String payTx) {
+        this.payTx = payTx;
+        return this;
+    }
+
+    public BigDecimal getPayAmount() {
+        return payAmount;
+    }
+
+    public RecordUserTxBean setPayAmount(BigDecimal payAmount) {
+        this.payAmount = payAmount;
+        return this;
+    }
+
+    public BigDecimal getPriceRate() {
+        return priceRate;
+    }
+
+    public RecordUserTxBean setPriceRate(BigDecimal priceRate) {
+        this.priceRate = priceRate;
+        return this;
+    }
+
+    public BigDecimal getHopeGetAmount() {
+        return hopeGetAmount;
+    }
+
+    public RecordUserTxBean setHopeGetAmount(BigDecimal hopeGetAmount) {
+        this.hopeGetAmount = hopeGetAmount;
+        return this;
+    }
+
+    public BigDecimal getActualPayAmount() {
+        return actualPayAmount;
+    }
+
+    public RecordUserTxBean setActualPayAmount(BigDecimal actualPayAmount) {
+        this.actualPayAmount = actualPayAmount;
+        return this;
+    }
+
+    public BigDecimal getActualGetAmount() {
+        return actualGetAmount;
+    }
+
+    public RecordUserTxBean setActualGetAmount(BigDecimal actualGetAmount) {
+        this.actualGetAmount = actualGetAmount;
+        return this;
+    }
+
+    public int getUserTxStatus() {
+        return userTxStatus;
+    }
+
+    public RecordUserTxBean setUserTxStatus(int userTxStatus) {
+        this.userTxStatus = userTxStatus;
+        return this;
+    }
+
+    public String getPlatformTx() {
+        return platformTx;
+    }
+
+    public RecordUserTxBean setPlatformTx(String platformTx) {
+        this.platformTx = platformTx;
+        return this;
+    }
+
+    public BigDecimal getEthFee() {
+        return ethFee;
+    }
+
+    public RecordUserTxBean setEthFee(BigDecimal ethFee) {
+        this.ethFee = ethFee;
+        return this;
+    }
+
+    public int getPlatformTxStatus() {
+        return platformTxStatus;
+    }
+
+    public RecordUserTxBean setPlatformTxStatus(int platformTxStatus) {
+        this.platformTxStatus = platformTxStatus;
+        return this;
+    }
+
+    public Timestamp getDistributionTime() {
+        return distributionTime;
+    }
+
+    public RecordUserTxBean setDistributionTime(Timestamp distributionTime) {
+        this.distributionTime = distributionTime;
+        return this;
+    }
+
+    public Timestamp getCreateTime() {
+        return createTime;
+    }
+
+    public RecordUserTxBean setCreateTime(Timestamp createTime) {
+        this.createTime = createTime;
+        return this;
+    }
+
+    public Timestamp getUpdateTime() {
+        return updateTime;
+    }
+
+    public RecordUserTxBean setUpdateTime(Timestamp updateTime) {
+        this.updateTime = updateTime;
+        return this;
+    }
+}

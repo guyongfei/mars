@@ -1,26 +1,19 @@
 package com.witshare.mars.service;
 
 import com.github.pagehelper.PageInfo;
-import com.witshare.mars.pojo.dto.ProjectPageBean;
 import com.witshare.mars.pojo.dto.ProjectReqBean;
-import com.witshare.mars.pojo.dto.ProjectRespBean;
 import com.witshare.mars.pojo.dto.SysProjectBean;
+import com.witshare.mars.pojo.vo.SysProjectBeanFrontInfoVo;
+import com.witshare.mars.pojo.vo.SysProjectBeanFrontListVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.pojo.vo.SysProjectListVo;
 
-import java.util.List;
 import java.util.Map;
 
 /**
  * 项目详情实现类
  **/
 public interface SysProjectService {
-    /**
-     * 获取首页展示项目
-     *
-     * @return
-     */
-    List<ProjectPageBean> getStarProjects();
 
     /**
      * 分页获取项目列表
@@ -28,10 +21,10 @@ public interface SysProjectService {
      * @param projectReqBean
      * @return
      */
-    PageInfo<ProjectPageBean> selectSysProjects(ProjectReqBean projectReqBean);
+    PageInfo<SysProjectBeanFrontListVo> selectSysProjects(ProjectReqBean projectReqBean);
 
 
-    ProjectRespBean selectProject(String projectGid);
+    SysProjectBeanFrontInfoVo selectProject(String projectGid);
 
 
     /**
@@ -72,15 +65,6 @@ public interface SysProjectService {
      */
     SysProjectBeanVo selectManagementByGid(String projectGid);
 
-
-    /**
-     * 获取项目评级报告pdf
-     *
-     * @param projectId
-     */
-    void getProjectPdf(Long projectId);
-
-
     /**
      * 清除所有项目缓存
      */
@@ -88,6 +72,7 @@ public interface SysProjectService {
 
     void hideProject(String projectGid);
 
-    SysProjectBean selectByGid(String projectGid);
+    SysProjectBean selectByProjectGid(String projectGid);
+
 
 }

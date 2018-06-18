@@ -27,33 +27,6 @@
         update_time=VALUES(update_time);
     </update>
 
-    <select id="selectProjectUsers" parameterType="java.lang.Long" resultType="map">
-        SELECT
-        temp.user_id AS id,
-        u.nickname as nickname,
-        u.head_img_url as headImgUrl,
-        temp.comment_count as commentCount
-        FROM
-            (SELECT
-                count(t.id) AS comment_count,
-                t.user_id AS user_id
-            FROM
-                (
-                SELECT id, comment_user_id AS user_id
-                            FROM sys_comment
-                            WHERE project_id = #{id} AND comment_status = 1
-                        UNION ALL
-                SELECT id, from_user_id AS user_id
-                            FROM sys_reply
-                            WHERE project_id = #{id} AND reply_status = 1
-                )t
-            GROUP BY t.user_id)temp
-        LEFT JOIN
-        sys_user u
-        ON u.id = temp.user_id
-        ORDER BY temp.comment_count DESC
-    </select>
-
 
     <select id="selectShowUserList" parameterType="map" resultType="com.witshare.mars.pojo.dto.GlobalSimpleBean">
 

@@ -536,76 +536,6 @@ public class RecordUserTxExample {
             return (Criteria) this;
         }
 
-        public Criteria andUserAddressIsNull() {
-            addCriterion("user_address is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressIsNotNull() {
-            addCriterion("user_address is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressEqualTo(String value) {
-            addCriterion("user_address =", value, "userAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressNotEqualTo(String value) {
-            addCriterion("user_address <>", value, "userAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressGreaterThan(String value) {
-            addCriterion("user_address >", value, "userAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressGreaterThanOrEqualTo(String value) {
-            addCriterion("user_address >=", value, "userAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressLessThan(String value) {
-            addCriterion("user_address <", value, "userAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressLessThanOrEqualTo(String value) {
-            addCriterion("user_address <=", value, "userAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressLike(String value) {
-            addCriterion("user_address like", value, "userAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressNotLike(String value) {
-            addCriterion("user_address not like", value, "userAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressIn(List<String> values) {
-            addCriterion("user_address in", values, "userAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressNotIn(List<String> values) {
-            addCriterion("user_address not in", values, "userAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressBetween(String value1, String value2) {
-            addCriterion("user_address between", value1, value2, "userAddress");
-            return (Criteria) this;
-        }
-
-        public Criteria andUserAddressNotBetween(String value1, String value2) {
-            addCriterion("user_address not between", value1, value2, "userAddress");
-            return (Criteria) this;
-        }
-
         public Criteria andPayCoinTypeIsNull() {
             addCriterion("pay_coin_type is null");
             return (Criteria) this;
@@ -616,52 +546,52 @@ public class RecordUserTxExample {
             return (Criteria) this;
         }
 
-        public Criteria andPayCoinTypeEqualTo(Boolean value) {
+        public Criteria andPayCoinTypeEqualTo(int value) {
             addCriterion("pay_coin_type =", value, "payCoinType");
             return (Criteria) this;
         }
 
-        public Criteria andPayCoinTypeNotEqualTo(Boolean value) {
+        public Criteria andPayCoinTypeNotEqualTo(int value) {
             addCriterion("pay_coin_type <>", value, "payCoinType");
             return (Criteria) this;
         }
 
-        public Criteria andPayCoinTypeGreaterThan(Boolean value) {
+        public Criteria andPayCoinTypeGreaterThan(int value) {
             addCriterion("pay_coin_type >", value, "payCoinType");
             return (Criteria) this;
         }
 
-        public Criteria andPayCoinTypeGreaterThanOrEqualTo(Boolean value) {
+        public Criteria andPayCoinTypeGreaterThanOrEqualTo(int value) {
             addCriterion("pay_coin_type >=", value, "payCoinType");
             return (Criteria) this;
         }
 
-        public Criteria andPayCoinTypeLessThan(Boolean value) {
+        public Criteria andPayCoinTypeLessThan(int value) {
             addCriterion("pay_coin_type <", value, "payCoinType");
             return (Criteria) this;
         }
 
-        public Criteria andPayCoinTypeLessThanOrEqualTo(Boolean value) {
+        public Criteria andPayCoinTypeLessThanOrEqualTo(int value) {
             addCriterion("pay_coin_type <=", value, "payCoinType");
             return (Criteria) this;
         }
 
-        public Criteria andPayCoinTypeIn(List<Boolean> values) {
+        public Criteria andPayCoinTypeIn(List<Integer> values) {
             addCriterion("pay_coin_type in", values, "payCoinType");
             return (Criteria) this;
         }
 
-        public Criteria andPayCoinTypeNotIn(List<Boolean> values) {
+        public Criteria andPayCoinTypeNotIn(List<Integer> values) {
             addCriterion("pay_coin_type not in", values, "payCoinType");
             return (Criteria) this;
         }
 
-        public Criteria andPayCoinTypeBetween(Boolean value1, Boolean value2) {
+        public Criteria andPayCoinTypeBetween(int value1, int value2) {
             addCriterion("pay_coin_type between", value1, value2, "payCoinType");
             return (Criteria) this;
         }
 
-        public Criteria andPayCoinTypeNotBetween(Boolean value1, Boolean value2) {
+        public Criteria andPayCoinTypeNotBetween(int value1, int value2) {
             addCriterion("pay_coin_type not between", value1, value2, "payCoinType");
             return (Criteria) this;
         }
@@ -796,63 +726,63 @@ public class RecordUserTxExample {
             return (Criteria) this;
         }
 
-        public Criteria andPriceIsNull() {
-            addCriterion("price is null");
+        public Criteria andPriceRateIsNull() {
+            addCriterion("price_rate is null");
             return (Criteria) this;
         }
 
-        public Criteria andPriceIsNotNull() {
-            addCriterion("price is not null");
+        public Criteria andPriceRateIsNotNull() {
+            addCriterion("price_rate is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPriceEqualTo(BigDecimal value) {
-            addCriterion("price =", value, "price");
+        public Criteria andPriceRateEqualTo(BigDecimal value) {
+            addCriterion("price_rate =", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotEqualTo(BigDecimal value) {
-            addCriterion("price <>", value, "price");
+        public Criteria andPriceRateNotEqualTo(BigDecimal value) {
+            addCriterion("price_rate <>", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceGreaterThan(BigDecimal value) {
-            addCriterion("price >", value, "price");
+        public Criteria andPriceRateGreaterThan(BigDecimal value) {
+            addCriterion("price_rate >", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("price >=", value, "price");
+        public Criteria andPriceRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("price_rate >=", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceLessThan(BigDecimal value) {
-            addCriterion("price <", value, "price");
+        public Criteria andPriceRateLessThan(BigDecimal value) {
+            addCriterion("price_rate <", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("price <=", value, "price");
+        public Criteria andPriceRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("price_rate <=", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceIn(List<BigDecimal> values) {
-            addCriterion("price in", values, "price");
+        public Criteria andPriceRateIn(List<BigDecimal> values) {
+            addCriterion("price_rate in", values, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotIn(List<BigDecimal> values) {
-            addCriterion("price not in", values, "price");
+        public Criteria andPriceRateNotIn(List<BigDecimal> values) {
+            addCriterion("price_rate not in", values, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price between", value1, value2, "price");
+        public Criteria andPriceRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price_rate between", value1, value2, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price not between", value1, value2, "price");
+        public Criteria andPriceRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price_rate not between", value1, value2, "priceRate");
             return (Criteria) this;
         }
 
@@ -866,52 +796,52 @@ public class RecordUserTxExample {
             return (Criteria) this;
         }
 
-        public Criteria andHopeGetAmountEqualTo(Long value) {
+        public Criteria andHopeGetAmountEqualTo(BigDecimal value) {
             addCriterion("hope_get_amount =", value, "hopeGetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andHopeGetAmountNotEqualTo(Long value) {
+        public Criteria andHopeGetAmountNotEqualTo(BigDecimal value) {
             addCriterion("hope_get_amount <>", value, "hopeGetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andHopeGetAmountGreaterThan(Long value) {
+        public Criteria andHopeGetAmountGreaterThan(BigDecimal value) {
             addCriterion("hope_get_amount >", value, "hopeGetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andHopeGetAmountGreaterThanOrEqualTo(Long value) {
+        public Criteria andHopeGetAmountGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("hope_get_amount >=", value, "hopeGetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andHopeGetAmountLessThan(Long value) {
+        public Criteria andHopeGetAmountLessThan(BigDecimal value) {
             addCriterion("hope_get_amount <", value, "hopeGetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andHopeGetAmountLessThanOrEqualTo(Long value) {
+        public Criteria andHopeGetAmountLessThanOrEqualTo(BigDecimal value) {
             addCriterion("hope_get_amount <=", value, "hopeGetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andHopeGetAmountIn(List<Long> values) {
+        public Criteria andHopeGetAmountIn(List<BigDecimal> values) {
             addCriterion("hope_get_amount in", values, "hopeGetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andHopeGetAmountNotIn(List<Long> values) {
+        public Criteria andHopeGetAmountNotIn(List<BigDecimal> values) {
             addCriterion("hope_get_amount not in", values, "hopeGetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andHopeGetAmountBetween(Long value1, Long value2) {
+        public Criteria andHopeGetAmountBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("hope_get_amount between", value1, value2, "hopeGetAmount");
             return (Criteria) this;
         }
 
-        public Criteria andHopeGetAmountNotBetween(Long value1, Long value2) {
+        public Criteria andHopeGetAmountNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("hope_get_amount not between", value1, value2, "hopeGetAmount");
             return (Criteria) this;
         }

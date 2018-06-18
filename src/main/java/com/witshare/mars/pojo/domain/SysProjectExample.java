@@ -1046,123 +1046,123 @@ public class SysProjectExample {
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceIsNull() {
-            addCriterion("start_price is null");
+        public Criteria andStartPriceRateIsNull() {
+            addCriterion("start_price_rate is null");
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceIsNotNull() {
-            addCriterion("start_price is not null");
+        public Criteria andStartPriceRateIsNotNull() {
+            addCriterion("start_price_rate is not null");
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceEqualTo(BigDecimal value) {
-            addCriterion("start_price =", value, "startPrice");
+        public Criteria andStartPriceRateEqualTo(BigDecimal value) {
+            addCriterion("start_price_rate =", value, "startPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceNotEqualTo(BigDecimal value) {
-            addCriterion("start_price <>", value, "startPrice");
+        public Criteria andStartPriceRateNotEqualTo(BigDecimal value) {
+            addCriterion("start_price_rate <>", value, "startPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceGreaterThan(BigDecimal value) {
-            addCriterion("start_price >", value, "startPrice");
+        public Criteria andStartPriceRateGreaterThan(BigDecimal value) {
+            addCriterion("start_price_rate >", value, "startPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("start_price >=", value, "startPrice");
+        public Criteria andStartPriceRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("start_price_rate >=", value, "startPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceLessThan(BigDecimal value) {
-            addCriterion("start_price <", value, "startPrice");
+        public Criteria andStartPriceRateLessThan(BigDecimal value) {
+            addCriterion("start_price_rate <", value, "startPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("start_price <=", value, "startPrice");
+        public Criteria andStartPriceRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("start_price_rate <=", value, "startPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceIn(List<BigDecimal> values) {
-            addCriterion("start_price in", values, "startPrice");
+        public Criteria andStartPriceRateIn(List<BigDecimal> values) {
+            addCriterion("start_price_rate in", values, "startPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceNotIn(List<BigDecimal> values) {
-            addCriterion("start_price not in", values, "startPrice");
+        public Criteria andStartPriceRateNotIn(List<BigDecimal> values) {
+            addCriterion("start_price_rate not in", values, "startPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("start_price between", value1, value2, "startPrice");
+        public Criteria andStartPriceRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("start_price_rate between", value1, value2, "startPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andStartPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("start_price not between", value1, value2, "startPrice");
+        public Criteria andStartPriceRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("start_price_rate not between", value1, value2, "startPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceIsNull() {
-            addCriterion("end_price is null");
+        public Criteria andEndPriceRateIsNull() {
+            addCriterion("end_price_rate is null");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceIsNotNull() {
-            addCriterion("end_price is not null");
+        public Criteria andEndPriceRateIsNotNull() {
+            addCriterion("end_price_rate is not null");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceEqualTo(BigDecimal value) {
-            addCriterion("end_price =", value, "endPrice");
+        public Criteria andEndPriceRateEqualTo(BigDecimal value) {
+            addCriterion("end_price_rate =", value, "endPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceNotEqualTo(BigDecimal value) {
-            addCriterion("end_price <>", value, "endPrice");
+        public Criteria andEndPriceRateNotEqualTo(BigDecimal value) {
+            addCriterion("end_price_rate <>", value, "endPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceGreaterThan(BigDecimal value) {
-            addCriterion("end_price >", value, "endPrice");
+        public Criteria andEndPriceRateGreaterThan(BigDecimal value) {
+            addCriterion("end_price_rate >", value, "endPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("end_price >=", value, "endPrice");
+        public Criteria andEndPriceRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("end_price_rate >=", value, "endPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceLessThan(BigDecimal value) {
-            addCriterion("end_price <", value, "endPrice");
+        public Criteria andEndPriceRateLessThan(BigDecimal value) {
+            addCriterion("end_price_rate <", value, "endPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("end_price <=", value, "endPrice");
+        public Criteria andEndPriceRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("end_price_rate <=", value, "endPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceIn(List<BigDecimal> values) {
-            addCriterion("end_price in", values, "endPrice");
+        public Criteria andEndPriceRateIn(List<BigDecimal> values) {
+            addCriterion("end_price_rate in", values, "endPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceNotIn(List<BigDecimal> values) {
-            addCriterion("end_price not in", values, "endPrice");
+        public Criteria andEndPriceRateNotIn(List<BigDecimal> values) {
+            addCriterion("end_price_rate not in", values, "endPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("end_price between", value1, value2, "endPrice");
+        public Criteria andEndPriceRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("end_price_rate between", value1, value2, "endPriceRate");
             return (Criteria) this;
         }
 
-        public Criteria andEndPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("end_price not between", value1, value2, "endPrice");
+        public Criteria andEndPriceRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("end_price_rate not between", value1, value2, "endPriceRate");
             return (Criteria) this;
         }
 

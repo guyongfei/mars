@@ -1,6 +1,7 @@
 package com.witshare.mars.dao.mysql;
 
 import com.witshare.mars.pojo.dto.*;
+import com.witshare.mars.pojo.vo.SysProjectBeanFrontListVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.pojo.vo.SysProjectListVo;
 import org.apache.ibatis.annotations.Param;
@@ -16,7 +17,7 @@ public interface StaticSysProjectMapper {
 
     List<ConfProjectTypeBean> selectProjectType();
 
-    List<ProjectPageBean> selectProjectList(ProjectReqBean projectReqBean);
+    List<SysProjectBeanFrontListVo> selectProjectList(ProjectReqBean projectReqBean);
 
     List<SysProjectListVo> selectManagementList(SysProjectBean sysProjectBean);
 

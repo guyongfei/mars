@@ -304,8 +304,8 @@ function getProject(row) {
                 $('#softCap').val(project.softCap);
                 $('#hardCap').val(project.hardCap);
                 $('#minPurchaseAmount').val(project.minPurchaseAmount);
-                $('#startPrice').val(project.startPrice);
-                $('#endPrice').val(project.endPrice);
+                $('#startPriceRate').val(project.startPriceRate);
+                $('#endPriceRate').val(project.endPriceRate);
                 $('#startTimePicker').val(getNowFormatDate(new Date(project.startTime)));
                 $('#endTimePicker').val(getNowFormatDate(new Date(project.endTime)));
 
@@ -648,14 +648,14 @@ $(function () {
                     }
                 }
             },
-            startPrice: {
+            startPriceRate: {
                 validators: {
                     notEmpty: {
                         message: '开始单价（ETH）不能为空'
                     }
                 }
             },
-            endPrice: {
+            endPriceRate: {
                 validators: {
                     notEmpty: {
                         message: '结束单价（ETH）不能为空'
@@ -958,8 +958,8 @@ $(function () {
             'hardCap': numeral($('#hardCap').val()).value(),
             'minPurchaseAmount': numeral($('#minPurchaseAmount').val()).value(),
 
-            'startPrice': numeral($('#startPrice').val()).value(),
-            'endPrice': numeral($('#endPrice').val()).value(),
+            'startPriceRate': numeral($('#startPriceRate').val()).value(),
+            'endPriceRate': numeral($('#endPriceRate').val()).value(),
             'startTimeLong': new Date($('#startTimePicker').val()).getMilliseconds(),
             'endTimeLong': new Date($('#endTimePicker').val()).getMilliseconds(),
 
@@ -989,14 +989,6 @@ $(function () {
             'log': logStr,
             'view': view
 
-            // 'pdfEn': pdfEn,
-            // 'pdfEnName': pdfEnName,
-            // 'pdfCn': pdfCn,
-            // 'pdfCnName': pdfCnName,
-            // 'pdfKo': pdfKo,
-            // 'pdfKoName': pdfKoName,
-            // 'pdfJa': pdfJa,
-            // 'pdfJaName': pdfJaName
         };
 
         console.log(dataJson);
@@ -1095,10 +1087,10 @@ $(function () {
 
     });
     function checkPrice() {
-        var startPrice = numeral($('#startPrice').val()).value();
-        var endPrice = numeral($('#endPrice').val()).value();
+        var startPriceRate = numeral($('#startPriceRate').val()).value();
+        var endPriceRate = numeral($('#endPriceRate').val()).value();
 
-        if (!startPrice || !endPrice || startPrice > endPrice) {
+        if (!startPriceRate || !endPriceRate || startPriceRate < endPriceRate) {
             layer.msg("价格设置有误", {
                 time: 2000,
                 icon: 0,

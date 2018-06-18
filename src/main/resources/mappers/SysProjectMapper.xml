@@ -19,8 +19,8 @@
     <result column="min_purchase_amount" property="minPurchaseAmount" jdbcType="DECIMAL"/>
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP"/>
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
-    <result column="start_price" property="startPrice" jdbcType="DECIMAL"/>
-    <result column="end_price" property="endPrice" jdbcType="DECIMAL"/>
+    <result column="start_price_rate" property="startPriceRate" jdbcType="DECIMAL"/>
+    <result column="end_price_rate" property="endPriceRate" jdbcType="DECIMAL"/>
     <result column="project_status" property="projectStatus" jdbcType="TINYINT"/>
     <result column="is_available" property="isAvailable" jdbcType="TINYINT"/>
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
@@ -99,7 +99,8 @@
     -->
     id, project_gid, project_token, token_address, platform_address, project_address,
     project_logo_link, project_img_link, soft_cap, hard_cap, min_purchase_amount, start_time,
-    end_time, start_price, end_price, project_status, is_available, create_time, update_time
+    end_time, start_price_rate, end_price_rate, project_status, is_available, create_time,
+    update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap"
           parameterType="com.witshare.mars.pojo.domain.SysProjectExample">
@@ -158,14 +159,14 @@
     platform_address, project_address, project_logo_link,
     project_img_link, soft_cap, hard_cap,
     min_purchase_amount, start_time, end_time,
-    start_price, end_price, project_status,
+    start_price_rate, end_price_rate, project_status,
     is_available, create_time, update_time
     )
     values (#{projectGid,jdbcType=CHAR}, #{projectToken,jdbcType=VARCHAR}, #{tokenAddress,jdbcType=VARCHAR},
     #{platformAddress,jdbcType=VARCHAR}, #{projectAddress,jdbcType=VARCHAR}, #{projectLogoLink,jdbcType=VARCHAR},
     #{projectImgLink,jdbcType=VARCHAR}, #{softCap,jdbcType=DECIMAL}, #{hardCap,jdbcType=DECIMAL},
     #{minPurchaseAmount,jdbcType=DECIMAL}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
-    #{startPrice,jdbcType=DECIMAL}, #{endPrice,jdbcType=DECIMAL}, #{projectStatus,jdbcType=TINYINT},
+    #{startPriceRate,jdbcType=DECIMAL}, #{endPriceRate,jdbcType=DECIMAL}, #{projectStatus,jdbcType=TINYINT},
     #{isAvailable,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
     )
   </insert>
@@ -213,11 +214,11 @@
       <if test="endTime != null">
         end_time,
       </if>
-      <if test="startPrice != null">
-        start_price,
+      <if test="startPriceRate != null">
+        start_price_rate,
       </if>
-      <if test="endPrice != null">
-        end_price,
+      <if test="endPriceRate != null">
+        end_price_rate,
       </if>
       project_status,
       is_available,
@@ -265,11 +266,11 @@
       <if test="endTime != null">
         #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="startPrice != null">
-        #{startPrice,jdbcType=DECIMAL},
+      <if test="startPriceRate != null">
+        #{startPriceRate,jdbcType=DECIMAL},
       </if>
-      <if test="endPrice != null">
-        #{endPrice,jdbcType=DECIMAL},
+      <if test="endPriceRate != null">
+        #{endPriceRate,jdbcType=DECIMAL},
       </if>
       #{projectStatus,jdbcType=TINYINT},
       #{isAvailable,jdbcType=TINYINT},
@@ -338,11 +339,11 @@
       <if test="record.endTime != null">
         end_time = #{record.endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.startPrice != null">
-        start_price = #{record.startPrice,jdbcType=DECIMAL},
+      <if test="record.startPriceRate != null">
+        start_price_rate = #{record.startPriceRate,jdbcType=DECIMAL},
       </if>
-      <if test="record.endPrice != null">
-        end_price = #{record.endPrice,jdbcType=DECIMAL},
+      <if test="record.endPriceRate != null">
+        end_price_rate = #{record.endPriceRate,jdbcType=DECIMAL},
       </if>
       <if test="record.projectStatus != null">
         project_status = #{record.projectStatus,jdbcType=TINYINT},
@@ -380,8 +381,8 @@
     min_purchase_amount = #{record.minPurchaseAmount,jdbcType=DECIMAL},
     start_time = #{record.startTime,jdbcType=TIMESTAMP},
     end_time = #{record.endTime,jdbcType=TIMESTAMP},
-    start_price = #{record.startPrice,jdbcType=DECIMAL},
-    end_price = #{record.endPrice,jdbcType=DECIMAL},
+    start_price_rate = #{record.startPriceRate,jdbcType=DECIMAL},
+    end_price_rate = #{record.endPriceRate,jdbcType=DECIMAL},
     project_status = #{record.projectStatus,jdbcType=TINYINT},
     is_available = #{record.isAvailable,jdbcType=TINYINT},
     create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -433,11 +434,11 @@
       <if test="endTime != null">
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="startPrice != null">
-        start_price = #{startPrice,jdbcType=DECIMAL},
+      <if test="startPriceRate != null">
+        start_price_rate = #{startPriceRate,jdbcType=DECIMAL},
       </if>
-      <if test="endPrice != null">
-        end_price = #{endPrice,jdbcType=DECIMAL},
+      <if test="endPriceRate != null">
+        end_price_rate = #{endPriceRate,jdbcType=DECIMAL},
       </if>
       <if test="projectStatus != null">
         project_status = #{projectStatus,jdbcType=TINYINT},
@@ -472,8 +473,8 @@
     min_purchase_amount = #{minPurchaseAmount,jdbcType=DECIMAL},
     start_time = #{startTime,jdbcType=TIMESTAMP},
     end_time = #{endTime,jdbcType=TIMESTAMP},
-    start_price = #{startPrice,jdbcType=DECIMAL},
-    end_price = #{endPrice,jdbcType=DECIMAL},
+    start_price_rate = #{startPriceRate,jdbcType=DECIMAL},
+    end_price_rate = #{endPriceRate,jdbcType=DECIMAL},
     project_status = #{projectStatus,jdbcType=TINYINT},
     is_available = #{isAvailable,jdbcType=TINYINT},
     create_time = #{createTime,jdbcType=TIMESTAMP},

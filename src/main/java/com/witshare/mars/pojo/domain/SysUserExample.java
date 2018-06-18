@@ -735,6 +735,146 @@ public class SysUserExample {
             return (Criteria) this;
         }
 
+        public Criteria andPayEthAddressIsNull() {
+            addCriterion("pay_eth_address is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressIsNotNull() {
+            addCriterion("pay_eth_address is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressEqualTo(String value) {
+            addCriterion("pay_eth_address =", value, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressNotEqualTo(String value) {
+            addCriterion("pay_eth_address <>", value, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressGreaterThan(String value) {
+            addCriterion("pay_eth_address >", value, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("pay_eth_address >=", value, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressLessThan(String value) {
+            addCriterion("pay_eth_address <", value, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressLessThanOrEqualTo(String value) {
+            addCriterion("pay_eth_address <=", value, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressLike(String value) {
+            addCriterion("pay_eth_address like", value, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressNotLike(String value) {
+            addCriterion("pay_eth_address not like", value, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressIn(List<String> values) {
+            addCriterion("pay_eth_address in", values, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressNotIn(List<String> values) {
+            addCriterion("pay_eth_address not in", values, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressBetween(String value1, String value2) {
+            addCriterion("pay_eth_address between", value1, value2, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andPayEthAddressNotBetween(String value1, String value2) {
+            addCriterion("pay_eth_address not between", value1, value2, "payEthAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressIsNull() {
+            addCriterion("get_token_address is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressIsNotNull() {
+            addCriterion("get_token_address is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressEqualTo(String value) {
+            addCriterion("get_token_address =", value, "getTokenAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressNotEqualTo(String value) {
+            addCriterion("get_token_address <>", value, "getTokenAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressGreaterThan(String value) {
+            addCriterion("get_token_address >", value, "getTokenAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("get_token_address >=", value, "getTokenAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressLessThan(String value) {
+            addCriterion("get_token_address <", value, "getTokenAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressLessThanOrEqualTo(String value) {
+            addCriterion("get_token_address <=", value, "getTokenAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressLike(String value) {
+            addCriterion("get_token_address like", value, "getTokenAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressNotLike(String value) {
+            addCriterion("get_token_address not like", value, "getTokenAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressIn(List<String> values) {
+            addCriterion("get_token_address in", values, "getTokenAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressNotIn(List<String> values) {
+            addCriterion("get_token_address not in", values, "getTokenAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressBetween(String value1, String value2) {
+            addCriterion("get_token_address between", value1, value2, "getTokenAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andGetTokenAddressNotBetween(String value1, String value2) {
+            addCriterion("get_token_address not between", value1, value2, "getTokenAddress");
+            return (Criteria) this;
+        }
+
         public Criteria andUserStatusIsNull() {
             addCriterion("user_status is null");
             return (Criteria) this;

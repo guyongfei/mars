@@ -1,9 +1,7 @@
 package com.witshare.mars.service;
 
-import com.github.pagehelper.PageInfo;
 import com.witshare.mars.constant.EnumStatus;
 import com.witshare.mars.pojo.dto.SysUserBean;
-import com.witshare.mars.pojo.vo.LoginVo;
 
 import java.util.Map;
 
@@ -78,7 +76,7 @@ public interface SysUserService {
      * @param requestBody
      * @return
      */
-    LoginVo login(Map<String, String> requestBody);
+    void login(Map<String, String> requestBody);
 
     /**
      * 登出
@@ -91,16 +89,6 @@ public interface SysUserService {
      * @return
      */
     SysUserBean getCurrentUser();
-
-
-    /**
-     * 获取单个项目的分页推荐用户
-     *
-     * @param requestBody
-     * @return
-     */
-    PageInfo<Map<String, Object>> getProjectUsers(Map<String, String> requestBody);
-
 
     /**
      * 隐藏用户

@@ -6,7 +6,6 @@ import com.witshare.mars.pojo.vo.SysUserViewVo;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
-import java.util.Map;
 
 public interface StaticSysUserMapper {
 
@@ -14,7 +13,6 @@ public interface StaticSysUserMapper {
 
     Long saveOrUpdate(SysUserBean sysUserBean);
 
-    List<Map<String, Object>> selectProjectUsers(Long id);
 
     List<GlobalSimpleBean> selectShowUserList(@Param("indexShow") Integer indexShow, @Param("name") String name);
 
