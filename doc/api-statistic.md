@@ -2,11 +2,13 @@
 
 # 统计相关
 
-## 1.平台情况(支持分页)
+## 1.项目统计信息
 
-- url：/statistic/platform
+- url：/statistic/project
 - method:GET
-  - startTime
+  - projectGid 项目唯一标识和token必选其一
+  - projectToken 
+  - startTime 用于分页区间查询
   - endTime
 - response body
 
@@ -15,18 +17,30 @@
       "message": "",
       "success": true,
       "data":{
-        "projectAmount":20,
-        "projectStatusAmount":[0,5,6,9,0],
-        "userAmount":0,
-        "txUseAmount":5,
-        "getEthAmount":5,
-        "dailyInfo":[
-            {
-                "activeProjectAmount":5,
-                "activeUserAmount":5,
-                "getEthAmount":5,
-                "dayTime":15212345610000
-            }
+        "projectGid":"",
+        "projectToken":"",
+        "summaryInfo":{
+           "accountCount":5,
+           "actualAccountCount":5,
+           "addressCount":5,
+           "actualAddressCount":5,
+           "ethAmount":5,
+           "actualEthAmount":5,
+           "tokenAmount":5,
+           "actualTokenAmount":5,
+           "dayTime":1521234561000
+         },
+        "dailyInfo":[  {
+           "accountCount":5,
+           "actualAccountCount":5,
+           "addressCount":5,
+           "actualAddressCount":5,
+           "ethAmount":5,
+           "actualEthAmount":5,
+           "tokenAmount":5,
+           "actualTokenAmount":5,
+           "dayTime":1521234561000
+        }
         ]
       }
     }
@@ -35,96 +49,21 @@
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
-|projectAmount|number|是|项目总数|
-|projectStatusAmount|arrary|是|按照项目状态分别统计的数量，顺序同项目状态表|
-|userAmount|number|是|所有用户数|
-|txUseAmount|number|是|所有发生过真实交易的用户数|
-|getEthAmount|number|是|认筹到的ETH总数|
+|projectGid|string|是|项目唯一标识|
+|projectToken|string|是|项目token|
+|summaryInfo|object|是|汇总信息|
 |dailyInfo|arrary|是|每日详情|
 
-> dailyInfo 字段详解
+>  字段详解
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
-|activeProjectAmount|number|是|认筹中的项目数|
-|activeUserAmount|number|是|发生交易的用户数|
-|getEthAmount|number|是|认筹到的ETH总数|
-|dayTime|number|是|时间戳|
-
-## 2.项目情况（支持分页）
-
-- url：/statistic/project?action=daily|project
-- method:GET
-
-- action = daily 单日项目横向统计
-  - request param
-    - dayTime 日期
-    - token 项目token
-  - response body
-    ```json
-        {
-        "message": "",
-        "success": true,
-        "data":{
-            "projects":[
-                {
-                    "projectGid":"",
-                    "token":"",
-                    "price":"",
-                    "getEthAmount":"",
-                    "actualGetEthAmount":"",
-                    "distributeAmount":"",
-                    "actualDistributeAmount":"",
-                    "txUserAmount":"",
-                    "actualTxUserAmount":"",
-                }
-            ],
-            "dayTime":1521234561000
-        }
-        }
-
-    ```
-- action = project 单个项目纵向统计
-  - request param
-    - startTime 日期(起)
-    - startTime 日期(止)
-    - token 项目token
-  - response body
-    ```json
-        {
-        "message": "",
-        "success": true,
-        "data":{
-            "projectGid":"",
-            "token":"",
-            "dailyInfo":[
-                {
-                    "price":"",
-                    "getEthAmount":"",
-                    "actualGetEthAmount":"",
-                    "distributeAmount":"",
-                    "actualDistributeAmount":"",
-                    "txUserAmount":"",
-                    "actualTxUserAmount":"",
-                    "dayTime":1521234561000
-                }
-            ]
-        }
-        }
-
-    ```
-
-> 字段详解
-
-|字段|类型|是否必须|说明|
-|---|---|---|---|
-|projectGid|string|是|项目唯一标识|
-|token|string|是|项目token|
-|price|number|是|价格(ETH)|
-|getEthAmount|number|是|认购数量(ETH)|
-|actualGetEthAmount|number|是|实际认购数量(ETH)|
-|distributeAmount|number|是|应分发token数|
-|actualDistributeAmount|number|是|实际应分发token数量|
-|txUserAmount|number|是|认购人数|
-|actualTxUserAmount|number|是|实际认购人数|
-|dayTime|number|是|时间戳|
+|accountCount|number|是|账户数|
+|actualAccountCount|number|是|实际账户数|
+|addressCount|number|是|地址数|
+|actualAddressCount|number|是|实际地址数|
+|ethAmount|number|是|募集到的ETH数量|
+|actualEthAmount|number|是|实际募集到的ETH数量|
+|tokenAmount|number|是|需要分发的token数量|
+|actualTokenAmount|number|是|实际需要分发的token数量|
+|dayTime|number|是|统计时间戳|
