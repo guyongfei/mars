@@ -39,15 +39,11 @@ public class ManagementPageController {
     }
 
     /**
-     * 首页展示项目页面
-     *
-     * @param model
-     * @return
-     * @throws Exception
+     * 定时任务页
      */
-    @RequestMapping(value = "/starproject", method = RequestMethod.GET)
+    @RequestMapping(value = "/quartz", method = RequestMethod.GET)
     public String modifyProjectPage(Map<String, Object> model) throws Exception {
-        return "views/startProject";
+        return "views/quartz";
     }
 
     /**

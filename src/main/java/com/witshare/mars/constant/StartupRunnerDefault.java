@@ -1,15 +1,18 @@
 package com.witshare.mars.constant;
 
 import com.google.gson.Gson;
+import com.witshare.mars.util.WitshareUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -27,7 +30,7 @@ public class StartupRunnerDefault implements CommandLineRunner {
     private final Gson GSON = new Gson();
     @Resource
     private PropertiesConfig propertiesConfig;
-    @Resource
+    @Autowired
     private QingObjStoreAWS3 qingObjStoreAWS3;
 
     private Set<String> freeAuthSet = ConcurrentHashMap.<String>newKeySet();
@@ -42,7 +45,8 @@ public class StartupRunnerDefault implements CommandLineRunner {
      */
     @Override
     public void run(String... args) {
-
+        InputStream objects = qingObjStoreAWS3.getObjects(propertiesConfig.qingyunBucket, "test/pdfEn/TOPC_1522663766728.pdf");
+        LOGGER.info("uploadToQingyun, objects is null {}", WitshareUtils.isObjectEmpty(objects));
         //加载权限信息至内存
         splitToSet(propertiesConfig.authFree, freeAuthSet);
         splitToSet(propertiesConfig.authAdminPath, adminPathSet);

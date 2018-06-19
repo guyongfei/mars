@@ -424,423 +424,543 @@ public class ProjectDailyInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andPriceIsNull() {
-            addCriterion("price is null");
+        public Criteria andPriceRateIsNull() {
+            addCriterion("price_rate is null");
             return (Criteria) this;
         }
 
-        public Criteria andPriceIsNotNull() {
-            addCriterion("price is not null");
+        public Criteria andPriceRateIsNotNull() {
+            addCriterion("price_rate is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPriceEqualTo(BigDecimal value) {
-            addCriterion("price =", value, "price");
+        public Criteria andPriceRateEqualTo(BigDecimal value) {
+            addCriterion("price_rate =", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotEqualTo(BigDecimal value) {
-            addCriterion("price <>", value, "price");
+        public Criteria andPriceRateNotEqualTo(BigDecimal value) {
+            addCriterion("price_rate <>", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceGreaterThan(BigDecimal value) {
-            addCriterion("price >", value, "price");
+        public Criteria andPriceRateGreaterThan(BigDecimal value) {
+            addCriterion("price_rate >", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("price >=", value, "price");
+        public Criteria andPriceRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("price_rate >=", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceLessThan(BigDecimal value) {
-            addCriterion("price <", value, "price");
+        public Criteria andPriceRateLessThan(BigDecimal value) {
+            addCriterion("price_rate <", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("price <=", value, "price");
+        public Criteria andPriceRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("price_rate <=", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceIn(List<BigDecimal> values) {
-            addCriterion("price in", values, "price");
+        public Criteria andPriceRateIn(List<BigDecimal> values) {
+            addCriterion("price_rate in", values, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotIn(List<BigDecimal> values) {
-            addCriterion("price not in", values, "price");
+        public Criteria andPriceRateNotIn(List<BigDecimal> values) {
+            addCriterion("price_rate not in", values, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price between", value1, value2, "price");
+        public Criteria andPriceRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price_rate between", value1, value2, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price not between", value1, value2, "price");
+        public Criteria andPriceRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price_rate not between", value1, value2, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountIsNull() {
-            addCriterion("subscription_amount is null");
+        public Criteria andGetEthAmountIsNull() {
+            addCriterion("get_eth_amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountIsNotNull() {
-            addCriterion("subscription_amount is not null");
+        public Criteria andGetEthAmountIsNotNull() {
+            addCriterion("get_eth_amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountEqualTo(BigDecimal value) {
-            addCriterion("subscription_amount =", value, "subscriptionAmount");
+        public Criteria andGetEthAmountEqualTo(BigDecimal value) {
+            addCriterion("get_eth_amount =", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountNotEqualTo(BigDecimal value) {
-            addCriterion("subscription_amount <>", value, "subscriptionAmount");
+        public Criteria andGetEthAmountNotEqualTo(BigDecimal value) {
+            addCriterion("get_eth_amount <>", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountGreaterThan(BigDecimal value) {
-            addCriterion("subscription_amount >", value, "subscriptionAmount");
+        public Criteria andGetEthAmountGreaterThan(BigDecimal value) {
+            addCriterion("get_eth_amount >", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("subscription_amount >=", value, "subscriptionAmount");
+        public Criteria andGetEthAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("get_eth_amount >=", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountLessThan(BigDecimal value) {
-            addCriterion("subscription_amount <", value, "subscriptionAmount");
+        public Criteria andGetEthAmountLessThan(BigDecimal value) {
+            addCriterion("get_eth_amount <", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("subscription_amount <=", value, "subscriptionAmount");
+        public Criteria andGetEthAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("get_eth_amount <=", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountIn(List<BigDecimal> values) {
-            addCriterion("subscription_amount in", values, "subscriptionAmount");
+        public Criteria andGetEthAmountIn(List<BigDecimal> values) {
+            addCriterion("get_eth_amount in", values, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountNotIn(List<BigDecimal> values) {
-            addCriterion("subscription_amount not in", values, "subscriptionAmount");
+        public Criteria andGetEthAmountNotIn(List<BigDecimal> values) {
+            addCriterion("get_eth_amount not in", values, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("subscription_amount between", value1, value2, "subscriptionAmount");
+        public Criteria andGetEthAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("get_eth_amount between", value1, value2, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("subscription_amount not between", value1, value2, "subscriptionAmount");
+        public Criteria andGetEthAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("get_eth_amount not between", value1, value2, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountIsNull() {
-            addCriterion("actual_subscription_amount is null");
+        public Criteria andActualGetEthAmountIsNull() {
+            addCriterion("actual_get_eth_amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountIsNotNull() {
-            addCriterion("actual_subscription_amount is not null");
+        public Criteria andActualGetEthAmountIsNotNull() {
+            addCriterion("actual_get_eth_amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountEqualTo(BigDecimal value) {
-            addCriterion("actual_subscription_amount =", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountEqualTo(BigDecimal value) {
+            addCriterion("actual_get_eth_amount =", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountNotEqualTo(BigDecimal value) {
-            addCriterion("actual_subscription_amount <>", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountNotEqualTo(BigDecimal value) {
+            addCriterion("actual_get_eth_amount <>", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountGreaterThan(BigDecimal value) {
-            addCriterion("actual_subscription_amount >", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountGreaterThan(BigDecimal value) {
+            addCriterion("actual_get_eth_amount >", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("actual_subscription_amount >=", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("actual_get_eth_amount >=", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountLessThan(BigDecimal value) {
-            addCriterion("actual_subscription_amount <", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountLessThan(BigDecimal value) {
+            addCriterion("actual_get_eth_amount <", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("actual_subscription_amount <=", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("actual_get_eth_amount <=", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountIn(List<BigDecimal> values) {
-            addCriterion("actual_subscription_amount in", values, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountIn(List<BigDecimal> values) {
+            addCriterion("actual_get_eth_amount in", values, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountNotIn(List<BigDecimal> values) {
-            addCriterion("actual_subscription_amount not in", values, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountNotIn(List<BigDecimal> values) {
+            addCriterion("actual_get_eth_amount not in", values, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("actual_subscription_amount between", value1, value2, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("actual_get_eth_amount between", value1, value2, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("actual_subscription_amount not between", value1, value2, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("actual_get_eth_amount not between", value1, value2, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountIsNull() {
-            addCriterion("distribute_amount is null");
+        public Criteria andPayTokenAmountIsNull() {
+            addCriterion("pay_token_amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountIsNotNull() {
-            addCriterion("distribute_amount is not null");
+        public Criteria andPayTokenAmountIsNotNull() {
+            addCriterion("pay_token_amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountEqualTo(BigDecimal value) {
-            addCriterion("distribute_amount =", value, "distributeAmount");
+        public Criteria andPayTokenAmountEqualTo(BigDecimal value) {
+            addCriterion("pay_token_amount =", value, "payTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountNotEqualTo(BigDecimal value) {
-            addCriterion("distribute_amount <>", value, "distributeAmount");
+        public Criteria andPayTokenAmountNotEqualTo(BigDecimal value) {
+            addCriterion("pay_token_amount <>", value, "payTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountGreaterThan(BigDecimal value) {
-            addCriterion("distribute_amount >", value, "distributeAmount");
+        public Criteria andPayTokenAmountGreaterThan(BigDecimal value) {
+            addCriterion("pay_token_amount >", value, "payTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("distribute_amount >=", value, "distributeAmount");
+        public Criteria andPayTokenAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("pay_token_amount >=", value, "payTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountLessThan(BigDecimal value) {
-            addCriterion("distribute_amount <", value, "distributeAmount");
+        public Criteria andPayTokenAmountLessThan(BigDecimal value) {
+            addCriterion("pay_token_amount <", value, "payTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("distribute_amount <=", value, "distributeAmount");
+        public Criteria andPayTokenAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("pay_token_amount <=", value, "payTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountIn(List<BigDecimal> values) {
-            addCriterion("distribute_amount in", values, "distributeAmount");
+        public Criteria andPayTokenAmountIn(List<BigDecimal> values) {
+            addCriterion("pay_token_amount in", values, "payTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountNotIn(List<BigDecimal> values) {
-            addCriterion("distribute_amount not in", values, "distributeAmount");
+        public Criteria andPayTokenAmountNotIn(List<BigDecimal> values) {
+            addCriterion("pay_token_amount not in", values, "payTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("distribute_amount between", value1, value2, "distributeAmount");
+        public Criteria andPayTokenAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pay_token_amount between", value1, value2, "payTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andDistributeAmountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("distribute_amount not between", value1, value2, "distributeAmount");
+        public Criteria andPayTokenAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("pay_token_amount not between", value1, value2, "payTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountIsNull() {
-            addCriterion("actual_distribute_amount is null");
+        public Criteria andActualPayTokenAmountIsNull() {
+            addCriterion("actual_pay_token_amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountIsNotNull() {
-            addCriterion("actual_distribute_amount is not null");
+        public Criteria andActualPayTokenAmountIsNotNull() {
+            addCriterion("actual_pay_token_amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountEqualTo(BigDecimal value) {
-            addCriterion("actual_distribute_amount =", value, "actualDistributeAmount");
+        public Criteria andActualPayTokenAmountEqualTo(BigDecimal value) {
+            addCriterion("actual_pay_token_amount =", value, "actualPayTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountNotEqualTo(BigDecimal value) {
-            addCriterion("actual_distribute_amount <>", value, "actualDistributeAmount");
+        public Criteria andActualPayTokenAmountNotEqualTo(BigDecimal value) {
+            addCriterion("actual_pay_token_amount <>", value, "actualPayTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountGreaterThan(BigDecimal value) {
-            addCriterion("actual_distribute_amount >", value, "actualDistributeAmount");
+        public Criteria andActualPayTokenAmountGreaterThan(BigDecimal value) {
+            addCriterion("actual_pay_token_amount >", value, "actualPayTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("actual_distribute_amount >=", value, "actualDistributeAmount");
+        public Criteria andActualPayTokenAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("actual_pay_token_amount >=", value, "actualPayTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountLessThan(BigDecimal value) {
-            addCriterion("actual_distribute_amount <", value, "actualDistributeAmount");
+        public Criteria andActualPayTokenAmountLessThan(BigDecimal value) {
+            addCriterion("actual_pay_token_amount <", value, "actualPayTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("actual_distribute_amount <=", value, "actualDistributeAmount");
+        public Criteria andActualPayTokenAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("actual_pay_token_amount <=", value, "actualPayTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountIn(List<BigDecimal> values) {
-            addCriterion("actual_distribute_amount in", values, "actualDistributeAmount");
+        public Criteria andActualPayTokenAmountIn(List<BigDecimal> values) {
+            addCriterion("actual_pay_token_amount in", values, "actualPayTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountNotIn(List<BigDecimal> values) {
-            addCriterion("actual_distribute_amount not in", values, "actualDistributeAmount");
+        public Criteria andActualPayTokenAmountNotIn(List<BigDecimal> values) {
+            addCriterion("actual_pay_token_amount not in", values, "actualPayTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("actual_distribute_amount between", value1, value2, "actualDistributeAmount");
+        public Criteria andActualPayTokenAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("actual_pay_token_amount between", value1, value2, "actualPayTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualDistributeAmountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("actual_distribute_amount not between", value1, value2, "actualDistributeAmount");
+        public Criteria andActualPayTokenAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("actual_pay_token_amount not between", value1, value2, "actualPayTokenAmount");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountIsNull() {
-            addCriterion("tx_user_amount is null");
+        public Criteria andTxUserCountIsNull() {
+            addCriterion("tx_user_count is null");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountIsNotNull() {
-            addCriterion("tx_user_amount is not null");
+        public Criteria andTxUserCountIsNotNull() {
+            addCriterion("tx_user_count is not null");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountEqualTo(BigDecimal value) {
-            addCriterion("tx_user_amount =", value, "txUserAmount");
+        public Criteria andTxUserCountEqualTo(Integer value) {
+            addCriterion("tx_user_count =", value, "txUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountNotEqualTo(BigDecimal value) {
-            addCriterion("tx_user_amount <>", value, "txUserAmount");
+        public Criteria andTxUserCountNotEqualTo(Integer value) {
+            addCriterion("tx_user_count <>", value, "txUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountGreaterThan(BigDecimal value) {
-            addCriterion("tx_user_amount >", value, "txUserAmount");
+        public Criteria andTxUserCountGreaterThan(Integer value) {
+            addCriterion("tx_user_count >", value, "txUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("tx_user_amount >=", value, "txUserAmount");
+        public Criteria andTxUserCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("tx_user_count >=", value, "txUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountLessThan(BigDecimal value) {
-            addCriterion("tx_user_amount <", value, "txUserAmount");
+        public Criteria andTxUserCountLessThan(Integer value) {
+            addCriterion("tx_user_count <", value, "txUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("tx_user_amount <=", value, "txUserAmount");
+        public Criteria andTxUserCountLessThanOrEqualTo(Integer value) {
+            addCriterion("tx_user_count <=", value, "txUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountIn(List<BigDecimal> values) {
-            addCriterion("tx_user_amount in", values, "txUserAmount");
+        public Criteria andTxUserCountIn(List<Integer> values) {
+            addCriterion("tx_user_count in", values, "txUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountNotIn(List<BigDecimal> values) {
-            addCriterion("tx_user_amount not in", values, "txUserAmount");
+        public Criteria andTxUserCountNotIn(List<Integer> values) {
+            addCriterion("tx_user_count not in", values, "txUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("tx_user_amount between", value1, value2, "txUserAmount");
+        public Criteria andTxUserCountBetween(Integer value1, Integer value2) {
+            addCriterion("tx_user_count between", value1, value2, "txUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andTxUserAmountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("tx_user_amount not between", value1, value2, "txUserAmount");
+        public Criteria andTxUserCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("tx_user_count not between", value1, value2, "txUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountIsNull() {
-            addCriterion("actual_tx_user_amount is null");
+        public Criteria andActualTxUserCountIsNull() {
+            addCriterion("actual_tx_user_count is null");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountIsNotNull() {
-            addCriterion("actual_tx_user_amount is not null");
+        public Criteria andActualTxUserCountIsNotNull() {
+            addCriterion("actual_tx_user_count is not null");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountEqualTo(BigDecimal value) {
-            addCriterion("actual_tx_user_amount =", value, "actualTxUserAmount");
+        public Criteria andActualTxUserCountEqualTo(Integer value) {
+            addCriterion("actual_tx_user_count =", value, "actualTxUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountNotEqualTo(BigDecimal value) {
-            addCriterion("actual_tx_user_amount <>", value, "actualTxUserAmount");
+        public Criteria andActualTxUserCountNotEqualTo(Integer value) {
+            addCriterion("actual_tx_user_count <>", value, "actualTxUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountGreaterThan(BigDecimal value) {
-            addCriterion("actual_tx_user_amount >", value, "actualTxUserAmount");
+        public Criteria andActualTxUserCountGreaterThan(Integer value) {
+            addCriterion("actual_tx_user_count >", value, "actualTxUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("actual_tx_user_amount >=", value, "actualTxUserAmount");
+        public Criteria andActualTxUserCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("actual_tx_user_count >=", value, "actualTxUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountLessThan(BigDecimal value) {
-            addCriterion("actual_tx_user_amount <", value, "actualTxUserAmount");
+        public Criteria andActualTxUserCountLessThan(Integer value) {
+            addCriterion("actual_tx_user_count <", value, "actualTxUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("actual_tx_user_amount <=", value, "actualTxUserAmount");
+        public Criteria andActualTxUserCountLessThanOrEqualTo(Integer value) {
+            addCriterion("actual_tx_user_count <=", value, "actualTxUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountIn(List<BigDecimal> values) {
-            addCriterion("actual_tx_user_amount in", values, "actualTxUserAmount");
+        public Criteria andActualTxUserCountIn(List<Integer> values) {
+            addCriterion("actual_tx_user_count in", values, "actualTxUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountNotIn(List<BigDecimal> values) {
-            addCriterion("actual_tx_user_amount not in", values, "actualTxUserAmount");
+        public Criteria andActualTxUserCountNotIn(List<Integer> values) {
+            addCriterion("actual_tx_user_count not in", values, "actualTxUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("actual_tx_user_amount between", value1, value2, "actualTxUserAmount");
+        public Criteria andActualTxUserCountBetween(Integer value1, Integer value2) {
+            addCriterion("actual_tx_user_count between", value1, value2, "actualTxUserCount");
             return (Criteria) this;
         }
 
-        public Criteria andActualTxUserAmountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("actual_tx_user_amount not between", value1, value2, "actualTxUserAmount");
+        public Criteria andActualTxUserCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("actual_tx_user_count not between", value1, value2, "actualTxUserCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountIsNull() {
+            addCriterion("tx_address_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountIsNotNull() {
+            addCriterion("tx_address_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountEqualTo(Integer value) {
+            addCriterion("tx_address_count =", value, "txAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountNotEqualTo(Integer value) {
+            addCriterion("tx_address_count <>", value, "txAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountGreaterThan(Integer value) {
+            addCriterion("tx_address_count >", value, "txAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("tx_address_count >=", value, "txAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountLessThan(Integer value) {
+            addCriterion("tx_address_count <", value, "txAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountLessThanOrEqualTo(Integer value) {
+            addCriterion("tx_address_count <=", value, "txAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountIn(List<Integer> values) {
+            addCriterion("tx_address_count in", values, "txAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountNotIn(List<Integer> values) {
+            addCriterion("tx_address_count not in", values, "txAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountBetween(Integer value1, Integer value2) {
+            addCriterion("tx_address_count between", value1, value2, "txAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxAddressCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("tx_address_count not between", value1, value2, "txAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountIsNull() {
+            addCriterion("actual_tx_address_count is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountIsNotNull() {
+            addCriterion("actual_tx_address_count is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountEqualTo(Integer value) {
+            addCriterion("actual_tx_address_count =", value, "actualTxAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountNotEqualTo(Integer value) {
+            addCriterion("actual_tx_address_count <>", value, "actualTxAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountGreaterThan(Integer value) {
+            addCriterion("actual_tx_address_count >", value, "actualTxAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountGreaterThanOrEqualTo(Integer value) {
+            addCriterion("actual_tx_address_count >=", value, "actualTxAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountLessThan(Integer value) {
+            addCriterion("actual_tx_address_count <", value, "actualTxAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountLessThanOrEqualTo(Integer value) {
+            addCriterion("actual_tx_address_count <=", value, "actualTxAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountIn(List<Integer> values) {
+            addCriterion("actual_tx_address_count in", values, "actualTxAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountNotIn(List<Integer> values) {
+            addCriterion("actual_tx_address_count not in", values, "actualTxAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountBetween(Integer value1, Integer value2) {
+            addCriterion("actual_tx_address_count between", value1, value2, "actualTxAddressCount");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxAddressCountNotBetween(Integer value1, Integer value2) {
+            addCriterion("actual_tx_address_count not between", value1, value2, "actualTxAddressCount");
             return (Criteria) this;
         }
 

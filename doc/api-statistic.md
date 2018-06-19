@@ -20,26 +20,26 @@
         "projectGid":"",
         "projectToken":"",
         "summaryInfo":{
-           "accountCount":5,
-           "actualAccountCount":5,
-           "addressCount":5,
-           "actualAddressCount":5,
-           "ethAmount":5,
-           "actualEthAmount":5,
-           "tokenAmount":5,
-           "actualTokenAmount":5,
+           "txUserCount":5,
+           "actualTxUserCount":5,
+           "txAddressCount":5,
+           "actualTxAddressCount":5,
+           "getEthAmount":5.0,
+           "actualGetEthAmount":5.0,
+           "payTokenAmount":5.0,
+           "actualPayTokenAmount":5.0,
            "dayTime":1521234561000
          },
         "dailyInfo":[  {
-           "accountCount":5,
-           "actualAccountCount":5,
-           "addressCount":5,
-           "actualAddressCount":5,
-           "ethAmount":5,
-           "actualEthAmount":5,
-           "tokenAmount":5,
-           "actualTokenAmount":5,
-           "dayTime":1521234561000
+          "txUserCount":5,
+          "actualTxUserCount":5,
+          "txAddressCount":5,
+          "actualTxAddressCount":5,
+          "getEthAmount":5.0,
+          "actualGetEthAmount":5.0,
+          "payTokenAmount":5.0,
+          "actualPayTokenAmount":5.0,
+          "dayTime":1521234561000
         }
         ]
       }
@@ -58,12 +58,12 @@
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
-|accountCount|number|是|账户数|
-|actualAccountCount|number|是|实际账户数|
-|addressCount|number|是|地址数|
-|actualAddressCount|number|是|实际地址数|
-|ethAmount|number|是|募集到的ETH数量|
-|actualEthAmount|number|是|实际募集到的ETH数量|
-|tokenAmount|number|是|需要分发的token数量|
-|actualTokenAmount|number|是|实际需要分发的token数量|
+|txUserCount|number|是|交易用户数|
+|actualTxUserCount|number|是|实际交易用户数|
+|txAddressCount|number|是|交易地址数|
+|actualTxAddressCount|number|是|实际交易地址数|
+|getEthAmount|number|是|募集到的ETH数量|
+|actualGetEthAmount|number|是|实际募集到的ETH数量|
+|payTokenAmount|number|是|需要分发的token数量|
+|actualPayTokenAmount|number|是|实际需要分发的token数量|
 |dayTime|number|是|统计时间戳|

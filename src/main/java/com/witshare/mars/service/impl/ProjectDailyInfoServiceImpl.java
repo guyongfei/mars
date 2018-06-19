@@ -20,6 +20,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 
@@ -75,7 +77,10 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
             return null;
         }
         if (dateTime == null) {
-            dateTime = new Timestamp(System.currentTimeMillis());
+            GregorianCalendar calendar = new GregorianCalendar();
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            calendar.add(Calendar.MILLISECOND, -1);
+            dateTime = new Timestamp(calendar.getTimeInMillis());
         }
         //取最新的一条价格数据
         ProjectDailyInfoExample projectDailyInfoExample = new ProjectDailyInfoExample();
@@ -96,9 +101,9 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
         ProjectDailyInfoBean projectDailyInfoBean = this.get(projectGid, timestamp);
         if (projectDailyInfoBean == null) {
             this.saveOrUpdate(projectGid, timestamp);
-            return this.get(projectGid, timestamp).getPrice();
+            return this.get(projectGid, null).getPriceRate();
         }
-        return projectDailyInfoBean.getPrice();
+        return projectDailyInfoBean.getPriceRate();
     }
 
     /**
@@ -130,7 +135,8 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
         Timestamp currentDay = dateTime.compareTo(startTime) <= 0 ? startTime : (dateTime.compareTo(endTime) >= 0 ? endTime : dateTime);
         ProjectDailyInfoBean projectDailyInfoBean = ProjectDailyInfoBean.newInstance()
                 .setProjectGid(projectGid)
-                .setPrice(price)
+                .setProjectToken(sysProjectBean.getProjectToken())
+                .setPriceRate(price)
                 .setCreateTime(current)
                 .setUpdateTime(current)
                 .setCurrentDay(currentDay);
@@ -140,7 +146,7 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
             BeanUtils.copyProperties(projectDailyInfoBean, projectDailyInfo);
             return projectDailyInfoMapper.insertSelective(projectDailyInfo);
         } else {
-            projectDailyInfoBeanDb.setPrice(price).setUpdateTime(current);
+            projectDailyInfoBeanDb.setPriceRate(price).setUpdateTime(current);
             BeanUtils.copyProperties(projectDailyInfoBeanDb, projectDailyInfo);
             return projectDailyInfoMapper.updateByPrimaryKeySelective(projectDailyInfo);
         }
