@@ -18,10 +18,12 @@
 
     <update id="saveOrUpdate" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO `sys_user`
-        (`nickname`,`email`,head_img_url,
+        (user_gid,
+        `nickname`,`email`,head_img_url,
         create_time,update_time)
         VALUES
-        ( #{nickname},#{email},#{headImgUrl},
+        ( #{userGid},
+        #{nickname},#{email},#{headImgUrl},
         NOW(),NOW())
         ON DUPLICATE KEY UPDATE
         update_time=VALUES(update_time);

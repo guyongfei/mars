@@ -20,11 +20,8 @@ public class SysProjectBeanFrontInfoVo {
     private BigDecimal minPurchaseAmount;
     private Timestamp startTime;
     private Timestamp endTime;
-    private BigDecimal startPrice;
-    private BigDecimal endPrice;
     private int projectStatus;
     private String projectInstruction;
-    private String whitePaperLink;
     private String projectContent;
 
     private BigDecimal priceRate;
@@ -176,24 +173,6 @@ public class SysProjectBeanFrontInfoVo {
         return this;
     }
 
-    public BigDecimal getStartPrice() {
-        return startPrice;
-    }
-
-    public SysProjectBeanFrontInfoVo setStartPrice(BigDecimal startPrice) {
-        this.startPrice = startPrice;
-        return this;
-    }
-
-    public BigDecimal getEndPrice() {
-        return endPrice;
-    }
-
-    public SysProjectBeanFrontInfoVo setEndPrice(BigDecimal endPrice) {
-        this.endPrice = endPrice;
-        return this;
-    }
-
     public int getProjectStatus() {
         return projectStatus;
     }
@@ -218,15 +197,6 @@ public class SysProjectBeanFrontInfoVo {
 
     public SysProjectBeanFrontInfoVo setProjectInstruction(String projectInstruction) {
         this.projectInstruction = projectInstruction;
-        return this;
-    }
-
-    public String getWhitePaperLink() {
-        return whitePaperLink;
-    }
-
-    public SysProjectBeanFrontInfoVo setWhitePaperLink(String whitePaperLink) {
-        this.whitePaperLink = whitePaperLink;
         return this;
     }
 
