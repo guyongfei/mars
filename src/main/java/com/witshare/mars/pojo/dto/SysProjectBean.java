@@ -781,5 +781,11 @@ public class SysProjectBean {
         return this;
     }
 
+    public SysProjectBean setTime(Timestamp timestamp) {
+        this.createTime = timestamp;
+        this.updateTime = timestamp;
+        return this;
+    }
+
 
 }

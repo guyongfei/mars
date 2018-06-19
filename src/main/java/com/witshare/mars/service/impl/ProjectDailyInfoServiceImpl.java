@@ -96,9 +96,9 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
         ProjectDailyInfoBean projectDailyInfoBean = this.get(projectGid, timestamp);
         if (projectDailyInfoBean == null) {
             this.saveOrUpdate(projectGid, timestamp);
-            return this.get(projectGid, timestamp).getPrice();
+            return this.get(projectGid, timestamp).getPriceRate();
         }
-        return projectDailyInfoBean.getPrice();
+        return projectDailyInfoBean.getPriceRate();
     }
 
     /**
@@ -130,7 +130,8 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
         Timestamp currentDay = dateTime.compareTo(startTime) <= 0 ? startTime : (dateTime.compareTo(endTime) >= 0 ? endTime : dateTime);
         ProjectDailyInfoBean projectDailyInfoBean = ProjectDailyInfoBean.newInstance()
                 .setProjectGid(projectGid)
-                .setPrice(price)
+                .setProjectToken(sysProjectBean.getProjectToken())
+                .setPriceRate(price)
                 .setCreateTime(current)
                 .setUpdateTime(current)
                 .setCurrentDay(currentDay);
@@ -140,7 +141,7 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
             BeanUtils.copyProperties(projectDailyInfoBean, projectDailyInfo);
             return projectDailyInfoMapper.insertSelective(projectDailyInfo);
         } else {
-            projectDailyInfoBeanDb.setPrice(price).setUpdateTime(current);
+            projectDailyInfoBeanDb.setPriceRate(price).setUpdateTime(current);
             BeanUtils.copyProperties(projectDailyInfoBeanDb, projectDailyInfo);
             return projectDailyInfoMapper.updateByPrimaryKeySelective(projectDailyInfo);
         }

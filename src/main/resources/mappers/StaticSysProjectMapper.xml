@@ -47,7 +47,7 @@
         VALUES
         (#{projectGid},#{projectToken},#{tokenAddress},#{platformAddress},#{projectAddress},
         #{projectLogoLink},#{projectImgLink},
-        #{softCap},#{hardCap},#{minPurchaseAmount},#{startTime},#{endTime},#{startPrice},#{endPrice},
+        #{softCap},#{hardCap},#{minPurchaseAmount},#{startTime},#{endTime},#{startPriceRate},#{endPriceRate},
         NOW(),NOW() );
     </insert>
 

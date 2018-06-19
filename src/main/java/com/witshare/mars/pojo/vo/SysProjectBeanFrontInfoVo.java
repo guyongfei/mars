@@ -15,7 +15,6 @@ public class SysProjectBeanFrontInfoVo {
     private String platformAddress;
     private String projectAddress;
     private String projectLogoLink;
-    private String projectImgLink;
     private BigDecimal softCap;
     private BigDecimal hardCap;
     private BigDecimal minPurchaseAmount;
@@ -28,7 +27,7 @@ public class SysProjectBeanFrontInfoVo {
     private String whitePaperLink;
     private String projectContent;
 
-    private BigDecimal price;
+    private BigDecimal priceRate;
     private BigDecimal soldAmount;
     private Long nextPriceInterval;
 
@@ -42,12 +41,12 @@ public class SysProjectBeanFrontInfoVo {
         return new SysProjectBeanFrontInfoVo();
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getPriceRate() {
+        return priceRate;
     }
 
-    public SysProjectBeanFrontInfoVo setPrice(BigDecimal price) {
-        this.price = price;
+    public SysProjectBeanFrontInfoVo setPriceRate(BigDecimal priceRate) {
+        this.priceRate = priceRate;
         return this;
     }
 
@@ -129,15 +128,6 @@ public class SysProjectBeanFrontInfoVo {
 
     public SysProjectBeanFrontInfoVo setProjectLogoLink(String projectLogoLink) {
         this.projectLogoLink = projectLogoLink;
-        return this;
-    }
-
-    public String getProjectImgLink() {
-        return projectImgLink;
-    }
-
-    public SysProjectBeanFrontInfoVo setProjectImgLink(String projectImgLink) {
-        this.projectImgLink = projectImgLink;
         return this;
     }
 

@@ -2,13 +2,9 @@ package com.witshare.mars.job;
 
 import com.witshare.mars.config.DistributedLocker;
 import com.witshare.mars.constant.EnumResponseText;
-import com.witshare.mars.constant.EnumStorage;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
-import com.witshare.mars.job.coindata.ExchangeSpiderJob;
-import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.service.EmailService;
-import com.witshare.mars.service.QingyunStorageService;
 import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.WitshareUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -16,10 +12,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 import static com.witshare.mars.config.ConfigTaskPool.TASK_EXECUTOR;
@@ -36,11 +30,7 @@ public class Task {
     @Autowired
     private EmailService emailService;
     @Autowired
-    private QingyunStorageService qingyunStorageService;
-    @Autowired
     private DistributedLocker distributedLocker;
-    @Autowired
-    private ExchangeSpiderJob exchangeSpiderJob;
     @Autowired
     private RedisCommonDao redisCommonDao;
 
@@ -59,39 +49,5 @@ public class Task {
         }
         LOGGER.info("sendEmailVerifyCode success.email:{},verifyCode:{}.", email, verifyCode);
     }
-
-    @Async(TASK_EXECUTOR)
-    public void qingYunStorage(SysProjectBean sysProjectBean, String content, EnumStorage type, CountDownLatch countDownLatch) {
-        if (StringUtils.isNotEmpty(content)) {
-            String objectName = "";
-            switch (type) {
-                case Log:
-                    objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getProjectGid(), type);
-                    sysProjectBean.setProjectLogoLink(objectName);
-                    break;
-                case View:
-                    objectName = qingyunStorageService.uploadToQingyun(content, sysProjectBean.getProjectGid(), type);
-                    sysProjectBean.setProjectImgLink(objectName);
-                    break;
-                default:
-                    break;
-            }
-        }
-        countDownLatch.countDown();
-    }
-
-    /**
-     * 执行获取交易所价格的任务
-     */
-    @Scheduled(cron = "0 0 0/1 * * ?")
-    public void spiderCoinData() {
-        String lockId = distributedLocker.lock(EXCHANGE_SPIDER_LOCK, redis_lock);
-        if (lockId == null) {
-            LOGGER.info("spiderCoinData pushTask-other_is_excuting");
-            return;
-        }
-//        exchangeSpiderJob.getCoinDataJob();
-    }
-
 
 }

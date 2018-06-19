@@ -26,6 +26,7 @@ import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.pojo.vo.SysProjectListVo;
 import com.witshare.mars.service.ProjectDailyInfoService;
 import com.witshare.mars.service.ProjectWebSiteService;
+import com.witshare.mars.service.QingyunStorageService;
 import com.witshare.mars.service.SysProjectService;
 import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.WitshareUtils;
@@ -40,10 +41,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 import static com.witshare.mars.constant.CacheConsts.WHITE_PAPER_LINK;
 
@@ -61,6 +60,8 @@ public class SysProjectServiceImpl implements SysProjectService {
     private SysProjectMapper sysProjectMapper;
     @Autowired
     private StaticProjectDescriptionMapper staticProjectDescriptionMapper;
+    @Autowired
+    private QingyunStorageService qingyunStorageService;
     @Autowired
     private StaticSysProjectMapper staticSysProjectMapper;
     @Autowired
@@ -100,13 +101,12 @@ public class SysProjectServiceImpl implements SysProjectService {
         BigDecimal softCap = sysProjectBean.getSoftCap();
         BigDecimal startPriceRate = sysProjectBean.getStartPriceRate();
         BigDecimal endPriceRate = sysProjectBean.getEndPriceRate();
-        Date endTime = new Date(sysProjectBean.getEndTimeLong());
-        Date startTime = new Date(sysProjectBean.getStartTimeLong());
+        Timestamp endTime = new Timestamp(sysProjectBean.getEndTimeLong());
+        Timestamp startTime = new Timestamp(sysProjectBean.getStartTimeLong());
         BigDecimal hardCap = sysProjectBean.getHardCap();
         BigDecimal minPurchaseAmount = sysProjectBean.getMinPurchaseAmount();
         String token = sysProjectBean.getProjectToken();
         String log = sysProjectBean.getLog();
-        String view = sysProjectBean.getView();
         String instructionEn = sysProjectBean.getInstructionEn();
         String contentEn = sysProjectBean.getContentEn();
         String officialLink = sysProjectBean.getOfficialLink();
@@ -131,7 +131,7 @@ public class SysProjectServiceImpl implements SysProjectService {
                 || minPurchaseAmount == null || softCap.compareTo(minPurchaseAmount) <= 0
                 || StringUtils.isEmpty(token)
                 || StringUtils.isEmpty(log)
-                || StringUtils.isEmpty(view)
+//                || StringUtils.isEmpty(view)
                 || StringUtils.isEmpty(instructionEn)
                 || StringUtils.isEmpty(contentEn)
                 || StringUtils.isEmpty(officialLink)
@@ -147,21 +147,25 @@ public class SysProjectServiceImpl implements SysProjectService {
 
         //检验是否有主键重复的
         checkExist(sysProjectBean);
-        //多线程提交对象存储，返回link
-        CountDownLatch countDownLatch = new CountDownLatch(2);
-        task.qingYunStorage(sysProjectBean, log, EnumStorage.Log, countDownLatch);
-        task.qingYunStorage(sysProjectBean, view, EnumStorage.View, countDownLatch);
-        try {
-            countDownLatch.await();
-        } catch (Exception e) {
-            throw new WitshareException(e.getMessage());
-        }
-        //todo 获取平台地址
-        sysProjectBean.setPlatformAddress("");
         sysProjectBean.setProjectGid(WitshareUtils.getUUID());
 
+        //存储s3
+        String objectName = qingyunStorageService.uploadToQingyun(log, sysProjectBean.getProjectGid(), EnumStorage.Log);
+        sysProjectBean.setProjectLogoLink(objectName);
+
+        //todo 获取平台地址
+        sysProjectBean.setPlatformAddress("")
+                .setProjectImgLink("")
+                .setIsAvailable(1)
+                .setStartTime(startTime)
+                .setEndTime(endTime)
+                .setCreateTime(current)
+                .setUpdateTime(current);
+        SysProject sysProject = new SysProject();
+        BeanUtils.copyProperties(sysProjectBean, sysProject);
+
         //存表
-        staticSysProjectMapper.saveOrUpdate(sysProjectBean);
+        sysProjectMapper.insertSelective(sysProject);
 
         staticProjectDescriptionMapper.saveOrUpdate(sysProjectBean);
 
@@ -386,7 +390,6 @@ public class SysProjectServiceImpl implements SysProjectService {
     }
 
 
-
     /**
      * @see SysProjectService#selectSysProjects(ProjectReqBean)
      **/
@@ -411,15 +414,8 @@ public class SysProjectServiceImpl implements SysProjectService {
         List<SysProjectBeanFrontListVo> projectList = projectPageInfo.getList();
         projectList.forEach(p -> {
             p.setProjectLogoLink(getPictureUrl(p.getProjectLogoLink()));
-            p.setProjectImgLink(getPictureUrl(p.getProjectImgLink()));
         });
         return projectPageInfo;
-
-//        //存缓存
-//        if (projectReqBean.getStarProject() != null && projectReqBean.getStarProject()) {
-//            redisCommonDao.putHash(indexProjectKey, i18N, JsonUtils.objToJsonByGson(projectList));
-//        }
-//        return null;
 
     }
 
@@ -461,7 +457,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         frontInfoVo.setWebsites(webSiteMap);
         //获取 价格、已售信息、下一个价格时间间隔
         Timestamp current = new Timestamp(System.currentTimeMillis());
-        frontInfoVo.setPrice(projectDailyInfoService.getPrice(projectGid, current));
+        frontInfoVo.setPriceRate(projectDailyInfoService.getPrice(projectGid, current));
 
         frontInfoVo.setNextPriceInterval(123456789L);
         frontInfoVo.setSoldAmount(new BigDecimal(123456));

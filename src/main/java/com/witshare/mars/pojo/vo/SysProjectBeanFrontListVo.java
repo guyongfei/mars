@@ -16,7 +16,6 @@ public class SysProjectBeanFrontListVo {
     private String platformAddress;
     private String projectAddress;
     private String projectLogoLink;
-    private String projectImgLink;
     private BigDecimal softCap;
     private BigDecimal hardCap;
     private BigDecimal minPurchaseAmount;
@@ -89,14 +88,7 @@ public class SysProjectBeanFrontListVo {
         return this;
     }
 
-    public String getProjectImgLink() {
-        return projectImgLink;
-    }
 
-    public SysProjectBeanFrontListVo setProjectImgLink(String projectImgLink) {
-        this.projectImgLink = projectImgLink;
-        return this;
-    }
 
     public BigDecimal getSoftCap() {
         return softCap;

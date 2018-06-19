@@ -53,8 +53,6 @@ public class SysUserServiceImpl implements SysUserService {
     @Autowired
     private VerifyCodeService verifyCodeService;
     @Autowired
-    private QingyunStorageService qingyunStorageService;
-    @Autowired
     private RedisCommonDao redisCommonDao;
     @Autowired
     private PropertiesConfig propertiesConfig;
@@ -62,6 +60,8 @@ public class SysUserServiceImpl implements SysUserService {
     private SysProjectService sysProjectServiceImpl;
     @Autowired
     private SysUserService sysUserService;
+    @Autowired
+    private QingyunStorageService qingyunStorageService;
 
     /**
      * @see SysUserService#register(Map)
@@ -277,8 +277,8 @@ public class SysUserServiceImpl implements SysUserService {
         SysUser sysUser = new SysUser();
         Long currentUserId = currentUser.getId();
         sysUser.setId(currentUserId);
-        String headImgUrl = qingyunStorageService.uploadToQingyun(avatarStr, currentUserId.toString(), EnumStorage.Avatar);
-        sysUser.setHeadImgUrl(headImgUrl);
+        String objectName = qingyunStorageService.uploadToQingyun(avatarStr, currentUserId.toString(), EnumStorage.Avatar);
+        sysUser.setHeadImgUrl(objectName);
         sysUser.setUpdateTime(new Timestamp(new Date().getTime()));
         sysUserMapper.updateByPrimaryKeySelective(sysUser);
         if (redisCommonDao.isMember(RedisKeyUtil.getIndexUserSetKey(), currentUserId.toString())) {

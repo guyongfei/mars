@@ -15,7 +15,7 @@ public class ProjectDailyInfoBean {
     private String projectToken;
 
 
-    private BigDecimal price;
+    private BigDecimal priceRate;
 
     private BigDecimal subscriptionAmount;
 
@@ -71,12 +71,12 @@ public class ProjectDailyInfoBean {
         return this;
     }
 
-    public BigDecimal getPrice() {
-        return price;
+    public BigDecimal getPriceRate() {
+        return priceRate;
     }
 
-    public ProjectDailyInfoBean setPrice(BigDecimal price) {
-        this.price = price;
+    public ProjectDailyInfoBean setPriceRate(BigDecimal priceRate) {
+        this.priceRate = priceRate;
         return this;
     }
 
