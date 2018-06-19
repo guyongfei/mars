@@ -26,7 +26,7 @@ public class VerifyCodeController {
      * 注册时发送验证码
      */
     @ResponseBody
-    @RequestMapping(value = "/email", method = RequestMethod.GET)
+    @RequestMapping(value = "/email", method = RequestMethod.POST)
     public ResponseBean sendRegisterVerificationCode(@RequestParam(value = "action") String action,
                                                      @RequestBody Map<String, String> requestBody) throws Exception {
 

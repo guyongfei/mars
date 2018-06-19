@@ -4,12 +4,13 @@
 
 ## 1.获取邮箱验证码
 
-- url : /verify-code/email?action=register|other & email={email}
+- url : /verify-code/email?action=register|other
 
-- method:get
-- request body
+- method:post
+- request param
   - action = register :注册时用
   - action = other :其他场景
+- request body
   - email ：用户的邮箱，用于收取验证码
 - response body
 
