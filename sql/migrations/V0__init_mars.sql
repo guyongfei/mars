@@ -4,7 +4,7 @@ CREATE TABLE `project_daily_info` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `project_gid` CHAR(32) NOT NULL COMMENT '项目唯一标识',
   `project_token` VARCHAR(126) NOT NULL COMMENT '项目token',
-  `price` DECIMAL(20,10) NOT NULL DEFAULT '0.0000000000' COMMENT '今日单价(ETH)',
+  `price_rate` DECIMAL(20,10) NOT NULL DEFAULT '0.0000000000' COMMENT '今日eth:token的价格比',
   `get_eth_amount` DECIMAL(30,10) UNSIGNED NOT NULL COMMENT '当日认购数量',
   `actual_get_eth_amount` DECIMAL(30,10) UNSIGNED NOT NULL COMMENT '当日实际认购数量',
   `distribute_amount` DECIMAL(30,10) UNSIGNED NOT NULL COMMENT '当日应分发token数量',

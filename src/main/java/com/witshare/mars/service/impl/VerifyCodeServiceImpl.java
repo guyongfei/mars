@@ -77,7 +77,10 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
             String nickname = System.currentTimeMillis() + WitshareUtils.generateRandomEnChar(2);
             SysUserBean userDb = sysUserService.getByNickname(nickname, null);
             if (userDb == null) {
-                sysUserBean = new SysUserBean(email, nickname, "");
+                sysUserBean = SysUserBean.newInstance().setUserGid(WitshareUtils.getUUID())
+                        .setEmail(email)
+                        .setNickname(nickname)
+                        .setHeadImgUrl("");
                 break;
             }
         }

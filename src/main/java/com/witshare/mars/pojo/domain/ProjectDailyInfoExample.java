@@ -424,183 +424,183 @@ public class ProjectDailyInfoExample {
             return (Criteria) this;
         }
 
-        public Criteria andPriceIsNull() {
-            addCriterion("price is null");
+        public Criteria andPriceRateIsNull() {
+            addCriterion("price_rate is null");
             return (Criteria) this;
         }
 
-        public Criteria andPriceIsNotNull() {
-            addCriterion("price is not null");
+        public Criteria andPriceRateIsNotNull() {
+            addCriterion("price_rate is not null");
             return (Criteria) this;
         }
 
-        public Criteria andPriceEqualTo(BigDecimal value) {
-            addCriterion("price =", value, "price");
+        public Criteria andPriceRateEqualTo(BigDecimal value) {
+            addCriterion("price_rate =", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotEqualTo(BigDecimal value) {
-            addCriterion("price <>", value, "price");
+        public Criteria andPriceRateNotEqualTo(BigDecimal value) {
+            addCriterion("price_rate <>", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceGreaterThan(BigDecimal value) {
-            addCriterion("price >", value, "price");
+        public Criteria andPriceRateGreaterThan(BigDecimal value) {
+            addCriterion("price_rate >", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("price >=", value, "price");
+        public Criteria andPriceRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("price_rate >=", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceLessThan(BigDecimal value) {
-            addCriterion("price <", value, "price");
+        public Criteria andPriceRateLessThan(BigDecimal value) {
+            addCriterion("price_rate <", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("price <=", value, "price");
+        public Criteria andPriceRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("price_rate <=", value, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceIn(List<BigDecimal> values) {
-            addCriterion("price in", values, "price");
+        public Criteria andPriceRateIn(List<BigDecimal> values) {
+            addCriterion("price_rate in", values, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotIn(List<BigDecimal> values) {
-            addCriterion("price not in", values, "price");
+        public Criteria andPriceRateNotIn(List<BigDecimal> values) {
+            addCriterion("price_rate not in", values, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price between", value1, value2, "price");
+        public Criteria andPriceRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price_rate between", value1, value2, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andPriceNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("price not between", value1, value2, "price");
+        public Criteria andPriceRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("price_rate not between", value1, value2, "priceRate");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountIsNull() {
-            addCriterion("subscription_amount is null");
+        public Criteria andGetEthAmountIsNull() {
+            addCriterion("get_eth_amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountIsNotNull() {
-            addCriterion("subscription_amount is not null");
+        public Criteria andGetEthAmountIsNotNull() {
+            addCriterion("get_eth_amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountEqualTo(BigDecimal value) {
-            addCriterion("subscription_amount =", value, "subscriptionAmount");
+        public Criteria andGetEthAmountEqualTo(BigDecimal value) {
+            addCriterion("get_eth_amount =", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountNotEqualTo(BigDecimal value) {
-            addCriterion("subscription_amount <>", value, "subscriptionAmount");
+        public Criteria andGetEthAmountNotEqualTo(BigDecimal value) {
+            addCriterion("get_eth_amount <>", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountGreaterThan(BigDecimal value) {
-            addCriterion("subscription_amount >", value, "subscriptionAmount");
+        public Criteria andGetEthAmountGreaterThan(BigDecimal value) {
+            addCriterion("get_eth_amount >", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("subscription_amount >=", value, "subscriptionAmount");
+        public Criteria andGetEthAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("get_eth_amount >=", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountLessThan(BigDecimal value) {
-            addCriterion("subscription_amount <", value, "subscriptionAmount");
+        public Criteria andGetEthAmountLessThan(BigDecimal value) {
+            addCriterion("get_eth_amount <", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("subscription_amount <=", value, "subscriptionAmount");
+        public Criteria andGetEthAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("get_eth_amount <=", value, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountIn(List<BigDecimal> values) {
-            addCriterion("subscription_amount in", values, "subscriptionAmount");
+        public Criteria andGetEthAmountIn(List<BigDecimal> values) {
+            addCriterion("get_eth_amount in", values, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountNotIn(List<BigDecimal> values) {
-            addCriterion("subscription_amount not in", values, "subscriptionAmount");
+        public Criteria andGetEthAmountNotIn(List<BigDecimal> values) {
+            addCriterion("get_eth_amount not in", values, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("subscription_amount between", value1, value2, "subscriptionAmount");
+        public Criteria andGetEthAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("get_eth_amount between", value1, value2, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andSubscriptionAmountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("subscription_amount not between", value1, value2, "subscriptionAmount");
+        public Criteria andGetEthAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("get_eth_amount not between", value1, value2, "getEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountIsNull() {
-            addCriterion("actual_subscription_amount is null");
+        public Criteria andActualGetEthAmountIsNull() {
+            addCriterion("actual_get_eth_amount is null");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountIsNotNull() {
-            addCriterion("actual_subscription_amount is not null");
+        public Criteria andActualGetEthAmountIsNotNull() {
+            addCriterion("actual_get_eth_amount is not null");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountEqualTo(BigDecimal value) {
-            addCriterion("actual_subscription_amount =", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountEqualTo(BigDecimal value) {
+            addCriterion("actual_get_eth_amount =", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountNotEqualTo(BigDecimal value) {
-            addCriterion("actual_subscription_amount <>", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountNotEqualTo(BigDecimal value) {
+            addCriterion("actual_get_eth_amount <>", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountGreaterThan(BigDecimal value) {
-            addCriterion("actual_subscription_amount >", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountGreaterThan(BigDecimal value) {
+            addCriterion("actual_get_eth_amount >", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountGreaterThanOrEqualTo(BigDecimal value) {
-            addCriterion("actual_subscription_amount >=", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("actual_get_eth_amount >=", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountLessThan(BigDecimal value) {
-            addCriterion("actual_subscription_amount <", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountLessThan(BigDecimal value) {
+            addCriterion("actual_get_eth_amount <", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountLessThanOrEqualTo(BigDecimal value) {
-            addCriterion("actual_subscription_amount <=", value, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("actual_get_eth_amount <=", value, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountIn(List<BigDecimal> values) {
-            addCriterion("actual_subscription_amount in", values, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountIn(List<BigDecimal> values) {
+            addCriterion("actual_get_eth_amount in", values, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountNotIn(List<BigDecimal> values) {
-            addCriterion("actual_subscription_amount not in", values, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountNotIn(List<BigDecimal> values) {
+            addCriterion("actual_get_eth_amount not in", values, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("actual_subscription_amount between", value1, value2, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("actual_get_eth_amount between", value1, value2, "actualGetEthAmount");
             return (Criteria) this;
         }
 
-        public Criteria andActualSubscriptionAmountNotBetween(BigDecimal value1, BigDecimal value2) {
-            addCriterion("actual_subscription_amount not between", value1, value2, "actualSubscriptionAmount");
+        public Criteria andActualGetEthAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("actual_get_eth_amount not between", value1, value2, "actualGetEthAmount");
             return (Criteria) this;
         }
 
