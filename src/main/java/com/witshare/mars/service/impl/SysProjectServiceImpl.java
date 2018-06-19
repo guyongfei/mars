@@ -122,8 +122,8 @@ public class SysProjectServiceImpl implements SysProjectService {
         if (StringUtils.isEmpty(sysProjectBean.getProjectNameEn())
                 || StringUtils.isEmpty(sysProjectBean.getTokenAddress())
                 || StringUtils.isEmpty(sysProjectBean.getProjectAddress())
-                || current.before(startTime)
-                || startTime.before(endTime)
+                || startTime.after(endTime)
+                || current.after(startTime)
                 || startPriceRate == null || startPriceRate.compareTo(endPriceRate) < 0
                 || endPriceRate == null || endPriceRate.compareTo(BigDecimal.ZERO) < 0
                 || softCap == null || softCap.compareTo(BigDecimal.ZERO) <= 0
