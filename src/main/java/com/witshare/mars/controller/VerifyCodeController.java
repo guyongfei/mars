@@ -3,6 +3,7 @@ package com.witshare.mars.controller;
 import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.util.ResponseBean;
+import com.witshare.mars.service.EmailService;
 import com.witshare.mars.service.VerifyCodeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,6 +22,8 @@ public class VerifyCodeController {
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Autowired
     private VerifyCodeService verifyCodeService;
+    @Autowired
+    private EmailService emailService;
 
     /**
      * 注册时发送验证码

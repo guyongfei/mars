@@ -34,7 +34,7 @@ public class Task {
     @Autowired
     private RedisCommonDao redisCommonDao;
 
-    @Async(TASK_EXECUTOR)
+//    @Async(TASK_EXECUTOR)
     public void sendEmailVerifyCode(String email, boolean register) {
         if (StringUtils.isEmpty(email)) {
             throw new WitshareException(EnumResponseText.ErrorEmail);
@@ -42,7 +42,9 @@ public class Task {
         String verifyCode = WitshareUtils.generateRandomNums(6);
         try {
             String redisKey = register ? RedisKeyUtil.getRegisterEmailVerifyCodeKey(email, verifyCode) : RedisKeyUtil.getUserEmailVerifyCodeKey(email, verifyCode);
-            emailService.sendVerifyCode(email, verifyCode);
+            //todo 为了解决谷歌云平台不能发送smtp的问题，在在正式环境注销掉吧
+//            emailService.sendVerifyCode(email, verifyCode);
+            emailService.service(email, verifyCode);
             redisCommonDao.put(redisKey, verifyCode, PHONE_NO_VERIFY_CODE_EXPIRE_MINUTE, TimeUnit.MINUTES);
         } catch (Exception e) {
             LOGGER.error("sendEmailVerifyCode fail.email:{},verifyCode:{}", email, verifyCode, e);

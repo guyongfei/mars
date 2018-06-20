@@ -1,5 +1,7 @@
 package com.witshare.mars.service.impl;
 
+import com.sendgrid.SendGrid;
+import com.sendgrid.SendGridException;
 import com.witshare.mars.constant.PropertiesConfig;
 import com.witshare.mars.service.EmailService;
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.mail.internet.MimeMessage;
+import java.io.IOException;
 
 import static org.apache.commons.codec.CharEncoding.UTF_8;
 
@@ -61,5 +64,30 @@ public class EmailServiceImpl implements EmailService {
                 LOGGER.error("sendVerifyCode fail.email:{},verifyCode:{}", email, verifyCode, ex);
             }
         }
+    }
+
+    @Override
+    public boolean service(String toEmail, String verifyCode) throws IOException, SendGridException {
+        SendGrid sendgrid = new SendGrid(propertiesConfig.sendGridUserName, propertiesConfig.sendGridPassword);
+        if (toEmail == null) {
+            return false;
+        }
+        SendGrid.Email email = new SendGrid.Email();
+        email.addTo(toEmail)
+                .setFrom(propertiesConfig.sendGridSender)
+                .setFromName(propertiesConfig.mailSubjectName)
+                .setSubject(VERIFY_CODE)
+                .setText(String.format(VERIFY_CODE_STR, verifyCode));
+        try {
+            SendGrid.Response response = sendgrid.send(email);
+            if (response.getCode() == 200) {
+                LOGGER.error("sendVerifyCode from sendgrid success.email:{},verifyCode:{}", email, verifyCode);
+                return true;
+            }
+        } catch (SendGridException e) {
+            e.printStackTrace();
+        }
+        LOGGER.error("sendVerifyCode from sendgrid fail.email:{},verifyCode:{}", email, verifyCode);
+        return false;
     }
 }

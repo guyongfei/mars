@@ -60,6 +60,13 @@ public class PropertiesConfig extends RuntimeException implements CommandLineRun
     public String frontPath;
     @Value("${project.default.avatar}")
     public String defaultAvatar;
+    @Value("${mail.sendgrid.username}")
+    public String sendGridUserName;
+    @Value("${mail.sendgrid.password}")
+    public String sendGridPassword;
+    @Value("${mail.sendgrid.sender}")
+    public String sendGridSender;
+
 
     @Override
     public void run(String... args) {
@@ -86,6 +93,8 @@ public class PropertiesConfig extends RuntimeException implements CommandLineRun
                 ", contextPath='" + contextPath + '\'' +
                 ", frontPath='" + frontPath + '\'' +
                 ", defaultAvatar='" + defaultAvatar + '\'' +
+                ", sendGridUserName='" + sendGridUserName + '\'' +
+                ", sendGridSender='" + sendGridSender + '\'' +
                 '}';
     }
 }
