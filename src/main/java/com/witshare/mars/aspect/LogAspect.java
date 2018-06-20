@@ -87,6 +87,7 @@ public class LogAspect implements ThrowsAdvice {
             requestHeader.put(headerName, headerValue);
         }
         requestMap.put("requestHeader", requestHeader);
+        requestMap.put("requestCookie", new Gson().toJson(request.getCookies()));
 
         //将请求地址变量置入
         HashMap<Object, Object> pathVariable = new HashMap<>();

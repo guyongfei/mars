@@ -175,6 +175,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     public SysUserBean getCurrentUser() {
         String token = CurrentThreadContext.getToken();
+        LOGGER.info("getCurrentUser,token:{}", token);
         if (StringUtils.isEmpty(token)) {
             return null;
         }
