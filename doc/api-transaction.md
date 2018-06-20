@@ -28,7 +28,35 @@
 |1|校验成功||
 |2|校验失败||
 
-## 1.设置用户交易地址
+## 1.查询用户交易地址
+
+- url：/transaction/user-address
+- method:get
+- request param
+  - projectGid 项目唯一标识
+- response body
+
+  ```json
+    {
+      "message": "",
+      "success": true,
+      "data":  {
+         "payEthAddress":"",
+         "getTokenAddress":""
+       }
+    }
+  ```
+
+> data字段详解（如未设置地址，data为空）
+
+|字段|类型|是否必须|说明|
+|---|---|---|---|
+|projectGid|string|是|项目唯一标识|
+|payEthAddress|string|是|支付Eth地址|
+|getTokenAddress|string|是|获取token地址|
+
+
+## 2.设置用户交易地址
 
 - url：/transaction/user-address
 - method:post
@@ -36,6 +64,7 @@
 
   ```json
   {
+    "projectGid":"",
     "payEthAddress":"",
     "getTokenAddress":""
   }
@@ -54,11 +83,12 @@
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
+|projectGid|string|是|项目唯一标识|
 |payEthAddress|string|是|支付Eth地址|
 |getTokenAddress|string|是|获取token地址|
 
 
-## 2.提交交易
+## 3.提交交易
 
 - url：/transaction
 - method:post
@@ -67,8 +97,8 @@
   ```json
   {
     "projectGid":"",
-    "priceRate":200,
-    "payAmount":2,
+    "priceRate":200.0,
+    "payAmount":2.0,
     "payCoinType":0,
     "payTx":"0xdc9f30b716597999eafa0cabaa0b33423845e2f13d4c30d845018d4cf7bad959",
     "hopeGetAmount":400
@@ -96,7 +126,7 @@
 |payTx|number|是|交易号|
 |hopeGetAmount|number|是|期望得到的token数量|
 
-## 3.个人交易列表
+## 4.个人交易列表
 
 > 只能查看自己的（通过cookie）
 
@@ -137,7 +167,7 @@
 |userTxStatus|string|是|认筹交易状态|
 |createTime|number|是|认筹时间|
 
-## 4.交易详情
+## 5.交易详情
 
 > 只能查看自己的（通过cookie）
 

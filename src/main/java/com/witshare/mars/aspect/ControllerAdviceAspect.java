@@ -1,6 +1,7 @@
 package com.witshare.mars.aspect;
 
 import com.witshare.mars.config.CurrentThreadContext;
+import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.util.ResponseBean;
 import org.aspectj.lang.Signature;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.NativeWebRequest;
 
 import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.Map;
 
 import static com.witshare.mars.aspect.LogAspect.writeApiLog;
@@ -34,6 +36,8 @@ public class ControllerAdviceAspect {
         Object result = null;
         if (e instanceof WitshareException) {
             result = ResponseBean.newInstanceError(e.getMessage());
+        } else if (e instanceof SQLException) {
+            result = ResponseBean.newInstanceError(EnumResponseText.ErrorSql.getEn());
         } else {
             result = ResponseBean.newInstanceError(e.getClass().getName() + ": " + e.getMessage());
             logger.error("{} fail:", signature.getDeclaringTypeName(), e);

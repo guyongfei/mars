@@ -144,8 +144,9 @@ public class SysProjectBean {
     private BigDecimal minPurchaseAmount;
     private Timestamp startTime;
     private Timestamp endTime;
-    private BigDecimal startPriceRate;
-    private BigDecimal endPriceRate;
+    private BigDecimal priceRate;
+//    private BigDecimal startPriceRate;
+//    private BigDecimal endPriceRate;
     private int projectStatus;
     private int isAvailable;
     private Timestamp createTime;
@@ -637,21 +638,12 @@ public class SysProjectBean {
         return this;
     }
 
-    public BigDecimal getStartPriceRate() {
-        return startPriceRate;
+    public BigDecimal getPriceRate() {
+        return priceRate;
     }
 
-    public SysProjectBean setStartPriceRate(BigDecimal startPriceRate) {
-        this.startPriceRate = startPriceRate;
-        return this;
-    }
-
-    public BigDecimal getEndPriceRate() {
-        return endPriceRate;
-    }
-
-    public SysProjectBean setEndPriceRate(BigDecimal endPriceRate) {
-        this.endPriceRate = endPriceRate;
+    public SysProjectBean setPriceRate(BigDecimal priceRate) {
+        this.priceRate = priceRate;
         return this;
     }
 

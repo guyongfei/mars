@@ -24,7 +24,6 @@ import com.witshare.mars.pojo.vo.SysProjectBeanFrontInfoVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanFrontListVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.pojo.vo.SysProjectListVo;
-import com.witshare.mars.service.ProjectDailyInfoService;
 import com.witshare.mars.service.ProjectWebSiteService;
 import com.witshare.mars.service.QingyunStorageService;
 import com.witshare.mars.service.SysProjectService;
@@ -71,10 +70,6 @@ public class SysProjectServiceImpl implements SysProjectService {
     @Autowired
     private ProjectWebSiteService projectWebSiteService;
     @Autowired
-    private ProjectDailyInfoService projectDailyInfoService;
-    @Autowired
-    private Task task;
-    @Autowired
     private RedisCommonDao redisCommonDao;
 
 
@@ -99,8 +94,7 @@ public class SysProjectServiceImpl implements SysProjectService {
 
         SysProjectBean sysProjectBean = new Gson().fromJson(jsonBody, SysProjectBean.class);
         BigDecimal softCap = sysProjectBean.getSoftCap();
-        BigDecimal startPriceRate = sysProjectBean.getStartPriceRate();
-        BigDecimal endPriceRate = sysProjectBean.getEndPriceRate();
+        BigDecimal priceRate = sysProjectBean.getPriceRate();
         Timestamp endTime = new Timestamp(sysProjectBean.getEndTimeLong());
         Timestamp startTime = new Timestamp(sysProjectBean.getStartTimeLong());
         BigDecimal hardCap = sysProjectBean.getHardCap();
@@ -124,14 +118,12 @@ public class SysProjectServiceImpl implements SysProjectService {
                 || StringUtils.isEmpty(sysProjectBean.getProjectAddress())
                 || startTime.after(endTime)
                 || current.after(startTime)
-                || startPriceRate == null || startPriceRate.compareTo(endPriceRate) < 0
-                || endPriceRate == null || endPriceRate.compareTo(BigDecimal.ZERO) < 0
+                || priceRate.compareTo(BigDecimal.ZERO) < 0
                 || softCap == null || softCap.compareTo(BigDecimal.ZERO) <= 0
                 || hardCap == null || softCap.compareTo(hardCap) > 0
                 || minPurchaseAmount == null || softCap.compareTo(minPurchaseAmount) <= 0
                 || StringUtils.isEmpty(token)
                 || StringUtils.isEmpty(log)
-//                || StringUtils.isEmpty(view)
                 || StringUtils.isEmpty(instructionEn)
                 || StringUtils.isEmpty(contentEn)
                 || StringUtils.isEmpty(officialLink)
@@ -455,11 +447,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         Map<String, String> webSiteMap = projectWebSiteService.select(projectGid);
         webSiteMap.put(WHITE_PAPER_LINK, descriptionBean.getWhitePaperLink());
         frontInfoVo.setWebsites(webSiteMap);
-        //获取 价格、已售信息、下一个价格时间间隔
-        Timestamp current = new Timestamp(System.currentTimeMillis());
-        frontInfoVo.setPriceRate(projectDailyInfoService.getPrice(projectGid, current));
-
-        frontInfoVo.setNextPriceInterval(123456789L);
+        //TODO 找出已经售卖的数量
         frontInfoVo.setSoldAmount(new BigDecimal(123456));
 
         redisCommonDao.putHash(projectStatisticKey, projectDetailName, gson.toJson(frontInfoVo));
