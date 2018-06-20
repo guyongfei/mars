@@ -22,8 +22,6 @@ public class SysUserBean {
     private String emailLike;
     private String start;
     private String headImgUrl;
-    private String payEthAddress;
-    private String getTokenAddress;
     private String userGid;
     private boolean admin;
     private String managementPage;
@@ -102,24 +100,6 @@ public class SysUserBean {
 
     public SysUserBean setHeadImgUrl(String headImgUrl) {
         this.headImgUrl = headImgUrl;
-        return this;
-    }
-
-    public String getPayEthAddress() {
-        return payEthAddress;
-    }
-
-    public SysUserBean setPayEthAddress(String payEthAddress) {
-        this.payEthAddress = payEthAddress;
-        return this;
-    }
-
-    public String getGetTokenAddress() {
-        return getTokenAddress;
-    }
-
-    public SysUserBean setGetTokenAddress(String getTokenAddress) {
-        this.getTokenAddress = getTokenAddress;
         return this;
     }
 

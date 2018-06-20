@@ -35,7 +35,8 @@ public enum EnumResponseText {
     CANNOTBLOCKEDYOURSELF(24, "不能冻结自己", "can't blocked yourself"),
     CannotRepeatSetting(25, "已有值，不能重复设置", "can't repeat setting"),
     ErrorPriceRate(25, "错误的价格", "error price rate."),
-    ErrorSaveS3(25, "S3保存失敗", "fail upload to s3."),
+    ErrorSaveS3(25, "S3保存失败", "fail upload to s3."),
+    ErrorSql(25, "sql异常", "error sql."),
     ErrorPayTx(25, "错误的交易号", "error pay tx."),;
 
     private int value;

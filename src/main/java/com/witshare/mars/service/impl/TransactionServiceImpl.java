@@ -4,20 +4,21 @@ import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.witshare.mars.constant.EnumProjectStatus;
 import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.dao.mysql.RecordUserTxMapper;
-import com.witshare.mars.dao.mysql.SysUserMapper;
-import com.witshare.mars.dao.redis.RedisCommonDao;
+import com.witshare.mars.dao.mysql.StaticSysUserTxMapper;
+import com.witshare.mars.dao.mysql.SysUserAddressMapper;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.domain.RecordUserTx;
 import com.witshare.mars.pojo.domain.RecordUserTxExample;
-import com.witshare.mars.pojo.domain.SysUser;
+import com.witshare.mars.pojo.domain.SysUserAddress;
+import com.witshare.mars.pojo.domain.SysUserAddressExample;
 import com.witshare.mars.pojo.dto.RecordUserTxBean;
 import com.witshare.mars.pojo.dto.SysProjectBean;
+import com.witshare.mars.pojo.dto.SysUserAddressBean;
 import com.witshare.mars.pojo.dto.SysUserBean;
-import com.witshare.mars.service.ProjectDailyInfoService;
+import com.witshare.mars.pojo.vo.SysUserAddressVo;
 import com.witshare.mars.service.SysProjectService;
 import com.witshare.mars.service.SysUserService;
 import com.witshare.mars.service.TransactionService;
-import com.witshare.mars.util.RedisKeyUtil;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -29,7 +30,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
-import static com.witshare.mars.pojo.dto.RecordUserTxBean.*;
+import static com.witshare.mars.pojo.dto.RecordUserTxBean.PROJECT_GID;
 import static com.witshare.mars.pojo.dto.SysUserBean.GET_TOKEN_ADDRESS;
 import static com.witshare.mars.pojo.dto.SysUserBean.PAY_ETH_ADDRESS;
 
@@ -42,15 +43,36 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private RecordUserTxMapper recordUserTxMapper;
     @Autowired
+    private StaticSysUserTxMapper staticSysUserTxMapper;
+    @Autowired
     private SysUserService sysUserService;
     @Autowired
     private SysProjectService sysProjectService;
     @Autowired
-    private ProjectDailyInfoService projectDailyInfoService;
-    @Autowired
-    private SysUserMapper sysUserMapper;
-    @Autowired
-    private RedisCommonDao redisCommonDao;
+    private SysUserAddressMapper sysUserAddressMapper;
+
+    @Override
+    public SysUserAddressVo getUserAddress(String projectGid) {
+        if (StringUtils.isEmpty(projectGid)) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        //不能重复设置
+        SysUserBean currentUser = sysUserService.getCurrentUser();
+        String userGid = currentUser.getUserGid();
+        SysProjectBean sysProjectBean = sysProjectService.selectByProjectGid(projectGid);
+        if (sysProjectBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
+        }
+        SysUserAddressExample sysUserAddressExample = new SysUserAddressExample();
+        sysUserAddressExample.or().andProjectGidEqualTo(projectGid).andUserGidEqualTo(userGid);
+        List<SysUserAddress> sysUserAddresses = sysUserAddressMapper.selectByExample(sysUserAddressExample);
+        if (CollectionUtils.isEmpty(sysUserAddresses)) {
+            return null;
+        }
+        SysUserAddressVo sysUserAddressVo = SysUserAddressVo.newInstance();
+        BeanUtils.copyProperties(sysUserAddresses.get(0), sysUserAddressVo);
+        return sysUserAddressVo;
+    }
 
     @Override
     public void setUserAddress(Map<String, String> requestBody) {
@@ -58,45 +80,59 @@ public class TransactionServiceImpl implements TransactionService {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
         String payEthAddress = requestBody.get(PAY_ETH_ADDRESS);
+        String projectGid = requestBody.get(PROJECT_GID);
         String getTokenAddress = requestBody.get(GET_TOKEN_ADDRESS);
-        if (StringUtils.isEmpty(payEthAddress) || StringUtils.isEmpty(getTokenAddress)) {
+        if (StringUtils.isEmpty(payEthAddress)
+                || StringUtils.isEmpty(getTokenAddress)
+                || StringUtils.isEmpty(projectGid)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
         //不能重复设置
         SysUserBean currentUser = sysUserService.getCurrentUser();
-        if (StringUtils.isNotEmpty(currentUser.getGetTokenAddress())
-                || StringUtils.isNotEmpty(currentUser.getPayEthAddress())) {
+        String userGid = currentUser.getUserGid();
+        SysProjectBean sysProjectBean = sysProjectService.selectByProjectGid(projectGid);
+        if (sysProjectBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
+        }
+
+        SysUserAddressExample sysUserAddressExample = new SysUserAddressExample();
+        sysUserAddressExample.or().andProjectGidEqualTo(projectGid).andUserGidEqualTo(userGid);
+        List<SysUserAddress> sysUserAddresses = sysUserAddressMapper.selectByExample(sysUserAddressExample);
+        if (CollectionUtils.isNotEmpty(sysUserAddresses)) {
             throw new WitshareException(EnumResponseText.CannotRepeatSetting);
         }
-        //保存值
+        //保存
         Timestamp current = new Timestamp(System.currentTimeMillis());
-        SysUserBean sysUserBean = SysUserBean.newInstance().setId(currentUser.getId())
-                .setPayEthAddress(payEthAddress)
+        SysUserAddressBean sysUserAddressBean = SysUserAddressBean.newInstance()
+                .setUserGid(userGid)
+                .setEmail(currentUser.getEmail())
+                .setProjectGid(projectGid)
+                .setProjectToken(sysProjectBean.getProjectToken())
                 .setGetTokenAddress(getTokenAddress)
+                .setPayEthAddress(payEthAddress)
+                .setCreateTime(current)
                 .setUpdateTime(current);
-        SysUser sysUser = new SysUser();
-        BeanUtils.copyProperties(sysUserBean, sysUser);
-        sysUserMapper.updateByPrimaryKeySelective(sysUser);
-
-        redisCommonDao.delRedisKey(RedisKeyUtil.getCallApiInfo(currentUser.getEmail()));
+        SysUserAddress sysUserAddress = new SysUserAddress();
+        BeanUtils.copyProperties(sysUserAddressBean, sysUserAddress);
+        sysUserAddressMapper.insertSelective(sysUserAddress);
     }
 
     /**
      * 保存交易
      */
     @Override
-    public void save(Map<String, Object> requestBody) {
+    public void save(RecordUserTxBean recordUserTxBean) {
 
-        if (MapUtils.isEmpty(requestBody)) {
+        if (recordUserTxBean == null) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
         SysUserBean currentUser = sysUserService.getCurrentUser();
-        String projectGid = (String) requestBody.get(PROJECT_GID);
-        String payTx = (String) requestBody.get(PAY_TX);
-        BigDecimal priceRate = (BigDecimal) requestBody.get(PRICE_RATE);
-        BigDecimal payAmount = (BigDecimal) requestBody.get(PAY_AMOUNT);
-        BigDecimal hopeGetAmount = (BigDecimal) requestBody.get(HOPE_GET_AMOUNT);
-        int payCoinType = (int) requestBody.get(PAY_COIN_TYPE);
+        String projectGid = recordUserTxBean.getProjectGid();
+        String payTx = recordUserTxBean.getPayTx();
+        BigDecimal priceRate = recordUserTxBean.getPriceRate();
+        BigDecimal payAmount = recordUserTxBean.getPayAmount();
+        BigDecimal hopeGetAmount = recordUserTxBean.getHopeGetAmount();
+        int payCoinType = recordUserTxBean.getPayCoinType();
         if (currentUser == null
                 || StringUtils.isEmpty(projectGid)
                 || StringUtils.isEmpty(payTx)
@@ -110,12 +146,12 @@ public class TransactionServiceImpl implements TransactionService {
         // 项目状态判断
         SysProjectBean sysProjectBean = sysProjectService.selectByProjectGid(projectGid);
         if (sysProjectBean == null
-                || sysProjectBean.getProjectStatus() != EnumProjectStatus.Status1.getStatus()
-                || sysProjectBean.getProjectStatus() != EnumProjectStatus.Status2.getStatus()) {
+                || (sysProjectBean.getProjectStatus() != EnumProjectStatus.Status1.getStatus()
+                && sysProjectBean.getProjectStatus() != EnumProjectStatus.Status2.getStatus())) {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
         //价格判断
-        BigDecimal price = projectDailyInfoService.getPrice(projectGid, null);
+        BigDecimal price = sysProjectBean.getPriceRate();
         if (price.compareTo(priceRate) != 0
                 || price.compareTo(hopeGetAmount.divide(payAmount, 10, 4)) != 0) {
             throw new WitshareException(EnumResponseText.ErrorPriceRate);
@@ -126,20 +162,12 @@ public class TransactionServiceImpl implements TransactionService {
             throw new WitshareException(EnumResponseText.ErrorPayTx);
         }
         Timestamp current = new Timestamp(System.currentTimeMillis());
-        RecordUserTxBean recordUserTxBean = RecordUserTxBean.newInstance()
-                .setUserGid(currentUser.getUserGid())
+        recordUserTxBean.setUserGid(currentUser.getUserGid())
                 .setUserEmail(currentUser.getEmail())
-                .setProjectGid(sysProjectBean.getProjectGid())
                 .setProjectToken(sysProjectBean.getProjectToken())
-                .setPayAmount(payAmount)
-                .setPayCoinType(payCoinType)
-                .setPayTx(payTx)
-                .setPriceRate(priceRate)
-                .setHopeGetAmount(hopeGetAmount)
                 .setTime(current);
-        RecordUserTx recordUserTx = new RecordUserTx();
-        BeanUtils.copyProperties(recordUserTxBean, recordUserTx);
-        recordUserTxMapper.insertSelective(recordUserTx);
+        //保存
+        staticSysUserTxMapper.insert(recordUserTxBean);
     }
 
 
@@ -157,6 +185,5 @@ public class TransactionServiceImpl implements TransactionService {
             return recordUserTxBean;
         }
         return null;
-
     }
 }

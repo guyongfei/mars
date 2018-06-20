@@ -1,10 +1,20 @@
 package com.witshare.mars.aspect;
 
 
+import com.google.gson.Gson;
 import com.witshare.mars.config.CurrentThreadContext;
+import com.witshare.mars.constant.CacheConsts;
+import com.witshare.mars.constant.EnumI18NProject;
 import com.witshare.mars.constant.PropertiesConfig;
+import com.witshare.mars.constant.StartupRunnerDefault;
+import com.witshare.mars.dao.redis.RedisCommonDao;
+import com.witshare.mars.pojo.dto.SysUserBean;
 import com.witshare.mars.pojo.util.LogApiBean;
+import com.witshare.mars.service.SysUserService;
 import com.witshare.mars.util.JsonUtils;
+import com.witshare.mars.util.RedisKeyUtil;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.Around;
@@ -19,6 +29,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.*;
 import org.springframework.web.servlet.HandlerMapping;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
@@ -33,6 +44,12 @@ public class LogAspect implements ThrowsAdvice {
     private static final Logger LOGGER = LoggerFactory.getLogger(LogAspect.class);
     @Autowired
     private PropertiesConfig propertiesConfig;
+    @Autowired
+    private StartupRunnerDefault startupRunnerDefault;
+    @Autowired
+    private RedisCommonDao redisCommonDao;
+    @Autowired
+    private SysUserService sysUserService;
 
     /**
      * 装载日志信息
@@ -162,6 +179,8 @@ public class LogAspect implements ThrowsAdvice {
         //获取必要的参数
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpServletResponse response = CurrentThreadContext.getResponse();
+        loadCookie(request);
+        checkAuth(request);
         String requestBody = charReader(request);
         Map requestMap = getRequestMap(joinPoint, request, requestBody);
         CurrentThreadContext.setRequestMap(requestMap);
@@ -178,5 +197,98 @@ public class LogAspect implements ThrowsAdvice {
         //删除本地线程变量
         CurrentThreadContext.remove();
         return result;
+    }
+
+
+    /**
+     * 加载cookie
+     *
+     * @param request
+     */
+    private void loadCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (!ArrayUtils.isEmpty(cookies)) {
+            for (Cookie cookie : cookies) {
+                if (CacheConsts.COOKIE_I18N_LANGUAGE.equals(cookie.getName())) {
+                    EnumI18NProject i18NProject = EnumI18NProject.getObjByLanguage(cookie.getValue());
+                    CurrentThreadContext.setInternationalTableName(i18NProject.getTableName());
+                    CurrentThreadContext.setI18N(i18NProject.getRequestLanguage());
+                }
+                if (CacheConsts.COOKIE_USER_TOKEN.equals(cookie.getName())) {
+                    CurrentThreadContext.setToken(cookie.getValue());
+                }
+
+            }
+        }
+        //TODO 正式代码删除，调试跨域用
+///*//        if (StringUtils.isEmpty(InterceptorContext.getToken())) {
+//        redisCommonDao.putHash(RedisKeyUtil.getTokenEmailKey(), "ea0d95a82c004c698fa3af10cd15785f", "446390091@qq.com");
+//        redisCommonDao.putHash(RedisKeyUtil.getEmailTokenKey(), "446390091@qq.com", "ea0d95a82c004c698fa3af10cd15785f");
+//        InterceptorContext.setToken("ea0d95a82c004c698fa3af10cd15785f");
+//        Cookie cookie1 = new Cookie(KEY_COOKIE_NAME, "ea0d95a82c004c698fa3af10cd15785f");
+//        InterceptorContext.getResponse().addCookie(cookie1);
+//        }*/
+        if (StringUtils.isEmpty(CurrentThreadContext.getInternationalTableName())) {
+            EnumI18NProject i18NProject = EnumI18NProject.getObjByLanguage(null);
+            CurrentThreadContext.setInternationalTableName(i18NProject.getTableName());
+            CurrentThreadContext.setI18N(i18NProject.getRequestLanguage());
+            Cookie cookie = new Cookie(CacheConsts.COOKIE_I18N_LANGUAGE, i18NProject.getRequestLanguage());
+            CurrentThreadContext.getResponse().addCookie(cookie);
+        }
+        String token = CurrentThreadContext.getToken();
+        if (!StringUtils.isEmpty(token)) {
+            String email = redisCommonDao.getHash(RedisKeyUtil.getTokenEmailKey(), token);
+            String userBeanJson = redisCommonDao.getString(RedisKeyUtil.getCallApiInfo(email));
+            if (StringUtils.isEmpty(userBeanJson)) {
+                SysUserBean userBean = sysUserService.getByEmail(email, null);
+                if (userBean != null) {
+                    redisCommonDao.setString(RedisKeyUtil.getCallApiInfo(email), new Gson().toJson(userBean));
+                }
+            }
+        }
+    }
+
+    /**
+     * 检验权限
+     *
+     * @param request
+     * @return
+     */
+    private boolean checkAuth(HttpServletRequest request) {
+        //替换掉项目名,获得Uri
+        String requestURI = request.getRequestURI();
+        String replace = "/" + PROJECT_NAME;
+        if (requestURI.startsWith(replace)) {
+            requestURI = requestURI.replace(replace, "");
+        }
+        //检验免登陆
+        Set<String> freeAuthSet = startupRunnerDefault.getFreeAuthSet();
+        for (String freeAuth : freeAuthSet) {
+            if (requestURI.startsWith(freeAuth)) {
+                return true;
+            }
+        }
+        //检验token
+        String token = CurrentThreadContext.getToken();
+        if (StringUtils.isEmpty(token)) {
+            return false;
+        }
+        String email = redisCommonDao.getHash(RedisKeyUtil.getTokenEmailKey(), token);
+        if (StringUtils.isEmpty(email)) {
+            return false;
+        }
+        CurrentThreadContext.setEmail(email);
+
+        //判断用户是否在管理员列表里
+        Set<String> adminUserSet = startupRunnerDefault.getAdminUserSet();
+        boolean isAdmin = adminUserSet.contains(email);
+        //检验管理员权限
+        Set<String> adminPathSet = startupRunnerDefault.getAdminPathSet();
+        for (String adminPath : adminPathSet) {
+            if (requestURI.startsWith(adminPath)) {
+                return isAdmin;
+            }
+        }
+        return true;
     }
 }
