@@ -383,7 +383,7 @@ $('#addModal').on('hidden.bs.modal', function () {
     $('#addEvent')[0].reset();
 
     reloadTable(1);
-
+    $('#logImg').attr('src', "");
     logStr = "";
     view = "";
     pdfEn = "";
