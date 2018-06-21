@@ -22,8 +22,7 @@ public class SysProjectBeanVo {
     private BigDecimal minPurchaseAmount;
     private Timestamp startTime;
     private Timestamp endTime;
-    private BigDecimal startPrice;
-    private BigDecimal endPrice;
+    private BigDecimal priceRate;
     private int projectStatus;
     private int isAvailable;
 
@@ -141,24 +140,6 @@ public class SysProjectBeanVo {
         return this;
     }
 
-    public BigDecimal getStartPrice() {
-        return startPrice;
-    }
-
-    public SysProjectBeanVo setStartPrice(BigDecimal startPrice) {
-        this.startPrice = startPrice;
-        return this;
-    }
-
-    public BigDecimal getEndPrice() {
-        return endPrice;
-    }
-
-    public SysProjectBeanVo setEndPrice(BigDecimal endPrice) {
-        this.endPrice = endPrice;
-        return this;
-    }
-
     public int getProjectStatus() {
         return projectStatus;
     }
@@ -213,4 +194,12 @@ public class SysProjectBeanVo {
         return this;
     }
 
+    public BigDecimal getPriceRate() {
+        return priceRate;
+    }
+
+    public SysProjectBeanVo setPriceRate(BigDecimal priceRate) {
+        this.priceRate = priceRate;
+        return this;
+    }
 }

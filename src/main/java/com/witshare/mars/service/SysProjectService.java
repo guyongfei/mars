@@ -8,8 +8,6 @@ import com.witshare.mars.pojo.vo.SysProjectBeanFrontListVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.pojo.vo.SysProjectListVo;
 
-import java.util.Map;
-
 /**
  * 项目详情实现类
  **/
@@ -39,7 +37,7 @@ public interface SysProjectService {
      *
      * @param requestBody
      */
-    void update(Map<String, Object> requestBody);
+    void update(String requestBody);
 
     /**
      * 获取可访问连接地址
@@ -63,7 +61,7 @@ public interface SysProjectService {
      *
      * @return
      */
-    SysProjectBeanVo selectManagementByGid(String projectGid);
+    SysProjectBeanVo selectManagementByProjectGid(String projectGid);
 
     /**
      * 清除所有项目缓存

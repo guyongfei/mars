@@ -48,7 +48,7 @@
                                                style="border-left:none;"
                                                autocomplete="off">
                                     </div>
-                                    <label class="col-md-2 control-label">ProjectName</label>
+                                    <label class="col-md-2 control-label">项目名称</label>
                                     <div class="col-md-4">
                                         <input class="form-control" type="text" id="projectNameEn"
                                                name="projectNameEn"
@@ -56,27 +56,6 @@
                                                autocomplete="off" placeholder="EN">
                                     </div>
                                 </div>
-
-
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">合约地址</label>
-                                    <div class="col-md-10 control-label">
-                                        <input class="form-control" type="text" id="tokenAddress" name="tokenAddress"
-                                               style="border-left:none;"
-                                               autocomplete="off">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">项目地址</label>
-                                    <div class="col-md-10 control-label">
-                                        <input class="form-control" type="text" id="projectAddress"
-                                               name="projectAddress"
-                                               style="border-left:none;"
-                                               autocomplete="off">
-                                    </div>
-                                </div>
-
 
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">软顶数量</label>
@@ -97,6 +76,12 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label class="col-md-2 control-label">价比(Eth:Token)</label>
+                                    <div class="col-md-4 control-label">
+                                        <input class="form-control thousands price" type="text" id="priceRate"
+                                               name="startPrice" style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
                                     <label class="col-md-2 control-label">最低认购数量</label>
                                     <div class="col-md-4 control-label">
                                         <input class="form-control thousands cap " type="text" id="minPurchaseAmount"
@@ -105,22 +90,6 @@
                                                autocomplete="off">
                                     </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">开始价比（Eth:Token）</label>
-                                    <div class="col-md-4 control-label">
-                                        <input class="form-control thousands price" type="text" id="startPriceRate"
-                                               name="startPrice" style="border-left:none;"
-                                               autocomplete="off">
-                                    </div>
-                                    <label class="col-md-2 control-label">结束价比（Eth:Token）</label>
-                                    <div class="col-md-4 control-label">
-                                        <input class="form-control thousands price" type="text" id="endPriceRate"
-                                               name="endPrice"
-                                               style="border-left:none;"
-                                               autocomplete="off">
-                                    </div>
-                                </div>
-
 
                                 <div class="form-group">
                                     <label class="col-md-2 control-label">开始时间</label>
@@ -138,6 +107,24 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">合约地址</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class="form-control" type="text" id="tokenAddress" name="tokenAddress"
+                                               style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">项目地址</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class="form-control" type="text" id="projectAddress"
+                                               name="projectAddress"
+                                               style="border-left:none;"
+                                               autocomplete="off">
+                                    </div>
+                                </div>
 
                                 <hr/>
                                 <div class="form-group">
@@ -226,11 +213,26 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">项目Log</label>
+                                    <div class="col-md-4 control-label">
+                                        <input type="file" id="log" name="log">
+                                    </div>
+                                    <div class="col-md-4 control-label">
+                                        <img id="logImg" value='custom' alt="" height="50"
+                                             data-address='' title="project log"/>
+                                    </div>
+                                </div>
+
                                 <hr>
-                                <button type="button" class="btn btn-primary" data-toggle="collapse"
-                                        data-target="#otherLanguge">
-                                    其他语言
-                                </button>
+                                <div class="form-group">
+                                    <div class="col-md-2 control-label">
+                                        <button type="button" class="btn btn-info" data-toggle="collapse"
+                                                data-target="#otherLanguge">
+                                            其他语言
+                                        </button>
+                                    </div>
+                                </div>
                                 <div id="otherLanguge" class="collapse">
                                     <div class="form-group">
 
@@ -343,23 +345,13 @@
                                 </div>
                                 <hr>
 
-                                <span class="col-md-12" style="color: #9eacb4;text-align: left">新增项目时，下面四项必填；修改项目时，如不修改可不传</span>
 
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">项目Log</label>
-                                    <div class="col-md-4">
-                                        <input type="file" id="log" name="log">
-                                    </div>
-
-                                    <label class="col-md-2 control-label">展示图片</label>
-                                    <div class="col-md-4">
-                                        <input type="file" id="view" name="view">
-                                    </div>
-                                </div>
                             </fieldset>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary col-offset-4 col-md-6">保存</button>
-                                <button type="reset" class="btn btn-danger col-ffset-2 col-md-6">重置</button>
+                                <button type="submit" class="btn btn-primary col-md-offset-4 col-md-2">保存</button>
+                                <button type="reset"
+                                        class="btn btn-danger col-md-offset-2 col-md-2">重置
+                                </button>
                             </div>
                         </form>
                     </div>

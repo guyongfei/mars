@@ -304,8 +304,7 @@ function getProject(row) {
                 $('#softCap').val(project.softCap);
                 $('#hardCap').val(project.hardCap);
                 $('#minPurchaseAmount').val(project.minPurchaseAmount);
-                $('#startPriceRate').val(project.startPriceRate);
-                $('#endPriceRate').val(project.endPriceRate);
+                $('#priceRate').val(project.priceRate);
                 $('#startTimePicker').val(getNowFormatDate(new Date(project.startTime)));
                 $('#endTimePicker').val(getNowFormatDate(new Date(project.endTime)));
 
@@ -337,6 +336,7 @@ function getProject(row) {
                 $(' #projectNameJa').val(project.descriptions.ja.projectName);
                 $(' #projectNameKo').val(project.descriptions.ko.projectName);
 
+                $('#logImg').attr('src', project.projectLogoLink);
                 //根据项目状态判断是否能更改
                 var projectStatus = project.projectStatus;
                 if (projectStatus > 0) {
@@ -452,13 +452,14 @@ $('input[type=file]').on('change', function (e) {
     if (file) {
         var fileName = file.name;
         fileName = fileName.replace(".pdf", "").replace(/[^\dA-Za-z\.]/g, "_");
-        console.log(fileName);
         var reader = new FileReader();
         reader.readAsDataURL(file);
+        console.log(fileName);
         reader.onloadend = function () {
             switch (id) {
                 case 'log':
                     logStr = reader.result;
+                    $('#logImg').attr('src', logStr);
                     break;
                 case 'view':
                     view = reader.result;
@@ -648,22 +649,13 @@ $(function () {
                     }
                 }
             },
-            startPriceRate: {
+            priceRate: {
                 validators: {
                     notEmpty: {
-                        message: '开始单价（ETH）不能为空'
+                        message: '单价比（ETH:TOKEN）不能为空'
                     }
                 }
             },
-            endPriceRate: {
-                validators: {
-                    notEmpty: {
-                        message: '结束单价（ETH）不能为空'
-                    }
-                }
-            },
-
-
             instructionEn: {
                 validators: {
                     notEmpty: {
@@ -958,10 +950,9 @@ $(function () {
             'hardCap': numeral($('#hardCap').val()).value(),
             'minPurchaseAmount': numeral($('#minPurchaseAmount').val()).value(),
 
-            'startPriceRate': numeral($('#startPriceRate').val()).value(),
-            'endPriceRate': numeral($('#endPriceRate').val()).value(),
-            'startTimeLong': new Date($('#startTimePicker').val()).getMilliseconds(),
-            'endTimeLong': new Date($('#endTimePicker').val()).getMilliseconds(),
+            'priceRate': numeral($('#priceRate').val()).value(),
+            'startTimeLong': new Date($('#startTimePicker').val()).getTime(),
+            'endTimeLong': new Date($('#endTimePicker').val()).getTime(),
 
             'instructionEn': $(' #instructionEn').val(),
             'instructionCn': $(' #instructionCn').val(),
@@ -1087,10 +1078,9 @@ $(function () {
 
     });
     function checkPrice() {
-        var startPriceRate = numeral($('#startPriceRate').val()).value();
-        var endPriceRate = numeral($('#endPriceRate').val()).value();
+        var priceRate = numeral($('#priceRate').val()).value();
 
-        if (!startPriceRate || !endPriceRate || startPriceRate < endPriceRate) {
+        if (!priceRate ) {
             layer.msg("价格设置有误", {
                 time: 2000,
                 icon: 0,
