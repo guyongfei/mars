@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 
 /**
  * 项目管理控制类
@@ -48,7 +47,7 @@ public class ManagementProjectController {
     @RequestMapping(value = "/project", method = RequestMethod.PUT)
     public ResponseBean updateProject(HttpServletRequest request,
                                       HttpServletResponse response,
-                                      @RequestBody Map<String, Object> requestBody) {
+                                      @RequestBody String requestBody) {
 
         sysProjectService.update(requestBody);
         return ResponseBean.newInstanceSuccess();
@@ -62,7 +61,7 @@ public class ManagementProjectController {
     @RequestMapping(value = "/project/{projectGid}", method = RequestMethod.GET)
     public ResponseBean getProjectById(@PathVariable String projectGid) {
 
-        SysProjectBeanVo sysProjectBeanVo = sysProjectService.selectManagementByGid(projectGid);
+        SysProjectBeanVo sysProjectBeanVo = sysProjectService.selectManagementByProjectGid(projectGid);
         return ResponseBean.newInstanceSuccess(sysProjectBeanVo);
     }
 

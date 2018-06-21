@@ -358,6 +358,7 @@
     </select>
 
     <insert id="saveOrUpdate" parameterType="com.witshare.mars.pojo.dto.SysProjectBean">
+
         INSERT INTO `project_description_en`
         (`project_gid`,
         `project_name`,`project_instruction`,`project_content`,
@@ -367,39 +368,68 @@
         (#{projectGid},
         #{projectNameEn}, #{instructionEn}, #{contentEn},
         #{whitePaperLinkEn},
-        now(),now());
+        now(),now())
+        ON DUPLICATE KEY UPDATE
+        project_name =VALUES(project_name),
+        project_instruction =VALUES(project_instruction),
+        project_content =VALUES(project_content),
+        white_paper_link =VALUES(white_paper_link),
+        update_time=VALUES(update_time);
 
-        INSERT INTO `project_description_cn`
-        (`project_gid`,
-        `project_name`,`project_instruction`,`project_content`,
-        `white_paper_link`,
-        `create_time`,`update_time`)
-        values
-        (#{projectGid},
-        #{projectNameCn}, #{instructionCn}, #{contentCn},
-        #{whitePaperLinkCn},
-        now(),now());
+        <if test="projectNameCn !=null and projectNameCn != ''">
+            INSERT INTO `project_description_cn`
+            (`project_gid`,
+            `project_name`,`project_instruction`,`project_content`,
+            `white_paper_link`,
+            `create_time`,`update_time`)
+            values
+            (#{projectGid},
+            #{projectNameCn}, #{instructionCn}, #{contentCn},
+            #{whitePaperLinkCn},
+            now(),now())
+            ON DUPLICATE KEY UPDATE
+            project_name =VALUES(project_name),
+            project_instruction =VALUES(project_instruction),
+            project_content =VALUES(project_content),
+            white_paper_link =VALUES(white_paper_link),
+            update_time=VALUES(update_time);
+        </if>
 
-        INSERT INTO `project_description_ko`
-        (`project_gid`,
-        `project_name`,`project_instruction`,`project_content`,
-        `white_paper_link`,
-        `create_time`,`update_time`)
-        values
-        (#{projectGid},
-        #{projectNameKo}, #{instructionKo}, #{contentKo},
-        #{whitePaperLinkKo},
-        now(),now());
-
-        INSERT INTO `project_description_ja`
-        (`project_gid`,
-        `project_name`,`project_instruction`,`project_content`,
-        `white_paper_link`,
-        `create_time`,`update_time`)
-        values
-        (#{projectGid},
-        #{projectNameJa}, #{instructionJa}, #{contentJa},
-        #{whitePaperLinkJa},
-        now(),now());
+        <if test="projectNameKo !=null and projectNameCn != ''">
+            INSERT INTO `project_description_ko`
+            (`project_gid`,
+            `project_name`,`project_instruction`,`project_content`,
+            `white_paper_link`,
+            `create_time`,`update_time`)
+            values
+            (#{projectGid},
+            #{projectNameKo}, #{instructionKo}, #{contentKo},
+            #{whitePaperLinkKo},
+            now(),now())
+            ON DUPLICATE KEY UPDATE
+            project_name =VALUES(project_name),
+            project_instruction =VALUES(project_instruction),
+            project_content =VALUES(project_content),
+            white_paper_link =VALUES(white_paper_link),
+            update_time=VALUES(update_time);
+        </if>
+        <if test="projectNameJa !=null and projectNameCn != ''">
+            INSERT INTO `project_description_ja`
+            (`project_gid`,
+            `project_name`,`project_instruction`,`project_content`,
+            `white_paper_link`,
+            `create_time`,`update_time`)
+            values
+            (#{projectGid},
+            #{projectNameJa}, #{instructionJa}, #{contentJa},
+            #{whitePaperLinkJa},
+            now(),now())
+            ON DUPLICATE KEY UPDATE
+            project_name =VALUES(project_name),
+            project_instruction =VALUES(project_instruction),
+            project_content =VALUES(project_content),
+            white_paper_link =VALUES(white_paper_link),
+            update_time=VALUES(update_time);
+        </if>
     </insert>
 </mapper>

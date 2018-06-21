@@ -7,29 +7,42 @@
         (SELECT COUNT(0)
         FROM `sys_project`
         WHERE `project_token`=#{projectToken}
-
+        <if test="projectGid !=null and projectGid != ''">
+            and project_gid !=#{projectGid}
+        </if>
         )+
         (SELECT COUNT(0)
         FROM `project_description_en`
         WHERE `project_name`=#{projectNameEn}
-
+        <if test="projectGid !=null and projectGid != ''">
+            and project_gid !=#{projectGid}
+        </if>
         )
         <if test="projectNameCn != null and projectNameCn!=''">
             + (SELECT COUNT(0)
             FROM `project_description_cn`
             WHERE `project_name`=#{projectNameCn}
+            <if test="projectGid !=null and projectGid != ''">
+                and project_gid !=#{projectGid}
+            </if>
             )
         </if>
         <if test="projectNameKo != null and projectNameKo!=''">
             + (SELECT COUNT(0)
             FROM `project_description_ko`
             WHERE `project_name`=#{projectNameKo}
+            <if test="projectGid !=null and projectGid != ''">
+                and project_gid !=#{projectGid}
+            </if>
             )
         </if>
         <if test="projectNameJa != null and projectNameJa!=''">
             + (SELECT COUNT(0)
             FROM `project_description_ja`
             WHERE `project_name`=#{projectNameJa}
+            <if test="projectGid !=null and projectGid != ''">
+                and project_gid !=#{projectGid}
+            </if>
             )
         </if>
 
@@ -105,6 +118,9 @@
     <select id="selectManagementList" resultType="com.witshare.mars.pojo.vo.SysProjectListVo">
         SELECT `project_gid`,`project_token`,`start_time`,`end_time`,`project_status`,`is_available`
         FROM `sys_project`
+        <if test="queryStr!=null and queryStr!=''">
+           WHERE project_token LIKE '%${queryStr}%'
+        </if>
         ORDER BY
         <choose>
             <when test="orderCondition != null and orderCondition != ''">
