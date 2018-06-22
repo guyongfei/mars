@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyDescriptor;
@@ -335,15 +333,15 @@ public class WitshareUtils {
         calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
         return calendar.getTime();
     }
-
+    final static Base64.Decoder decoder = Base64.getDecoder();
+    final static Base64.Encoder encoder = Base64.getEncoder();
     //base64字符串转化成图片
     public static byte[] base64ToByte(String imgStr) {   //对字节数组字符串进行Base64解码并生成图片
         if (imgStr == null) //图像数据为空
             return null;
-        BASE64Decoder decoder = new BASE64Decoder();
         try {
             //Base64解码
-            byte[] b = decoder.decodeBuffer(imgStr);
+            byte[] b = decoder.decode(imgStr);
             for (int i = 0; i < b.length; ++i) {
                 if (b[i] < 0) {//调整异常数据
                     b[i] += 256;
@@ -362,7 +360,7 @@ public class WitshareUtils {
             byte[] bytes = new byte[inputStream.available()];
             // 将文件中的内容读入到数组中
             inputStream.read(bytes);
-            strBase64 = new BASE64Encoder().encode(bytes);      //将字节流数组转换为字符串
+            strBase64 = encoder.encodeToString(bytes);      //将字节流数组转换为字符串
             inputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
