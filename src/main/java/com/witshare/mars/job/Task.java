@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
@@ -33,6 +34,8 @@ public class Task {
     private DistributedLocker distributedLocker;
     @Autowired
     private RedisCommonDao redisCommonDao;
+    @Autowired
+    private StatisticTxJob statisticTxJob;
 
 //    @Async(TASK_EXECUTOR)
     public void sendEmailVerifyCode(String email, boolean register) {
@@ -50,6 +53,19 @@ public class Task {
             LOGGER.error("sendEmailVerifyCode fail.email:{},verifyCode:{}", email, verifyCode, e);
         }
         LOGGER.info("sendEmailVerifyCode success.email:{},verifyCode:{}.", email, verifyCode);
+    }
+
+    /**
+     * 执行获取交易所价格的任务
+     */
+    @Scheduled(cron = "0 0 0/30 * * ?")
+    public void statisticTx() {
+        String lockId = distributedLocker.lock(EXCHANGE_SPIDER_LOCK, redis_lock);
+        if (lockId == null) {
+            LOGGER.info("statisticTokenTx pushTask-other_is_excuting");
+            return;
+        }
+//        exchangeSpiderJob.getCoinDataJob();
     }
 
 }

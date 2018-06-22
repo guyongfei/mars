@@ -96,10 +96,6 @@ public class JobController {
 
     /**
      * 查询所有任务
-     *
-     * @param pageNum
-     * @param pageSize
-     * @return
      */
     @RequestMapping(value = "/queryjob")
     public Map<String, Object> queryjob(@RequestParam(value = "pageNum") Integer pageNum, @RequestParam(value = "pageSize") Integer pageSize) {

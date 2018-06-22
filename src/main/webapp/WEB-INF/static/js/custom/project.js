@@ -37,6 +37,24 @@ function getAddDay(addDay) {
     return current;
 }
 
+function initTimer() {
+    console.log("initTimer");
+    $('#startTimePicker').datetimepicker().val(getNowFormatDate(getAddDay(1))).datetimepicker('update');
+    $('#endTimePicker').datetimepicker().val(getNowFormatDate(getAddDay(3))).datetimepicker('update');
+}
+
+
+function numberFormat(num) {
+    var txt = numeral(num);
+    var formatStr = '0,0';
+    var value = txt.value();
+    var split = value.toString().split('.');
+    if (split.length > 1) {
+        formatStr = formatStr + "." + split[1].toString().replace(/\d/g, '0');
+    }
+    return txt.format(formatStr);
+}
+
 var TableInit = function () {
     var oTableInit = new Object();
     //初始化Table
@@ -301,22 +319,38 @@ function getProject(row) {
                 $('#tokenAddress').val(project.tokenAddress);
                 $('#projectToken').val(project.projectToken);
                 $('#projectAddress').val(project.projectAddress);
-                $('#softCap').val(project.softCap);
-                $('#hardCap').val(project.hardCap);
-                $('#minPurchaseAmount').val(project.minPurchaseAmount);
-                $('#priceRate').val(project.priceRate);
+                $('#softCap').val(numberFormat(project.softCap));
+                $('#hardCap').val(numberFormat(project.hardCap));
+                $('#minPurchaseAmount').val(numberFormat(project.minPurchaseAmount));
+                $('#priceRate').val(numberFormat(project.priceRate));
                 $('#startTimePicker').val(getNowFormatDate(new Date(project.startTime)));
                 $('#endTimePicker').val(getNowFormatDate(new Date(project.endTime)));
 
                 $(' #instructionEn').val(project.descriptions.en.projectInstruction);
-                $(' #instructionCn').val(project.descriptions.cn.projectInstruction);
-                $(' #instructionKo').val(project.descriptions.ko.projectInstruction);
-                $(' #instructionJa').val(project.descriptions.ja.projectInstruction);
-
                 $(' #contentEn').val(project.descriptions.en.projectContent);
-                $(' #contentCn').val(project.descriptions.cn.projectContent);
-                $(' #contentKo').val(project.descriptions.ko.projectContent);
-                $(' #contentJa').val(project.descriptions.ja.projectContent);
+                $(' #whitePaperLinkEn').val(project.descriptions.en.whitePaperLink);
+                $(' #projectNameEn').val(project.descriptions.en.projectName);
+
+                if (project.descriptions.cn) {
+                    $(' #instructionCn').val(project.descriptions.cn.projectInstruction);
+                    $(' #contentCn').val(project.descriptions.cn.projectContent);
+                    $(' #whitePaperLinkCn').val(project.descriptions.cn.whitePaperLink);
+                    $(' #projectNameCn').val(project.descriptions.cn.projectName);
+                }
+
+                if (project.descriptions.ko) {
+                    $(' #instructionKo').val(project.descriptions.ko.projectInstruction);
+                    $(' #contentKo').val(project.descriptions.ko.projectContent);
+                    $(' #whitePaperLinkKo').val(project.descriptions.ko.whitePaperLink);
+                    $(' #projectNameKo').val(project.descriptions.ko.projectName);
+                }
+
+                if (project.descriptions.ja) {
+                    $(' #instructionJa').val(project.descriptions.ja.projectInstruction);
+                    $(' #contentJa').val(project.descriptions.ja.projectContent);
+                    $(' #whitePaperLinkJa').val(project.descriptions.ja.whitePaperLink);
+                    $(' #projectNameJa').val(project.descriptions.ja.projectName);
+                }
 
                 $(' #officialLink').val(project.websites.officialLink);
                 $(' #twitter').val(project.websites.twitter);
@@ -325,16 +359,6 @@ function getProject(row) {
                 $(' #reddit').val(project.websites.reddit);
                 $(' #biYong').val(project.websites.biYong);
                 $(' #gitHub').val(project.websites.gitHub);
-
-                $(' #whitePaperLinkCn').val(project.descriptions.cn.whitePaperLink);
-                $(' #whitePaperLinkEn').val(project.descriptions.en.whitePaperLink);
-                $(' #whitePaperLinkKo').val(project.descriptions.ko.whitePaperLink);
-                $(' #whitePaperLinkJa').val(project.descriptions.ja.whitePaperLink);
-
-                $(' #projectNameCn').val(project.descriptions.cn.projectName);
-                $(' #projectNameEn').val(project.descriptions.en.projectName);
-                $(' #projectNameJa').val(project.descriptions.ja.projectName);
-                $(' #projectNameKo').val(project.descriptions.ko.projectName);
 
                 $('#logImg').attr('src', project.projectLogoLink);
                 //根据项目状态判断是否能更改
@@ -380,63 +404,31 @@ $('#btn_query').click(function () {
 //隐藏模态框
 $('#addModal').on('hidden.bs.modal', function () {
 
+    // 表单清空
     $('#addEvent')[0].reset();
-
+    $('#addEvent')
+        .bootstrapValidator("resetForm", true)
+        .bootstrapValidator('addField', 'log', {
+        validators: {
+            notEmpty: {
+                message: '图像不能为空'
+            },
+            file: {
+                extension: 'jpg,jpeg,bmp,png,gif',
+                type: 'image/jpg,image/jpeg,image/bmp,image/gif,image/png',
+                maxSize: 10 * 1024 * 1024,
+                message: '请上传10M以内的图像（jpg,jpeg,bmp,gif,png）'
+            }
+        }
+    });
+    //重新加载表格
     reloadTable(1);
+    //初始化时间选择器
+    initTimer();
+    //log图片清空
     $('#logImg').attr('src', "");
     logStr = "";
-    view = "";
-    pdfEn = "";
-    pdfEnName = "";
-    pdfCn = "";
-    pdfCnName = "";
-    pdfKo = "";
-    pdfKoName = "";
-    pdfJa = "";
-    pdfJaName = "";
     addMethod = true;
-
-    $('#addEvent').bootstrapValidator("resetForm", true);
-
-    $('#addEvent').bootstrapValidator('addField', 'log', {
-        validators: {
-            notEmpty: {
-                message: '图像不能为空'
-            },
-            file: {
-                extension: 'jpg,jpeg,bmp,png,gif',
-                type: 'image/jpg,image/jpeg,image/bmp,image/gif,image/png',
-                maxSize: 10 * 1024 * 1024,
-                message: '请上传10M以内的图像（jpg,jpeg,bmp,gif,png）'
-            }
-        }
-    }).bootstrapValidator('addField', 'view', {
-        validators: {
-            notEmpty: {
-                message: '图像不能为空'
-            },
-            file: {
-                extension: 'jpg,jpeg,bmp,png,gif',
-                type: 'image/jpg,image/jpeg,image/bmp,image/gif,image/png',
-                maxSize: 10 * 1024 * 1024,
-                message: '请上传10M以内的图像（jpg,jpeg,bmp,gif,png）'
-            }
-        }
-    }).bootstrapValidator('addField', 'pdfEn', {
-        validators: {
-            notEmpty: {
-                message: 'pdf不能为空'
-            },
-            file: {
-                extension: 'pdf',
-                type: 'application/pdf',
-                maxSize: 10 * 1024 * 1024,
-                message: '请上传10M以内的pdf文件'
-            }
-        }
-    })
-
-
 })
 
 //新增按钮
@@ -1032,9 +1024,12 @@ $(function () {
             forceParse: 0,
             showMeridian: 1
         });
-
-        $('#startTimePicker').datetimepicker().val(getNowFormatDate(getAddDay(1))).datetimepicker('update');
-        $('#endTimePicker').datetimepicker().val(getNowFormatDate(getAddDay(3))).datetimepicker('update');
+        //初始化时间选择器
+        initTimer();
+        
+        $('#reset').click(function () {
+            
+        })
 
         $('.time').change(function () {
             var start = new Date($('#startTimePicker').val());
@@ -1077,10 +1072,12 @@ $(function () {
 
 
     });
+
+
     function checkPrice() {
         var priceRate = numeral($('#priceRate').val()).value();
 
-        if (!priceRate ) {
+        if (!priceRate) {
             layer.msg("价格设置有误", {
                 time: 2000,
                 icon: 0,

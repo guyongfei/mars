@@ -41,6 +41,7 @@ import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.witshare.mars.constant.CacheConsts.WHITE_PAPER_LINK;
 
@@ -52,7 +53,7 @@ import static com.witshare.mars.constant.CacheConsts.WHITE_PAPER_LINK;
 public class SysProjectServiceImpl implements SysProjectService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SysProjectServiceImpl.class);
-    private static final long DEFULT_LIMIT = 1000;
+
     private static Gson gson = new Gson();
     @Autowired
     private SysProjectMapper sysProjectMapper;
@@ -91,8 +92,6 @@ public class SysProjectServiceImpl implements SysProjectService {
         //todo 获取平台地址
         Timestamp current = new Timestamp(System.currentTimeMillis());
         sysProjectBean.setPlatformAddress("")
-                .setProjectImgLink("")
-                .setIsAvailable(1)
                 .setStartTime(sysProjectBean.getStartTime())
                 .setEndTime(sysProjectBean.getEndTime())
                 .setCreateTime(current)
@@ -112,6 +111,7 @@ public class SysProjectServiceImpl implements SysProjectService {
      * @see SysProjectService#update(String)
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void update(String jsonBody) {
         if (StringUtils.isEmpty(jsonBody)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
@@ -158,7 +158,12 @@ public class SysProjectServiceImpl implements SysProjectService {
         staticProjectDescriptionMapper.saveOrUpdate(sysProjectBean);
 
         staticProjectWebsiteMapper.saveOrUpdate(sysProjectBean);
+
+        //删缓存
+        this.deleteProjectCache(projectGid);
     }
+
+
 
 
     /**
@@ -261,25 +266,31 @@ public class SysProjectServiceImpl implements SysProjectService {
     }
 
     /**
-     * TODO 通过userGid查询主表,需要动态的修改表的数据，需要存缓存
+     * @see SysProjectService#selectByProjectGid(String)
      */
     @Override
     public SysProjectBean selectByProjectGid(String projectGid) {
         if (StringUtils.isEmpty(projectGid)) {
             return null;
         }
+        SysProjectBean sysProjectBean;
+        String result = redisCommonDao.getString(RedisKeyUtil.getProjectKey(projectGid));
+        if (StringUtils.isNotEmpty(result)) {
+            sysProjectBean = new Gson().fromJson(result, SysProjectBean.class);
+            return sysProjectBean;
+        }
         SysProjectExample sysProjectExample = new SysProjectExample();
         sysProjectExample.or().andProjectGidEqualTo(projectGid);
         List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
         if (CollectionUtils.isNotEmpty(sysProjects)) {
-            SysProjectBean sysProjectBean = new SysProjectBean();
+            sysProjectBean = SysProjectBean.newInstance();
             BeanUtils.copyProperties(sysProjects.get(0), sysProjectBean);
             sysProjectBean.setProjectLogoLink(getPictureUrl(sysProjectBean.getProjectLogoLink()))
                     .setProjectImgLink(getPictureUrl(sysProjectBean.getProjectImgLink()));
+            redisCommonDao.put(RedisKeyUtil.getProjectKey(projectGid), new Gson().toJson(sysProjectBean), 1, TimeUnit.DAYS);
             return sysProjectBean;
         }
         return null;
-
     }
 
 
@@ -324,12 +335,15 @@ public class SysProjectServiceImpl implements SysProjectService {
         EnumI18NProject i18n = EnumI18NProject.getObjByLanguage(CurrentThreadContext.getInternationalTableName());
         String projectDetailName = i18n.getProjectDetailName();
         //查找redis
-        String projectStatisticKey = RedisKeyUtil.getProjectStatisticKey(projectGid);
+        String projectStatisticKey = RedisKeyUtil.getProjectFrontKey(projectGid);
         String projectDetail = redisCommonDao.getHash(projectStatisticKey, projectDetailName);
         if (StringUtils.isNotEmpty(projectDetail)) {
             frontInfoVo = gson.fromJson(projectDetail, SysProjectBeanFrontInfoVo.class);
+            //TODO 找出已经售卖的数量
+            frontInfoVo.setSoldAmount(new BigDecimal(123456));
             return frontInfoVo;
         }
+
         //查主表
         SysProjectBean sysProjectBean = this.selectByProjectGid(projectGid);
         if (sysProjectBean == null) {
@@ -348,33 +362,13 @@ public class SysProjectServiceImpl implements SysProjectService {
         Map<String, String> webSiteMap = projectWebSiteService.select(projectGid);
         webSiteMap.put(WHITE_PAPER_LINK, descriptionBean.getWhitePaperLink());
         frontInfoVo.setWebsites(webSiteMap);
-        //TODO 找出已经售卖的数量
-        frontInfoVo.setSoldAmount(new BigDecimal(123456));
 
         redisCommonDao.putHash(projectStatisticKey, projectDetailName, gson.toJson(frontInfoVo));
 
+        //TODO 找出已经售卖的数量
+        frontInfoVo.setSoldAmount(new BigDecimal(123456));
         return frontInfoVo;
     }
-
-
-    /**
-     * @see SysProjectService#delAllProjectCache()
-     */
-    @Override
-    public void delAllProjectCache() {
-        SysProjectExample sysProjectExample = new SysProjectExample();
-        long count = sysProjectMapper.countByExample(sysProjectExample);
-        for (int offset = 0; offset < count; offset += DEFULT_LIMIT) {
-            List<String> projectIdList = staticSysProjectMapper.selectAllProjectId(offset, (int) DEFULT_LIMIT);
-            if (CollectionUtils.isNotEmpty(projectIdList)) {
-                projectIdList.forEach(p -> {
-                    String projectStatisticKey = RedisKeyUtil.getProjectStatisticKey(p);
-                    redisCommonDao.delRedisKey(projectStatisticKey);
-                });
-            }
-        }
-    }
-
 
     @Override
     public void hideProject(String projectGid) {
@@ -388,7 +382,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         Long id = sysProjectBean.getId();
         staticSysProjectMapper.modifyProjectStatus(id);
         //清缓存
-        redisCommonDao.delRedisKey(RedisKeyUtil.getProjectStatisticKey(projectGid));
+        this.deleteProjectCache(projectGid);
 
     }
 
@@ -398,6 +392,12 @@ public class SysProjectServiceImpl implements SysProjectService {
     @Override
     public String getPictureUrl(String source) {
         return StringUtils.isEmpty(source) ? null : propertiesConfig.qingyunHttpUrl + source;
+    }
+
+    @Override
+    public void deleteProjectCache(String projectGid) {
+        redisCommonDao.delRedisKey(RedisKeyUtil.getProjectFrontKey(projectGid));
+        redisCommonDao.delRedisKey(RedisKeyUtil.getProjectKey(projectGid));
     }
 
 }

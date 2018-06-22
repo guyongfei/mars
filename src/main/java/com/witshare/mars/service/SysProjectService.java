@@ -14,63 +14,50 @@ import com.witshare.mars.pojo.vo.SysProjectListVo;
 public interface SysProjectService {
 
     /**
-     * 分页获取项目列表
-     *
-     * @param projectReqBean
-     * @return
+     * 前台获取列表
      */
     PageInfo<SysProjectBeanFrontListVo> selectSysProjects(ProjectReqBean projectReqBean);
-
-
+    /**
+     * 前台获取详情
+     */
     SysProjectBeanFrontInfoVo selectProject(String projectGid);
-
-
-    /**
-     * 新增项目
-     *
-     * @param requestBody
-     */
-    void save(String requestBody);
-
-    /**
-     * 更新项目
-     *
-     * @param requestBody
-     */
-    void update(String requestBody);
-
-    /**
-     * 获取可访问连接地址
-     *
-     * @param source
-     * @return
-     */
-    String getPictureUrl(String source);
-
-
     /**
      * 管理页面获取项目列表
-     *
-     * @param sysProjectBean
-     * @return
      */
     PageInfo<SysProjectListVo> selectManagementList(SysProjectBean sysProjectBean);
 
     /**
      * 管理页面获取单个项目详情
-     *
-     * @return
      */
     SysProjectBeanVo selectManagementByProjectGid(String projectGid);
 
     /**
-     * 清除所有项目缓存
+     * 新增项目
      */
-    void delAllProjectCache();
+    void save(String requestBody);
 
+    /**
+     * 更新项目
+     */
+    void update(String requestBody);
+    /**
+     * 隐藏单个项目
+     */
     void hideProject(String projectGid);
-
+    /**
+     * 查询单个项目
+     */
     SysProjectBean selectByProjectGid(String projectGid);
+    /**
+     * 删除单个项目缓存
+     */
+    void deleteProjectCache(String projectGid);
+    /**
+     * 获取可访问连接地址
+     */
+    String getPictureUrl(String source);
+
+
 
 
 }

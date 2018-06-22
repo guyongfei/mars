@@ -1,7 +1,5 @@
 package com.witshare.mars.controller;
 
-import com.witshare.mars.constant.EnumWitshare;
-import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.dto.SysUserBean;
 import com.witshare.mars.pojo.util.ResponseBean;
 import com.witshare.mars.service.SysUserService;
@@ -26,48 +24,24 @@ public class ManagementUserController {
 
     /**
      * 隐藏用户
-     *
-     * @param id
-     * @return
      */
     @ResponseBody
     @RequestMapping(value = "/user/hide/{id}", method = RequestMethod.PUT)
     public ResponseBean hideUser(@PathVariable Long id) {
-        ResponseBean responseBean;
-        try {
-            sysUserService.hideUser(id);
-            responseBean = new ResponseBean(Boolean.TRUE);
-        } catch (WitshareException e) {
-            LOGGER.error("hideUser fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, e.getMessage());
-        } catch (Exception e) {
-            LOGGER.error("hideUser fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, EnumWitshare.SYS_ERROR.value());
-        }
-        return responseBean;
+
+        sysUserService.hideUser(id);
+        return ResponseBean.newInstanceSuccess();
     }
 
     /**
      * 获取用户信息
-     *
-     * @param id
-     * @return
      */
     @ResponseBody
     @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public ResponseBean getUserInfo(@PathVariable Long id) {
-        ResponseBean responseBean;
-        try {
-            SysUserBean sysUserBean = sysUserService.getByUserId(id, null);
-            responseBean = new ResponseBean(Boolean.TRUE, "", sysUserBean);
-        } catch (WitshareException e) {
-            LOGGER.error("modifyUserInfo fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, e.getMessage());
-        } catch (Exception e) {
-            LOGGER.error("modifyUserInfo fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, EnumWitshare.SYS_ERROR.value());
-        }
-        return responseBean;
+
+        SysUserBean sysUserBean = sysUserService.getByUserId(id, null);
+        return ResponseBean.newInstanceSuccess(sysUserBean);
     }
 
     /**
@@ -80,18 +54,11 @@ public class ManagementUserController {
      */
     @ResponseBody
     @RequestMapping(value = "/user/{id}", method = RequestMethod.PUT)
-    public ResponseBean modifyUserInfo(@PathVariable Long id, @RequestBody Map<String, String> requestBody) {
-        ResponseBean responseBean;
-        try {
-            sysUserService.modifyUserInfo(id, requestBody);
-            responseBean = new ResponseBean(Boolean.TRUE);
-        } catch (WitshareException e) {
-            LOGGER.error("modifyUserInfo fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, e.getMessage());
-        } catch (Exception e) {
-            LOGGER.error("modifyUserInfo fail,{}", e);
-            responseBean = new ResponseBean(Boolean.FALSE, EnumWitshare.SYS_ERROR.value());
-        }
-        return responseBean;
+    public ResponseBean modifyUserInfo(@PathVariable Long id,
+                                       @RequestBody Map<String, String> requestBody) {
+
+        sysUserService.modifyUserInfo(id, requestBody);
+        return ResponseBean.newInstanceSuccess();
+
     }
 }
