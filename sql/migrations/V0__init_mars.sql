@@ -144,7 +144,7 @@ CREATE TABLE `record_user_tx` (
   `pay_amount` decimal(20,10) NOT NULL COMMENT '购买支付币种数量',
   `price_rate` decimal(20,10) NOT NULL COMMENT '购买时eth:token的价格比',
   `hope_get_amount` decimal(20,10) NOT NULL COMMENT '期望得到的token数量',
-  `should_get_amount` decimal(20,10) NOT NULL COMMENT '应该得到的token数量',
+  `should_get_amount` decimal(20,10) NOT NULL DEFAULT '0.0000000000' COMMENT '应该得到的token数量',
   `actual_pay_amount` decimal(20,10) NOT NULL DEFAULT '0.0000000000' COMMENT '实际支付eth数量（用户给平台）',
   `actual_get_amount` decimal(30,10) NOT NULL DEFAULT '0.0000000000' COMMENT '实际得到token数量（平台给用户）',
   `user_tx_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态(0-->初始状态,1-成功,2-成功（金额不符）,3-失败（交易号不存在）,4-失败（转账失败）等)',
