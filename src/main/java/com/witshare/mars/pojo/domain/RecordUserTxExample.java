@@ -906,6 +906,66 @@ public class RecordUserTxExample {
             return (Criteria) this;
         }
 
+        public Criteria andShouldGetAmountIsNull() {
+            addCriterion("should_get_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShouldGetAmountIsNotNull() {
+            addCriterion("should_get_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andShouldGetAmountEqualTo(BigDecimal value) {
+            addCriterion("should_get_amount =", value, "shouldGetAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShouldGetAmountNotEqualTo(BigDecimal value) {
+            addCriterion("should_get_amount <>", value, "shouldGetAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShouldGetAmountGreaterThan(BigDecimal value) {
+            addCriterion("should_get_amount >", value, "shouldGetAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShouldGetAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("should_get_amount >=", value, "shouldGetAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShouldGetAmountLessThan(BigDecimal value) {
+            addCriterion("should_get_amount <", value, "shouldGetAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShouldGetAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("should_get_amount <=", value, "shouldGetAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShouldGetAmountIn(List<BigDecimal> values) {
+            addCriterion("should_get_amount in", values, "shouldGetAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShouldGetAmountNotIn(List<BigDecimal> values) {
+            addCriterion("should_get_amount not in", values, "shouldGetAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShouldGetAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("should_get_amount between", value1, value2, "shouldGetAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andShouldGetAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("should_get_amount not between", value1, value2, "shouldGetAmount");
+            return (Criteria) this;
+        }
+
         public Criteria andActualPayAmountIsNull() {
             addCriterion("actual_pay_amount is null");
             return (Criteria) this;

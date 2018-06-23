@@ -23,6 +23,7 @@ public class RecordUserTxBean {
     private BigDecimal payAmount;
     private BigDecimal priceRate;
     private BigDecimal hopeGetAmount;
+    private BigDecimal shouldGetAmount;
     private BigDecimal actualPayAmount;
     private BigDecimal actualGetAmount;
     private int userTxStatus;
@@ -215,6 +216,15 @@ public class RecordUserTxBean {
 
     public RecordUserTxBean setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+        return this;
+    }
+
+    public BigDecimal getShouldGetAmount() {
+        return shouldGetAmount;
+    }
+
+    public RecordUserTxBean setShouldGetAmount(BigDecimal shouldGetAmount) {
+        this.shouldGetAmount = shouldGetAmount;
         return this;
     }
 }
