@@ -67,6 +67,9 @@ public class PropertiesConfig extends RuntimeException implements CommandLineRun
     @Value("${mail.sendgrid.sender}")
     public String sendGridSender;
 
+    @Value("${project.user.tx.max}")
+    public Integer projectUserTxMax;
+
 
     @Override
     public void run(String... args) {

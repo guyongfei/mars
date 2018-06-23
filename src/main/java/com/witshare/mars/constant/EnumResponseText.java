@@ -37,7 +37,9 @@ public enum EnumResponseText {
     ErrorPriceRate(25, "错误的价格", "error price rate."),
     ErrorSaveS3(25, "S3保存失败", "fail upload to s3."),
     ErrorSql(25, "sql异常", "error sql."),
-    ErrorPayTx(25, "错误的交易号", "error pay tx."),;
+    ErrorPayTx(25, "错误的交易号", "error pay tx."),
+    ErrorTxDoing(25, "已有交易在进行", "There is already a transactions going on."),
+    ReachTxMax(25, "用户达到交易上线", "Reach Number of transactions max."),;
 
     private int value;
     private String zh;
