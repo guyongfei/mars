@@ -133,31 +133,31 @@ CREATE TABLE `record_platform_tx` (
 /*Table structure for table `record_user_tx` */
 
 CREATE TABLE `record_user_tx` (
-  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
-  `user_gid` CHAR(32) NOT NULL COMMENT '用户唯一标识',
-  `user_email` VARCHAR(126) NOT NULL COMMENT '邮箱',
-  `project_gid` CHAR(32) NOT NULL COMMENT '项目唯一标识',
-  `project_token` VARCHAR(126) NOT NULL COMMENT '项目token',
-  `pay_coin_type` TINYINT(1) NOT NULL COMMENT '购买交易币种(0-ETH,1-BTC)',
-  `pay_tx` VARCHAR(68) NOT NULL COMMENT '购买交易号',
-  `pay_tx_id` INT(11) UNSIGNED NOT NULL COMMENT '购买交易ID',
-  `pay_amount` DECIMAL(20,10) NOT NULL  COMMENT '购买支付币种数量',
-  `price_rate` DECIMAL(20,10) NOT NULL   COMMENT '购买时eth:token的价格比',
-  `hope_get_amount` DECIMAL(20,10) NOT NULL COMMENT '期望得到的token数量',
-  `actual_pay_amount` DECIMAL(20,10) NOT NULL DEFAULT '0.0000000000' COMMENT '实际支付eth数量（用户给平台）',
-  `actual_get_amount` DECIMAL(30,10) NOT NULL DEFAULT '0.0000000000' COMMENT '实际得到token数量（平台给用户）',
-  `user_tx_status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '状态(0-->初始状态,1-成功,2-成功（金额不符）,3-失败（交易号不存在）,4-失败（转账失败）等)',
-  `platform_tx` VARCHAR(68) NOT NULL DEFAULT '' COMMENT '打币交易号',
-  `eth_fee` DECIMAL(20,10) NOT NULL DEFAULT '0.0000000000' COMMENT '手续费',
-  `platform_tx_status` TINYINT(1) UNSIGNED NOT NULL DEFAULT '0' COMMENT '状态(0-->初始状态,1-校验成功，2-校验失败)',
-  `distribution_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '打币时间',
-  `create_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
-  `update_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `user_gid` char(32) NOT NULL COMMENT '用户唯一标识',
+  `user_email` varchar(126) NOT NULL COMMENT '邮箱',
+  `project_gid` char(32) NOT NULL COMMENT '项目唯一标识',
+  `project_token` varchar(126) NOT NULL COMMENT '项目token',
+  `pay_coin_type` tinyint(1) NOT NULL COMMENT '购买交易币种(0-ETH,1-BTC)',
+  `pay_tx` varchar(68) NOT NULL COMMENT '购买交易号',
+  `pay_tx_id` int(11) unsigned NOT NULL COMMENT '购买交易ID',
+  `pay_amount` decimal(20,10) NOT NULL COMMENT '购买支付币种数量',
+  `price_rate` decimal(20,10) NOT NULL COMMENT '购买时eth:token的价格比',
+  `hope_get_amount` decimal(20,10) NOT NULL COMMENT '期望得到的token数量',
+  `should_get_amount` decimal(20,10) NOT NULL COMMENT '应该得到的token数量',
+  `actual_pay_amount` decimal(20,10) NOT NULL DEFAULT '0.0000000000' COMMENT '实际支付eth数量（用户给平台）',
+  `actual_get_amount` decimal(30,10) NOT NULL DEFAULT '0.0000000000' COMMENT '实际得到token数量（平台给用户）',
+  `user_tx_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态(0-->初始状态,1-成功,2-成功（金额不符）,3-失败（交易号不存在）,4-失败（转账失败）等)',
+  `platform_tx` varchar(68) NOT NULL DEFAULT '' COMMENT '打币交易号',
+  `eth_fee` decimal(20,10) NOT NULL DEFAULT '0.0000000000' COMMENT '手续费',
+  `platform_tx_status` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '状态(0-->初始状态,1-校验成功，2-校验失败)',
+  `distribution_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '打币时间',
+  `create_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
+  `update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_pay_tx` (`pay_tx`),
-  UNIQUE KEY `uk_pay_tx_id` (`pay_tx_id`),
-  UNIQUE KEY `uk_platform_tx` (`platform_tx`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='用户交易流水表';
+  UNIQUE KEY `uk_pay_tx_id` (`pay_tx_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户交易流水表';
 
 /*Table structure for table `sys_project` */
 
