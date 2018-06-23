@@ -1,8 +1,10 @@
 package com.witshare.mars.service.impl;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
+import com.witshare.mars.config.DistributedLocker;
 import com.witshare.mars.constant.EnumProjectStatus;
 import com.witshare.mars.constant.EnumResponseText;
+import com.witshare.mars.constant.PropertiesConfig;
 import com.witshare.mars.dao.mysql.RecordUserTxMapper;
 import com.witshare.mars.dao.mysql.StaticSysUserTxMapper;
 import com.witshare.mars.dao.mysql.SysUserAddressMapper;
@@ -21,6 +23,9 @@ import com.witshare.mars.service.SysUserService;
 import com.witshare.mars.service.TransactionService;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +55,13 @@ public class TransactionServiceImpl implements TransactionService {
     private SysProjectService sysProjectService;
     @Autowired
     private SysUserAddressMapper sysUserAddressMapper;
+    @Autowired
+    private PropertiesConfig propertiesConfig;
+    @Autowired
+    private DistributedLocker distributedLocker;
+    private final static String USER_TX_LOCK = "userTxLock:";
+    private final static int USER_TX_LOCK_TIME = 5;
+    private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Override
     public SysUserAddressVo getUserAddress(String projectGid) {
@@ -162,12 +174,35 @@ public class TransactionServiceImpl implements TransactionService {
             throw new WitshareException(EnumResponseText.ErrorPayTx);
         }
         Timestamp current = new Timestamp(System.currentTimeMillis());
-        recordUserTxBean.setUserGid(currentUser.getUserGid())
+        String userGid = currentUser.getUserGid();
+        recordUserTxBean.setUserGid(userGid)
                 .setUserEmail(currentUser.getEmail())
                 .setProjectToken(sysProjectBean.getProjectToken())
                 .setTime(current);
-        //保存
-        staticSysUserTxMapper.insert(recordUserTxBean);
+
+        //每个用户的交易数量受到限制
+        String txLockKey = USER_TX_LOCK + userGid;
+        String lockId = distributedLocker.lock(txLockKey, USER_TX_LOCK_TIME);
+        if (StringUtils.isEmpty(lockId)) {
+            throw new WitshareException(EnumResponseText.ErrorPayTx);
+        }
+        try {
+            int projectUserTxMax = propertiesConfig.projectUserTxMax;
+            if (-1 != projectUserTxMax) {
+                int buyCount = this.selectBuyCount(userGid, projectGid);
+                if (NumberUtils.compare(projectUserTxMax, buyCount) <= 0) {
+                    throw new WitshareException(EnumResponseText.ReachTxMax);
+                }
+            }
+            //保存
+            staticSysUserTxMapper.insert(recordUserTxBean);
+        } catch (Exception e) {
+            LOGGER.info("save tx fail.userGid:{},projectGid:{}", userGid, projectGid, e);
+            throw e;
+        } finally {
+            distributedLocker.unlock(txLockKey, lockId);
+        }
+
     }
 
 
@@ -185,5 +220,17 @@ public class TransactionServiceImpl implements TransactionService {
             return recordUserTxBean;
         }
         return null;
+    }
+
+
+    @Override
+    public int selectBuyCount(String userGid, String projectGid) {
+        if (StringUtils.isEmpty(userGid) || StringUtils.isNotEmpty(projectGid)) {
+            return 0;
+        }
+        RecordUserTxExample recordUserTxExample = new RecordUserTxExample();
+        recordUserTxExample.or().andUserGidEqualTo(userGid).andProjectGidEqualTo(projectGid);
+        List<RecordUserTx> recordUserTxes = recordUserTxMapper.selectByExample(recordUserTxExample);
+        return recordUserTxes.size();
     }
 }

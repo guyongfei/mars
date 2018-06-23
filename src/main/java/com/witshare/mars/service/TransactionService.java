@@ -17,4 +17,6 @@ public interface TransactionService {
     void save(RecordUserTxBean requestBody);
 
     RecordUserTxBean selectByPayTx(String payTx);
+
+    int selectBuyCount(String userGid, String projectGid);
 }
