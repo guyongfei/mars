@@ -24,87 +24,87 @@ import java.util.Map;
 @RestController
 @RequestMapping(value = "/job")
 public class JobController {
-    private static Logger log = LoggerFactory.getLogger(JobController.class);
-    @Autowired
-    private JobAndTriggerService jobAndTriggerService;
-    @Autowired
-    @Qualifier("marsScheduler")
-    private SchedulerFactoryBean schedulerFactoryBean;
+//    private static Logger log = LoggerFactory.getLogger(JobController.class);
+//    @Autowired
+//    private JobAndTriggerService jobAndTriggerService;
+//    @Autowired
+//    @Qualifier("marsScheduler")
+//    private SchedulerFactoryBean schedulerFactoryBean;
+//
+//    public static BaseJob getClass(String classname) throws Exception {
+//        Class<?> class1 = Class.forName(classname);
+//        return (BaseJob) class1.newInstance();
+//    }
+//
+//    /**
+//     * 新增任务
+//     *
+//     * @throws Exception
+//     */
+//    @RequestMapping(value = "/addjob", method = RequestMethod.POST)
+//    public void addJob(JobAndTrigger jobAndTrigger) throws Exception {
+//        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+//        JobDynamicScheduler.addJob(scheduler, jobAndTrigger);
+//    }
+//
+//    /**
+//     * 暂停任务
+//     *
+//     * @throws Exception
+//     */
+//    @RequestMapping(value = "/pausejob", method = RequestMethod.POST)
+//    public void pausejob(JobAndTrigger jobAndTrigger) throws Exception {
+//        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+//        JobDynamicScheduler.pauseJob(scheduler, jobAndTrigger);
+//    }
+//
+//    /**
+//     * 恢复任务
+//     *
+//     * @throws Exception
+//     */
+//    @RequestMapping(value = "/resumejob", method = RequestMethod.POST)
+//    public void resumejob(JobAndTrigger jobAndTrigger) throws Exception {
+//        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+//        JobDynamicScheduler.resumeJob(scheduler, jobAndTrigger);
+//    }
+//
+//    /**
+//     * 执行一次任务
+//     *
+//     * @throws Exception
+//     */
+//    @RequestMapping(value = "/executeonce", method = RequestMethod.POST)
+//    public void executeOnce(JobAndTrigger jobAndTrigger) throws Exception {
+//        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+//        JobDynamicScheduler.executeOnce(scheduler, jobAndTrigger);
+//    }
+//
+//
+//    /**
+//     * 删除任务
+//     *
+//     * @param jobAndTrigger
+//     * @throws Exception
+//     */
+//    @RequestMapping(value = "/deletejob", method = RequestMethod.POST)
+//    public void deleteJob(JobAndTrigger jobAndTrigger) throws Exception {
+//        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+//        JobDynamicScheduler.removeJob(scheduler, jobAndTrigger);
+//    }
 
-    public static BaseJob getClass(String classname) throws Exception {
-        Class<?> class1 = Class.forName(classname);
-        return (BaseJob) class1.newInstance();
-    }
 
-    /**
-     * 新增任务
-     *
-     * @throws Exception
-     */
-    @RequestMapping(value = "/addjob", method = RequestMethod.POST)
-    public void addJob(JobAndTrigger jobAndTrigger) throws Exception {
-        Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        JobDynamicScheduler.addJob(scheduler, jobAndTrigger);
-    }
-
-    /**
-     * 暂停任务
-     *
-     * @throws Exception
-     */
-    @RequestMapping(value = "/pausejob", method = RequestMethod.POST)
-    public void pausejob(JobAndTrigger jobAndTrigger) throws Exception {
-        Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        JobDynamicScheduler.pauseJob(scheduler, jobAndTrigger);
-    }
-
-    /**
-     * 恢复任务
-     *
-     * @throws Exception
-     */
-    @RequestMapping(value = "/resumejob", method = RequestMethod.POST)
-    public void resumejob(JobAndTrigger jobAndTrigger) throws Exception {
-        Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        JobDynamicScheduler.resumeJob(scheduler, jobAndTrigger);
-    }
-
-    /**
-     * 执行一次任务
-     *
-     * @throws Exception
-     */
-    @RequestMapping(value = "/executeonce", method = RequestMethod.POST)
-    public void executeOnce(JobAndTrigger jobAndTrigger) throws Exception {
-        Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        JobDynamicScheduler.executeOnce(scheduler, jobAndTrigger);
-    }
-
-
-    /**
-     * 删除任务
-     *
-     * @param jobAndTrigger
-     * @throws Exception
-     */
-    @RequestMapping(value = "/deletejob", method = RequestMethod.POST)
-    public void deleteJob(JobAndTrigger jobAndTrigger) throws Exception {
-        Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        JobDynamicScheduler.removeJob(scheduler, jobAndTrigger);
-    }
-
-
-    /**
-     * 查询所有任务
-     */
-    @RequestMapping(value = "/queryjob")
-    public Map<String, Object> queryjob(@RequestParam(value = "pageNum") Integer pageNum, @RequestParam(value = "pageSize") Integer pageSize) {
-        PageInfo<JobAndTrigger> jobAndTrigger = jobAndTriggerService.getJobAndTriggerDetails(pageNum, pageSize);
-        Map<String, Object> map = new HashMap<String, Object>();
-        map.put("JobAndTrigger", jobAndTrigger);
-        map.put("number", jobAndTrigger.getTotal());
-        return map;
-    }
+//    /**
+//     * 查询所有任务
+//     */
+//    @RequestMapping(value = "/queryjob")
+//    public Map<String, Object> queryjob(@RequestParam(value = "pageNum") Integer pageNum, @RequestParam(value = "pageSize") Integer pageSize) {
+//        PageInfo<JobAndTrigger> jobAndTrigger = jobAndTriggerService.getJobAndTriggerDetails(pageNum, pageSize);
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        map.put("JobAndTrigger", jobAndTrigger);
+//        map.put("number", jobAndTrigger.getTotal());
+//        return map;
+//    }
 
 
 }

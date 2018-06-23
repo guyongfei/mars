@@ -25,30 +25,30 @@ public class JobAndTriggerImpl implements JobAndTriggerService {
     private final static Gson GSON = new Gson();
     @Autowired
     private JobAndTriggerMapper jobAndTriggerMapper;
-    @Autowired
-    @Qualifier("marsScheduler")
-    private SchedulerFactoryBean schedulerFactoryBean;
+//    @Autowired
+//    @Qualifier("marsScheduler")
+//    private SchedulerFactoryBean schedulerFactoryBean;
 
 
     public PageInfo<JobAndTrigger> getJobAndTriggerDetails(int pageNum, int pageSize) {
         PageHelper.startPage(pageNum, pageSize);
         List<JobAndTrigger> list = jobAndTriggerMapper.getJobAndTriggerDetails();
-        Scheduler scheduler = schedulerFactoryBean.getScheduler();
-        for (JobAndTrigger jt : list) {
-            JobKey jobKey = new JobKey(jt.getJobName(), jt.getJobGroup());
-            try {
-                JobDataMap jobDataMap = null;
-                JobDetail jobDetail = scheduler.getJobDetail(jobKey);
-                if (jobDetail != null) {
-                    jobDataMap = jobDetail.getJobDataMap();
-                }
-                if (jobDataMap != null) {
-                    jt.setJobData(GSON.toJson(jobDataMap));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        Scheduler scheduler = schedulerFactoryBean.getScheduler();
+//        for (JobAndTrigger jt : list) {
+//            JobKey jobKey = new JobKey(jt.getJobName(), jt.getJobGroup());
+//            try {
+//                JobDataMap jobDataMap = null;
+//                JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+//                if (jobDetail != null) {
+//                    jobDataMap = jobDetail.getJobDataMap();
+//                }
+//                if (jobDataMap != null) {
+//                    jt.setJobData(GSON.toJson(jobDataMap));
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
         PageInfo<JobAndTrigger> page = new PageInfo<JobAndTrigger>(list);
         return page;
     }

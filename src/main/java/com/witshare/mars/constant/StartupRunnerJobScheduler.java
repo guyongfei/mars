@@ -25,15 +25,15 @@ public class StartupRunnerJobScheduler implements CommandLineRunner {
     private static Logger Logger = LoggerFactory.getLogger(StartupRunnerJobScheduler.class);
     @Resource
     private PropertiesConfig propertiesConfig;
-    @Autowired
-    @Qualifier("marsScheduler")
-    private SchedulerFactoryBean schedulerFactoryBean;
+//    @Autowired
+//    @Qualifier("marsScheduler")
+//    private SchedulerFactoryBean schedulerFactoryBean;
 
     @Override
     public void run(String... args) throws Exception {
 
         //同步每日统计
-        createJob(schedulerFactoryBean, "syncStatisticInfo", "system", "0 5 0 * * ?", "同步前一天的统计", SyncDailyStatisticInfo.class);
+//        createJob(schedulerFactoryBean, "syncStatisticInfo", "system", "0 5 0 * * ?", "同步前一天的统计", SyncDailyStatisticInfo.class);
     }
 
 

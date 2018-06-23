@@ -13,13 +13,13 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.util.Properties;
 
-@Configuration
+//@Configuration
 public class ConfigScheduler {
 
     @Autowired
     private MyJobFactory myJobFactory;
 
-    @Bean(name = "marsScheduler")
+//    @Bean(name = "marsScheduler")
     public SchedulerFactoryBean schedulerFactoryBean(@Qualifier("quartzDatasource") DataSource dataSource) throws IOException {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setOverwriteExistingJobs(true);
