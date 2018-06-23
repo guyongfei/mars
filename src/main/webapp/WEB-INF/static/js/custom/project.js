@@ -103,12 +103,19 @@ var TableInit = function () {
                 title: '项目状态',
                 formatter: projectStatusFormatter
             }, {
-                title: '是否启用',
+                title: '是否关闭',
                 field: 'isAvailable',
                 align: 'center',
                 valign: 'middle',
                 events: lockEvents,
                 formatter: lockFormatter
+            }, {
+                title: '统计',
+                field: 'statistic',
+                align: 'center',
+                valign: 'middle',
+                events: statisticEvents,
+                formatter: statisticFormatter
             }, {
                 field: 'operate',
                 title: '操作',
@@ -136,14 +143,24 @@ function lockFormatter(value, row, index) {
     var color_red = 'btn-success';
     var color_green = 'btn-danger';
     if (value) {
-        state = '已启用';
+        state = '开启';
         color = color_red;
     } else if (!value) {
-        state = "已关闭";
+        state = "关闭";
         color = color_green;
     }
     return [
         '<a class="lock" href="javascript:void(0)" title="切换状态">',
+        '<button class="btn ' + color + '" >' + state + '</button>',
+        '</a>'
+    ].join('');
+}
+
+function statisticFormatter(value, row, index) {
+    var color = 'btn-primary';
+    var state = '查看';
+    return [
+        '<a class="statistic" href="javascript:void(0)" title="查看统计">',
         '<button class="btn ' + color + '" >' + state + '</button>',
         '</a>'
     ].join('');
@@ -227,9 +244,14 @@ window.operateEvents = {
         getProject(row)
     }
 };
+window.statisticEvents = {
+    'click .editRow': function (e, value, row, index) {
+        //弹出查询页面
+    }
+};
 function operateFormatter(value, row, index) {
     return [
-        '<button type="button" id="editRow"  class="btn am-btn-primary  editRow" ><i class="fa fa-send " aria-hidden="true" ></i>编辑</button>'
+        '<button type="button" id="editRow"  class="btn btn-info  editRow" ><i class="fa fa-send " aria-hidden="true" ></i>编辑</button>'
     ]
 };
 
@@ -1080,7 +1102,7 @@ $(function () {
     function checkPrice() {
         var priceRate = numeral($('#priceRate').val()).value();
 
-        if (!priceRate ) {
+        if (!priceRate) {
             layer.msg("价格设置有误", {
                 time: 2000,
                 icon: 0,
