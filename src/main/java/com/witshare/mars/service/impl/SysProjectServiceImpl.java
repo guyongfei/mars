@@ -336,7 +336,8 @@ public class SysProjectServiceImpl implements SysProjectService {
         String projectDetailName = i18n.getProjectDetailName();
         //查找redis
         String projectStatisticKey = RedisKeyUtil.getProjectFrontKey(projectGid);
-        String projectDetail = redisCommonDao.getHash(projectStatisticKey, projectDetailName);
+        String projectDetail = null;
+//        String projectDetail = redisCommonDao.getHash(projectStatisticKey, projectDetailName);
         if (StringUtils.isNotEmpty(projectDetail)) {
             frontInfoVo = gson.fromJson(projectDetail, SysProjectBeanFrontInfoVo.class);
             //TODO 找出已经售卖的数量
