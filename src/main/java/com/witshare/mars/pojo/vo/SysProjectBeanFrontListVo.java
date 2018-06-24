@@ -27,6 +27,7 @@ public class SysProjectBeanFrontListVo {
     private String projectInstruction;
     private String whitePaperLink;
     private String projectContent;
+    private String projectName;
 
     private Timestamp createTime;
     private Timestamp updateTime;
@@ -223,6 +224,15 @@ public class SysProjectBeanFrontListVo {
 
     public SysProjectBeanFrontListVo setProjectContent(String projectContent) {
         this.projectContent = projectContent;
+        return this;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public SysProjectBeanFrontListVo setProjectName(String projectName) {
+        this.projectName = projectName;
         return this;
     }
 }

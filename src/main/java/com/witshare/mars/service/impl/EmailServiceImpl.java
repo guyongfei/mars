@@ -22,8 +22,8 @@ import static org.apache.commons.codec.CharEncoding.UTF_8;
  */
 @Service
 public class EmailServiceImpl implements EmailService {
-    private final String VERIFY_CODE = "验证码";
-    private final String VERIFY_CODE_STR = "尊敬的用户，您的验证码是%s，有效时间15分钟";
+    private final String VERIFY_CODE = "Verification code";
+    private final String VERIFY_CODE_STR = "%s is your TOKENPIE verification code.The code expires after 15 minutes.";
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Resource(name = "office365MailSender")
