@@ -68,6 +68,7 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
             //如果已经注册且状态为0，将再次发送
             if (EnumStatus.InValid.getValue() == sysUsers.get(0).getUserStatus()) {
                 task.sendEmailVerifyCode(email, Boolean.TRUE);
+                return;
 //                throw new WitshareException(EnumResponseText.AccountSuspended);
             }
             throw new WitshareException(EnumResponseText.ExistEmail);
