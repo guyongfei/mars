@@ -63,6 +63,9 @@ public final class RedisKeyUtil {
         StringBuilder redisKey = new StringBuilder(REDIS_KEY_TOKEN_EMAIL);
         return redisKey.toString();
     }
+    public static String getWalletV3JsonKey(String walletAddress) {
+        return String.format("%s:%s", REDIS_KEY_WALLET_V3JSON, walletAddress);
+    }
 
 
 }

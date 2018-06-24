@@ -3,21 +3,27 @@ package com.witshare.mars.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sun.org.apache.regexp.internal.RE;
+import com.witshare.mars.dao.redis.RedisCommonDao;
+import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.pojo.dto.TokenDistributeBean;
 import com.witshare.mars.pojo.util.ResponseBean;
+import com.witshare.mars.service.SysProjectService;
 import com.witshare.mars.service.TokenDistributeService;
 import com.witshare.mars.util.HttpClientUtil;
+import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.TokenHelper;
 import com.witshare.mars.util.UUIDUtil;
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class TokenDistributeServiceImpl implements TokenDistributeService {
@@ -33,8 +39,24 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
     @Value("${moon.sk}")
     private String MOON_SK;
 
+    @Autowired
+    private RedisCommonDao redisCommonDao;
+    @Autowired
+    private SysProjectService sysProjectService;
+
     @Override
     public ResponseBean execTokenDistribute(TokenDistributeBean tokenDistributeBean) {
+        String keystore = tokenDistributeBean.getKeystore();
+        SysProjectBean sysProjectBean = sysProjectService.selectByProjectGid(tokenDistributeBean.getProjectGid());
+        if (Objects.nonNull(sysProjectBean)) {
+            String address = sysProjectBean.getPlatformAddress();
+            if (StringUtils.isNoneBlank(address, keystore)) {
+                //缓存keystore
+                String walletV3JsonKey = RedisKeyUtil.getWalletV3JsonKey(address);
+                redisCommonDao.setString(walletV3JsonKey, keystore);
+                redisCommonDao.expire(walletV3JsonKey, 60 * 10);
+            }
+        }
         String rid = UUIDUtil.get12UUID();
         String reqPath = "/token/distribute";
         String url = MOON_HOST + reqPath;
@@ -45,9 +67,10 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
             put("userTxStatusArr", tokenDistributeBean.getUserTxStatus());
             put("platformTxStatusArr", tokenDistributeBean.getPlatformTxStatus());
         }};
-        String reqToken = getToken(reqPath, "POST", null, JSON.toJSONString(body));
+        String bodyJson = JSON.toJSONString(body);
+        String reqToken = getToken(reqPath, "POST", null, bodyJson);
         logger.info("execTokenDistribute() request==>rid={}; url={}; param={}", rid, url, body);
-        String result = HttpClientUtil.doPost(url, reqToken, MOON_TOKEN_HEADER_NAME);
+        String result = HttpClientUtil.doPost(url, bodyJson,reqToken, MOON_TOKEN_HEADER_NAME);
         logger.info("execTokenDistribute() response==>rid={}; res={}", rid, result);
         ResponseBean responseBean = parseResult(result);
         return responseBean;
@@ -57,11 +80,11 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
     public ResponseBean getTokenDistributeProgress(String projectGid) {
         String rid = UUIDUtil.get12UUID();
         String reqPath = "/token/distribute/progress";
-        String params = "?projectGid=" + projectGid;
-        String url = MOON_HOST + reqPath + params;
+        String params = "projectGid=" + projectGid;
+        String url = MOON_HOST + reqPath;
         String reqToken = getToken(reqPath, "GET", params, null);
         logger.info("getTokenDistributeProgress() request==>rid={}; url={}; param={}", rid, url, params);
-        String result = HttpClientUtil.doGet(url, reqToken, MOON_TOKEN_HEADER_NAME);
+        String result = HttpClientUtil.doGet(url + "?" + params, reqToken, MOON_TOKEN_HEADER_NAME);
         logger.info("getTokenDistributeProgress() response==>rid={}; res={}", rid, result);
         ResponseBean responseBean = parseResult(result);
         return responseBean;
