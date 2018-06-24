@@ -65,9 +65,10 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
         sysUserExample.or().andEmailEqualTo(email).andSaltIsNotNull();
         List<SysUser> sysUsers = sysUserMapper.selectByExample(sysUserExample);
         if (!CollectionUtils.isEmpty(sysUsers)) {
-            //如果已经注册且状态为0，表示被冻结；未被冬季则表示已经存在该账号
+            //如果已经注册且状态为0，将再次发送
             if (EnumStatus.InValid.getValue() == sysUsers.get(0).getUserStatus()) {
-                throw new WitshareException(EnumResponseText.AccountSuspended);
+                task.sendEmailVerifyCode(email, Boolean.TRUE);
+//                throw new WitshareException(EnumResponseText.AccountSuspended);
             }
             throw new WitshareException(EnumResponseText.ExistEmail);
         }
