@@ -30,7 +30,7 @@ public class ProjectSummaryBean {
 
     private Timestamp updateTime;
 
-    private ProjectSummaryBean() {
+    public ProjectSummaryBean() {
     }
 
     public static ProjectSummaryBean newInstance() {

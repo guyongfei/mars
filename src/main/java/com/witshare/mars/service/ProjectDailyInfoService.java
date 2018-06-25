@@ -16,4 +16,6 @@ public interface ProjectDailyInfoService {
     ProjectSummaryBean getSummary(String projectGid);
 
     ProjectDailyInfoBean get(String projectGid, Date date);
+
+    void syncDailyInfo();
 }

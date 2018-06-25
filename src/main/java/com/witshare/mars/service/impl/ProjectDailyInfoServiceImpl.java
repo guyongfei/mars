@@ -2,29 +2,25 @@ package com.witshare.mars.service.impl;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.witshare.mars.constant.EnumProjectStatus;
-import com.witshare.mars.dao.mysql.ProjectDailyInfoMapper;
-import com.witshare.mars.dao.mysql.ProjectSummaryMapper;
-import com.witshare.mars.dao.mysql.RecordUserTxMapper;
-import com.witshare.mars.dao.mysql.SysProjectMapper;
+import com.witshare.mars.dao.mysql.*;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.pojo.domain.*;
 import com.witshare.mars.pojo.dto.ProjectDailyInfoBean;
 import com.witshare.mars.pojo.dto.ProjectSummaryBean;
 import com.witshare.mars.pojo.dto.RecordUserTxBean;
-import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.service.ProjectDailyInfoService;
 import com.witshare.mars.service.SysProjectService;
+import com.witshare.mars.util.WitshareUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,6 +36,10 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
     private SysProjectMapper sysProjectMapper;
     @Autowired
     private RecordUserTxMapper recordUserTxMapper;
+    @Autowired
+    private StaticProjectDailyInfoMapper staticProjectDailyInfoMapper;
+    @Autowired
+    private StaticProjectSummaryMapper staticProjectSummaryMapper;
     @Autowired
     private SysProjectService sysProjectService;
     @Autowired
@@ -73,15 +73,6 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
             return projectSummaryBean;
         }
         return null;
-
-//        BigDecimal actualGetEthAmount = projectDailyInfos.stream().map(ProjectDailyInfo::getActualGetEthAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-//        BigDecimal actualPayTokenAmount = projectDailyInfos.stream().map(ProjectDailyInfo::getActualPayTokenAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-//        BigDecimal getEthAmount = projectDailyInfos.stream().map(ProjectDailyInfo::getGetEthAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-//        BigDecimal payTokenAmount = projectDailyInfos.stream().map(ProjectDailyInfo::getPayTokenAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-//        int txAddressCount = projectDailyInfos.stream().mapToInt(ProjectDailyInfo::getTxCount).sum();
-//        int txUserCount = projectDailyInfos.stream().mapToInt(ProjectDailyInfo::getUserCount).sum();
-//        int actualTxAddressCount = projectDailyInfos.stream().mapToInt(ProjectDailyInfo::getActualTxCount).sum();
-//        int actualTxUserCount = projectDailyInfos.stream().mapToInt(ProjectDailyInfo::getActualTxUserCount).sum();
     }
 
     @Override
@@ -106,13 +97,18 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
 
 
     //更新每日统计表和汇总表
+    @Override
     public void syncDailyInfo() {
+        LinkedList<String> projects = new LinkedList<>();
+        LinkedList<ProjectDailyInfoBean> projectDailyInfoBeans = new LinkedList<>();
+        LinkedList<ProjectSummaryBean> projectSummaryBeans = new LinkedList<>();
+
         //查询 还未打币完成的项目
         SysProjectExample sysProjectExample = new SysProjectExample();
         sysProjectExample.or().andProjectStatusIn(EnumProjectStatus.getStatisticStatuses());
         List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
-        LinkedList<String> projects = new LinkedList<>();
         sysProjects.forEach(p -> projects.add(p.getProjectGid()));
+
         //查询与项目有关的所有交易
         RecordUserTxExample recordUserTxExample = new RecordUserTxExample();
         recordUserTxExample.or().andProjectGidIn(projects);
@@ -128,88 +124,77 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
                 .collect(Collectors.groupingBy(RecordUserTxBean::getProjectGid,
                         Collectors.groupingBy(RecordUserTxBean::getLocalDate,
                                 Collectors.toList())));
-        //
-        LinkedList<ProjectDailyInfoBean> projectDailyInfoBeans = new LinkedList<>();
-        LinkedList<ProjectSummaryBean> projectSummaryBeans = new LinkedList<>();
 
-
-
+        //汇总数据
         collect.forEach((projectGid, v1) -> {
-
-            SysProjectBean sysProjectBean = sysProjectService.selectByProjectGid(projectGid);
-            String projectToken = sysProjectBean.getProjectToken();
-            LinkedList<RecordUserTxBean> projectList = new LinkedList<>();
-            Timestamp current = new Timestamp(System.currentTimeMillis());
+            LinkedList<RecordUserTxBean> userTxList = new LinkedList<>();
             v1.forEach((localDate, v2) -> {
-                //获取统计数据
-                BigDecimal actualGetEthAmount = v2.stream().map(RecordUserTxBean::getActualGetAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-                BigDecimal actualPayTokenAmount = v2.stream().map(RecordUserTxBean::getShouldGetAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-                BigDecimal getEthAmount = v2.stream().map(RecordUserTxBean::getPayAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-                BigDecimal payTokenAmount = v2.stream().map(RecordUserTxBean::getHopeGetAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+                ProjectSummaryBean projectSummaryBean = getProjectSummaryBean(v2);
+                if (projectSummaryBean == null) {
+                    return;
+                }
 
-                Set<String> userSet = v2.stream().map(RecordUserTxBean::getUserGid).collect(Collectors.toSet());
-                int txCount = v2.size();
-                int userCount = userSet.size();
-
-                Set<String> actualUserSet = v2.stream().filter(p -> (BigDecimal.ZERO.compareTo(p.getShouldGetAmount()) < 0)).map(RecordUserTxBean::getUserGid).collect(Collectors.toSet());
-                int actualTxCount = (int) v2.stream().filter(p -> (BigDecimal.ZERO.compareTo(p.getShouldGetAmount()) < 0)).count();
-                int actualUserCount = actualUserSet.size();
-
-
-                ZoneId zoneId = ZoneId.systemDefault();
-                ZonedDateTime zdt = localDate.atStartOfDay(zoneId);
-                Date current_day = Date.from(zdt.toInstant());
-
-                //组装统计对象
-                ProjectDailyInfoBean projectDailyInfoBean = ProjectDailyInfoBean.newInstance()
-                        .setProjectGid(projectGid)
-                        .setProjectToken(projectToken)
-                        .setActualGetEthAmount(actualGetEthAmount)
-                        .setActualPayTokenAmount(actualPayTokenAmount)
-                        .setGetEthAmount(getEthAmount)
-                        .setPayTokenAmount(payTokenAmount)
-                        .setTxCount(txCount)
-                        .setUserCount(userCount)
-                        .setActualTxCount(actualTxCount)
-                        .setActualUserCount(actualUserCount)
-                        .setCreateTime(current)
-                        .setUpdateTime(current)
-                        .setCurrentDay(current_day);
+                ProjectDailyInfoBean projectDailyInfoBean = ProjectDailyInfoBean.newInstance();
+                BeanUtils.copyProperties(projectSummaryBean,projectDailyInfoBean);
+                Date currentDay = WitshareUtils.getDateByLocalDate(localDate);
+                projectDailyInfoBean.setCurrentDay(currentDay);
 
                 //置入list
-                projectList.addAll(v2);
+                userTxList.addAll(v2);
                 projectDailyInfoBeans.add(projectDailyInfoBean);
+
             });
-
-            BigDecimal actualGetEthAmount = projectList.stream().map(RecordUserTxBean::getActualGetAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-            BigDecimal actualPayTokenAmount = projectList.stream().map(RecordUserTxBean::getShouldGetAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-            BigDecimal getEthAmount = projectList.stream().map(RecordUserTxBean::getPayAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-            BigDecimal payTokenAmount = projectList.stream().map(RecordUserTxBean::getHopeGetAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-            Set<String> userSet = projectList.stream().map(RecordUserTxBean::getUserGid).collect(Collectors.toSet());
-            int txCount = projectList.size();
-            int userCount = userSet.size();
-
-            Set<String> actualUserSet = projectList.stream().filter(p -> (BigDecimal.ZERO.compareTo(p.getShouldGetAmount()) < 0)).map(RecordUserTxBean::getUserGid).collect(Collectors.toSet());
-            int actualTxCount = (int) projectList.stream().filter(p -> (BigDecimal.ZERO.compareTo(p.getShouldGetAmount()) < 0)).count();
-            int actualUserCount = actualUserSet.size();
-
-            ProjectSummaryBean projectSummaryBean = ProjectSummaryBean.newInstance()
-                    .setProjectGid(projectGid)
-                    .setProjectToken(projectToken)
-                    .setActualUserCount(actualUserCount)
-                    .setUserCount(userCount)
-                    .setActualGetEthAmount(actualGetEthAmount)
-                    .setActualPayTokenAmount(actualPayTokenAmount)
-                    .setGetEthAmount(getEthAmount)
-                    .setPayTokenAmount(payTokenAmount)
-                    .setTxCount(txCount)
-                    .setUserCount(userCount)
-                    .setActualTxCount(actualTxCount)
-                    .setActualUserCount(actualUserCount)
-                    .setCreateTime(current)
-                    .setUpdateTime(current);
+            //置入list
+            ProjectSummaryBean projectSummaryBean = getProjectSummaryBean(userTxList);
+            projectSummaryBeans.add(projectSummaryBean);
         });
 
+        //存表
+        staticProjectDailyInfoMapper.saveOrUpdate(projectDailyInfoBeans);
+        staticProjectSummaryMapper.saveOrUpdate(projectSummaryBeans);
+    }
+
+    /**
+     * 通过交易记录获得项目统计数据
+     */
+    private ProjectSummaryBean getProjectSummaryBean(List<RecordUserTxBean> userTxList) {
+
+        if (CollectionUtils.isEmpty(userTxList)) {
+            return null;
+        }
+
+        RecordUserTxBean recordUserTxBean = userTxList.get(0);
+        String projectGid = recordUserTxBean.getProjectGid();
+        String projectToken = recordUserTxBean.getProjectToken();
+        Timestamp current = new Timestamp(System.currentTimeMillis());
+
+        BigDecimal actualGetEthAmount = userTxList.stream().map(RecordUserTxBean::getActualPayAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal actualPayTokenAmount = userTxList.stream().map(RecordUserTxBean::getShouldGetAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal getEthAmount = userTxList.stream().map(RecordUserTxBean::getPayAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal payTokenAmount = userTxList.stream().map(RecordUserTxBean::getHopeGetAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        Set<String> userSet = userTxList.stream().map(RecordUserTxBean::getUserGid).collect(Collectors.toSet());
+        int txCount = userTxList.size();
+        int userCount = userSet.size();
+
+        Set<String> actualUserSet = userTxList.stream().filter(p -> (BigDecimal.ZERO.compareTo(p.getShouldGetAmount()) < 0)).map(RecordUserTxBean::getUserGid).collect(Collectors.toSet());
+        int actualTxCount = (int) userTxList.stream().filter(p -> (BigDecimal.ZERO.compareTo(p.getShouldGetAmount()) < 0)).count();
+        int actualUserCount = actualUserSet.size();
+
+        return ProjectSummaryBean.newInstance()
+                .setProjectGid(projectGid)
+                .setProjectToken(projectToken)
+                .setActualUserCount(actualUserCount)
+                .setUserCount(userCount)
+                .setActualGetEthAmount(actualGetEthAmount)
+                .setActualPayTokenAmount(actualPayTokenAmount)
+                .setGetEthAmount(getEthAmount)
+                .setPayTokenAmount(payTokenAmount)
+                .setTxCount(txCount)
+                .setUserCount(userCount)
+                .setActualTxCount(actualTxCount)
+                .setActualUserCount(actualUserCount)
+                .setCreateTime(current)
+                .setUpdateTime(current);
 
     }
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.witshare.mars.dao.mysql.StaticProjectSummaryMapper">
+
+    <insert id="saveOrUpdate">
+        <if test="collection!=null and collection.size()>0">
+            <foreach collection="collection" item="bean">
+                insert into project_summary (project_gid, project_token, get_eth_amount,
+                actual_get_eth_amount, pay_token_amount, actual_pay_token_amount,
+                user_count, actual_user_count, tx_count,
+                actual_tx_count,create_time,
+                update_time)
+                values (#{bean.projectGid,jdbcType=CHAR}, #{bean.projectToken,jdbcType=VARCHAR},
+                #{bean.getEthAmount,jdbcType=DECIMAL}, #{bean.actualGetEthAmount,jdbcType=DECIMAL},
+                #{bean.payTokenAmount,jdbcType=DECIMAL},#{bean.actualPayTokenAmount,jdbcType=DECIMAL},
+                #{bean.userCount,jdbcType=INTEGER}, #{bean.actualUserCount,jdbcType=INTEGER},
+                #{bean.txCount,jdbcType=INTEGER},#{bean.actualTxCount,jdbcType=INTEGER},
+                #{bean.createTime,jdbcType=TIMESTAMP}, #{bean.updateTime,jdbcType=TIMESTAMP})
+                ON DUPLICATE KEY UPDATE
+                get_eth_amount=VALUES(get_eth_amount),
+                actual_get_eth_amount=VALUES(actual_get_eth_amount),
+                pay_token_amount=VALUES(pay_token_amount),
+                actual_pay_token_amount=VALUES(actual_pay_token_amount),
+                actual_user_count=VALUES(actual_user_count),
+                tx_count=VALUES(tx_count),
+                actual_tx_count=VALUES(actual_tx_count),
+                user_count=VALUES(user_count),
+                update_time=VALUES(update_time) ;
+            </foreach>
+        </if>
+    </insert>
+
+</mapper>

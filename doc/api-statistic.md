@@ -20,26 +20,26 @@
         "projectGid":"",
         "projectToken":"",
         "summaryInfo":{
-           "txUserCount":5,
-           "actualTxUserCount":5,
-           "txAddressCount":5,
-           "actualTxAddressCount":5,
-           "getEthAmount":5.0,
-           "actualGetEthAmount":5.0,
-           "payTokenAmount":5.0,
-           "actualPayTokenAmount":5.0,
-           "dayTime":1521234561000
+            "userCount":5,
+            "actualUserCount":5,
+            "txCount":5,
+            "actualTxCount":5,
+            "getEthAmount":5.0,
+            "actualGetEthAmount":5.0,
+            "payTokenAmount":5.0,
+            "actualPayTokenAmount":5.0,
+            "dayTime":1521234561000
          },
         "dailyInfo":[  {
-          "txUserCount":5,
-          "actualTxUserCount":5,
-          "txAddressCount":5,
-          "actualTxAddressCount":5,
-          "getEthAmount":5.0,
-          "actualGetEthAmount":5.0,
-          "payTokenAmount":5.0,
-          "actualPayTokenAmount":5.0,
-          "dayTime":1521234561000
+            "userCount":5,
+            "actualUserCount":5,
+            "txCount":5,
+            "actualTxCount":5,
+            "getEthAmount":5.0,
+            "actualGetEthAmount":5.0,
+            "payTokenAmount":5.0,
+            "actualPayTokenAmount":5.0,
+            "dayTime":1521234561000
         }
         ]
       }
@@ -58,12 +58,12 @@
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
-|txUserCount|number|是|交易用户数|
-|actualTxUserCount|number|是|实际交易用户数|
-|txAddressCount|number|是|交易地址数|
-|actualTxAddressCount|number|是|实际交易地址数|
-|getEthAmount|number|是|募集到的ETH数量|
-|actualGetEthAmount|number|是|实际募集到的ETH数量|
-|payTokenAmount|number|是|需要分发的token数量|
-|actualPayTokenAmount|number|是|实际需要分发的token数量|
+|userCount|number|是|用户数量|
+|actualUserCount|number|是|有效用户|
+|txCount|number|是|申请数量|
+|actualTxCount|number|是|有效申请|
+|getEthAmount|number|是|ETH数量|
+|actualGetEthAmount|number|是|有效ETH|
+|payTokenAmount|number|是|Token数量|
+|actualPayTokenAmount|number|是|有效Token|
 |dayTime|number|是|统计时间戳|

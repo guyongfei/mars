@@ -23,6 +23,9 @@ import java.net.InetAddress;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.*;
 
 import static com.witshare.mars.constant.CacheConsts.PARAM_PASSWORD_ENCRYPTION_ALGORITHM;
@@ -49,6 +52,16 @@ public class WitshareUtils {
         }
         return prop;
     }
+
+    public static Date getDateByLocalDate(LocalDate localDate) {
+        if (localDate == null) {
+            return null;
+        }
+        ZoneId zoneId = ZoneId.systemDefault();
+        ZonedDateTime zdt = localDate.atStartOfDay(zoneId);
+        return Date.from(zdt.toInstant());
+    }
+
 
     public static Timestamp getCurrentTimeStamp() {
         return new Timestamp(System.currentTimeMillis());
@@ -82,30 +95,6 @@ public class WitshareUtils {
     }
 
     /**
-     * 获取当前语言
-     *
-     * @return
-     */
-    public static String getI18N() {
-        String i18N = CurrentThreadContext.getI18N();
-        return StringUtils.isEmpty(i18N) ? EnumI18NProject.PROJECT_DESCRIPTION_CN.getRequestLanguage() : i18N;
-    }
-
-
-    public static String getHostName() {
-        try {
-            InetAddress addr = InetAddress.getLocalHost();
-            String ip = addr.getHostAddress().toString(); //获取本机ip
-            String hostName = addr.getHostName().toString(); //获取本机计算机名称
-            return hostName;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-    /**
      * 加密用户密码。
      */
     public static String encryptPassword(String loginName, String salt, String originPassword) {
@@ -116,29 +105,6 @@ public class WitshareUtils {
                 PARAM_PASSWORD_ENCRYPTION_TIMES
         ).toString();
         return cryptograph;
-    }
-
-    /**
-     * 获取登录用户IP地址
-     *
-     * @param request
-     * @return
-     */
-    public static String getIpAddress(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        if (ip.equals("0:0:0:0:0:0:0:1")) {
-            ip = "本地";
-        }
-        return ip;
     }
 
     /**
@@ -333,8 +299,10 @@ public class WitshareUtils {
         calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) + 1);
         return calendar.getTime();
     }
+
     final static Base64.Decoder decoder = Base64.getDecoder();
     final static Base64.Encoder encoder = Base64.getEncoder();
+
     //base64字符串转化成图片
     public static byte[] base64ToByte(String imgStr) {   //对字节数组字符串进行Base64解码并生成图片
         if (imgStr == null) //图像数据为空
