@@ -203,7 +203,6 @@ public class SysProjectServiceImpl implements SysProjectService {
                 || StringUtils.isEmpty(sysProjectBean.getTokenAddress())
                 || StringUtils.isEmpty(sysProjectBean.getProjectAddress())
                 || startTime.after(endTime)
-                || current.after(startTime)
                 || priceRate.compareTo(BigDecimal.ZERO) < 0
                 || softCap == null || softCap.compareTo(BigDecimal.ZERO) <= 0
                 || hardCap == null || softCap.compareTo(hardCap) > 0

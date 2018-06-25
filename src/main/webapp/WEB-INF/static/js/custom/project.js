@@ -608,9 +608,13 @@ $(function () {
                         message: '合约地址不能为空'
                     },
                     stringLength: {
-                        min: 1,
-                        max: 1,
-                        message: ''
+                        min: 42,
+                        max: 42,
+                        message: '请输入42个字符的合约地址'
+                    },
+                    regexp: {
+                        regexp: /^0x\S{40}$/,
+                        message: '请输入正确的合约地址'
                     }
                 }
             },
@@ -621,9 +625,13 @@ $(function () {
                         message: '项目地址不能为空'
                     },
                     stringLength: {
-                        min: 1,
-                        max: 1,
-                        message: ''
+                        min: 42,
+                        max: 42,
+                        message: '请输入42个字符的地址'
+                    },
+                    regexp: {
+                        regexp: /^0x\S{40}$/,
+                        message: '请输入正确的地址'
                     }
                 }
             },
