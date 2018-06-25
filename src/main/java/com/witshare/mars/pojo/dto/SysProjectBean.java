@@ -147,8 +147,8 @@ public class SysProjectBean {
     private BigDecimal priceRate;
 //    private BigDecimal startPriceRate;
 //    private BigDecimal endPriceRate;
-    private Timestamp projectStatus;
-    private Timestamp isAvailable;
+    private Integer projectStatus;
+    private Integer isAvailable;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -755,20 +755,20 @@ public class SysProjectBean {
         return this;
     }
 
-    public Timestamp getProjectStatus() {
+    public Integer getProjectStatus() {
         return projectStatus;
     }
 
-    public SysProjectBean setProjectStatus(Timestamp projectStatus) {
+    public SysProjectBean setProjectStatus(Integer projectStatus) {
         this.projectStatus = projectStatus;
         return this;
     }
 
-    public Timestamp getIsAvailable() {
+    public Integer getIsAvailable() {
         return isAvailable;
     }
 
-    public SysProjectBean setIsAvailable(Timestamp isAvailable) {
+    public SysProjectBean setIsAvailable(Integer isAvailable) {
         this.isAvailable = isAvailable;
         return this;
     }
