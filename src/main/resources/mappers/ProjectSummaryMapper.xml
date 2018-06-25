@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.witshare.mars.dao.mysql.ProjectDailyInfoMapper" >
-  <resultMap id="BaseResultMap" type="com.witshare.mars.pojo.domain.ProjectDailyInfo" >
+<mapper namespace="com.witshare.mars.dao.mysql.ProjectSummaryMapper" >
+  <resultMap id="BaseResultMap" type="com.witshare.mars.pojo.domain.ProjectSummary" >
     <id column="id" property="id" jdbcType="INTEGER" />
     <result column="project_gid" property="projectGid" jdbcType="CHAR" />
     <result column="project_token" property="projectToken" jdbcType="VARCHAR" />
@@ -13,7 +13,6 @@
     <result column="actual_user_count" property="actualUserCount" jdbcType="INTEGER" />
     <result column="tx_count" property="txCount" jdbcType="INTEGER" />
     <result column="actual_tx_count" property="actualTxCount" jdbcType="INTEGER" />
-    <result column="current_day" property="currentDay" jdbcType="DATE" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -78,16 +77,16 @@
   <sql id="Base_Column_List" >
     id, project_gid, project_token, get_eth_amount, actual_get_eth_amount, pay_token_amount, 
     actual_pay_token_amount, user_count, actual_user_count, tx_count, actual_tx_count, 
-    current_day, create_time, update_time
+    create_time, update_time
   </sql>
-  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.witshare.mars.pojo.domain.ProjectDailyInfoExample" >
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.witshare.mars.pojo.domain.ProjectSummaryExample" >
     select
     <if test="distinct" >
       distinct
     </if>
     'true' as QUERYID,
     <include refid="Base_Column_List" />
-    from project_daily_info
+    from project_summary
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
@@ -98,33 +97,33 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
-    from project_daily_info
+    from project_summary
     where id = #{id,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from project_daily_info
+    delete from project_summary
     where id = #{id,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.witshare.mars.pojo.domain.ProjectDailyInfoExample" >
-    delete from project_daily_info
+  <delete id="deleteByExample" parameterType="com.witshare.mars.pojo.domain.ProjectSummaryExample" >
+    delete from project_summary
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.witshare.mars.pojo.domain.ProjectDailyInfo" useGeneratedKeys="true" keyProperty="id" >
-    insert into project_daily_info (project_gid, project_token, get_eth_amount, 
+  <insert id="insert" parameterType="com.witshare.mars.pojo.domain.ProjectSummary" useGeneratedKeys="true" keyProperty="id" >
+    insert into project_summary (project_gid, project_token, get_eth_amount, 
       actual_get_eth_amount, pay_token_amount, actual_pay_token_amount, 
       user_count, actual_user_count, tx_count, 
-      actual_tx_count, current_day, create_time, 
-      update_time)
+      actual_tx_count, create_time, update_time
+      )
     values (#{projectGid,jdbcType=CHAR}, #{projectToken,jdbcType=VARCHAR}, #{getEthAmount,jdbcType=DECIMAL}, 
       #{actualGetEthAmount,jdbcType=DECIMAL}, #{payTokenAmount,jdbcType=DECIMAL}, #{actualPayTokenAmount,jdbcType=DECIMAL}, 
       #{userCount,jdbcType=INTEGER}, #{actualUserCount,jdbcType=INTEGER}, #{txCount,jdbcType=INTEGER}, 
-      #{actualTxCount,jdbcType=INTEGER}, #{currentDay,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{actualTxCount,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.witshare.mars.pojo.domain.ProjectDailyInfo" useGeneratedKeys="true" keyProperty="id" >
-    insert into project_daily_info
+  <insert id="insertSelective" parameterType="com.witshare.mars.pojo.domain.ProjectSummary" useGeneratedKeys="true" keyProperty="id" >
+    insert into project_summary
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="projectGid != null" >
         project_gid,
@@ -155,9 +154,6 @@
       </if>
       <if test="actualTxCount != null" >
         actual_tx_count,
-      </if>
-      <if test="currentDay != null" >
-        current_day,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -197,9 +193,6 @@
       <if test="actualTxCount != null" >
         #{actualTxCount,jdbcType=INTEGER},
       </if>
-      <if test="currentDay != null" >
-        #{currentDay,jdbcType=DATE},
-      </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -208,14 +201,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.witshare.mars.pojo.domain.ProjectDailyInfoExample" resultType="java.lang.Integer" >
-    select count(*) from project_daily_info
+  <select id="countByExample" parameterType="com.witshare.mars.pojo.domain.ProjectSummaryExample" resultType="java.lang.Integer" >
+    select count(*) from project_summary
     <if test="_parameter != null" >
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map" >
-    update project_daily_info
+    update project_summary
     <set >
       <if test="record.id != null" >
         id = #{record.id,jdbcType=INTEGER},
@@ -250,9 +243,6 @@
       <if test="record.actualTxCount != null" >
         actual_tx_count = #{record.actualTxCount,jdbcType=INTEGER},
       </if>
-      <if test="record.currentDay != null" >
-        current_day = #{record.currentDay,jdbcType=DATE},
-      </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -265,7 +255,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map" >
-    update project_daily_info
+    update project_summary
     set id = #{record.id,jdbcType=INTEGER},
       project_gid = #{record.projectGid,jdbcType=CHAR},
       project_token = #{record.projectToken,jdbcType=VARCHAR},
@@ -277,15 +267,14 @@
       actual_user_count = #{record.actualUserCount,jdbcType=INTEGER},
       tx_count = #{record.txCount,jdbcType=INTEGER},
       actual_tx_count = #{record.actualTxCount,jdbcType=INTEGER},
-      current_day = #{record.currentDay,jdbcType=DATE},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.witshare.mars.pojo.domain.ProjectDailyInfo" >
-    update project_daily_info
+  <update id="updateByPrimaryKeySelective" parameterType="com.witshare.mars.pojo.domain.ProjectSummary" >
+    update project_summary
     <set >
       <if test="projectGid != null" >
         project_gid = #{projectGid,jdbcType=CHAR},
@@ -317,9 +306,6 @@
       <if test="actualTxCount != null" >
         actual_tx_count = #{actualTxCount,jdbcType=INTEGER},
       </if>
-      <if test="currentDay != null" >
-        current_day = #{currentDay,jdbcType=DATE},
-      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -329,8 +315,8 @@
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.witshare.mars.pojo.domain.ProjectDailyInfo" >
-    update project_daily_info
+  <update id="updateByPrimaryKey" parameterType="com.witshare.mars.pojo.domain.ProjectSummary" >
+    update project_summary
     set project_gid = #{projectGid,jdbcType=CHAR},
       project_token = #{projectToken,jdbcType=VARCHAR},
       get_eth_amount = #{getEthAmount,jdbcType=DECIMAL},
@@ -341,7 +327,6 @@
       actual_user_count = #{actualUserCount,jdbcType=INTEGER},
       tx_count = #{txCount,jdbcType=INTEGER},
       actual_tx_count = #{actualTxCount,jdbcType=INTEGER},
-      current_day = #{currentDay,jdbcType=DATE},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}

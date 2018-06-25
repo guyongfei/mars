@@ -8,18 +8,36 @@ CREATE TABLE `project_daily_info` (
   `actual_get_eth_amount` DECIMAL(30,10) UNSIGNED NOT NULL  DEFAULT '0.00000'COMMENT '当日实际认购数量',
   `pay_token_amount` DECIMAL(30,10) UNSIGNED NOT NULL  DEFAULT '0.00000'COMMENT '当日应分发token数量',
   `actual_pay_token_amount` DECIMAL(30,10) UNSIGNED NOT NULL DEFAULT '0.00000' COMMENT '当日实际应分发token数量',
-  `tx_user_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '当日认购用户数量',
-  `actual_tx_user_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '当日实际认购用户数量',
-  `tx_address_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '当日认购地址数量',
-  `actual_tx_address_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '当日实际认购地址数量',
+  `user_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '当日认购用户数量',
+  `actual_user_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '当日实际认购用户数量',
+  `tx_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '当日申请数量',
+  `actual_tx_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '当日实际申请数量',
   `current_day` DATE NOT NULL DEFAULT '0000-00-00' COMMENT '当前日期',
   `create_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
   `update_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_multi` (`project_gid`,`current_day`)
-) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='统计表';
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='项目每日统计表';
 
-/*Table structure for table `project_description_cn` */
+
+CREATE TABLE `project_summary` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `project_gid` CHAR(32) NOT NULL COMMENT '项目唯一标识',
+  `project_token` VARCHAR(126) NOT NULL COMMENT '项目token',
+  `get_eth_amount` DECIMAL(30,10) UNSIGNED NOT NULL  DEFAULT '0.00000'COMMENT '认购数量',
+  `actual_get_eth_amount` DECIMAL(30,10) UNSIGNED NOT NULL  DEFAULT '0.00000'COMMENT '实际认购数量',
+  `pay_token_amount` DECIMAL(30,10) UNSIGNED NOT NULL  DEFAULT '0.00000'COMMENT '应分发token数量',
+  `actual_pay_token_amount` DECIMAL(30,10) UNSIGNED NOT NULL DEFAULT '0.00000' COMMENT '实际应分发token数量',
+  `user_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '认购用户数量',
+  `actual_user_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '实际认购用户数量',
+  `tx_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '申请数量',
+  `actual_tx_count` int(11) UNSIGNED NOT NULL  DEFAULT '0'COMMENT '实际申请数量',
+  `create_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
+  `update_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_project_gid` (`project_gid`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='项目汇总统计表';
+
 
 CREATE TABLE `project_description_cn` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',

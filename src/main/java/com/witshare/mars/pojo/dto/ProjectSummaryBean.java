@@ -1,10 +1,9 @@
-package com.witshare.mars.pojo.domain;
+package com.witshare.mars.pojo.dto;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Date;
 
-public class ProjectDailyInfo {
+public class ProjectSummaryBean {
     private Long id;
 
     private String projectGid;
@@ -27,121 +26,131 @@ public class ProjectDailyInfo {
 
     private Integer actualTxCount;
 
-    private Date currentDay;
-
     private Timestamp createTime;
 
     private Timestamp updateTime;
+
+    private ProjectSummaryBean() {
+    }
+
+    public static ProjectSummaryBean newInstance() {
+        return new ProjectSummaryBean();
+    }
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public ProjectSummaryBean setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getProjectGid() {
         return projectGid;
     }
 
-    public void setProjectGid(String projectGid) {
-        this.projectGid = projectGid == null ? null : projectGid.trim();
+    public ProjectSummaryBean setProjectGid(String projectGid) {
+        this.projectGid = projectGid;
+        return this;
     }
 
     public String getProjectToken() {
         return projectToken;
     }
 
-    public void setProjectToken(String projectToken) {
-        this.projectToken = projectToken == null ? null : projectToken.trim();
+    public ProjectSummaryBean setProjectToken(String projectToken) {
+        this.projectToken = projectToken;
+        return this;
     }
 
     public BigDecimal getGetEthAmount() {
         return getEthAmount;
     }
 
-    public void setGetEthAmount(BigDecimal getEthAmount) {
+    public ProjectSummaryBean setGetEthAmount(BigDecimal getEthAmount) {
         this.getEthAmount = getEthAmount;
+        return this;
     }
 
     public BigDecimal getActualGetEthAmount() {
         return actualGetEthAmount;
     }
 
-    public void setActualGetEthAmount(BigDecimal actualGetEthAmount) {
+    public ProjectSummaryBean setActualGetEthAmount(BigDecimal actualGetEthAmount) {
         this.actualGetEthAmount = actualGetEthAmount;
+        return this;
     }
 
     public BigDecimal getPayTokenAmount() {
         return payTokenAmount;
     }
 
-    public void setPayTokenAmount(BigDecimal payTokenAmount) {
+    public ProjectSummaryBean setPayTokenAmount(BigDecimal payTokenAmount) {
         this.payTokenAmount = payTokenAmount;
+        return this;
     }
 
     public BigDecimal getActualPayTokenAmount() {
         return actualPayTokenAmount;
     }
 
-    public void setActualPayTokenAmount(BigDecimal actualPayTokenAmount) {
+    public ProjectSummaryBean setActualPayTokenAmount(BigDecimal actualPayTokenAmount) {
         this.actualPayTokenAmount = actualPayTokenAmount;
+        return this;
     }
 
     public Integer getUserCount() {
         return userCount;
     }
 
-    public void setUserCount(Integer userCount) {
+    public ProjectSummaryBean setUserCount(Integer userCount) {
         this.userCount = userCount;
+        return this;
     }
 
     public Integer getActualUserCount() {
         return actualUserCount;
     }
 
-    public void setActualUserCount(Integer actualUserCount) {
+    public ProjectSummaryBean setActualUserCount(Integer actualUserCount) {
         this.actualUserCount = actualUserCount;
+        return this;
     }
 
     public Integer getTxCount() {
         return txCount;
     }
 
-    public void setTxCount(Integer txCount) {
+    public ProjectSummaryBean setTxCount(Integer txCount) {
         this.txCount = txCount;
+        return this;
     }
 
     public Integer getActualTxCount() {
         return actualTxCount;
     }
 
-    public void setActualTxCount(Integer actualTxCount) {
+    public ProjectSummaryBean setActualTxCount(Integer actualTxCount) {
         this.actualTxCount = actualTxCount;
-    }
-
-    public Date getCurrentDay() {
-        return currentDay;
-    }
-
-    public void setCurrentDay(Date currentDay) {
-        this.currentDay = currentDay;
+        return this;
     }
 
     public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public ProjectSummaryBean setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+        return this;
     }
 
     public Timestamp getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public ProjectSummaryBean setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+        return this;
     }
 }

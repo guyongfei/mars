@@ -3,18 +3,16 @@ package com.witshare.mars.pojo.domain;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-public class ProjectDailyInfoExample {
+public class ProjectSummaryExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ProjectDailyInfoExample() {
+    public ProjectSummaryExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -106,32 +104,6 @@ public class ProjectDailyInfoExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -811,66 +783,6 @@ public class ProjectDailyInfoExample {
 
         public Criteria andActualTxCountNotBetween(Integer value1, Integer value2) {
             addCriterion("actual_tx_count not between", value1, value2, "actualTxCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayIsNull() {
-            addCriterion("current_day is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayIsNotNull() {
-            addCriterion("current_day is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayEqualTo(Date value) {
-            addCriterionForJDBCDate("current_day =", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayNotEqualTo(Date value) {
-            addCriterionForJDBCDate("current_day <>", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayGreaterThan(Date value) {
-            addCriterionForJDBCDate("current_day >", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("current_day >=", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayLessThan(Date value) {
-            addCriterionForJDBCDate("current_day <", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("current_day <=", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayIn(List<Date> values) {
-            addCriterionForJDBCDate("current_day in", values, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayNotIn(List<Date> values) {
-            addCriterionForJDBCDate("current_day not in", values, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("current_day between", value1, value2, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("current_day not between", value1, value2, "currentDay");
             return (Criteria) this;
         }
 

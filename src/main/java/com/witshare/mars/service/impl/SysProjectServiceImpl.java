@@ -16,13 +16,12 @@ import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.domain.SysProject;
 import com.witshare.mars.pojo.domain.SysProjectExample;
-import com.witshare.mars.pojo.dto.ProjectDescriptionBean;
-import com.witshare.mars.pojo.dto.ProjectReqBean;
-import com.witshare.mars.pojo.dto.SysProjectBean;
+import com.witshare.mars.pojo.dto.*;
 import com.witshare.mars.pojo.vo.SysProjectBeanFrontInfoVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanFrontListVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.pojo.vo.SysProjectListVo;
+import com.witshare.mars.service.ProjectDailyInfoService;
 import com.witshare.mars.service.ProjectWebSiteService;
 import com.witshare.mars.service.QingyunStorageService;
 import com.witshare.mars.service.SysProjectService;
@@ -69,6 +68,8 @@ public class SysProjectServiceImpl implements SysProjectService {
     private PropertiesConfig propertiesConfig;
     @Autowired
     private ProjectWebSiteService projectWebSiteService;
+    @Autowired
+    private ProjectDailyInfoService projectDailyInfoService;
     @Autowired
     private RedisCommonDao redisCommonDao;
 
@@ -162,8 +163,6 @@ public class SysProjectServiceImpl implements SysProjectService {
         //删缓存
         this.deleteProjectCache(projectGid);
     }
-
-
 
 
     /**
@@ -276,6 +275,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         String result = redisCommonDao.getString(RedisKeyUtil.getProjectKey(projectGid));
         if (StringUtils.isNotEmpty(result)) {
             sysProjectBean = new Gson().fromJson(result, SysProjectBean.class);
+            this.updateProjectStatus(sysProjectBean);
             return sysProjectBean;
         }
         SysProjectExample sysProjectExample = new SysProjectExample();
@@ -286,10 +286,58 @@ public class SysProjectServiceImpl implements SysProjectService {
             BeanUtils.copyProperties(sysProjects.get(0), sysProjectBean);
             sysProjectBean.setProjectLogoLink(getPictureUrl(sysProjectBean.getProjectLogoLink()))
                     .setProjectImgLink(getPictureUrl(sysProjectBean.getProjectImgLink()));
+            this.updateProjectStatus(sysProjectBean);
             redisCommonDao.put(RedisKeyUtil.getProjectKey(projectGid), new Gson().toJson(sysProjectBean), 1, TimeUnit.DAYS);
             return sysProjectBean;
         }
         return null;
+    }
+
+    /**
+     * 根据已售数量判断和更改项目状态
+     *
+     * @param sysProjectBean
+     */
+    private void updateProjectStatus(SysProjectBean sysProjectBean) {
+        if (sysProjectBean == null) {
+            return;
+        }
+        int projectStatus = sysProjectBean.getProjectStatus();
+        String projectGid = sysProjectBean.getProjectGid();
+        Timestamp startTime = sysProjectBean.getStartTime();
+        Timestamp endTime = sysProjectBean.getEndTime();
+        Timestamp current = new Timestamp(System.currentTimeMillis());
+        BigDecimal softCap = sysProjectBean.getSoftCap();
+        BigDecimal hardCap = sysProjectBean.getHardCap();
+        BigDecimal actualGetEthAmount = BigDecimal.ZERO;
+        ProjectSummaryBean summary = projectDailyInfoService.getSummary(projectGid);
+        if (summary != null) {
+            actualGetEthAmount = summary.getActualGetEthAmount();
+        }
+        //状态修改
+        int projectStatusNow = 0;
+        if (startTime.after(current)) {
+            projectStatusNow = EnumProjectStatus.Status1.getStatus();
+        }
+        if (softCap.compareTo(actualGetEthAmount) >= 0) {
+            projectStatusNow = EnumProjectStatus.Status1.getStatus();
+        }
+        if (hardCap.compareTo(actualGetEthAmount) >= 0) {
+            projectStatusNow = EnumProjectStatus.Status2.getStatus();
+        }
+        if (endTime.before(current)) {
+            projectStatusNow = EnumProjectStatus.Status3.getStatus();
+        }
+        sysProjectBean.setProjectStatus(projectStatusNow);
+        //更改数据库，删除redis
+        if (projectStatus != projectStatusNow) {
+            SysProject sysProject = new SysProject();
+            sysProject.setUpdateTime(current);
+            sysProject.setProjectGid(projectGid);
+            sysProject.setProjectStatus(projectStatusNow);
+            sysProjectMapper.updateByPrimaryKeySelective(sysProject);
+            this.deleteProjectCache(projectGid);
+        }
     }
 
 
@@ -339,8 +387,7 @@ public class SysProjectServiceImpl implements SysProjectService {
 //        String projectDetail = redisCommonDao.getHash(projectStatisticKey, projectDetailName);
         if (StringUtils.isNotEmpty(projectDetail)) {
             frontInfoVo = gson.fromJson(projectDetail, SysProjectBeanFrontInfoVo.class);
-            //TODO 找出已经售卖的数量
-            frontInfoVo.setSoldAmount(new BigDecimal(123456));
+            frontInfoVo.setSoldAmount(projectDailyInfoService.getSoldAmount(projectGid));
             return frontInfoVo;
         }
 
@@ -363,10 +410,12 @@ public class SysProjectServiceImpl implements SysProjectService {
         webSiteMap.put(WHITE_PAPER_LINK, descriptionBean.getWhitePaperLink());
         frontInfoVo.setWebsites(webSiteMap);
 
+        //返回状态做修改
+        frontInfoVo.setProjectStatus(this.getFrontProjectStatus(frontInfoVo.getProjectStatus()));
+
         redisCommonDao.putHash(projectStatisticKey, projectDetailName, gson.toJson(frontInfoVo));
 
-        //TODO 找出已经售卖的数量
-        frontInfoVo.setSoldAmount(new BigDecimal(123456));
+        frontInfoVo.setSoldAmount(projectDailyInfoService.getSoldAmount(projectGid));
         return frontInfoVo;
     }
 
@@ -398,6 +447,17 @@ public class SysProjectServiceImpl implements SysProjectService {
     public void deleteProjectCache(String projectGid) {
         redisCommonDao.delRedisKey(RedisKeyUtil.getProjectFrontKey(projectGid));
         redisCommonDao.delRedisKey(RedisKeyUtil.getProjectKey(projectGid));
+    }
+
+    @Override
+    public int getFrontProjectStatus(int status) {
+        if (status == EnumProjectStatus.Status2.getStatus()) {
+            status = EnumProjectStatus.Status1.getStatus();
+        }
+        if (status == EnumProjectStatus.Status4.getStatus()) {
+            status = EnumProjectStatus.Status3.getStatus();
+        }
+        return status;
     }
 
 }

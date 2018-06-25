@@ -1,5 +1,8 @@
 package com.witshare.mars.constant;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * 项目状态
  */
@@ -26,4 +29,14 @@ public enum EnumProjectStatus {
     public String getDes() {
         return des;
     }
+
+    public static List<Integer> getStatisticStatuses() {
+        LinkedList<Integer> status = new LinkedList<>();
+        status.add(Status1.getStatus());
+        status.add(Status2.getStatus());
+        status.add(Status3.getStatus());
+        status.add(Status4.getStatus());
+        return status;
+    }
+
 }

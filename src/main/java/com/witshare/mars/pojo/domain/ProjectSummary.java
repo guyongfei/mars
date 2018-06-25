@@ -2,9 +2,8 @@ package com.witshare.mars.pojo.domain;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.Date;
 
-public class ProjectDailyInfo {
+public class ProjectSummary {
     private Long id;
 
     private String projectGid;
@@ -26,8 +25,6 @@ public class ProjectDailyInfo {
     private Integer txCount;
 
     private Integer actualTxCount;
-
-    private Date currentDay;
 
     private Timestamp createTime;
 
@@ -119,14 +116,6 @@ public class ProjectDailyInfo {
 
     public void setActualTxCount(Integer actualTxCount) {
         this.actualTxCount = actualTxCount;
-    }
-
-    public Date getCurrentDay() {
-        return currentDay;
-    }
-
-    public void setCurrentDay(Date currentDay) {
-        this.currentDay = currentDay;
     }
 
     public Timestamp getCreateTime() {

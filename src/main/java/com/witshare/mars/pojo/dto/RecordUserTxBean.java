@@ -2,6 +2,7 @@ package com.witshare.mars.pojo.dto;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 public class RecordUserTxBean {
 
@@ -33,6 +34,10 @@ public class RecordUserTxBean {
     private Timestamp distributionTime;
     private Timestamp createTime;
     private Timestamp updateTime;
+    private LocalDate localDate;
+
+
+
 
     private RecordUserTxBean() {
     }
@@ -207,6 +212,7 @@ public class RecordUserTxBean {
 
     public RecordUserTxBean setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+        this.localDate = createTime.toLocalDateTime().toLocalDate();
         return this;
     }
 
@@ -227,4 +233,10 @@ public class RecordUserTxBean {
         this.shouldGetAmount = shouldGetAmount;
         return this;
     }
+
+    public LocalDate getLocalDate() {
+        return localDate;
+    }
+
+
 }

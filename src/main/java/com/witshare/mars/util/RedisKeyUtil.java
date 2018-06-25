@@ -32,16 +32,15 @@ public final class RedisKeyUtil {
         return String.format("%s:%s", REDIS_KEY_USER_INFO_STATISTIC, userId);
     }
 
-    public static String getProjectStatisticKey(String projectGid) {
-        return String.format("%s:%s", REDIS_KEY_PROJECT_INFO_STATISTIC, projectGid);
-    }
-
     public static String getProjectFrontKey(String projectGid) {
         return String.format("%s:%s", REDIS_KEY_PROJECT_FRONT, projectGid);
     }
 
     public static String getProjectKey(String projectGid) {
-        return String.format("%s:%s", REDIS_KEY_PROJECT_FRONT, projectGid);
+        return String.format("%s:%s", REDIS_KEY_PROJECT, projectGid);
+    }
+    public static String getProjectStatisticKey(String projectGid) {
+        return String.format("%s:%s", REDIS_KEY_PROJECT_STATISTIC, projectGid);
     }
 
     public static String getIndexUserKey() {
@@ -63,6 +62,7 @@ public final class RedisKeyUtil {
         StringBuilder redisKey = new StringBuilder(REDIS_KEY_TOKEN_EMAIL);
         return redisKey.toString();
     }
+
     public static String getWalletV3JsonKey(String walletAddress) {
         return String.format("%s:%s", REDIS_KEY_WALLET_V3JSON, walletAddress);
     }

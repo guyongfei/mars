@@ -30,7 +30,6 @@ public class CacheConsts {
     public static final String REDIS_KEY_USER_VERIFY_CODE_REGISTER = REDIS_PREFIX + "cache:register-email:";
     public static final String REDIS_KEY_USER_VERIFY_CODE = REDIS_PREFIX + "cache:email:";
     public static final String REDIS_KEY_USER_INFO_STATISTIC = REDIS_PREFIX + "cache:user-info-statistic";
-    public static final String REDIS_KEY_PROJECT_INFO_STATISTIC = REDIS_PREFIX + "cache:project-info-statistic";
 
     public static final String REDIS_KEY_CALL_API_INFO = REDIS_PREFIX + "db:call-api-info:";
 
@@ -44,6 +43,7 @@ public class CacheConsts {
 
     public static final String REDIS_KEY_PROJECT_FRONT = REDIS_PREFIX + "cache:project-info-front";
     public static final String REDIS_KEY_PROJECT = REDIS_PREFIX + "cache:project";
+    public static final String REDIS_KEY_PROJECT_STATISTIC = REDIS_PREFIX + "cache:project-statistic";
     public static final String REDIS_KEY_WALLET_V3JSON = REDIS_PREFIX + "db:walletV3Json";
 
 }
