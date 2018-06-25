@@ -1,5 +1,6 @@
 package com.witshare.mars.util;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -15,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Map;
 
 /**
  * HTTP链接工具类
@@ -22,7 +24,7 @@ import java.net.URI;
 public class HttpClientUtil {
     static Logger log = LoggerFactory.getLogger(HttpClientUtil.class);
 
-    public static String doPost(String url, String bodyJson, String token) {
+    public static String doPost(String url, String bodyJson, String token, String tokenHeaderName) {
         HttpPost httpPost = null;
         String result = null;
         try {
@@ -39,10 +41,8 @@ public class HttpClientUtil {
                 entity.setContentType("application/json");
                 httpPost.setEntity(entity);
             }
-            if (token != null && token != "") {
-                //设置header信息
-                httpPost.setHeader("X-IbeeAuth-Token", token);
-                httpPost.setHeader("X-WeshareAuth-Token", token);
+            if (StringUtils.isNotBlank(token)) {
+                httpPost.setHeader(StringUtils.isBlank(tokenHeaderName) ? "X-IbeeAuth-Token" : tokenHeaderName, token);
             }
 
             //执行请求操作，并拿到结果（同步阻塞） 
@@ -62,7 +62,15 @@ public class HttpClientUtil {
         return result;
     }
 
+    public static String doPost(String url, String bodyJson, String token) {
+        return doPost(url, bodyJson, token, null);
+    }
+
     public static String doGet(String url, String token) {
+        return doGet(url, token, null);
+    }
+
+    public static String doGet(String url, String token, String tokenHeaderName) {
         // 创建Httpclient对象
         CloseableHttpClient httpclient = HttpClients.createDefault();
         String resultString = "";
@@ -75,8 +83,8 @@ public class HttpClientUtil {
             HttpGet httpGet = new HttpGet(uri);
 
             //设置header信息
-            if (token != null && token != "") {
-                httpGet.setHeader("X-IbeeAuth-Token", token);
+            if (StringUtils.isNotBlank(token)) {
+                httpGet.setHeader(StringUtils.isBlank(tokenHeaderName) ? "X-IbeeAuth-Token" : tokenHeaderName, token);
             }
             // 执行请求
             response = httpclient.execute(httpGet);

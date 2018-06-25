@@ -44,5 +44,6 @@ public class CacheConsts {
 
     public static final String REDIS_KEY_PROJECT_FRONT = REDIS_PREFIX + "cache:project-info-front";
     public static final String REDIS_KEY_PROJECT = REDIS_PREFIX + "cache:project";
+    public static final String REDIS_KEY_WALLET_V3JSON = REDIS_PREFIX + "db:walletV3Json";
 
 }
