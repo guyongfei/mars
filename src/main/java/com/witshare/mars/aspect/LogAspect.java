@@ -36,7 +36,9 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.BufferedReader;
 import java.util.*;
 
+import static com.witshare.mars.constant.CacheConsts.COOKIE_USER_TOKEN;
 import static com.witshare.mars.constant.CacheConsts.PROJECT_NAME;
+import static com.witshare.mars.constant.CacheConsts.SHIRO_SESSION_EXPIRE_TIME;
 
 
 @Aspect
@@ -185,6 +187,9 @@ public class LogAspect implements ThrowsAdvice {
         Map requestMap = getRequestMap(joinPoint, request, requestBody);
         CurrentThreadContext.setRequestMap(requestMap);
 
+
+
+
         loadCookie(request);
 
         boolean hasAuth = checkAuth(request);
@@ -216,6 +221,7 @@ public class LogAspect implements ThrowsAdvice {
     private void loadCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (!ArrayUtils.isEmpty(cookies)) {
+            //将token置入cookie
             for (Cookie cookie : cookies) {
                 if (CacheConsts.COOKIE_I18N_LANGUAGE.equals(cookie.getName())) {
                     EnumI18NProject i18NProject = EnumI18NProject.getObjByLanguage(cookie.getValue());
@@ -228,6 +234,7 @@ public class LogAspect implements ThrowsAdvice {
 
             }
         }
+        CurrentThreadContext.setToken("e131cbebb655494cb01c617a10951671");
         if (StringUtils.isEmpty(CurrentThreadContext.getInternationalTableName())) {
             EnumI18NProject i18NProject = EnumI18NProject.getObjByLanguage(null);
             CurrentThreadContext.setInternationalTableName(i18NProject.getTableName());
