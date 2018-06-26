@@ -32,6 +32,7 @@ import org.springframework.web.servlet.HandlerMapping;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.BufferedReader;
 import java.util.*;
 
@@ -180,15 +181,20 @@ public class LogAspect implements ThrowsAdvice {
         //获取必要的参数
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpServletResponse response = CurrentThreadContext.getResponse();
-        loadCookie(request);
-        checkAuth(request);
         String requestBody = charReader(request);
         Map requestMap = getRequestMap(joinPoint, request, requestBody);
         CurrentThreadContext.setRequestMap(requestMap);
-        Object result;
 
-        //执行方法
-        result = joinPoint.proceed();
+        loadCookie(request);
+        boolean hasAuth = checkAuth(request);
+        Object result = null;
+        if (hasAuth) {
+            //执行方法
+            result = joinPoint.proceed();
+        } else {
+            //返回无权限
+            response.setStatus(HttpServletResponseWrapper.SC_UNAUTHORIZED);
+        }
 
         //写api调用日志
         if ("1".equals(propertiesConfig.writeApiLog)) {
