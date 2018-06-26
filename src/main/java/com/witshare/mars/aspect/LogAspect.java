@@ -186,6 +186,7 @@ public class LogAspect implements ThrowsAdvice {
         CurrentThreadContext.setRequestMap(requestMap);
 
         loadCookie(request);
+
         boolean hasAuth = checkAuth(request);
         Object result = null;
         if (hasAuth) {
@@ -227,14 +228,6 @@ public class LogAspect implements ThrowsAdvice {
 
             }
         }
-        //TODO 正式代码删除，调试跨域用
-///*//        if (StringUtils.isEmpty(InterceptorContext.getToken())) {
-//        redisCommonDao.putHash(RedisKeyUtil.getTokenEmailKey(), "ea0d95a82c004c698fa3af10cd15785f", "446390091@qq.com");
-//        redisCommonDao.putHash(RedisKeyUtil.getEmailTokenKey(), "446390091@qq.com", "ea0d95a82c004c698fa3af10cd15785f");
-//        InterceptorContext.setToken("ea0d95a82c004c698fa3af10cd15785f");
-//        Cookie cookie1 = new Cookie(KEY_COOKIE_NAME, "ea0d95a82c004c698fa3af10cd15785f");
-//        InterceptorContext.getResponse().addCookie(cookie1);
-//        }*/
         if (StringUtils.isEmpty(CurrentThreadContext.getInternationalTableName())) {
             EnumI18NProject i18NProject = EnumI18NProject.getObjByLanguage(null);
             CurrentThreadContext.setInternationalTableName(i18NProject.getTableName());
@@ -257,9 +250,6 @@ public class LogAspect implements ThrowsAdvice {
 
     /**
      * 检验权限
-     *
-     * @param request
-     * @return
      */
     private boolean checkAuth(HttpServletRequest request) {
         //替换掉项目名,获得Uri

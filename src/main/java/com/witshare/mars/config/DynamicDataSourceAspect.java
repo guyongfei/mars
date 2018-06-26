@@ -19,7 +19,7 @@ public class DynamicDataSourceAspect {
 
     private final Logger logger = LoggerFactory.getLogger(DynamicDataSourceAspect.class);
 
-    @Before("execution(* com.witshare.mars.dao.mysql.JobAndTriggerMapper.*(..)) ")
+   /* @Before("execution(* com.witshare.mars.dao.mysql.JobAndTriggerMapper.*(..)) ")
     public void before(JoinPoint point) {
         Object target = point.getTarget();
         String method = point.getSignature().getName();
@@ -41,5 +41,5 @@ public class DynamicDataSourceAspect {
     @After("execution(* com.witshare.mars.dao.mysql.JobAndTriggerMapper.*(..))")
     public void restoreDataSource(JoinPoint point) {
         DynamicDataSourceContextHolder.clearDataSourceType();
-    }
+    }*/
 }
