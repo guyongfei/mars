@@ -145,4 +145,15 @@ public interface RedisCommonDao {
 
     long incrBy(String redisKey, long value);
 
+    void zAdd(String key, String member, double score);
+
+
+    Set<String> zRevRangeByScore(String key, double max, double min, int offset, int count);
+
+
+    Set<String> zGetAndDelete(String key);
+
+    long zCount(String key);
+
+    void zDel(String key, String filed);
 }

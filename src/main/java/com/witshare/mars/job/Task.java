@@ -5,19 +5,18 @@ import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.service.EmailService;
+import com.witshare.mars.service.TransactionService;
 import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.WitshareUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.witshare.mars.config.ConfigTaskPool.TASK_EXECUTOR;
 import static com.witshare.mars.constant.CacheConsts.PHONE_NO_VERIFY_CODE_EXPIRE_MINUTE;
 
 /**
@@ -25,8 +24,8 @@ import static com.witshare.mars.constant.CacheConsts.PHONE_NO_VERIFY_CODE_EXPIRE
  */
 @Component
 public class Task {
-    public final static int redis_lock = 10 * 60;
-    private final static String EXCHANGE_SPIDER_LOCK = "exchangeLock";
+    public final static int GAS_PRICE_REDIS_LOCK = 60;
+    private final static String GAS_PRICE_LOCK = "gasPrice";
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Autowired
     private EmailService emailService;
@@ -35,9 +34,9 @@ public class Task {
     @Autowired
     private RedisCommonDao redisCommonDao;
     @Autowired
-    private StatisticTxJob statisticTxJob;
+    private TransactionService transactionService;
 
-//    @Async(TASK_EXECUTOR)
+    //    @Async(TASK_EXECUTOR)
     public void sendEmailVerifyCode(String email, boolean register) {
         if (StringUtils.isEmpty(email)) {
             throw new WitshareException(EnumResponseText.ErrorEmail);
@@ -56,16 +55,16 @@ public class Task {
     }
 
     /**
-     * 执行获取交易所价格的任务
+     * 同步Moon价格
      */
-    @Scheduled(cron = "0 0 0/30 * * ?")
-    public void statisticTx() {
-        String lockId = distributedLocker.lock(EXCHANGE_SPIDER_LOCK, redis_lock);
+    @Scheduled(cron = "0 0 */1 * * ?")
+    public void syncGasPrice() {
+        String lockId = distributedLocker.lock(GAS_PRICE_LOCK, GAS_PRICE_REDIS_LOCK);
         if (lockId == null) {
-            LOGGER.info("statisticTokenTx pushTask-other_is_excuting");
+            LOGGER.info("syncGasPrice pushTask-other_is_execute");
             return;
         }
-//        exchangeSpiderJob.getCoinDataJob();
+        transactionService.syncGasPrice();
     }
 
 }

@@ -39,6 +39,7 @@ public enum EnumResponseText {
     ErrorSql(25, "sql异常", "error sql."),
     ErrorPayTx(25, "错误的交易号", "error pay tx."),
     ErrorTxDoing(25, "已有交易在进行", "There is already a transactions going on."),
+    NotReachMinPurchaseAmount(25, "不满足最低认购数量", "The minimum purchase amount is not reached."),
     ReachTxMax(25, "用户达到交易上线", "Reach Number of transactions max."),;
 
     private int value;

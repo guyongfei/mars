@@ -422,7 +422,35 @@ function reloadTable(pageNum) {
 //查询按钮
 $('#btn_query').click(function () {
     reloadTable(1);
+});
+
+//新增按钮
+$('#btn_add').click(function () {
+    $.ajax({
+        url: contextPath + "/management/platform-addresses/count",
+        type: "get",
+        contentType: "application/json;charset=UTF-8",
+        success: function (data) {
+            console.log(data);
+            if (data.success) {
+                var addressCount = parseInt(data.data);
+                if (addressCount <= 1) {
+                    layer.msg("平台地址还剩" + addressCount + "个，建议添加地址后再新增项目。", {
+                        time: 5000,
+                        icon: 2,
+                        shift: 1
+                    }, function () {
+                        $('.close').click()
+                    })
+                }
+                $('#addModal').modal('show');
+                addMethod = true;
+            }
+        }
+    });
+
 })
+
 //隐藏模态框
 $('#addModal').on('hidden.bs.modal', function () {
 
@@ -431,18 +459,18 @@ $('#addModal').on('hidden.bs.modal', function () {
     $('#addEvent')
         .bootstrapValidator("resetForm", true)
         .bootstrapValidator('addField', 'log', {
-        validators: {
-            notEmpty: {
-                message: '图像不能为空'
-            },
-            file: {
-                extension: 'jpg,jpeg,bmp,png,gif',
-                type: 'image/jpg,image/jpeg,image/bmp,image/gif,image/png',
-                maxSize: 10 * 1024 * 1024,
-                message: '请上传10M以内的图像（jpg,jpeg,bmp,gif,png）'
+            validators: {
+                notEmpty: {
+                    message: '图像不能为空'
+                },
+                file: {
+                    extension: 'jpg,jpeg,bmp,png,gif',
+                    type: 'image/jpg,image/jpeg,image/bmp,image/gif,image/png',
+                    maxSize: 10 * 1024 * 1024,
+                    message: '请上传10M以内的图像（jpg,jpeg,bmp,gif,png）'
+                }
             }
-        }
-    });
+        });
     //重新加载表格
     reloadTable(1);
     //初始化时间选择器
@@ -453,11 +481,6 @@ $('#addModal').on('hidden.bs.modal', function () {
     addMethod = true;
 })
 
-//新增按钮
-$('#btn_add').click(function () {
-    $('#addModal').modal('show');
-    addMethod = true
-})
 
 //file 文本变化获取值
 $('input[type=file]').on('change', function (e) {
@@ -607,11 +630,6 @@ $(function () {
                     notEmpty: {
                         message: '合约地址不能为空'
                     },
-                    stringLength: {
-                        min: 42,
-                        max: 42,
-                        message: '请输入42个字符的合约地址'
-                    },
                     regexp: {
                         regexp: /^0x\S{40}$/,
                         message: '请输入正确的合约地址'
@@ -623,11 +641,6 @@ $(function () {
                 validators: {
                     notEmpty: {
                         message: '项目地址不能为空'
-                    },
-                    stringLength: {
-                        min: 42,
-                        max: 42,
-                        message: '请输入42个字符的地址'
                     },
                     regexp: {
                         regexp: /^0x\S{40}$/,
@@ -1056,9 +1069,9 @@ $(function () {
         });
         //初始化时间选择器
         initTimer();
-        
+
         $('#reset').click(function () {
-            
+
         })
 
         $('.time').change(function () {

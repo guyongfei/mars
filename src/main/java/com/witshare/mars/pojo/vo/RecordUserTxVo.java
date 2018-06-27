@@ -1,10 +1,10 @@
-package com.witshare.mars.pojo.domain;
+package com.witshare.mars.pojo.vo;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class RecordUserTx {
-    private Long id;
+public class RecordUserTxVo {
+
 
     private String userGid;
 
@@ -44,173 +44,183 @@ public class RecordUserTx {
 
     private Timestamp createTime;
 
-    private Timestamp updateTime;
 
-    public Long getId() {
-        return id;
+    private RecordUserTxVo() {
+
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public static RecordUserTxVo newInstance() {
+        return new RecordUserTxVo();
     }
 
     public String getUserGid() {
         return userGid;
     }
 
-    public void setUserGid(String userGid) {
-        this.userGid = userGid == null ? null : userGid.trim();
+    public RecordUserTxVo setUserGid(String userGid) {
+        this.userGid = userGid;
+        return this;
     }
 
     public String getUserEmail() {
         return userEmail;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail == null ? null : userEmail.trim();
+    public RecordUserTxVo setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+        return this;
     }
 
     public String getProjectGid() {
         return projectGid;
     }
 
-    public void setProjectGid(String projectGid) {
-        this.projectGid = projectGid == null ? null : projectGid.trim();
+    public RecordUserTxVo setProjectGid(String projectGid) {
+        this.projectGid = projectGid;
+        return this;
     }
 
     public String getProjectToken() {
         return projectToken;
     }
 
-    public void setProjectToken(String projectToken) {
-        this.projectToken = projectToken == null ? null : projectToken.trim();
+    public RecordUserTxVo setProjectToken(String projectToken) {
+        this.projectToken = projectToken;
+        return this;
     }
 
     public Integer getPayCoinType() {
         return payCoinType;
     }
 
-    public void setPayCoinType(Integer payCoinType) {
+    public RecordUserTxVo setPayCoinType(Integer payCoinType) {
         this.payCoinType = payCoinType;
+        return this;
     }
 
     public String getPayTx() {
         return payTx;
     }
 
-    public void setPayTx(String payTx) {
-        this.payTx = payTx == null ? null : payTx.trim();
+    public RecordUserTxVo setPayTx(String payTx) {
+        this.payTx = payTx;
+        return this;
     }
 
     public Long getPayTxId() {
         return payTxId;
     }
 
-    public void setPayTxId(Long payTxId) {
+    public RecordUserTxVo setPayTxId(Long payTxId) {
         this.payTxId = payTxId;
+        return this;
     }
 
     public BigDecimal getPayAmount() {
         return payAmount;
     }
 
-    public void setPayAmount(BigDecimal payAmount) {
+    public RecordUserTxVo setPayAmount(BigDecimal payAmount) {
         this.payAmount = payAmount;
+        return this;
     }
 
     public BigDecimal getPriceRate() {
         return priceRate;
     }
 
-    public void setPriceRate(BigDecimal priceRate) {
+    public RecordUserTxVo setPriceRate(BigDecimal priceRate) {
         this.priceRate = priceRate;
+        return this;
     }
 
     public BigDecimal getHopeGetAmount() {
         return hopeGetAmount;
     }
 
-    public void setHopeGetAmount(BigDecimal hopeGetAmount) {
+    public RecordUserTxVo setHopeGetAmount(BigDecimal hopeGetAmount) {
         this.hopeGetAmount = hopeGetAmount;
+        return this;
     }
 
     public BigDecimal getShouldGetAmount() {
         return shouldGetAmount;
     }
 
-    public void setShouldGetAmount(BigDecimal shouldGetAmount) {
+    public RecordUserTxVo setShouldGetAmount(BigDecimal shouldGetAmount) {
         this.shouldGetAmount = shouldGetAmount;
+        return this;
     }
 
     public BigDecimal getActualPayAmount() {
         return actualPayAmount;
     }
 
-    public void setActualPayAmount(BigDecimal actualPayAmount) {
+    public RecordUserTxVo setActualPayAmount(BigDecimal actualPayAmount) {
         this.actualPayAmount = actualPayAmount;
+        return this;
     }
 
     public BigDecimal getActualGetAmount() {
         return actualGetAmount;
     }
 
-    public void setActualGetAmount(BigDecimal actualGetAmount) {
+    public RecordUserTxVo setActualGetAmount(BigDecimal actualGetAmount) {
         this.actualGetAmount = actualGetAmount;
+        return this;
     }
 
     public Integer getUserTxStatus() {
         return userTxStatus;
     }
 
-    public void setUserTxStatus(Integer userTxStatus) {
+    public RecordUserTxVo setUserTxStatus(Integer userTxStatus) {
         this.userTxStatus = userTxStatus;
+        return this;
     }
 
     public String getPlatformTx() {
         return platformTx;
     }
 
-    public void setPlatformTx(String platformTx) {
-        this.platformTx = platformTx == null ? null : platformTx.trim();
+    public RecordUserTxVo setPlatformTx(String platformTx) {
+        this.platformTx = platformTx;
+        return this;
     }
 
     public BigDecimal getEthFee() {
         return ethFee;
     }
 
-    public void setEthFee(BigDecimal ethFee) {
+    public RecordUserTxVo setEthFee(BigDecimal ethFee) {
         this.ethFee = ethFee;
+        return this;
     }
 
     public Integer getPlatformTxStatus() {
         return platformTxStatus;
     }
 
-    public void setPlatformTxStatus(Integer platformTxStatus) {
+    public RecordUserTxVo setPlatformTxStatus(Integer platformTxStatus) {
         this.platformTxStatus = platformTxStatus;
+        return this;
     }
 
     public Timestamp getDistributionTime() {
         return distributionTime;
     }
 
-    public void setDistributionTime(Timestamp distributionTime) {
+    public RecordUserTxVo setDistributionTime(Timestamp distributionTime) {
         this.distributionTime = distributionTime;
+        return this;
     }
 
     public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public RecordUserTxVo setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
-    }
-
-    public Timestamp getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Timestamp updateTime) {
-        this.updateTime = updateTime;
+        return this;
     }
 }

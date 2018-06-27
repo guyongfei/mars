@@ -39,6 +39,7 @@ public final class RedisKeyUtil {
     public static String getProjectKey(String projectGid) {
         return String.format("%s:%s", REDIS_KEY_PROJECT, projectGid);
     }
+
     public static String getProjectStatisticKey(String projectGid) {
         return String.format("%s:%s", REDIS_KEY_PROJECT_STATISTIC, projectGid);
     }
@@ -61,6 +62,13 @@ public final class RedisKeyUtil {
     public static String getTokenEmailKey() {
         StringBuilder redisKey = new StringBuilder(REDIS_KEY_TOKEN_EMAIL);
         return redisKey.toString();
+    }
+
+    public static String getGasPriceKey() {
+        return REDIS_KEY_GAS_PRICE;
+    }
+    public static String getPlatformAddressKey() {
+        return REDIS_KEY_platform_address;
     }
 
     public static String getWalletV3JsonKey(String walletAddress) {

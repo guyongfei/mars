@@ -70,6 +70,15 @@ public class PropertiesConfig extends RuntimeException implements CommandLineRun
     @Value("${project.user.tx.max}")
     public Integer projectUserTxMax;
 
+    @Value("${moon.host}")
+    public String moonHost;
+    @Value("${moon.ak}")
+    public String moonAk;
+    @Value("${moon.sk}")
+    public String moonSk;
+    @Value("${moon.token_header_name}")
+    public String moonTokenName;
+
 
     @Override
     public void run(String... args) {
@@ -83,6 +92,7 @@ public class PropertiesConfig extends RuntimeException implements CommandLineRun
                 "projectName='" + projectName + '\'' +
                 ", writeApiLog='" + writeApiLog + '\'' +
                 ", qingyunBucket='" + qingyunBucket + '\'' +
+                ", qingyunS3AK='" + qingyunS3AK + '\'' +
                 ", qingyunZoneKey='" + qingyunZoneKey + '\'' +
                 ", qingyunHost='" + qingyunHost + '\'' +
                 ", qingyunHttpUrl='" + qingyunHttpUrl + '\'' +
@@ -97,7 +107,11 @@ public class PropertiesConfig extends RuntimeException implements CommandLineRun
                 ", frontPath='" + frontPath + '\'' +
                 ", defaultAvatar='" + defaultAvatar + '\'' +
                 ", sendGridUserName='" + sendGridUserName + '\'' +
+                ", sendGridPassword='" + sendGridPassword + '\'' +
                 ", sendGridSender='" + sendGridSender + '\'' +
+                ", moonHost='" + moonHost + '\'' +
+                ", moonAk='" + moonAk + '\'' +
+                ", moonTokenName='" + moonTokenName + '\'' +
                 '}';
     }
 }

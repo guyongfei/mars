@@ -99,7 +99,8 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
      * @param bodyJson
      * @return
      */
-    private String getToken(String url, String method, String queryParam, String bodyJson) {
+    @Override
+    public String getToken(String url, String method, String queryParam, String bodyJson) {
         int ttTime = (int) (System.currentTimeMillis() / 1000 + 600L);
         TokenHelper tokenHelper = new TokenHelper(MOON_AK, MOON_SK);
         String token = tokenHelper.generateToken(url, method, queryParam, bodyJson, ttTime);

@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-public class RecordUserTxBean {
+public class RecordUserTxBean extends BasePageBean {
 
     public static final String PROJECT_GID = "projectGid";
     public static final String PRICE_RATE = "priceRate";
@@ -19,22 +19,25 @@ public class RecordUserTxBean {
     private String userEmail;
     private String projectGid;
     private String projectToken;
-    private int payCoinType;
+    private Integer payCoinType;
     private String payTx;
+    private Long payTxId;
     private BigDecimal payAmount;
     private BigDecimal priceRate;
     private BigDecimal hopeGetAmount;
     private BigDecimal shouldGetAmount;
     private BigDecimal actualPayAmount;
     private BigDecimal actualGetAmount;
-    private int userTxStatus;
+    private Integer userTxStatus;
     private String platformTx;
     private BigDecimal ethFee;
-    private int platformTxStatus;
+    private Integer platformTxStatus;
     private Timestamp distributionTime;
     private Timestamp createTime;
     private Timestamp updateTime;
     private LocalDate localDate;
+
+
 
 
 
@@ -238,5 +241,32 @@ public class RecordUserTxBean {
         return localDate;
     }
 
+    public RecordUserTxBean setPayCoinType(Integer payCoinType) {
+        this.payCoinType = payCoinType;
+        return this;
+    }
 
+    public Long getPayTxId() {
+        return payTxId;
+    }
+
+    public RecordUserTxBean setPayTxId(Long payTxId) {
+        this.payTxId = payTxId;
+        return this;
+    }
+
+    public RecordUserTxBean setUserTxStatus(Integer userTxStatus) {
+        this.userTxStatus = userTxStatus;
+        return this;
+    }
+
+    public RecordUserTxBean setPlatformTxStatus(Integer platformTxStatus) {
+        this.platformTxStatus = platformTxStatus;
+        return this;
+    }
+
+    public RecordUserTxBean setLocalDate(LocalDate localDate) {
+        this.localDate = localDate;
+        return this;
+    }
 }

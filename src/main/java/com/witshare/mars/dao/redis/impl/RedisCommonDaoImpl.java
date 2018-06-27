@@ -402,4 +402,68 @@ public class RedisCommonDaoImpl implements RedisCommonDao {
                 () -> stringRedisTemplate.opsForValue().increment(redisKey, data)
         ).get();
     }
+
+
+    /**
+     * Redis Zadd 命令用于将一个或多个成员元素及其分数值加入到有序集当中。
+     * 如果某个成员已经是有序集的成员，那么更新这个成员的分数值，并通过重新插入这个成员元素，来保证该成员在正确的位置上。
+     * 分数值可以是整数值或双精度浮点数。
+     * 如果有序集合 key 不存在，则创建一个空的有序集并执行 ZADD 操作。
+     * 当 key 存在但不是有序集类型时，返回一个错误。
+     *
+     * @return 被成功添加的新成员的数量，不包括那些被更新的、已经存在的成员。
+     */
+    public void zAdd(String key, String member, double score) {
+        logger.info("redisDao zadd :  key={}, member={},score={}", key, member, score);
+        TryBase.ofr(
+                CacheConsts.RETRY_TIMES,
+                () -> stringRedisTemplate.opsForZSet().add(key, member, score));
+    }
+
+    /**
+     * Redis Zrevrangebyscore 返回有序集中指定分数区间内的所有的成员。有序集成员按分数值递减(从大到小)的次序排列。
+     * 具有相同分数值的成员按字典序的逆序(reverse lexicographical order )排列。
+     * 除了成员按分数值递减的次序排列这一点外， ZREVRANGEBYSCORE 命令的其他方面和 ZRANGEBYSCORE 命令一样。
+     *
+     * @return 指定区间内，带有分数值(可选)的有序集成员的列表。
+     */
+
+    public Set<String> zRevRangeByScore(String key, double max, double min, int offset, int count) {
+        return TryBase.ofc(
+                CacheConsts.RETRY_TIMES,
+                () -> stringRedisTemplate.opsForZSet().rangeByScore(key, max, min, offset, count)).get();
+    }
+
+
+    @Override
+    public Set<String> zGetAndDelete(String key) {
+
+        SessionCallback<Set<String>> sessionCallback = new SessionCallback<Set<String>>() {
+            @Override
+            public Set<String> execute(RedisOperations operations) throws DataAccessException {
+                operations.watch(key);
+                Set range = operations.boundZSetOps(key).range(0, 1);
+                operations.multi();
+                if (!CollectionUtils.isEmpty(range)) {
+                    operations.boundZSetOps(key).removeRange(0, 1);
+                }
+                operations.exec();
+                return range;
+            }
+        };
+        return stringRedisTemplate.execute(sessionCallback);
+    }
+
+    public long zCount(String key) {
+        return TryBase.ofc(
+                CacheConsts.RETRY_TIMES,
+                () -> stringRedisTemplate.opsForZSet().zCard(key)).get();
+    }
+
+    @Override
+    public void zDel(String key, String filed) {
+        TryBase.ofr(
+                CacheConsts.RETRY_TIMES,
+                () -> stringRedisTemplate.opsForZSet().remove(key, filed));
+    }
 }

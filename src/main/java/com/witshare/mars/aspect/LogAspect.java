@@ -231,10 +231,9 @@ public class LogAspect implements ThrowsAdvice {
                 if (CacheConsts.COOKIE_USER_TOKEN.equals(cookie.getName())) {
                     CurrentThreadContext.setToken(cookie.getValue());
                 }
-
             }
         }
-        CurrentThreadContext.setToken("e131cbebb655494cb01c617a10951671");
+        CurrentThreadContext.setToken("595a0da001794855bf50b3853c221c53");
         if (StringUtils.isEmpty(CurrentThreadContext.getInternationalTableName())) {
             EnumI18NProject i18NProject = EnumI18NProject.getObjByLanguage(null);
             CurrentThreadContext.setInternationalTableName(i18NProject.getTableName());

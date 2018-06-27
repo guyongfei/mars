@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.LinkedList;
 import java.util.List;
 
-public class SysProjectBean {
+public class SysProjectBean  extends BasePageBean{
 
     public static String ID = "id";
     public static String PROJECT_GID = "projectGid";
@@ -124,12 +124,9 @@ public class SysProjectBean {
 
     private String queryStr;
     private String img;
-    private Integer pageSize;
-    private Integer pageNum;
     private Integer typeId;
 
-    private String orderCondition;
-    private Integer ascOrdesc;
+
 
     private Long id;
     private String projectGid;
@@ -145,8 +142,6 @@ public class SysProjectBean {
     private Timestamp startTime;
     private Timestamp endTime;
     private BigDecimal priceRate;
-//    private BigDecimal startPriceRate;
-//    private BigDecimal endPriceRate;
     private Integer projectStatus;
     private Integer isAvailable;
     private Timestamp createTime;
@@ -575,24 +570,6 @@ public class SysProjectBean {
         return this;
     }
 
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    public SysProjectBean setPageSize(Integer pageSize) {
-        this.pageSize = pageSize;
-        return this;
-    }
-
-    public Integer getPageNum() {
-        return pageNum;
-    }
-
-    public SysProjectBean setPageNum(Integer pageNum) {
-        this.pageNum = pageNum;
-        return this;
-    }
-
     public Integer getTypeId() {
         return typeId;
     }
@@ -737,23 +714,6 @@ public class SysProjectBean {
         return this;
     }
 
-    public String getOrderCondition() {
-        return orderCondition;
-    }
-
-    public SysProjectBean setOrderCondition(String orderCondition) {
-        this.orderCondition = orderCondition;
-        return this;
-    }
-
-    public Integer getAscOrdesc() {
-        return ascOrdesc;
-    }
-
-    public SysProjectBean setAscOrdesc(Integer ascOrdesc) {
-        this.ascOrdesc = ascOrdesc;
-        return this;
-    }
 
     public Integer getProjectStatus() {
         return projectStatus;
