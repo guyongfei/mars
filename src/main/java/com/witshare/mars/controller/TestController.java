@@ -26,11 +26,11 @@ public class TestController {
         return ResponseBean.newInstanceSuccess();
     }
 
-//    @RequestMapping(value = "/set-platform-address")
-//    public ResponseBean setPlatformAddress() {
-//        platformAddressService.set();
-//        return ResponseBean.newInstanceSuccess();
-//    }
+    @RequestMapping(value = "/get-platform-address")
+    public ResponseBean setPlatformAddress() {
+        String platformAddress = platformAddressService.getPlatformAddress();
+        return ResponseBean.newInstanceSuccess(platformAddress);
+    }
 //
 //    @RequestMapping(value = "/get-platform-address-page")
 //    public ResponseBean getPlatformAddressPage() {

@@ -442,10 +442,10 @@ public class RedisCommonDaoImpl implements RedisCommonDao {
             @Override
             public Set<String> execute(RedisOperations operations) throws DataAccessException {
                 operations.watch(key);
-                Set range = operations.boundZSetOps(key).range(0, 1);
+                Set range = operations.boundZSetOps(key).range(0, 0);
                 operations.multi();
                 if (!CollectionUtils.isEmpty(range)) {
-                    operations.boundZSetOps(key).removeRange(0, 1);
+                    operations.boundZSetOps(key).removeRange(0, 0);
                 }
                 operations.exec();
                 return range;

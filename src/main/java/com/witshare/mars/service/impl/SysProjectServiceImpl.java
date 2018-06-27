@@ -16,15 +16,15 @@ import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.domain.SysProject;
 import com.witshare.mars.pojo.domain.SysProjectExample;
-import com.witshare.mars.pojo.dto.*;
+import com.witshare.mars.pojo.dto.ProjectDescriptionBean;
+import com.witshare.mars.pojo.dto.ProjectReqBean;
+import com.witshare.mars.pojo.dto.ProjectSummaryBean;
+import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.pojo.vo.SysProjectBeanFrontInfoVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanFrontListVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.pojo.vo.SysProjectListVo;
-import com.witshare.mars.service.ProjectDailyInfoService;
-import com.witshare.mars.service.ProjectWebSiteService;
-import com.witshare.mars.service.QingyunStorageService;
-import com.witshare.mars.service.SysProjectService;
+import com.witshare.mars.service.*;
 import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.WitshareUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -71,6 +71,8 @@ public class SysProjectServiceImpl implements SysProjectService {
     @Autowired
     private ProjectDailyInfoService projectDailyInfoService;
     @Autowired
+    private PlatformAddressService platformAddressService;
+    @Autowired
     private RedisCommonDao redisCommonDao;
 
 
@@ -90,9 +92,12 @@ public class SysProjectServiceImpl implements SysProjectService {
         String objectName = qingyunStorageService.uploadToQingyun(sysProjectBean.getLog(), sysProjectBean.getProjectGid(), EnumStorage.Log);
         sysProjectBean.setProjectLogoLink(objectName);
 
-        //todo 获取平台地址
         Timestamp current = new Timestamp(System.currentTimeMillis());
-        sysProjectBean.setPlatformAddress("")
+        String platformAddress = platformAddressService.getPlatformAddress();
+        if (StringUtils.isEmpty(platformAddress)) {
+            throw new WitshareException(EnumResponseText.NoPlatformAddress);
+        }
+        sysProjectBean.setPlatformAddress(platformAddress)
                 .setStartTime(sysProjectBean.getStartTime())
                 .setEndTime(sysProjectBean.getEndTime())
                 .setCreateTime(current)
