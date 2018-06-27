@@ -1,0 +1,1 @@
+ALTER TABLE `sys_project` ADD COLUMN `token_decimal` INT(11) UNSIGNED NOT NULL COMMENT '项目token的精度，小数点后的位数';
