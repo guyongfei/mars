@@ -45,9 +45,10 @@
         "projectToken":"",
         "payEthAddress":"",
         "getTokenAddress":"",
-        "priceRate":"",
+        "priceRate":5.0,
         "platformAddress":"",
         "minPurchaseAmount":5.0,
+        "txCount":1,
         "txCountLimit":false,
         "gasPrice": {
                "gasPrice": 1000000000,
@@ -68,6 +69,7 @@
 |priceRate|number|是|eth:token的价格比|
 |platformAddress|string|是|项目平台地址|
 |minPurchaseAmount|number|是|最低购买Eth数量|
+|txCount|number|是|购买次数|
 |txCountLimit|boolean|是|是否交易数量限制，如true表示达到交易次数上限不能再次交易|
 |gasPrice|object|是|gas价格|
 

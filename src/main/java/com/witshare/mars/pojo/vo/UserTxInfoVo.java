@@ -15,6 +15,8 @@ public class UserTxInfoVo {
 
     private String getTokenAddress;
 
+    private Integer txCount;
+
     private Boolean txCountLimit;
 
     private BigDecimal priceRate;
@@ -121,6 +123,15 @@ public class UserTxInfoVo {
 
     public UserTxInfoVo setGasPrice(MoonGetPriceResponseBean.Result gasPrice) {
         this.gasPrice = gasPrice;
+        return this;
+    }
+
+    public Integer getTxCount() {
+        return txCount;
+    }
+
+    public UserTxInfoVo setTxCount(Integer txCount) {
+        this.txCount = txCount;
         return this;
     }
 }

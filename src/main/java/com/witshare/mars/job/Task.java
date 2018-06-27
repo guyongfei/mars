@@ -57,7 +57,7 @@ public class Task {
     /**
      * 同步Moon价格
      */
-    @Scheduled(cron = "0 0 */1 * * ?")
+    @Scheduled(cron = "0 0/5 * * * ?")
     public void syncGasPrice() {
         String lockId = distributedLocker.lock(GAS_PRICE_LOCK, GAS_PRICE_REDIS_LOCK);
         if (lockId == null) {

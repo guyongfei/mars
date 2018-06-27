@@ -96,9 +96,9 @@ public class TransactionServiceImpl implements TransactionService {
             BeanUtils.copyProperties(sysUserAddresses.get(0), userTxInfoVo);
         }
         //是否已经交易次数上限
-        int buyCount = this.selectBuyCount(userGid, projectGid);
+        int txCount = this.selectBuyCount(userGid, projectGid);
         int projectUserTxMax = propertiesConfig.projectUserTxMax;
-        userTxInfoVo.setTxCountLimit(NumberUtils.compare(projectUserTxMax, buyCount) <= 0);
+        userTxInfoVo.setTxCountLimit(NumberUtils.compare(projectUserTxMax, txCount) <= 0).setTxCount(txCount);
         //交易价格
         MoonGetPriceResponseBean.Result gasPrice = this.getGasPrice();
         userTxInfoVo.setGasPrice(gasPrice);
