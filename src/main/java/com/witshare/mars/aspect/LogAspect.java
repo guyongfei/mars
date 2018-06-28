@@ -32,10 +32,13 @@ import org.springframework.web.servlet.HandlerMapping;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.BufferedReader;
 import java.util.*;
 
+import static com.witshare.mars.constant.CacheConsts.COOKIE_USER_TOKEN;
 import static com.witshare.mars.constant.CacheConsts.PROJECT_NAME;
+import static com.witshare.mars.constant.CacheConsts.SHIRO_SESSION_EXPIRE_TIME;
 
 
 @Aspect
@@ -180,15 +183,24 @@ public class LogAspect implements ThrowsAdvice {
         //获取必要的参数
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         HttpServletResponse response = CurrentThreadContext.getResponse();
-        loadCookie(request);
-        checkAuth(request);
         String requestBody = charReader(request);
         Map requestMap = getRequestMap(joinPoint, request, requestBody);
         CurrentThreadContext.setRequestMap(requestMap);
-        Object result;
 
-        //执行方法
-        result = joinPoint.proceed();
+
+
+
+        loadCookie(request);
+
+        boolean hasAuth = checkAuth(request);
+        Object result = null;
+        if (hasAuth) {
+            //执行方法
+            result = joinPoint.proceed();
+        } else {
+            //返回无权限
+            response.setStatus(HttpServletResponseWrapper.SC_UNAUTHORIZED);
+        }
 
         //写api调用日志
         if ("1".equals(propertiesConfig.writeApiLog)) {
@@ -209,6 +221,7 @@ public class LogAspect implements ThrowsAdvice {
     private void loadCookie(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (!ArrayUtils.isEmpty(cookies)) {
+            //将token置入cookie
             for (Cookie cookie : cookies) {
                 if (CacheConsts.COOKIE_I18N_LANGUAGE.equals(cookie.getName())) {
                     EnumI18NProject i18NProject = EnumI18NProject.getObjByLanguage(cookie.getValue());
@@ -218,17 +231,9 @@ public class LogAspect implements ThrowsAdvice {
                 if (CacheConsts.COOKIE_USER_TOKEN.equals(cookie.getName())) {
                     CurrentThreadContext.setToken(cookie.getValue());
                 }
-
             }
         }
-        //TODO 正式代码删除，调试跨域用
-///*//        if (StringUtils.isEmpty(InterceptorContext.getToken())) {
-//        redisCommonDao.putHash(RedisKeyUtil.getTokenEmailKey(), "ea0d95a82c004c698fa3af10cd15785f", "446390091@qq.com");
-//        redisCommonDao.putHash(RedisKeyUtil.getEmailTokenKey(), "446390091@qq.com", "ea0d95a82c004c698fa3af10cd15785f");
-//        InterceptorContext.setToken("ea0d95a82c004c698fa3af10cd15785f");
-//        Cookie cookie1 = new Cookie(KEY_COOKIE_NAME, "ea0d95a82c004c698fa3af10cd15785f");
-//        InterceptorContext.getResponse().addCookie(cookie1);
-//        }*/
+        CurrentThreadContext.setToken("595a0da001794855bf50b3853c221c53");
         if (StringUtils.isEmpty(CurrentThreadContext.getInternationalTableName())) {
             EnumI18NProject i18NProject = EnumI18NProject.getObjByLanguage(null);
             CurrentThreadContext.setInternationalTableName(i18NProject.getTableName());
@@ -251,9 +256,6 @@ public class LogAspect implements ThrowsAdvice {
 
     /**
      * 检验权限
-     *
-     * @param request
-     * @return
      */
     private boolean checkAuth(HttpServletRequest request) {
         //替换掉项目名,获得Uri

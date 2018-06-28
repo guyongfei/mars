@@ -28,9 +28,9 @@
 |1|校验成功||
 |2|校验失败||
 
-## 1.查询用户交易地址
+## 1.查询用户项目交易信息
 
-- url：/transaction/user-address
+- url：/transaction/info
 - method:get
 - request param
   - projectGid 项目唯一标识
@@ -41,19 +41,45 @@
       "message": "",
       "success": true,
       "data":  {
-         "payEthAddress":"",
-         "getTokenAddress":""
+        "projectGid":"",
+        "projectToken":"",
+        "payEthAddress":"",
+        "getTokenAddress":"",
+        "priceRate":5.0,
+        "platformAddress":"",
+        "minPurchaseAmount":5.0,
+        "txCount":1,
+        "txCountLimit":false,
+        "gasPrice": {
+               "gasPrice": 1000000000,
+               "gasPriceGWei": "1gwei",
+               "ethGasLimit": 21000
+             }
        }
     }
   ```
 
-> data字段详解（如未设置地址，data为空）
+> data字段详解
 
 |字段|类型|是否必须|说明|
 |---|---|---|---|
 |projectGid|string|是|项目唯一标识|
 |payEthAddress|string|是|支付Eth地址|
 |getTokenAddress|string|是|获取token地址|
+|priceRate|number|是|eth:token的价格比|
+|platformAddress|string|是|项目平台地址|
+|minPurchaseAmount|number|是|最低购买Eth数量|
+|txCount|number|是|购买次数|
+|txCountLimit|boolean|是|是否交易数量限制，如true表示达到交易次数上限不能再次交易|
+|gasPrice|object|是|gas价格|
+
+> gasPrice 字段详解
+
+| 字段         | 类型   |是否必须| 说明    |
+| ------------ | ------ |---| ---------------------- |
+| gasPrice     | number |是|当前gasPrice，单位wei  |
+| gasPriceGWei | string |是| 当前gasPrice，单位gwei |
+| ethGasLimit  | number |是| ETH转账默认的gasLimit  |
 
 
 ## 2.设置用户交易地址
@@ -133,11 +159,7 @@
 - url：/transactions
 - method:get
 - request param
-  - payTx
-  - projectStatus
-  - userTxStatus
-  - startTime 交易时间（起）
-  - endTime 交易时间（至）
+  - projectGid
 - response body
 
   ```json
@@ -148,7 +170,10 @@
         "projectGid":"",
         "token":"",
         "payTx":"",
-        "projectStatus":0,
+        "payTxId":"",
+        "payAmount":"",
+        "priceRate":"",
+        "hopeGetAmount":"",
         "userTxStatus":5,
         "createTime":1521234561000
       }
@@ -163,8 +188,11 @@
 |projectGid|string|是|项目唯一标识|
 |token|string|是|项目token|
 |payTx|string|是|认筹交易号|
-|projectStatus|string|是|项目状态|
-|userTxStatus|string|是|认筹交易状态|
+|payTxId|string|是|购买交易ID|
+|payAmount|number|是|支付eth数额|
+|priceRate|number|是|eth:token的价格比|
+|hopeGetAmount|number|是|希望获得eth数额|
+|userTxStatus|number|是|认筹交易状态|
 |createTime|number|是|认筹时间|
 
 ## 5.交易详情

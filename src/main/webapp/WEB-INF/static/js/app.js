@@ -115,8 +115,8 @@ $("li").on("click", "#indexPage", function () {
 $("li").on("click", "#gotoProjectPage", function () {
     $('#content').load(contextPath + '/management/page/project');
 });
-$("li").on("click", "#gotoQuartzPage", function () {
-    $('#content').load(contextPath + '/management/page/quartz');
+$("li").on("click", "#gotoPlatformAddressPage", function () {
+    $('#content').load(contextPath + '/management/page/platformAddress');
 });
 $("li").on("click", "#gotoStarUser", function () {
     $('#content').load(contextPath + '/management/page/user');

@@ -23,4 +23,6 @@ public interface TokenDistributeService {
      * @return
      */
     ResponseBean getTokenDistributeProgress(String projectGid);
+
+    String getToken(String url, String method, String queryParam, String bodyJson);
 }
