@@ -43,6 +43,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import static com.witshare.mars.constant.CacheConsts.TX_ID_INCREMENT;
 import static com.witshare.mars.pojo.dto.RecordUserTxBean.PROJECT_GID;
 import static com.witshare.mars.pojo.dto.SysUserBean.GET_TOKEN_ADDRESS;
 import static com.witshare.mars.pojo.dto.SysUserBean.PAY_ETH_ADDRESS;
@@ -285,6 +286,7 @@ public class TransactionServiceImpl implements TransactionService {
         pageInfo.getList().forEach(p -> {
             RecordUserTxListVo vo = RecordUserTxListVo.newInstance();
             BeanUtils.copyProperties(p, vo);
+            vo.setPayTxId(p.getId() + TX_ID_INCREMENT);
             vos.add(vo);
         });
         pageInfo.setList(null);
@@ -299,16 +301,16 @@ public class TransactionServiceImpl implements TransactionService {
      */
     @Override
     public RecordUserTxVo select(Long payTxId) {
-        if (payTxId == null || payTxId < 10000) {
+        if (payTxId == null || payTxId <= TX_ID_INCREMENT) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
         SysUserBean currentUser = sysUserService.getCurrentUser();
-        RecordUserTxExample recordUserTxExample = new RecordUserTxExample();
-        recordUserTxExample.or().andUserGidEqualTo(currentUser.getUserGid()).andPayTxIdEqualTo(payTxId);
-        List<RecordUserTx> recordUserTxes = recordUserTxMapper.selectByExample(recordUserTxExample);
-        if (CollectionUtils.isNotEmpty(recordUserTxes)) {
+        String userGid = currentUser.getUserGid();
+        RecordUserTx recordUserTx = recordUserTxMapper.selectByPrimaryKey(payTxId - TX_ID_INCREMENT);
+        if (recordUserTx != null && StringUtils.equals(userGid, recordUserTx.getUserGid())) {
             RecordUserTxVo recordUserTxVo = RecordUserTxVo.newInstance();
-            BeanUtils.copyProperties(recordUserTxes.get(0), recordUserTxVo);
+            BeanUtils.copyProperties(recordUserTx, recordUserTxVo);
+            recordUserTxVo.setPayTxId(payTxId);
             return recordUserTxVo;
         }
         return null;

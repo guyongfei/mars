@@ -576,66 +576,6 @@ public class RecordUserTxExample {
             return (Criteria) this;
         }
 
-        public Criteria andPayTxIdIsNull() {
-            addCriterion("pay_tx_id is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTxIdIsNotNull() {
-            addCriterion("pay_tx_id is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTxIdEqualTo(Long value) {
-            addCriterion("pay_tx_id =", value, "payTxId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTxIdNotEqualTo(Long value) {
-            addCriterion("pay_tx_id <>", value, "payTxId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTxIdGreaterThan(Long value) {
-            addCriterion("pay_tx_id >", value, "payTxId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTxIdGreaterThanOrEqualTo(Long value) {
-            addCriterion("pay_tx_id >=", value, "payTxId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTxIdLessThan(Long value) {
-            addCriterion("pay_tx_id <", value, "payTxId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTxIdLessThanOrEqualTo(Long value) {
-            addCriterion("pay_tx_id <=", value, "payTxId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTxIdIn(List<Long> values) {
-            addCriterion("pay_tx_id in", values, "payTxId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTxIdNotIn(List<Long> values) {
-            addCriterion("pay_tx_id not in", values, "payTxId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTxIdBetween(Long value1, Long value2) {
-            addCriterion("pay_tx_id between", value1, value2, "payTxId");
-            return (Criteria) this;
-        }
-
-        public Criteria andPayTxIdNotBetween(Long value1, Long value2) {
-            addCriterion("pay_tx_id not between", value1, value2, "payTxId");
-            return (Criteria) this;
-        }
-
         public Criteria andPayAmountIsNull() {
             addCriterion("pay_amount is null");
             return (Criteria) this;

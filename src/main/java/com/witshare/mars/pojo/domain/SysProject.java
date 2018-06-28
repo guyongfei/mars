@@ -40,6 +40,8 @@ public class SysProject {
 
     private Timestamp updateTime;
 
+    private Integer tokenDecimal;
+
     public Long getId() {
         return id;
     }
@@ -182,5 +184,13 @@ public class SysProject {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public Integer getTokenDecimal() {
+        return tokenDecimal;
+    }
+
+    public void setTokenDecimal(Integer tokenDecimal) {
+        this.tokenDecimal = tokenDecimal;
     }
 }

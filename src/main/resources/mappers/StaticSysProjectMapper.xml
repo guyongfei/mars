@@ -56,12 +56,12 @@
         (`project_gid`, `project_token`,`token_address`,`platform_address`,`project_address`,
         `project_logo_link`,`project_img_link`,
         `soft_cap`,`hard_cap`,`min_purchase_amount`,`start_time`,`end_time`,`start_price`,`end_price`,
-        `create_time`,`update_time`)
+        `create_time`,`update_time`,token_decimal)
         VALUES
         (#{projectGid},#{projectToken},#{tokenAddress},#{platformAddress},#{projectAddress},
         #{projectLogoLink},#{projectImgLink},
         #{softCap},#{hardCap},#{minPurchaseAmount},#{startTime},#{endTime},#{startPriceRate},#{endPriceRate},
-        NOW(),NOW() );
+        NOW(),NOW(),#{tokenDecimal} );
     </insert>
 
     <select id="selectPdfById" resultType="com.witshare.mars.pojo.dto.ProjectPdfBean">
