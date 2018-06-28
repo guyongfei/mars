@@ -1,5 +1,6 @@
 package com.witshare.mars.service;
 
+import com.github.pagehelper.PageInfo;
 import com.witshare.mars.pojo.dto.ProjectDailyInfoBean;
 import com.witshare.mars.pojo.dto.ProjectSummaryBean;
 
@@ -14,6 +15,8 @@ public interface ProjectDailyInfoService {
     BigDecimal getSoldAmount(String projectGid);
 
     ProjectSummaryBean getSummary(String projectGid);
+
+    PageInfo<ProjectDailyInfoBean> getList(ProjectDailyInfoBean projectDailyInfoBean);
 
     ProjectDailyInfoBean get(String projectGid, Date date);
 

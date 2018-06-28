@@ -9,10 +9,39 @@ var pdfKoName;
 var pdfJa;
 var pdfJaName;
 var projectNow;
+var projectToken;
+var projectDecimal;
 var addMethod = true;
-var projectTypeArr = new Array();
+var tokenReg = /^0x[a-fA-F0-9]{40}$/;
+var regToken = new RegExp(/^0x[a-fA-F0-9]{40}$/, "");
 
 function getNowFormatDate(date) {
+    if (!date) {
+        date = new Date();
+    }
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    if (hours >= 0 && hours <= 9) {
+        hours = "0" + hours;
+    }
+    if (minutes >= 0 && minutes <= 9) {
+        minutes = "0" + minutes;
+    }
+    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+        + " " + hours + seperator2 + minutes;
+    return currentdate;
+}
+function getNowFormatDay(date) {
     if (!date) {
         date = new Date();
     }
@@ -26,9 +55,7 @@ function getNowFormatDate(date) {
     if (strDate >= 0 && strDate <= 9) {
         strDate = "0" + strDate;
     }
-    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
-        + " " + date.getHours() + seperator2 + date.getMinutes();
-    return currentdate;
+    return date.getFullYear() + seperator1 + month + seperator1 + strDate;
 }
 
 function getAddDay(addDay) {
@@ -120,7 +147,7 @@ var TableInit = function () {
                 align: 'center',
                 title: '项目状态',
                 formatter: projectStatusFormatter
-            }, {
+            },  {
                 title: '是否关闭',
                 field: 'isAvailable',
                 align: 'center',
@@ -128,16 +155,10 @@ var TableInit = function () {
                 events: lockEvents,
                 formatter: lockFormatter
             }, {
-                title: '统计',
-                field: 'statistic',
+                field: 'operate',
+                title: '其他',
                 align: 'center',
                 valign: 'middle',
-                events: statisticEvents,
-                formatter: statisticFormatter
-            }, {
-                field: 'operate',
-                title: '操作',
-                align: 'center',
                 events: operateEvents,
                 formatter: operateFormatter
             }]
@@ -174,15 +195,6 @@ function lockFormatter(value, row, index) {
     ].join('');
 }
 
-function statisticFormatter(value, row, index) {
-    var color = 'btn-primary';
-    var state = '查看';
-    return [
-        '<a class="statistic" href="javascript:void(0)" title="查看统计">',
-        '<button class="btn ' + color + '" >' + state + '</button>',
-        '</a>'
-    ].join('');
-}
 
 function projectStatusFormatter(value, row, index) {
     var state = '--';
@@ -213,6 +225,12 @@ function projectStatusFormatter(value, row, index) {
 function timeFormatter(value, row, index) {
     return [
         '<label  >' + getNowFormatDate(new Date(value)) + '</label>'
+    ].join('');
+}
+
+function dayFormatter(value, row, index) {
+    return [
+        '<label  >' + getNowFormatDay(new Date(value)) + '</label>'
     ].join('');
 }
 
@@ -260,18 +278,131 @@ window.lockEvents = {
 window.operateEvents = {
     'click .editRow': function (e, value, row, index) {
         getProject(row)
+    },
+    'click .statistic': function (e, value, row, index) {
+        $('#statisticProjectToken').html(row.projectToken);
+        $('#statisticProjectGid').val(row.projectGid);
+
+        reloadStatisticTable(1);
+        $('#statisticModal').modal('show');
     }
 };
-window.statisticEvents = {
-    'click .editRow': function (e, value, row, index) {
-        //弹出查询页面
-    }
-};
+
+
 function operateFormatter(value, row, index) {
     return [
-        '<button type="button" id="editRow"  class="btn btn-info  editRow" ><i class="fa fa-send " aria-hidden="true" ></i>编辑</button>'
-    ]
+        '<button type="button" id="editRow"  style="margin: 0 10px 0 0 " class="btn btn-primary  editRow" ><i class="fa fa-send " aria-hidden="true" ></i>编辑</button>',
+        '<button type="button" id="editRow1"  class="statistic btn  btn-info " projectGid="' + row.projectGid + '" >统计</button>'
+    ].join('')
 };
+
+//重新加载表格
+function reloadStatisticTable(pageNum) {
+    $('#statistic_table').bootstrapTable('refresh', {pageNumber: pageNum});
+}
+
+var TableInit_ = function () {
+    var oTableInit_ = new Object();
+    //初始化Table
+    oTableInit_.Init = function () {
+        $('#statistic_table').bootstrapTable({
+            url: contextPath + '/management/statistic',         //请求后台的URL（*）
+            method: 'get',                      //请求方式（*）
+            toolbar: '#toolbar',                //工具按钮用哪个容器
+            striped: true,                      //是否显示行间隔色
+            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                   //是否显示分页（*）
+            sortable: false,                     //是否启用排序
+            sortOrder: "asc",                   //排序方式
+            queryParams: oTableInit_.queryParams,//传递参数（*）
+            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                       //初始化加载第一页，默认第一页
+            pageSize: 10,                       //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+            strictSearch: true,
+            showColumns: false,                  //是否显示所有的列
+            showRefresh: false,                  //是否显示刷新按钮
+            minimumCountColumns: 1,             //最少允许的列数
+            clickToSelect: true,                //是否启用点击选中行
+//                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "projectGid",                     //每一行的唯一标识，一般为主键列
+            showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
+            cardView: false,                    //是否显示详细视图
+            detailView: false,                   //是否显示父子表
+            responseHandler: function (res) {
+                return {
+                    "total": res.data.total,//总页数
+                    "rows": res.data.list   //数据
+                };
+            },
+            columns: [{
+                title: '序号',
+                align: "center",
+                formatter: function (value, row, index) {
+                    //获取每页显示的数量
+                    var pageSize = $('#statistic_table').bootstrapTable('getOptions').pageSize;
+                    //获取当前是第几页
+                    var pageNumber = $('#statistic_table').bootstrapTable('getOptions').pageNumber;
+                    //返回序号，注意index是从0开始的，所以要加上1
+                    return pageSize * (pageNumber - 1) + index + 1;
+                }
+            },{
+                field: 'getEthAmount',
+                align: 'center',
+                title: 'ETH数量'
+            }, {
+                field: 'actualGetEthAmount',
+                align: 'center',
+                title: '有效ETH'
+            }, {
+                field: 'payTokenAmount',
+                align: 'center',
+                title: 'Token数量'
+            }, {
+                field: 'actualPayTokenAmount',
+                align: 'center',
+                title: '有效Token'
+            }, {
+                field: 'userCount',
+                align: 'center',
+                title: '用户数量'
+            }, {
+                field: 'actualUserCount',
+                align: 'center',
+                title: '有效用户'
+            }, {
+                field: 'txCount',
+                align: 'center',
+                title: '申请数量'
+            }, {
+                field: 'actualTxCount',
+                align: 'center',
+                title: '有效申请'
+            }, {
+                field: 'currentDay',
+                align: 'center',
+                title: '日期',
+                formatter: dayFormatter
+            }]
+        });
+    };
+
+    //得到查询的参数
+    oTableInit_.queryParams = function (params) {
+        var temp = {
+            pageSize: params.limit,   //页面大小
+            pageNum: params.offset / params.limit + 1  //页码
+        };
+        var projectGid = $("#statisticProjectGid").val().trim();
+        if (projectGid) {
+            temp.projectGid = projectGid;
+        }
+        return temp;
+    };
+    return oTableInit_;
+};
+
 
 //加载单个项目
 function getProject(row) {
@@ -556,6 +687,17 @@ $(function () {
     //加载table
     var oTable = new TableInit();
     oTable.Init();
+
+    //加载table
+    var oTable_ = new TableInit_();
+    oTable_.Init();
+
+    // $('.statistics').click(function () {
+    //     var projectGid = $(this).attr('projectGid');
+    //     $('#statisticProjectGid').val(projectGid);
+    //     reloadStatisticTable(1);
+    // })
+
 
     $('#addEvent').bootstrapValidator({
         message: 'This value is not valid',
@@ -1113,9 +1255,48 @@ $(function () {
             $(this).val(result)
         });
 
-
+        $('#tokenAddress').change(function () {
+            var tokenAddress = $(this).val().trim();
+            $(this).val(tokenAddress);
+            if (tokenAddress && regToken.test(tokenAddress)) {
+                $.ajax({
+                    url: moonPath + "/token/" + tokenAddress,
+                    type: 'GET',
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: 'jsonp',
+                    crossDomain: true,
+                    success: function (data) {
+                        console.log(data);
+                        if (data.code == "0" && data.result && data.result.symbol != "UN_SYMBOL") {
+                            var result = data.result;
+                            projectToken = result.symbol;
+                            $('#projectToken').html(projectToken);
+                            projectDecimal = result.decimal;
+                            $('#tokenDecimal').html(projectDecimal);
+                            $('#projectNameEn').val(data.name);
+                        } else {
+                            layer.msg("智能合约地址未找到，请再次输入", {
+                                time: 2000,
+                                icon: 0,
+                                shift: 1
+                            }, function () {
+                                $('#tokenAddress').val('')
+                            })
+                        }
+                    }
+                })
+            }
+        })
     });
-
+    /*    {
+     "code": "0",
+     "message": "成功",
+     "result": {
+     "name": "Bee Honey Token",
+     "symbol": "HONEY",
+     "decimal": "9"
+     }
+     }*/
 
     function checkPrice() {
         var priceRate = numeral($('#priceRate').val()).value();

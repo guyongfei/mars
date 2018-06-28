@@ -48,6 +48,7 @@
 <body data-type="index">
 <span th:text="${contextPath}" id="contextPath" style="display: none;"></span>
 <span th:text="${frontPath}" id="frontPath" style="display: none;"></span>
+<span th:text="${moonPath}" id="moonPath" style="display: none;"></span>
 
 <div class="tpl-page-container tpl-page-header-fixed">
     <!--侧边栏-->
@@ -62,6 +63,11 @@
                 <li>
                     <a id="gotoProjectPage" class="left-slidebar-a btn btn-default">
                         <span th:text="'项目'"></span>
+                    </a>
+                </li>
+                <li>
+                    <a id="gotoProjectStatisticPage" class="left-slidebar-a btn btn-default">
+                        <span th:text="'统计'"></span>
                     </a>
                 </li>
                 <li>

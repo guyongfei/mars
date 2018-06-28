@@ -11,6 +11,7 @@ var noticeId, noticeIndex;
 
 var contextPath = $("#contextPath").text();
 var frontPath = $("#frontPath").text();
+var moonPath = $("#moonPath").text();
 
 
 $(function () {
@@ -118,8 +119,8 @@ $("li").on("click", "#gotoProjectPage", function () {
 $("li").on("click", "#gotoPlatformAddressPage", function () {
     $('#content').load(contextPath + '/management/page/platformAddress');
 });
-$("li").on("click", "#gotoStarUser", function () {
-    $('#content').load(contextPath + '/management/page/user');
+$("li").on("click", "#gotoProjectStatisticPage", function () {
+    $('#content').load(contextPath + '/management/page/project-statistic');
 });
 $("li").on("click", "#gotoBillBoard", function () {
     $('#content').load(contextPath + '/management/page/billboard');

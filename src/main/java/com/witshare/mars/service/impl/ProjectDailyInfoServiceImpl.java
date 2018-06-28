@@ -1,9 +1,13 @@
 package com.witshare.mars.service.impl;
 
 import com.alibaba.dubbo.common.utils.CollectionUtils;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.witshare.mars.constant.EnumProjectStatus;
+import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.dao.mysql.*;
 import com.witshare.mars.dao.redis.RedisCommonDao;
+import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.domain.*;
 import com.witshare.mars.pojo.dto.ProjectDailyInfoBean;
 import com.witshare.mars.pojo.dto.ProjectSummaryBean;
@@ -15,7 +19,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -96,6 +99,42 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
     }
 
 
+    @Override
+    public PageInfo<ProjectDailyInfoBean> getList(ProjectDailyInfoBean projectDailyInfoBean) {
+        if (projectDailyInfoBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        Integer pageNum = projectDailyInfoBean.getPageNum();
+        Integer pageSize = projectDailyInfoBean.getPageSize();
+        String projectGid = projectDailyInfoBean.getProjectGid();
+        if (pageNum == null || pageSize == null) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        PageInfo<ProjectDailyInfoBean> projectDailyInfoBeanPageInfo = new PageInfo<>();
+        if (StringUtils.isEmpty(projectGid)) {
+            return projectDailyInfoBeanPageInfo;
+        }
+
+        ProjectDailyInfoExample projectDailyInfoExample = new ProjectDailyInfoExample();
+        projectDailyInfoExample.or().andProjectGidEqualTo(projectGid);
+        projectDailyInfoExample.setOrderByClause("current_day desc");
+        PageInfo<ProjectDailyInfo> pageInfos = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(() -> projectDailyInfoMapper.selectByExample(projectDailyInfoExample));
+
+
+        List<ProjectDailyInfo> list = pageInfos.getList();
+        LinkedList<ProjectDailyInfoBean> projectDailyInfoBeans = new LinkedList<>();
+        list.forEach(p -> {
+            ProjectDailyInfoBean bean = new ProjectDailyInfoBean();
+            BeanUtils.copyProperties(p, bean);
+            projectDailyInfoBeans.add(bean);
+        });
+        pageInfos.setList(null);
+        BeanUtils.copyProperties(pageInfos, projectDailyInfoBeanPageInfo);
+        projectDailyInfoBeanPageInfo.setList(projectDailyInfoBeans);
+        return projectDailyInfoBeanPageInfo;
+    }
+
     //更新每日统计表和汇总表
     @Override
     public void syncDailyInfo() {
@@ -135,7 +174,7 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
                 }
 
                 ProjectDailyInfoBean projectDailyInfoBean = ProjectDailyInfoBean.newInstance();
-                BeanUtils.copyProperties(projectSummaryBean,projectDailyInfoBean);
+                BeanUtils.copyProperties(projectSummaryBean, projectDailyInfoBean);
                 Date currentDay = WitshareUtils.getDateByLocalDate(localDate);
                 projectDailyInfoBean.setCurrentDay(currentDay);
 

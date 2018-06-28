@@ -27,6 +27,23 @@
             </div>
         </div>
 
+        <div class="modal fade" id="statisticModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style="width:80%;height:auto;">
+                <div class="modal-content" style="padding: 30px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myStatisticModal">统计</h4>
+                        <label style="display: none" id="statisticProjectGid"></label>
+
+                    </div>
+                    <div class="modal-body">
+                        <label id="statisticProjectToken"></label>
+                        <table id="statistic_table"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document" style="width:80%;height:auto;">
@@ -39,20 +56,51 @@
                     <div class="modal-body">
                         <form class="form-horizontal" id="addEvent" method="post" data-toggle="validator" role="form">
                             <fieldset>
+
                                 <div class="form-group">
-                                    <label class="col-md-2 control-label">TOKEN</label>
-                                    <div class="col-md-4 control-label">
-                                        <input class="form-control" type="text" id="projectToken"
-                                               name="projectToken"
+                                    <!--  <label class="col-md-2 control-label">TOKEN</label>-->
+                                    <label class="col-md-2 control-label" id="projectToken"></label>
+                                    <!--
+                                                                        <label class="col-md-2 control-label">tokenDecimal</label>
+                                                                        <label class="col-md-2 control-label" id="tokenDecimal"></label> -->
+                                    <!--
+                                                                        <div class="col-md-4 control-label">
+                                                                            <input class="form-control" type="text" id="projectToken"
+                                                                                   name="projectToken"
+                                                                                   style="border-left:none;"
+                                                                                   autocomplete="off">
+                                                                        </div>-->
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">合约地址</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class="form-control" type="text" id="tokenAddress" name="tokenAddress"
+                                               placeholder="如：0xcf7c80c4f39465541c54c4acbaa02bf8649a29b9"
                                                style="border-left:none;"
                                                autocomplete="off">
                                     </div>
+                                </div>
+
+
+                                <div class="form-group">
                                     <label class="col-md-2 control-label">项目名称</label>
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <input class="form-control" type="text" id="projectNameEn"
                                                name="projectNameEn"
                                                style="border-left:none;"
                                                autocomplete="off" placeholder="EN">
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-md-2 control-label">项目地址</label>
+                                    <div class="col-md-10 control-label">
+                                        <input class="form-control" type="text" id="projectAddress"
+                                               placeholder="如：0x57d9d65d2f0eb2944d2bdae208b60ba49292e2e0"
+                                               name="projectAddress"
+                                               style="border-left:none;"
+                                               autocomplete="off">
                                     </div>
                                 </div>
 
@@ -106,26 +154,6 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">合约地址</label>
-                                    <div class="col-md-10 control-label">
-                                        <input class="form-control" type="text" id="tokenAddress" name="tokenAddress"
-                                               placeholder="如：0xcf7c80c4f39465541c54c4acbaa02bf8649a29b9"
-                                               style="border-left:none;"
-                                               autocomplete="off">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="col-md-2 control-label">项目地址</label>
-                                    <div class="col-md-10 control-label">
-                                        <input class="form-control" type="text" id="projectAddress"
-                                               placeholder="如：0x57d9d65d2f0eb2944d2bdae208b60ba49292e2e0"
-                                               name="projectAddress"
-                                               style="border-left:none;"
-                                               autocomplete="off">
-                                    </div>
-                                </div>
 
                                 <hr/>
                                 <div class="form-group">
@@ -361,6 +389,5 @@
     </div>
 </div>
 <script th:src="@{/js/custom/project.js}"></script>
-
 </body>
 </html>
