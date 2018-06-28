@@ -19,6 +19,8 @@ public class UserTxInfoVo {
 
     private Boolean txCountLimit;
 
+    private Integer projectStatus;
+
     private BigDecimal priceRate;
 
     private String projectToken;
@@ -132,6 +134,15 @@ public class UserTxInfoVo {
 
     public UserTxInfoVo setTxCount(Integer txCount) {
         this.txCount = txCount;
+        return this;
+    }
+
+    public Integer getProjectStatus() {
+        return projectStatus;
+    }
+
+    public UserTxInfoVo setProjectStatus(Integer projectStatus) {
+        this.projectStatus = projectStatus;
         return this;
     }
 }

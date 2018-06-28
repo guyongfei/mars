@@ -18,8 +18,6 @@ public class RecordUserTx {
 
     private String payTx;
 
-    private Long payTxId;
-
     private BigDecimal payAmount;
 
     private BigDecimal priceRate;
@@ -100,14 +98,6 @@ public class RecordUserTx {
 
     public void setPayTx(String payTx) {
         this.payTx = payTx == null ? null : payTx.trim();
-    }
-
-    public Long getPayTxId() {
-        return payTxId;
-    }
-
-    public void setPayTxId(Long payTxId) {
-        this.payTxId = payTxId;
     }
 
     public BigDecimal getPayAmount() {

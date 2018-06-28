@@ -146,6 +146,7 @@ public class SysProjectBean  extends BasePageBean{
     private Integer isAvailable;
     private Timestamp createTime;
     private Timestamp updateTime;
+    private Integer tokenDecimal;
 
     private List<WebSiteManagementBean> websiteList = new LinkedList<>();
 
@@ -739,5 +740,12 @@ public class SysProjectBean  extends BasePageBean{
         return this;
     }
 
+    public Integer getTokenDecimal() {
+        return tokenDecimal;
+    }
 
+    public SysProjectBean setTokenDecimal(Integer tokenDecimal) {
+        this.tokenDecimal = tokenDecimal;
+        return this;
+    }
 }

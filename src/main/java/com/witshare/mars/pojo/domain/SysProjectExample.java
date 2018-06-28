@@ -1255,6 +1255,66 @@ public class SysProjectExample {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+
+        public Criteria andTokenDecimalIsNull() {
+            addCriterion("token_decimal is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenDecimalIsNotNull() {
+            addCriterion("token_decimal is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenDecimalEqualTo(Integer value) {
+            addCriterion("token_decimal =", value, "tokenDecimal");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenDecimalNotEqualTo(Integer value) {
+            addCriterion("token_decimal <>", value, "tokenDecimal");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenDecimalGreaterThan(Integer value) {
+            addCriterion("token_decimal >", value, "tokenDecimal");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenDecimalGreaterThanOrEqualTo(Integer value) {
+            addCriterion("token_decimal >=", value, "tokenDecimal");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenDecimalLessThan(Integer value) {
+            addCriterion("token_decimal <", value, "tokenDecimal");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenDecimalLessThanOrEqualTo(Integer value) {
+            addCriterion("token_decimal <=", value, "tokenDecimal");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenDecimalIn(List<Integer> values) {
+            addCriterion("token_decimal in", values, "tokenDecimal");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenDecimalNotIn(List<Integer> values) {
+            addCriterion("token_decimal not in", values, "tokenDecimal");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenDecimalBetween(Integer value1, Integer value2) {
+            addCriterion("token_decimal between", value1, value2, "tokenDecimal");
+            return (Criteria) this;
+        }
+
+        public Criteria andTokenDecimalNotBetween(Integer value1, Integer value2) {
+            addCriterion("token_decimal not between", value1, value2, "tokenDecimal");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

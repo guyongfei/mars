@@ -9,7 +9,6 @@
     <result column="project_token" property="projectToken" jdbcType="VARCHAR" />
     <result column="pay_coin_type" property="payCoinType" jdbcType="TINYINT" />
     <result column="pay_tx" property="payTx" jdbcType="VARCHAR" />
-    <result column="pay_tx_id" property="payTxId" jdbcType="INTEGER" />
     <result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
     <result column="price_rate" property="priceRate" jdbcType="DECIMAL" />
     <result column="hope_get_amount" property="hopeGetAmount" jdbcType="DECIMAL" />
@@ -83,8 +82,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, user_gid, user_email, project_gid, project_token, pay_coin_type, pay_tx, pay_tx_id, 
-    pay_amount, price_rate, hope_get_amount, should_get_amount, actual_pay_amount, actual_get_amount, 
+    id, user_gid, user_email, project_gid, project_token, pay_coin_type, pay_tx, pay_amount, 
+    price_rate, hope_get_amount, should_get_amount, actual_pay_amount, actual_get_amount, 
     user_tx_status, platform_tx, eth_fee, platform_tx_status, distribution_time, create_time, 
     update_time
   </sql>
@@ -122,18 +121,18 @@
   <insert id="insert" parameterType="com.witshare.mars.pojo.domain.RecordUserTx" useGeneratedKeys="true" keyProperty="id" >
     insert into record_user_tx (user_gid, user_email, project_gid, 
       project_token, pay_coin_type, pay_tx, 
-      pay_tx_id, pay_amount, price_rate, 
-      hope_get_amount, should_get_amount, actual_pay_amount, 
-      actual_get_amount, user_tx_status, platform_tx, 
-      eth_fee, platform_tx_status, distribution_time, 
-      create_time, update_time)
+      pay_amount, price_rate, hope_get_amount, 
+      should_get_amount, actual_pay_amount, actual_get_amount, 
+      user_tx_status, platform_tx, eth_fee, 
+      platform_tx_status, distribution_time, create_time, 
+      update_time)
     values (#{userGid,jdbcType=CHAR}, #{userEmail,jdbcType=VARCHAR}, #{projectGid,jdbcType=CHAR}, 
       #{projectToken,jdbcType=VARCHAR}, #{payCoinType,jdbcType=TINYINT}, #{payTx,jdbcType=VARCHAR}, 
-      #{payTxId,jdbcType=INTEGER}, #{payAmount,jdbcType=DECIMAL}, #{priceRate,jdbcType=DECIMAL}, 
-      #{hopeGetAmount,jdbcType=DECIMAL}, #{shouldGetAmount,jdbcType=DECIMAL}, #{actualPayAmount,jdbcType=DECIMAL}, 
-      #{actualGetAmount,jdbcType=DECIMAL}, #{userTxStatus,jdbcType=TINYINT}, #{platformTx,jdbcType=VARCHAR}, 
-      #{ethFee,jdbcType=DECIMAL}, #{platformTxStatus,jdbcType=TINYINT}, #{distributionTime,jdbcType=TIMESTAMP}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+      #{payAmount,jdbcType=DECIMAL}, #{priceRate,jdbcType=DECIMAL}, #{hopeGetAmount,jdbcType=DECIMAL}, 
+      #{shouldGetAmount,jdbcType=DECIMAL}, #{actualPayAmount,jdbcType=DECIMAL}, #{actualGetAmount,jdbcType=DECIMAL}, 
+      #{userTxStatus,jdbcType=TINYINT}, #{platformTx,jdbcType=VARCHAR}, #{ethFee,jdbcType=DECIMAL}, 
+      #{platformTxStatus,jdbcType=TINYINT}, #{distributionTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.witshare.mars.pojo.domain.RecordUserTx" useGeneratedKeys="true" keyProperty="id" >
     insert into record_user_tx
@@ -155,9 +154,6 @@
       </if>
       <if test="payTx != null" >
         pay_tx,
-      </if>
-      <if test="payTxId != null" >
-        pay_tx_id,
       </if>
       <if test="payAmount != null" >
         pay_amount,
@@ -217,9 +213,6 @@
       </if>
       <if test="payTx != null" >
         #{payTx,jdbcType=VARCHAR},
-      </if>
-      <if test="payTxId != null" >
-        #{payTxId,jdbcType=INTEGER},
       </if>
       <if test="payAmount != null" >
         #{payAmount,jdbcType=DECIMAL},
@@ -292,9 +285,6 @@
       <if test="record.payTx != null" >
         pay_tx = #{record.payTx,jdbcType=VARCHAR},
       </if>
-      <if test="record.payTxId != null" >
-        pay_tx_id = #{record.payTxId,jdbcType=INTEGER},
-      </if>
       <if test="record.payAmount != null" >
         pay_amount = #{record.payAmount,jdbcType=DECIMAL},
       </if>
@@ -348,7 +338,6 @@
       project_token = #{record.projectToken,jdbcType=VARCHAR},
       pay_coin_type = #{record.payCoinType,jdbcType=TINYINT},
       pay_tx = #{record.payTx,jdbcType=VARCHAR},
-      pay_tx_id = #{record.payTxId,jdbcType=INTEGER},
       pay_amount = #{record.payAmount,jdbcType=DECIMAL},
       price_rate = #{record.priceRate,jdbcType=DECIMAL},
       hope_get_amount = #{record.hopeGetAmount,jdbcType=DECIMAL},
@@ -386,9 +375,6 @@
       </if>
       <if test="payTx != null" >
         pay_tx = #{payTx,jdbcType=VARCHAR},
-      </if>
-      <if test="payTxId != null" >
-        pay_tx_id = #{payTxId,jdbcType=INTEGER},
       </if>
       <if test="payAmount != null" >
         pay_amount = #{payAmount,jdbcType=DECIMAL},
@@ -440,7 +426,6 @@
       project_token = #{projectToken,jdbcType=VARCHAR},
       pay_coin_type = #{payCoinType,jdbcType=TINYINT},
       pay_tx = #{payTx,jdbcType=VARCHAR},
-      pay_tx_id = #{payTxId,jdbcType=INTEGER},
       pay_amount = #{payAmount,jdbcType=DECIMAL},
       price_rate = #{priceRate,jdbcType=DECIMAL},
       hope_get_amount = #{hopeGetAmount,jdbcType=DECIMAL},

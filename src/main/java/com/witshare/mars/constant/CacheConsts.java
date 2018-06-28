@@ -5,6 +5,8 @@ public class CacheConsts {
     public static final int RETRY_TIMES = 3;
     public static final int SHIRO_SESSION_EXPIRE_TIME = -1;
     public static final int PHONE_NO_VERIFY_CODE_EXPIRE_MINUTE = 15;
+    //tx_pay_id为主键id+10000
+    public static final int TX_ID_INCREMENT = 10000;
     public static final String PROJECT_NAME = "mars";
     public static final String KEY_DATA = "data";
 

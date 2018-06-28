@@ -6,11 +6,11 @@
             keyProperty="id">
         insert into record_user_tx (user_gid, user_email, project_gid,
           project_token, pay_coin_type, pay_tx,
-          pay_tx_id, pay_amount, price_rate,
+          pay_amount, price_rate,
           hope_get_amount, create_time, update_time)
         values (#{userGid,jdbcType=CHAR}, #{userEmail,jdbcType=VARCHAR}, #{projectGid,jdbcType=CHAR},
           #{projectToken,jdbcType=VARCHAR}, #{payCoinType,jdbcType=TINYINT}, #{payTx,jdbcType=VARCHAR},
-          (SELECT LAST_INSERT_ID())+10000, #{payAmount,jdbcType=DECIMAL}, #{priceRate,jdbcType=DECIMAL},
+           #{payAmount,jdbcType=DECIMAL}, #{priceRate,jdbcType=DECIMAL},
           #{hopeGetAmount,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
 
