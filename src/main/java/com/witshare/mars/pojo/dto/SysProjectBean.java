@@ -122,7 +122,6 @@ public class SysProjectBean  extends BasePageBean{
     private Long idDb;
 
 
-    private String queryStr;
     private String img;
     private Integer typeId;
 
@@ -550,15 +549,6 @@ public class SysProjectBean  extends BasePageBean{
 
     public SysProjectBean setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
-        return this;
-    }
-
-    public String getQueryStr() {
-        return queryStr;
-    }
-
-    public SysProjectBean setQueryStr(String queryStr) {
-        this.queryStr = queryStr;
         return this;
     }
 

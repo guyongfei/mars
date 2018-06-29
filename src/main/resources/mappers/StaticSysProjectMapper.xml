@@ -116,7 +116,7 @@
     </select>
 
     <select id="selectManagementList" resultType="com.witshare.mars.pojo.vo.SysProjectListVo">
-        SELECT `project_gid`,`project_token`,`start_time`,`end_time`,`project_status`,`is_available`
+        SELECT id, `project_gid`,`project_token`,`start_time`,`end_time`,`project_status`,`is_available`
         FROM `sys_project`
         <if test="queryStr!=null and queryStr!=''">
            WHERE project_token LIKE '%${queryStr}%'

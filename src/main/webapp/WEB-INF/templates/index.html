@@ -14,6 +14,7 @@
     <link th:href="@{/css/bootstrapValidator.css}" rel="stylesheet" media="screen"/>
     <link th:href="@{/css/ztree/demo.css}" rel="stylesheet" media="screen"/>
     <link th:href="@{/css/ztree/zTreeStyle/zTreeStyle.css}" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/select2.css}" rel="stylesheet" media="screen"/>
 
     <style>
         #scrollUp {
@@ -71,6 +72,11 @@
                     </a>
                 </li>
                 <li>
+                    <a id="gotoTxStatisticPage" class="left-slidebar-a btn btn-default">
+                        <span th:text="'交易'"></span>
+                    </a>
+                </li>
+                <li>
                     <a id="gotoPlatformAddressPage" class="left-slidebar-a btn btn-default">
                         <span th:text="'平台地址'"></span>
                     </a>
@@ -114,6 +120,7 @@
 <script th:src="@{/js/ztree/jquery.ztree.exedit.js}"></script>
 <script th:src="@{/js/bootstrapValidator.js}"></script>
 <script th:src="@{/js/numeral/numeral.js}"></script>
+<script th:src="@{/js/select2/select2.js}"></script>
 
 <script type="text/javascript">
 

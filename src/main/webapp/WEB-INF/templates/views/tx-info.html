@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+</head>
+<body>
+<div class="am-popup-inner am-modal-active " style="display: block;">
+    <div>
+        <div class="col-md-12" style="text-align:center;">
+            <div class="panel-body" style="padding-bottom:0px;">
+                <div class="form-group" style="margin-top:15px">
+                    <label for="id_label_single" class="col-md-12">
+                        Token:
+                        <select class="js-project-data-ajax js-states form-control" id="id_label_single"
+                                style="width: 80%"></select>
+                    </label>
+                </div>
+
+                <div class="form-group" style="margin-top:15px">
+                    <div class="form-group" style="margin-top:15px">
+                        <label class="col-md-2">
+                            打币异常表
+                        </label>
+                    </div>
+                    <div class="form-group" style="margin-top:15px">
+                        <table id="error_table"></table>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top:15px">
+                    <div class="form-group" style="margin-top:15px">
+                        <label for="id_label_single" class="col-md-2">
+                            交易记录表
+                        </label>
+                    </div>
+                    <div class="col-md-12" style="text-align:center;">
+                        <div class="panel-body" style="padding-bottom:0px;">
+                            <div class="panel panel-default">
+                                <div class="panel-body">
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <label for="email_">Email</label>
+                                            <input type="email" class="form-control" id="email_" placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="payTx_">TxHash</label>
+                                            <input type="text" class="form-control" id="payTx_" placeholder="">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="payTxId_">payTxId</label>
+                                            <input type="text" class="form-control" id="payTxId_" placeholder="">
+                                        </div>
+                                    </form>
+
+                                    <form class="form-inline">
+                                        <div class="form-group">
+                                            <label for="userTxStatus_">Tx状态</label>
+                                            <select class="form-control" id="userTxStatus_" placeholder="">
+                                                <option value="" >请选择</option>
+                                                <option value="0">pending：还未查询</option>
+                                                <option value="3">tx_not_exist:交易号不存在</option>
+                                                <option value="11">not_to_platform：to地址不是平台地址</option>
+                                                <option value="12">from_not_match：from地址与用户填写的不一致</option>
+                                                <option value="13">eth_not_match：eth数量与用户填写的不一致</option>
+                                                <option value="1">comfirmed：确认信息正确</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="platformTxStatus_">Tx状态</label>
+                                            <select class="form-control" id="platformTxStatus_" placeholder="">
+                                                <option value="">请选择</option>
+                                                <option value="0">not_sending：未打币</option>
+                                                <option value="3">sending：打币中</option>
+                                                <option value="1">complete：打币完成</option>
+                                                <option value="2">failed：打币失败</option>
+                                            </select>
+                                        </div>
+                                        <button type="button" id="btn_query" class="btn btn-primary" style="width: 20%">
+                                            查询
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <table id="tx_table"></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script th:src="@{/js/custom/tx-info.js}"></script>
+</body>
+</html>

@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 public class SysProjectListVo {
 
-
+    private Long id;
     private String projectToken;
     private String projectGid;
     private Integer projectStatus;
@@ -19,6 +19,14 @@ public class SysProjectListVo {
         return new SysProjectListVo();
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public SysProjectListVo setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public String getProjectToken() {
         return projectToken;

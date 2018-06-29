@@ -936,6 +936,266 @@ public class RecordUserTxExample {
             return (Criteria) this;
         }
 
+        public Criteria andActualSendingAddressIsNull() {
+            addCriterion("actual_sending_address is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressIsNotNull() {
+            addCriterion("actual_sending_address is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressEqualTo(String value) {
+            addCriterion("actual_sending_address =", value, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressNotEqualTo(String value) {
+            addCriterion("actual_sending_address <>", value, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressGreaterThan(String value) {
+            addCriterion("actual_sending_address >", value, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("actual_sending_address >=", value, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressLessThan(String value) {
+            addCriterion("actual_sending_address <", value, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressLessThanOrEqualTo(String value) {
+            addCriterion("actual_sending_address <=", value, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressLike(String value) {
+            addCriterion("actual_sending_address like", value, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressNotLike(String value) {
+            addCriterion("actual_sending_address not like", value, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressIn(List<String> values) {
+            addCriterion("actual_sending_address in", values, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressNotIn(List<String> values) {
+            addCriterion("actual_sending_address not in", values, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressBetween(String value1, String value2) {
+            addCriterion("actual_sending_address between", value1, value2, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualSendingAddressNotBetween(String value1, String value2) {
+            addCriterion("actual_sending_address not between", value1, value2, "actualSendingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressIsNull() {
+            addCriterion("actual_receiving_address is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressIsNotNull() {
+            addCriterion("actual_receiving_address is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressEqualTo(String value) {
+            addCriterion("actual_receiving_address =", value, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressNotEqualTo(String value) {
+            addCriterion("actual_receiving_address <>", value, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressGreaterThan(String value) {
+            addCriterion("actual_receiving_address >", value, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressGreaterThanOrEqualTo(String value) {
+            addCriterion("actual_receiving_address >=", value, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressLessThan(String value) {
+            addCriterion("actual_receiving_address <", value, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressLessThanOrEqualTo(String value) {
+            addCriterion("actual_receiving_address <=", value, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressLike(String value) {
+            addCriterion("actual_receiving_address like", value, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressNotLike(String value) {
+            addCriterion("actual_receiving_address not like", value, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressIn(List<String> values) {
+            addCriterion("actual_receiving_address in", values, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressNotIn(List<String> values) {
+            addCriterion("actual_receiving_address not in", values, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressBetween(String value1, String value2) {
+            addCriterion("actual_receiving_address between", value1, value2, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualReceivingAddressNotBetween(String value1, String value2) {
+            addCriterion("actual_receiving_address not between", value1, value2, "actualReceivingAddress");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeIsNull() {
+            addCriterion("actual_tx_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeIsNotNull() {
+            addCriterion("actual_tx_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeEqualTo(Timestamp value) {
+            addCriterion("actual_tx_time =", value, "actualTxTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeNotEqualTo(Timestamp value) {
+            addCriterion("actual_tx_time <>", value, "actualTxTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeGreaterThan(Timestamp value) {
+            addCriterion("actual_tx_time >", value, "actualTxTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeGreaterThanOrEqualTo(Timestamp value) {
+            addCriterion("actual_tx_time >=", value, "actualTxTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeLessThan(Timestamp value) {
+            addCriterion("actual_tx_time <", value, "actualTxTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeLessThanOrEqualTo(Timestamp value) {
+            addCriterion("actual_tx_time <=", value, "actualTxTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeIn(List<Timestamp> values) {
+            addCriterion("actual_tx_time in", values, "actualTxTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeNotIn(List<Timestamp> values) {
+            addCriterion("actual_tx_time not in", values, "actualTxTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("actual_tx_time between", value1, value2, "actualTxTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andActualTxTimeNotBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("actual_tx_time not between", value1, value2, "actualTxTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeIsNull() {
+            addCriterion("tx_verification_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeIsNotNull() {
+            addCriterion("tx_verification_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeEqualTo(Timestamp value) {
+            addCriterion("tx_verification_time =", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeNotEqualTo(Timestamp value) {
+            addCriterion("tx_verification_time <>", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeGreaterThan(Timestamp value) {
+            addCriterion("tx_verification_time >", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeGreaterThanOrEqualTo(Timestamp value) {
+            addCriterion("tx_verification_time >=", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeLessThan(Timestamp value) {
+            addCriterion("tx_verification_time <", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeLessThanOrEqualTo(Timestamp value) {
+            addCriterion("tx_verification_time <=", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeIn(List<Timestamp> values) {
+            addCriterion("tx_verification_time in", values, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeNotIn(List<Timestamp> values) {
+            addCriterion("tx_verification_time not in", values, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("tx_verification_time between", value1, value2, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeNotBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("tx_verification_time not between", value1, value2, "txVerificationTime");
+            return (Criteria) this;
+        }
+
         public Criteria andUserTxStatusIsNull() {
             addCriterion("user_tx_status is null");
             return (Criteria) this;

@@ -68,7 +68,12 @@ public final class RedisKeyUtil {
         return REDIS_KEY_GAS_PRICE;
     }
     public static String getPlatformAddressKey() {
-        return REDIS_KEY_platform_address;
+        return REDIS_KEY_PLATFORM_ADDRESS;
+    }
+
+
+    public static String getUserProjectAddressKey(String projectGid) {
+        return String.format("%s:%s", REDIS_KEY_USER_ADDRESS, projectGid);
     }
 
     public static String getWalletV3JsonKey(String walletAddress) {

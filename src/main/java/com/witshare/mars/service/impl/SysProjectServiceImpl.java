@@ -241,6 +241,8 @@ public class SysProjectServiceImpl implements SysProjectService {
     public PageInfo<SysProjectListVo> selectManagementList(SysProjectBean sysProjectBean) {
         Integer pageNum = sysProjectBean.getPageNum();
         Integer pageSize = sysProjectBean.getPageSize();
+        pageSize = pageSize == null ? 10 : pageSize;
+        pageNum = pageNum == null ? 1 : pageNum;
         return PageHelper.startPage(pageNum, pageSize)
                 .doSelectPageInfo(() -> staticSysProjectMapper.selectManagementList(sysProjectBean));
     }

@@ -15,6 +15,10 @@
     <result column="should_get_amount" property="shouldGetAmount" jdbcType="DECIMAL" />
     <result column="actual_pay_amount" property="actualPayAmount" jdbcType="DECIMAL" />
     <result column="actual_get_amount" property="actualGetAmount" jdbcType="DECIMAL" />
+    <result column="actual_sending_address" property="actualSendingAddress" jdbcType="VARCHAR" />
+    <result column="actual_receiving_address" property="actualReceivingAddress" jdbcType="VARCHAR" />
+    <result column="actual_tx_time" property="actualTxTime" jdbcType="TIMESTAMP" />
+    <result column="tx_verification_time" property="txVerificationTime" jdbcType="TIMESTAMP" />
     <result column="user_tx_status" property="userTxStatus" jdbcType="TINYINT" />
     <result column="platform_tx" property="platformTx" jdbcType="VARCHAR" />
     <result column="eth_fee" property="ethFee" jdbcType="DECIMAL" />
@@ -84,6 +88,7 @@
   <sql id="Base_Column_List" >
     id, user_gid, user_email, project_gid, project_token, pay_coin_type, pay_tx, pay_amount, 
     price_rate, hope_get_amount, should_get_amount, actual_pay_amount, actual_get_amount, 
+    actual_sending_address, actual_receiving_address, actual_tx_time, tx_verification_time, 
     user_tx_status, platform_tx, eth_fee, platform_tx_status, distribution_time, create_time, 
     update_time
   </sql>
@@ -123,16 +128,20 @@
       project_token, pay_coin_type, pay_tx, 
       pay_amount, price_rate, hope_get_amount, 
       should_get_amount, actual_pay_amount, actual_get_amount, 
-      user_tx_status, platform_tx, eth_fee, 
-      platform_tx_status, distribution_time, create_time, 
-      update_time)
+      actual_sending_address, actual_receiving_address, 
+      actual_tx_time, tx_verification_time, user_tx_status, 
+      platform_tx, eth_fee, platform_tx_status, 
+      distribution_time, create_time, update_time
+      )
     values (#{userGid,jdbcType=CHAR}, #{userEmail,jdbcType=VARCHAR}, #{projectGid,jdbcType=CHAR}, 
       #{projectToken,jdbcType=VARCHAR}, #{payCoinType,jdbcType=TINYINT}, #{payTx,jdbcType=VARCHAR}, 
       #{payAmount,jdbcType=DECIMAL}, #{priceRate,jdbcType=DECIMAL}, #{hopeGetAmount,jdbcType=DECIMAL}, 
       #{shouldGetAmount,jdbcType=DECIMAL}, #{actualPayAmount,jdbcType=DECIMAL}, #{actualGetAmount,jdbcType=DECIMAL}, 
-      #{userTxStatus,jdbcType=TINYINT}, #{platformTx,jdbcType=VARCHAR}, #{ethFee,jdbcType=DECIMAL}, 
-      #{platformTxStatus,jdbcType=TINYINT}, #{distributionTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{actualSendingAddress,jdbcType=VARCHAR}, #{actualReceivingAddress,jdbcType=VARCHAR}, 
+      #{actualTxTime,jdbcType=TIMESTAMP}, #{txVerificationTime,jdbcType=TIMESTAMP}, #{userTxStatus,jdbcType=TINYINT}, 
+      #{platformTx,jdbcType=VARCHAR}, #{ethFee,jdbcType=DECIMAL}, #{platformTxStatus,jdbcType=TINYINT}, 
+      #{distributionTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.witshare.mars.pojo.domain.RecordUserTx" useGeneratedKeys="true" keyProperty="id" >
     insert into record_user_tx
@@ -172,6 +181,18 @@
       </if>
       <if test="actualGetAmount != null" >
         actual_get_amount,
+      </if>
+      <if test="actualSendingAddress != null" >
+        actual_sending_address,
+      </if>
+      <if test="actualReceivingAddress != null" >
+        actual_receiving_address,
+      </if>
+      <if test="actualTxTime != null" >
+        actual_tx_time,
+      </if>
+      <if test="txVerificationTime != null" >
+        tx_verification_time,
       </if>
       <if test="userTxStatus != null" >
         user_tx_status,
@@ -231,6 +252,18 @@
       </if>
       <if test="actualGetAmount != null" >
         #{actualGetAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="actualSendingAddress != null" >
+        #{actualSendingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="actualReceivingAddress != null" >
+        #{actualReceivingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="actualTxTime != null" >
+        #{actualTxTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="txVerificationTime != null" >
+        #{txVerificationTime,jdbcType=TIMESTAMP},
       </if>
       <if test="userTxStatus != null" >
         #{userTxStatus,jdbcType=TINYINT},
@@ -303,6 +336,18 @@
       <if test="record.actualGetAmount != null" >
         actual_get_amount = #{record.actualGetAmount,jdbcType=DECIMAL},
       </if>
+      <if test="record.actualSendingAddress != null" >
+        actual_sending_address = #{record.actualSendingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actualReceivingAddress != null" >
+        actual_receiving_address = #{record.actualReceivingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.actualTxTime != null" >
+        actual_tx_time = #{record.actualTxTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.txVerificationTime != null" >
+        tx_verification_time = #{record.txVerificationTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="record.userTxStatus != null" >
         user_tx_status = #{record.userTxStatus,jdbcType=TINYINT},
       </if>
@@ -344,6 +389,10 @@
       should_get_amount = #{record.shouldGetAmount,jdbcType=DECIMAL},
       actual_pay_amount = #{record.actualPayAmount,jdbcType=DECIMAL},
       actual_get_amount = #{record.actualGetAmount,jdbcType=DECIMAL},
+      actual_sending_address = #{record.actualSendingAddress,jdbcType=VARCHAR},
+      actual_receiving_address = #{record.actualReceivingAddress,jdbcType=VARCHAR},
+      actual_tx_time = #{record.actualTxTime,jdbcType=TIMESTAMP},
+      tx_verification_time = #{record.txVerificationTime,jdbcType=TIMESTAMP},
       user_tx_status = #{record.userTxStatus,jdbcType=TINYINT},
       platform_tx = #{record.platformTx,jdbcType=VARCHAR},
       eth_fee = #{record.ethFee,jdbcType=DECIMAL},
@@ -394,6 +443,18 @@
       <if test="actualGetAmount != null" >
         actual_get_amount = #{actualGetAmount,jdbcType=DECIMAL},
       </if>
+      <if test="actualSendingAddress != null" >
+        actual_sending_address = #{actualSendingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="actualReceivingAddress != null" >
+        actual_receiving_address = #{actualReceivingAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="actualTxTime != null" >
+        actual_tx_time = #{actualTxTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="txVerificationTime != null" >
+        tx_verification_time = #{txVerificationTime,jdbcType=TIMESTAMP},
+      </if>
       <if test="userTxStatus != null" >
         user_tx_status = #{userTxStatus,jdbcType=TINYINT},
       </if>
@@ -432,6 +493,10 @@
       should_get_amount = #{shouldGetAmount,jdbcType=DECIMAL},
       actual_pay_amount = #{actualPayAmount,jdbcType=DECIMAL},
       actual_get_amount = #{actualGetAmount,jdbcType=DECIMAL},
+      actual_sending_address = #{actualSendingAddress,jdbcType=VARCHAR},
+      actual_receiving_address = #{actualReceivingAddress,jdbcType=VARCHAR},
+      actual_tx_time = #{actualTxTime,jdbcType=TIMESTAMP},
+      tx_verification_time = #{txVerificationTime,jdbcType=TIMESTAMP},
       user_tx_status = #{userTxStatus,jdbcType=TINYINT},
       platform_tx = #{platformTx,jdbcType=VARCHAR},
       eth_fee = #{ethFee,jdbcType=DECIMAL},
