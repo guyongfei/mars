@@ -14,6 +14,11 @@ public class RecordUserTxBean extends BasePageBean {
     public static final String PAY_COIN_TYPE = "payCoinType";
 
 
+    private String actualSendingAddress;
+    private String actualReceivingAddress;
+    private Timestamp actualTxTime;
+    private Timestamp txVerificationTime;
+
     private Long id;
     private String userGid;
     private String userEmail;
@@ -35,12 +40,12 @@ public class RecordUserTxBean extends BasePageBean {
     private Timestamp distributionTime;
     private Timestamp createTime;
     private Timestamp updateTime;
+
+
     private LocalDate localDate;
-
-
-
-
-
+    private String email;
+    private String payEthAddress;
+    private String platformAddress;
 
     private RecordUserTxBean() {
     }
@@ -101,13 +106,8 @@ public class RecordUserTxBean extends BasePageBean {
         return this;
     }
 
-    public int getPayCoinType() {
+    public Integer getPayCoinType() {
         return payCoinType;
-    }
-
-    public RecordUserTxBean setPayCoinType(int payCoinType) {
-        this.payCoinType = payCoinType;
-        return this;
     }
 
     public String getPayTx() {
@@ -164,13 +164,8 @@ public class RecordUserTxBean extends BasePageBean {
         return this;
     }
 
-    public int getUserTxStatus() {
+    public Integer getUserTxStatus() {
         return userTxStatus;
-    }
-
-    public RecordUserTxBean setUserTxStatus(int userTxStatus) {
-        this.userTxStatus = userTxStatus;
-        return this;
     }
 
     public String getPlatformTx() {
@@ -191,13 +186,8 @@ public class RecordUserTxBean extends BasePageBean {
         return this;
     }
 
-    public int getPlatformTxStatus() {
+    public Integer getPlatformTxStatus() {
         return platformTxStatus;
-    }
-
-    public RecordUserTxBean setPlatformTxStatus(int platformTxStatus) {
-        this.platformTxStatus = platformTxStatus;
-        return this;
     }
 
     public Timestamp getDistributionTime() {
@@ -267,6 +257,69 @@ public class RecordUserTxBean extends BasePageBean {
 
     public RecordUserTxBean setLocalDate(LocalDate localDate) {
         this.localDate = localDate;
+        return this;
+    }
+
+    public String getActualSendingAddress() {
+        return actualSendingAddress;
+    }
+
+    public RecordUserTxBean setActualSendingAddress(String actualSendingAddress) {
+        this.actualSendingAddress = actualSendingAddress;
+        return this;
+    }
+
+    public String getActualReceivingAddress() {
+        return actualReceivingAddress;
+    }
+
+    public RecordUserTxBean setActualReceivingAddress(String actualReceivingAddress) {
+        this.actualReceivingAddress = actualReceivingAddress;
+        return this;
+    }
+
+    public Timestamp getActualTxTime() {
+        return actualTxTime;
+    }
+
+    public RecordUserTxBean setActualTxTime(Timestamp actualTxTime) {
+        this.actualTxTime = actualTxTime;
+        return this;
+    }
+
+    public Timestamp getTxVerificationTime() {
+        return txVerificationTime;
+    }
+
+    public RecordUserTxBean setTxVerificationTime(Timestamp txVerificationTime) {
+        this.txVerificationTime = txVerificationTime;
+        return this;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public RecordUserTxBean setEmail(String email) {
+        this.email = email;
+        return this;
+    }
+
+    public String getPayEthAddress() {
+        return payEthAddress;
+    }
+
+    public RecordUserTxBean setPayEthAddress(String payEthAddress) {
+        this.payEthAddress = payEthAddress;
+        return this;
+    }
+
+    public String getPlatformAddress() {
+        return platformAddress;
+    }
+
+    public RecordUserTxBean setPlatformAddress(String platformAddress) {
+        this.platformAddress = platformAddress;
         return this;
     }
 }

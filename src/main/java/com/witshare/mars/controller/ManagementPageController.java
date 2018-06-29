@@ -19,6 +19,7 @@ public class ManagementPageController {
 
     private final static String CONTEXT_PATH = "contextPath";
     private final static String FRONT_PATH = "frontPath";
+    private final static String MOON_PATH = "moonPath";
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Autowired
@@ -31,6 +32,7 @@ public class ManagementPageController {
     public String managementPage(Map<String, Object> model) throws Exception {
         model.put(CONTEXT_PATH, propertiesConfig.contextPath);
         model.put(FRONT_PATH, propertiesConfig.frontPath);
+        model.put(MOON_PATH, propertiesConfig.moonHost);
         return "index";
     }
 
@@ -41,6 +43,22 @@ public class ManagementPageController {
     @RequestMapping(value = "/project", method = RequestMethod.GET)
     public String projectPage(Map<String, Object> model) throws Exception {
         return "views/project";
+    }
+
+    /**
+     * 项目统计
+     */
+    @RequestMapping(value = "/project-statistic", method = RequestMethod.GET)
+    public String projectStatisticPage(Map<String, Object> model) throws Exception {
+        return "views/project-statistic";
+    }
+
+    /**
+     * 交易
+     */
+    @RequestMapping(value = "/tx-info", method = RequestMethod.GET)
+    public String txStatisticPage(Map<String, Object> model) throws Exception {
+        return "views/tx-info";
     }
 
     /**

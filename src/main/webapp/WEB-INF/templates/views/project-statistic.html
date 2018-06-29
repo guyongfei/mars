@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+</head>
+<body>
+<div class="am-popup-inner am-modal-active " style="display: block;">
+    <div>
+        <div class="col-md-12" style="text-align:center;">
+            <div class="panel-body" style="padding-bottom:0px;">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <form id="formSearch" class="form-horizontal">
+                            <div class="form-group" style="margin-top:15px">
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" id="txt_search">
+                                </div>
+                                <div class="col-md-4" style="text-align:left;">
+                                    <button type="button" id="btn_query" class="btn btn-primary">查询</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <table id="inner_table"></table>
+            </div>
+        </div>
+
+        <div class="modal fade" id="statisticModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style="width:80%;height:auto;">
+                <div class="modal-content" style="padding: 30px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myStatisticModal">统计</h4>
+                        <label style="display: none" id="statisticProjectGid"></label>
+
+                    </div>
+                    <div class="modal-body">
+                        <label id="statisticProjectToken"></label>
+                        <table id="statistic_table"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script th:src="@{/js/custom/project-statistic.js}"></script>
+</body>
+</html>

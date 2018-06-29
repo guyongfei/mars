@@ -3,7 +3,7 @@ package com.witshare.mars.pojo.dto;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class ProjectSummaryBean {
+public class ProjectSummaryBean extends BasePageBean {
     private Long id;
 
     private String projectGid;

@@ -14,6 +14,7 @@
     <link th:href="@{/css/bootstrapValidator.css}" rel="stylesheet" media="screen"/>
     <link th:href="@{/css/ztree/demo.css}" rel="stylesheet" media="screen"/>
     <link th:href="@{/css/ztree/zTreeStyle/zTreeStyle.css}" rel="stylesheet" media="screen"/>
+    <link th:href="@{/css/select2.css}" rel="stylesheet" media="screen"/>
 
     <style>
         #scrollUp {
@@ -48,6 +49,7 @@
 <body data-type="index">
 <span th:text="${contextPath}" id="contextPath" style="display: none;"></span>
 <span th:text="${frontPath}" id="frontPath" style="display: none;"></span>
+<span th:text="${moonPath}" id="moonPath" style="display: none;"></span>
 
 <div class="tpl-page-container tpl-page-header-fixed">
     <!--侧边栏-->
@@ -62,6 +64,16 @@
                 <li>
                     <a id="gotoProjectPage" class="left-slidebar-a btn btn-default">
                         <span th:text="'项目'"></span>
+                    </a>
+                </li>
+                <li>
+                    <a id="gotoProjectStatisticPage" class="left-slidebar-a btn btn-default">
+                        <span th:text="'统计'"></span>
+                    </a>
+                </li>
+                <li>
+                    <a id="gotoTxStatisticPage" class="left-slidebar-a btn btn-default">
+                        <span th:text="'交易'"></span>
                     </a>
                 </li>
                 <li>
@@ -108,6 +120,7 @@
 <script th:src="@{/js/ztree/jquery.ztree.exedit.js}"></script>
 <script th:src="@{/js/bootstrapValidator.js}"></script>
 <script th:src="@{/js/numeral/numeral.js}"></script>
+<script th:src="@{/js/select2/select2.js}"></script>
 
 <script type="text/javascript">
 

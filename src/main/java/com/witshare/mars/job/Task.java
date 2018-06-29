@@ -5,6 +5,7 @@ import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.service.EmailService;
+import com.witshare.mars.service.ProjectDailyInfoService;
 import com.witshare.mars.service.TransactionService;
 import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.WitshareUtils;
@@ -25,7 +26,9 @@ import static com.witshare.mars.constant.CacheConsts.PHONE_NO_VERIFY_CODE_EXPIRE
 @Component
 public class Task {
     public final static int GAS_PRICE_REDIS_LOCK = 60;
+    public final static int PROJECT_DAILY_INFO_REDIS_LOCK = 60;
     private final static String GAS_PRICE_LOCK = "gasPrice";
+    private final static String PROJECT_DAILY_INFO_LOCK = "projectDailyInfo";
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Autowired
     private EmailService emailService;
@@ -35,6 +38,8 @@ public class Task {
     private RedisCommonDao redisCommonDao;
     @Autowired
     private TransactionService transactionService;
+    @Autowired
+    private ProjectDailyInfoService projectDailyInfoService;
 
     //    @Async(TASK_EXECUTOR)
     public void sendEmailVerifyCode(String email, boolean register) {
@@ -65,6 +70,19 @@ public class Task {
             return;
         }
         transactionService.syncGasPrice();
+    }
+
+    /**
+     * 同步项目统计数据
+     */
+    @Scheduled(cron = "0 2/30 * * * ?")
+    public void syncProjectDailyInfo() {
+        String lockId = distributedLocker.lock(PROJECT_DAILY_INFO_LOCK, PROJECT_DAILY_INFO_REDIS_LOCK);
+        if (lockId == null) {
+            LOGGER.info("syncProjectDailyInfo pushTask-other_is_execute");
+            return;
+        }
+        projectDailyInfoService.syncDailyInfo();
     }
 
 }

@@ -30,6 +30,14 @@ public class RecordUserTx {
 
     private BigDecimal actualGetAmount;
 
+    private String actualSendingAddress;
+
+    private String actualReceivingAddress;
+
+    private Timestamp actualTxTime;
+
+    private Timestamp txVerificationTime;
+
     private Integer userTxStatus;
 
     private String platformTx;
@@ -146,6 +154,38 @@ public class RecordUserTx {
 
     public void setActualGetAmount(BigDecimal actualGetAmount) {
         this.actualGetAmount = actualGetAmount;
+    }
+
+    public String getActualSendingAddress() {
+        return actualSendingAddress;
+    }
+
+    public void setActualSendingAddress(String actualSendingAddress) {
+        this.actualSendingAddress = actualSendingAddress == null ? null : actualSendingAddress.trim();
+    }
+
+    public String getActualReceivingAddress() {
+        return actualReceivingAddress;
+    }
+
+    public void setActualReceivingAddress(String actualReceivingAddress) {
+        this.actualReceivingAddress = actualReceivingAddress == null ? null : actualReceivingAddress.trim();
+    }
+
+    public Timestamp getActualTxTime() {
+        return actualTxTime;
+    }
+
+    public void setActualTxTime(Timestamp actualTxTime) {
+        this.actualTxTime = actualTxTime;
+    }
+
+    public Timestamp getTxVerificationTime() {
+        return txVerificationTime;
+    }
+
+    public void setTxVerificationTime(Timestamp txVerificationTime) {
+        this.txVerificationTime = txVerificationTime;
     }
 
     public Integer getUserTxStatus() {

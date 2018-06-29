@@ -8,6 +8,7 @@ public class BasePageBean {
     private Integer pageSize;
     private Integer pageNum;
     private String orderCondition;
+    private String queryStr;
     private Integer ascOrdesc;
 
     public BasePageBean() {
@@ -46,6 +47,15 @@ public class BasePageBean {
 
     public BasePageBean setAscOrdesc(Integer ascOrdesc) {
         this.ascOrdesc = ascOrdesc;
+        return this;
+    }
+
+    public String getQueryStr() {
+        return queryStr;
+    }
+
+    public BasePageBean setQueryStr(String queryStr) {
+        this.queryStr = queryStr;
         return this;
     }
 }

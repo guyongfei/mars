@@ -8,9 +8,11 @@ var appInfoIndex = null;
 var taskType = null;
 var appKey = null;
 var noticeId, noticeIndex;
+var projectGid;
 
 var contextPath = $("#contextPath").text();
 var frontPath = $("#frontPath").text();
+var moonPath = $("#moonPath").text();
 
 
 $(function () {
@@ -72,6 +74,7 @@ $("body").on("click", "a", function () {
     $(this).addClass("active").parent().siblings().find("a").removeClass("active").find("i").removeClass("tpl-left-nav-more-ico-rotate");
     if ($(this).data("href") === "#" || !$(this).data("href")) return false;
     $("#content").load($(this).data("href"));
+    projectGid = '';
 });
 $(".tpl-left-nav a").on("click", function () {
     if ($(this).data("href") !== "#" && $(this).data("href")) {
@@ -118,11 +121,11 @@ $("li").on("click", "#gotoProjectPage", function () {
 $("li").on("click", "#gotoPlatformAddressPage", function () {
     $('#content').load(contextPath + '/management/page/platformAddress');
 });
-$("li").on("click", "#gotoStarUser", function () {
-    $('#content').load(contextPath + '/management/page/user');
+$("li").on("click", "#gotoProjectStatisticPage", function () {
+    $('#content').load(contextPath + '/management/page/project-statistic');
 });
-$("li").on("click", "#gotoBillBoard", function () {
-    $('#content').load(contextPath + '/management/page/billboard');
+$("li").on("click", "#gotoTxStatisticPage", function () {
+    $('#content').load(contextPath + '/management/page/tx-info');
 });
 $("li").on("click", "#gotoProjectType", function () {
     $('#content').load(contextPath + '/management/page/projecttype');
