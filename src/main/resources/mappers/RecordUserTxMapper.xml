@@ -26,6 +26,7 @@
     <result column="distribution_time" property="distributionTime" jdbcType="TIMESTAMP" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="distribution_batch_id" property="distributionBatchId" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -90,7 +91,7 @@
     price_rate, hope_get_amount, should_get_amount, actual_pay_amount, actual_get_amount, 
     actual_sending_address, actual_receiving_address, actual_tx_time, tx_verification_time, 
     user_tx_status, platform_tx, eth_fee, platform_tx_status, distribution_time, create_time, 
-    update_time
+    update_time, distribution_batch_id
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.witshare.mars.pojo.domain.RecordUserTxExample" >
     select
@@ -131,8 +132,8 @@
       actual_sending_address, actual_receiving_address, 
       actual_tx_time, tx_verification_time, user_tx_status, 
       platform_tx, eth_fee, platform_tx_status, 
-      distribution_time, create_time, update_time
-      )
+      distribution_time, create_time, update_time, 
+      distribution_batch_id)
     values (#{userGid,jdbcType=CHAR}, #{userEmail,jdbcType=VARCHAR}, #{projectGid,jdbcType=CHAR}, 
       #{projectToken,jdbcType=VARCHAR}, #{payCoinType,jdbcType=TINYINT}, #{payTx,jdbcType=VARCHAR}, 
       #{payAmount,jdbcType=DECIMAL}, #{priceRate,jdbcType=DECIMAL}, #{hopeGetAmount,jdbcType=DECIMAL}, 
@@ -140,8 +141,8 @@
       #{actualSendingAddress,jdbcType=VARCHAR}, #{actualReceivingAddress,jdbcType=VARCHAR}, 
       #{actualTxTime,jdbcType=TIMESTAMP}, #{txVerificationTime,jdbcType=TIMESTAMP}, #{userTxStatus,jdbcType=TINYINT}, 
       #{platformTx,jdbcType=VARCHAR}, #{ethFee,jdbcType=DECIMAL}, #{platformTxStatus,jdbcType=TINYINT}, 
-      #{distributionTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}
-      )
+      #{distributionTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{distributionBatchId,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.witshare.mars.pojo.domain.RecordUserTx" useGeneratedKeys="true" keyProperty="id" >
     insert into record_user_tx
@@ -215,6 +216,9 @@
       <if test="updateTime != null" >
         update_time,
       </if>
+      <if test="distributionBatchId != null" >
+        distribution_batch_id,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userGid != null" >
@@ -285,6 +289,9 @@
       </if>
       <if test="updateTime != null" >
         #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="distributionBatchId != null" >
+        #{distributionBatchId,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -369,6 +376,9 @@
       <if test="record.updateTime != null" >
         update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.distributionBatchId != null" >
+        distribution_batch_id = #{record.distributionBatchId,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -399,7 +409,8 @@
       platform_tx_status = #{record.platformTxStatus,jdbcType=TINYINT},
       distribution_time = #{record.distributionTime,jdbcType=TIMESTAMP},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      distribution_batch_id = #{record.distributionBatchId,jdbcType=VARCHAR}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -476,6 +487,9 @@
       <if test="updateTime != null" >
         update_time = #{updateTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="distributionBatchId != null" >
+        distribution_batch_id = #{distributionBatchId,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -503,7 +517,8 @@
       platform_tx_status = #{platformTxStatus,jdbcType=TINYINT},
       distribution_time = #{distributionTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      distribution_batch_id = #{distributionBatchId,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
