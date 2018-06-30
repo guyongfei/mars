@@ -1,7 +1,7 @@
 var init = false;
 var userTxStatus = new Array();
 var txId;
-var platformTxStatus;
+var platformTxStatus = new Array();
 var loadTableTime;
 //
 // var userTxStatusArr = [
@@ -571,7 +571,10 @@ $(function () {
         var dataJson = {
             'password': $(' #password').val(),
             'keystore': $(' #keystore').val(),
-            'projectGid': projectGid
+            'projectGid': projectGid,
+            'id':txId-10000,
+            'platformTxStatusArr':platformTxStatus,
+            'userTxStatusArr':userTxStatus
         }
         $.ajax({
             url: contextPath + "/pay-record/token/distribute",

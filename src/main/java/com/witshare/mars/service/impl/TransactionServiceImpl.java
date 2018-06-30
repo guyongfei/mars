@@ -253,7 +253,7 @@ public class TransactionServiceImpl implements TransactionService {
      */
     @Override
     public int selectBuyCount(String userGid, String projectGid) {
-        if (StringUtils.isEmpty(userGid) || StringUtils.isNotEmpty(projectGid)) {
+        if (StringUtils.isEmpty(userGid) || StringUtils.isEmpty(projectGid)) {
             return 0;
         }
         RecordUserTxExample recordUserTxExample = new RecordUserTxExample();
