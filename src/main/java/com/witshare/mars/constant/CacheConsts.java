@@ -26,7 +26,7 @@ public class CacheConsts {
 
     public static final String PARAM_PASSWORD_ENCRYPTION_ALGORITHM = "md5";
     public static final int PARAM_PASSWORD_ENCRYPTION_TIMES = 3;
-    private final static String REDIS_PREFIX = "ibs:" + PROJECT_NAME + ":";
+    private final static String REDIS_PREFIX = "tokenpie:" + PROJECT_NAME + ":";
     public static final String REDIS_KEY_PHONE_NO_VERIFY_CODE_LIST_REGISTER = REDIS_PREFIX + "cache:register-verify-code-list";
     public static final String REDIS_KEY_PHONE_NO_VERIFY_CODE_LIST = REDIS_PREFIX + "cache:verify-code-list";
     public static final String REDIS_KEY_USER_VERIFY_CODE_REGISTER = REDIS_PREFIX + "cache:register-email:";
