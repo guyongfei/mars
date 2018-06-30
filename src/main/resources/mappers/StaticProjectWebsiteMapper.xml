@@ -2,56 +2,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.witshare.mars.dao.mysql.StaticProjectWebsiteMapper">
 
-    <insert id="save" useGeneratedKeys="true" keyProperty="id"
-            parameterType="com.witshare.mars.pojo.dto.SysProjectBean">
-
-        DELETE FROM `project_website` WHERE`project_id`=#{id};
-
-        <if test="websiteList!=null and websiteList.size()>0">
-            INSERT INTO `project_website`
-            (`project_id`,`type_id`,link_url,
-            `create_time`,`update_time`)
-            VALUES
-            <foreach collection="websiteList" item="websiteType" separator=",">
-                (#{id},#{websiteType.typeId},#{websiteType.linkUrl},now(),now())
-            </foreach>
-        </if>
-
-    </insert>
-
-    <select id="selectWebSiteList" parameterType="map" resultType="map">
-
-        SELECT
-        pwt.link_name AS linkName,
-        pwt.picture_url AS pictureUrl,
-        pw.link_url AS linkUrl
-        FROM project_website pw
-        LEFT JOIN project_website_type pwt
-        ON pw.type_id = pwt.id
-        <where>
-            AND pw.project_id = #{projectGid}
-            AND pwt.link_type = #{linkCategory}
-        </where>
-
-    </select>
-
-    <select id="selectManagementWebsite"
-            resultType="com.witshare.mars.pojo.dto.WebSiteManagementBean">
-         SELECT t.id  typeId,t.`link_type` linkType,t.`link_name` linkName,w.url linkUrl
-        FROM  `project_website_type` t
-        LEFT JOIN
-        (SELECT `type_id` id,`link_url`  url FROM `project_website` WHERE `project_id` =#{projectId}) w ON w.id = t.id
-    </select>
-
-    <!--    <insert id="saveOrUpdate">
-            REPLACE INTO
-            `project_website`(`project_gid`,`website_type`,`link_url`,`create_time`,`update_time`)
-            VALUES
-            <foreach collection="list" item="site" separator=",">
-                (#{site.projectGid}, #{site.websiteType}, #{site.linkUrl}, now(), now())
-            </foreach>
-        </insert>-->
-
     <insert id="saveOrUpdate">
         REPLACE INTO
         `project_website`(`project_gid`,`website_type`,`link_url`,`create_time`,`update_time`)
@@ -62,7 +12,11 @@
         (#{projectGid}, 'telegram', #{telegram}, now(), now()),
         (#{projectGid}, 'reddit', #{reddit}, now(), now()),
         (#{projectGid}, 'officialLink', #{officialLink}, now(), now()),
-        (#{projectGid}, 'biYong', #{biYong}, now(), now());
+        (#{projectGid}, 'biYong', #{biYong}, now(), now()),
+        (#{projectGid}, 'kyc', #{kyc}, now(), now()),
+        (#{projectGid}, 'tokenTerms', #{tokenTerms}, now(), now()),
+        (#{projectGid}, 'privacyPolicy', #{privacyPolicy}, now(), now())
+        ;
     </insert>
 
 </mapper>

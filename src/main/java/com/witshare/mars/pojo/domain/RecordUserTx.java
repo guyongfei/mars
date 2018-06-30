@@ -52,6 +52,8 @@ public class RecordUserTx {
 
     private Timestamp updateTime;
 
+    private String distributionBatchId;
+
     public Long getId() {
         return id;
     }
@@ -242,5 +244,13 @@ public class RecordUserTx {
 
     public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+    }
+
+    public String getDistributionBatchId() {
+        return distributionBatchId;
+    }
+
+    public void setDistributionBatchId(String distributionBatchId) {
+        this.distributionBatchId = distributionBatchId == null ? null : distributionBatchId.trim();
     }
 }

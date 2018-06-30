@@ -25,6 +25,7 @@ public class SysProjectBeanVo {
     private BigDecimal priceRate;
     private int projectStatus;
     private int isAvailable;
+    private Integer tokenDecimal;
 
     private Timestamp createTime;
     private Timestamp updateTime;
@@ -200,6 +201,15 @@ public class SysProjectBeanVo {
 
     public SysProjectBeanVo setPriceRate(BigDecimal priceRate) {
         this.priceRate = priceRate;
+        return this;
+    }
+
+    public Integer getTokenDecimal() {
+        return tokenDecimal;
+    }
+
+    public SysProjectBeanVo setTokenDecimal(Integer tokenDecimal) {
+        this.tokenDecimal = tokenDecimal;
         return this;
     }
 }

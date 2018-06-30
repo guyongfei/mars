@@ -1625,6 +1625,76 @@ public class RecordUserTxExample {
             addCriterion("update_time not between", value1, value2, "updateTime");
             return (Criteria) this;
         }
+
+        public Criteria andDistributionBatchIdIsNull() {
+            addCriterion("distribution_batch_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdIsNotNull() {
+            addCriterion("distribution_batch_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdEqualTo(String value) {
+            addCriterion("distribution_batch_id =", value, "distributionBatchId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdNotEqualTo(String value) {
+            addCriterion("distribution_batch_id <>", value, "distributionBatchId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdGreaterThan(String value) {
+            addCriterion("distribution_batch_id >", value, "distributionBatchId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdGreaterThanOrEqualTo(String value) {
+            addCriterion("distribution_batch_id >=", value, "distributionBatchId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdLessThan(String value) {
+            addCriterion("distribution_batch_id <", value, "distributionBatchId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdLessThanOrEqualTo(String value) {
+            addCriterion("distribution_batch_id <=", value, "distributionBatchId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdLike(String value) {
+            addCriterion("distribution_batch_id like", value, "distributionBatchId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdNotLike(String value) {
+            addCriterion("distribution_batch_id not like", value, "distributionBatchId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdIn(List<String> values) {
+            addCriterion("distribution_batch_id in", values, "distributionBatchId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdNotIn(List<String> values) {
+            addCriterion("distribution_batch_id not in", values, "distributionBatchId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdBetween(String value1, String value2) {
+            addCriterion("distribution_batch_id between", value1, value2, "distributionBatchId");
+            return (Criteria) this;
+        }
+
+        public Criteria andDistributionBatchIdNotBetween(String value1, String value2) {
+            addCriterion("distribution_batch_id not between", value1, value2, "distributionBatchId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

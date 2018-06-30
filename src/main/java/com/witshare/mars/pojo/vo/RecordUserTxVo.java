@@ -44,7 +44,7 @@ public class RecordUserTxVo {
 
     private Timestamp createTime;
 
-
+    private String distributionBatchId;
     private RecordUserTxVo() {
 
     }
@@ -221,6 +221,15 @@ public class RecordUserTxVo {
 
     public RecordUserTxVo setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+        return this;
+    }
+
+    public String getDistributionBatchId() {
+        return distributionBatchId;
+    }
+
+    public RecordUserTxVo setDistributionBatchId(String distributionBatchId) {
+        this.distributionBatchId = distributionBatchId;
         return this;
     }
 }
