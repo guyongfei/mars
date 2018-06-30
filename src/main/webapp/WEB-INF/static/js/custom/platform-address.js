@@ -123,13 +123,13 @@ $(function () {
     $('#btn_add').click(function () {
         $('#addModal').modal('show')
     });
-    $('#addModal').on('hidden.bs.modal', function () {
-        $(' #words').val('');
+    $('#addresses').on('hidden.bs.modal', function () {
+        $(' #addresses').val('');
         $('#inner_table').bootstrapTable('refresh', {pageNumber: 1});
     })
 
 
-    $('#words').change(function () {
+    $('#addresses').change(function () {
         var data = $(this).val();
         var arr = new Array(); //定义一数组
         arr = data.split("\n"); //字符分割
@@ -141,7 +141,7 @@ $(function () {
             }
         }
         $('#addEvent').bootstrapValidator("resetForm", true);
-        $(this).val(str)
+        $(this).val(str.substr(0,str.length-1))
     })
 
     $('#addEvent').bootstrapValidator({
@@ -159,7 +159,7 @@ $(function () {
                         message: '地址不能为空'
                     },
                     regexp: {
-                        regexp: /^(0x\S{40}\s?)*$/,
+                        regexp: tokenAddressReg,
                         message: '请输入正确的地址'
                     }
                 }

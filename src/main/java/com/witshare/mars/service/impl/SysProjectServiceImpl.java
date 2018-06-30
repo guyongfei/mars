@@ -38,6 +38,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -89,7 +90,7 @@ public class SysProjectServiceImpl implements SysProjectService {
 
         sysProjectBean.setProjectGid(WitshareUtils.getUUID());
         //存储s3
-        String objectName = qingyunStorageService.uploadToQingyun(sysProjectBean.getLog(), sysProjectBean.getProjectGid(), EnumStorage.Log);
+        String objectName = qingyunStorageService.uploadToQingyun(sysProjectBean.getLogo(), sysProjectBean.getProjectGid(), EnumStorage.Logo);
         sysProjectBean.setProjectLogoLink(objectName);
 
         Timestamp current = new Timestamp(System.currentTimeMillis());
@@ -148,9 +149,9 @@ public class SysProjectServiceImpl implements SysProjectService {
         }
 
         //存储s3
-        String log = sysProjectBean.getLog();
-        if (StringUtils.isNotEmpty(log)) {
-            String objectName = qingyunStorageService.uploadToQingyun(log, sysProjectBean.getProjectGid(), EnumStorage.Log);
+        String logo = sysProjectBean.getLogo();
+        if (StringUtils.isNotEmpty(logo)) {
+            String objectName = qingyunStorageService.uploadToQingyun(logo, sysProjectBean.getProjectGid(), EnumStorage.Logo);
             sysProjectBean.setProjectLogoLink(objectName);
         }
 
@@ -190,7 +191,6 @@ public class SysProjectServiceImpl implements SysProjectService {
         Timestamp startTime = new Timestamp(sysProjectBean.getStartTimeLong());
         BigDecimal hardCap = sysProjectBean.getHardCap();
         BigDecimal minPurchaseAmount = sysProjectBean.getMinPurchaseAmount();
-        String token = sysProjectBean.getProjectToken();
         String instructionEn = sysProjectBean.getInstructionEn();
         String contentEn = sysProjectBean.getContentEn();
         String officialLink = sysProjectBean.getOfficialLink();
@@ -201,32 +201,29 @@ public class SysProjectServiceImpl implements SysProjectService {
         String reddit = sysProjectBean.getReddit();
         String telegram = sysProjectBean.getTelegram();
         String whitePaperLinkEn = sysProjectBean.getWhitePaperLinkEn();
-        Timestamp current = new Timestamp(System.currentTimeMillis());
+        String kyc = sysProjectBean.getKyc();
+        String privacyPolicy = sysProjectBean.getPrivacyPolicy();
+        String tokenTerms = sysProjectBean.getTokenTerms();
+        String projectNameEn = sysProjectBean.getProjectNameEn();
+        String tokenAddress = sysProjectBean.getTokenAddress();
+        String projectAddress = sysProjectBean.getProjectAddress();
+        String token = sysProjectBean.getProjectToken();
+        Integer tokenDecimal = sysProjectBean.getTokenDecimal();
         //校验必要项是否完整
-        if (StringUtils.isEmpty(sysProjectBean.getProjectNameEn())
-                || StringUtils.isEmpty(sysProjectBean.getTokenAddress())
-                || StringUtils.isEmpty(sysProjectBean.getProjectAddress())
+        if (StringUtils.isAnyBlank(tokenAddress, token, projectNameEn, projectAddress)
+                || tokenDecimal == null
                 || startTime.after(endTime)
                 || priceRate.compareTo(BigDecimal.ZERO) < 0
                 || softCap == null || softCap.compareTo(BigDecimal.ZERO) <= 0
                 || hardCap == null || softCap.compareTo(hardCap) > 0
                 || minPurchaseAmount == null || softCap.compareTo(minPurchaseAmount) <= 0
-                || StringUtils.isEmpty(token)
-                || StringUtils.isEmpty(instructionEn)
-                || StringUtils.isEmpty(contentEn)
-                || StringUtils.isEmpty(officialLink)
-                || StringUtils.isEmpty(facebook)
-                || StringUtils.isEmpty(twitter)
-                || StringUtils.isEmpty(biYong)
-                || StringUtils.isEmpty(gitHub)
-                || StringUtils.isEmpty(reddit)
-                || StringUtils.isEmpty(telegram)
-                || StringUtils.isEmpty(whitePaperLinkEn)) {
+                || StringUtils.isAnyBlank(instructionEn, contentEn)
+                || StringUtils.isAnyBlank(officialLink, whitePaperLinkEn, facebook, twitter, biYong, gitHub, reddit, telegram, kyc, tokenTerms, privacyPolicy)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
         if (isSave) {
-            String log = sysProjectBean.getLog();
-            if (StringUtils.isEmpty(log)) {
+            String logo = sysProjectBean.getLogo();
+            if (StringUtils.isEmpty(logo)) {
                 throw new WitshareException(EnumResponseText.ErrorRequest);
             }
         }
@@ -243,19 +240,35 @@ public class SysProjectServiceImpl implements SysProjectService {
         Integer pageSize = sysProjectBean.getPageSize();
         pageSize = pageSize == null ? 10 : pageSize;
         pageNum = pageNum == null ? 1 : pageNum;
-        return PageHelper.startPage(pageNum, pageSize)
-                .doSelectPageInfo(() -> staticSysProjectMapper.selectManagementList(sysProjectBean));
+        SysProjectExample sysProjectExample = new SysProjectExample();
+        sysProjectExample.or().andProjectTokenLike("%" + sysProjectBean.getQueryStr() + "%");
+        PageInfo<SysProject> pageInfo = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(() -> sysProjectMapper.selectByExample(sysProjectExample));
+        PageInfo<SysProjectListVo> pageInfo_ = new PageInfo<>();
+        LinkedList<SysProjectListVo> sysProjectListVos = new LinkedList<>();
+        pageInfo.getList().forEach(p -> {
+            SysProjectListVo sysProjectListVo = new SysProjectListVo();
+            BeanUtils.copyProperties(p, sysProjectListVo);
+            sysProjectListVos.add(sysProjectListVo);
+        });
+        pageInfo.setList(null);
+        BeanUtils.copyProperties(pageInfo, pageInfo_);
+        pageInfo_.setList(sysProjectListVos);
+        return pageInfo_;
     }
 
     @Override
     public SysProjectBeanVo selectManagementByProjectGid(String projectGid) {
         //查询主表
-        SysProjectBean sysProjectBean = this.selectByProjectGid(projectGid);
-        if (sysProjectBean == null) {
+        SysProjectExample sysProjectExample = new SysProjectExample();
+        sysProjectExample.or().andProjectGidEqualTo(projectGid);
+        SysProject sysProject = sysProjectMapper.selectByExample(sysProjectExample).get(0);
+        if (sysProject == null) {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
         SysProjectBeanVo sysProjectBeanVo = new SysProjectBeanVo();
-        BeanUtils.copyProperties(sysProjectBean, sysProjectBeanVo);
+        BeanUtils.copyProperties(sysProject, sysProjectBeanVo);
+        sysProjectBeanVo.setProjectLogoLink(this.getPictureUrl(sysProjectBeanVo.getProjectLogoLink()));
         //依此查询描述表
         Map<String, ProjectDescriptionBean> description = sysProjectBeanVo.getDescriptions();
         Arrays.stream(EnumI18NProject.values()).forEach(p -> {

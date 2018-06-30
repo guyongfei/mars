@@ -118,7 +118,7 @@ public class UserTxServiceImpl implements UserTxService {
         }
         PageInfo<DistributionStatusVo> distributionStatusVoPageInfo = new PageInfo<>();
         RecordUserTxExample recordUserTxExample = new RecordUserTxExample();
-        recordUserTxExample.or().andProjectGidEqualTo(projectGid).andPlatformTxStatusEqualTo(3);
+        recordUserTxExample.or().andProjectGidEqualTo(projectGid).andPlatformTxStatusGreaterThanOrEqualTo(3);
         List<RecordUserTx> recordUserTxes = recordUserTxMapper.selectByExample(recordUserTxExample);
         LinkedList<DistributionStatusVo> distributionStatusVos = new LinkedList<>();
         int[] status = new int[100];

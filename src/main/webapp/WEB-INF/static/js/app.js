@@ -9,6 +9,7 @@ var taskType = null;
 var appKey = null;
 var noticeId, noticeIndex;
 var projectGid;
+var project;
 
 var contextPath = $("#contextPath").text();
 var frontPath = $("#frontPath").text();
@@ -75,6 +76,7 @@ $("body").on("click", "a", function () {
     if ($(this).data("href") === "#" || !$(this).data("href")) return false;
     $("#content").load($(this).data("href"));
     projectGid = '';
+    project = '';
 });
 $(".tpl-left-nav a").on("click", function () {
     if ($(this).data("href") !== "#" && $(this).data("href")) {

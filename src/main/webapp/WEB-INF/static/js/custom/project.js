@@ -10,14 +10,17 @@ var pdfJa;
 var pdfJaName;
 var projectNow;
 var projectToken;
-var projectDecimal;
+var tokenDecimal;
 var addMethod = true;
-var tokenReg = /^0x[a-fA-F0-9]{40}$/;
-var regToken = new RegExp(/^0x[a-fA-F0-9]{40}$/, "");
+var tokenAddressReg = /^0x[a-fA-F0-9]{40}$/;
+var regToken = new RegExp(tokenAddressReg);
 
 function getNowFormatDate(date) {
     if (!date) {
         date = new Date();
+    }
+    if (date.getFullYear() == 2000) {
+        return "-"
     }
     var seperator1 = "-";
     var seperator2 = ":";
@@ -147,7 +150,7 @@ var TableInit = function () {
                 align: 'center',
                 title: '项目状态',
                 formatter: projectStatusFormatter
-            },  {
+            }, {
                 title: '是否关闭',
                 field: 'isAvailable',
                 align: 'center',
@@ -157,8 +160,9 @@ var TableInit = function () {
             }, {
                 field: 'operate',
                 title: '其他',
-                align: 'center',
-                valign: 'middle',
+                align: 'left',
+                halign: 'center',
+                falign: 'left',
                 events: operateEvents,
                 formatter: operateFormatter
             }]
@@ -290,11 +294,14 @@ window.operateEvents = {
 
 
 function operateFormatter(value, row, index) {
-    return [
-        '<button type="button" id="editRow"  style="margin: 0 10px 0 0 " class="btn btn-primary  editRow" ><i class="fa fa-send " aria-hidden="true" ></i>编辑</button>',
-        '<button type="button" id="editRow1"  class="statistic btn  btn-info " projectGid="' + row.projectGid + '" >统计</button>'
-    ].join('')
-};
+
+    var arr = new Array();
+    arr.push('<button type="button" id="editRow"  style="margin: 0 10px 0 0 " class="btn btn-primary  editRow" ><i class="fa fa-send " aria-hidden="true" ></i>编辑</button>');
+    if (row.projectStatus > 0) {
+        arr.push('<button type="button" id="editRow1"  class="statistic btn  btn-info " projectGid="' + row.projectGid + '" >统计</button>')
+    }
+    return arr.join('')
+}
 
 //重新加载表格
 function reloadStatisticTable(pageNum) {
@@ -347,7 +354,7 @@ var TableInit_ = function () {
                     //返回序号，注意index是从0开始的，所以要加上1
                     return pageSize * (pageNumber - 1) + index + 1;
                 }
-            },{
+            }, {
                 field: 'getEthAmount',
                 align: 'center',
                 title: 'ETH数量'
@@ -408,12 +415,12 @@ var TableInit_ = function () {
 function getProject(row) {
 
     $('#addEvent')
-        .bootstrapValidator('removeField', 'log')
+        .bootstrapValidator('removeField', 'logo')
         .bootstrapValidator('removeField', 'view')
         .bootstrapValidator('removeField', 'pdfZh')
         .bootstrapValidator('removeField', 'pdfEn');
 
-    $('#addEvent').bootstrapValidator('addField', 'log', {
+    $('#addEvent').bootstrapValidator('addField', 'logo', {
         validators: {
             file: {
                 extension: 'jpg,jpeg,bmp,png,gif',
@@ -468,9 +475,10 @@ function getProject(row) {
             if (data.success) {
                 var project = data.data;
                 projectNow = project;
-
+                tokenDecimal = project.tokenDecimal;
+                projectToken = project.projectToken;
+                $('#projectToken').html(project.projectToken);
                 $('#tokenAddress').val(project.tokenAddress);
-                $('#projectToken').val(project.projectToken);
                 $('#projectAddress').val(project.projectAddress);
                 $('#softCap').val(numberFormat(project.softCap));
                 $('#hardCap').val(numberFormat(project.hardCap));
@@ -512,8 +520,11 @@ function getProject(row) {
                 $(' #reddit').val(project.websites.reddit);
                 $(' #biYong').val(project.websites.biYong);
                 $(' #gitHub').val(project.websites.gitHub);
+                $(' #privacyPolicy').val(project.websites.privacyPolicy);
+                $(' #tokenTerms').val(project.websites.tokenTerms);
+                $(' #kyc').val(project.websites.kyc);
 
-                $('#logImg').attr('src', project.projectLogoLink);
+                $('#logoImg').attr('src', project.projectLogoLink);
                 //根据项目状态判断是否能更改
                 var projectStatus = project.projectStatus;
                 if (projectStatus > 0) {
@@ -607,8 +618,8 @@ $('#addModal').on('hidden.bs.modal', function () {
     //初始化时间选择器
     initTimer();
     //log图片清空
-    $('#logImg').attr('src', "");
-    logStr = "";
+    $('#logoImg').attr('src', "");
+    logoStr = "";
     addMethod = true;
 })
 
@@ -625,9 +636,9 @@ $('input[type=file]').on('change', function (e) {
         console.log(fileName);
         reader.onloadend = function () {
             switch (id) {
-                case 'log':
-                    logStr = reader.result;
-                    $('#logImg').attr('src', logStr);
+                case 'logo':
+                    logoStr = reader.result;
+                    $('#logoImg').attr('src', logoStr);
                     break;
                 case 'view':
                     view = reader.result;
@@ -654,8 +665,8 @@ $('input[type=file]').on('change', function (e) {
         };
     } else {
         switch (id) {
-            case 'log':
-                logStr = "";
+            case 'logo':
+                logoStr = "";
                 break;
             case 'view':
                 view = "";
@@ -773,7 +784,7 @@ $(function () {
                         message: '合约地址不能为空'
                     },
                     regexp: {
-                        regexp: /^0x\S{40}$/,
+                        regexp: tokenAddressReg,
                         message: '请输入正确的合约地址'
                     }
                 }
@@ -785,7 +796,7 @@ $(function () {
                         message: '项目地址不能为空'
                     },
                     regexp: {
-                        regexp: /^0x\S{40}$/,
+                        regexp: tokenAddressReg,
                         message: '请输入正确的地址'
                     }
                 }
@@ -1021,6 +1032,42 @@ $(function () {
                     }
                 }
             },
+            kyc: {
+                validators: {
+                    notEmpty: {
+                        message: '链接地址不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
+                    }
+                }
+            },
+            tokenTerms: {
+                validators: {
+                    notEmpty: {
+                        message: '链接地址不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
+                    }
+                }
+            },
+            privacyPolicy: {
+                validators: {
+                    notEmpty: {
+                        message: '链接地址不能为空'
+                    },
+                    stringLength: {
+                        min: 1,
+                        max: 250,
+                        message: '请输入250个字符以下的网址'
+                    }
+                }
+            },
 
             pdfEn: {
                 validators: {
@@ -1115,13 +1162,14 @@ $(function () {
         }
         var dataJson = {
             'projectGid': projectGid,
-            'projectToken': $(' #projectToken').val(),
+            'tokenDecimal': addMethod ? tokenDecimal : projectNow.tokenDecimal,
+            'projectToken': addMethod ? projectToken : projectNow.projectToken,
+            'tokenAddress': $(' #tokenAddress').val(),
             'projectNameEn': $(' #projectNameEn').val(),
             'projectNameCn': $(' #projectNameCn').val(),
             'projectNameKo': $(' #projectNameKo').val(),
-            'projectNameJa': $(' #projectNameJa').val(),
 
-            'tokenAddress': $(' #tokenAddress').val(),
+            'projectNameJa': $(' #projectNameJa').val(),
             'projectAddress': $(' #projectAddress').val(),
             'softCap': numeral($('#softCap').val()).value(),
             'hardCap': numeral($('#hardCap').val()).value(),
@@ -1153,8 +1201,11 @@ $(function () {
             'reddit': $(' #reddit').val(),
             'biYong': $(' #biYong').val(),
             'gitHub': $(' #gitHub').val(),
+            'kyc': $(' #kyc').val(),
+            'privacyPolicy': $(' #privacyPolicy').val(),
+            'tokenTerms': $(' #tokenTerms').val(),
 
-            'log': logStr,
+            'logo': logoStr,
             'view': view
 
         };
@@ -1271,8 +1322,8 @@ $(function () {
                             var result = data.result;
                             projectToken = result.symbol;
                             $('#projectToken').html(projectToken);
-                            projectDecimal = result.decimal;
-                            $('#tokenDecimal').html(projectDecimal);
+                            tokenDecimal = result.decimal;
+                            $('#tokenDecimal').html(tokenDecimal);
                             $('#projectNameEn').val(data.name);
                         } else {
                             layer.msg("智能合约地址未找到，请再次输入", {

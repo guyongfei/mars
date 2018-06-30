@@ -5,7 +5,7 @@ package com.witshare.mars.constant;
  */
 public enum EnumStorage {
 
-    Log(0, "log", "log图片", "pic"),
+    Logo(0, "logo", "logo图片", "pic"),
     View(1, "view", "展示图片", "pic"),
     Avatar(6, "avatar", "用户头像", "pic");
 

@@ -59,9 +59,9 @@ public class SysProjectBean  extends BasePageBean{
     public static String HARD_CAP = "hardCap";
     public static String SOFT_CAP = "softCap";
 
-    public static String LOG = "log";
+    public static String LOGO = "logo";
 
-    public static String LOG_STR = "logStr";
+    public static String LOGO_STR = "logoStr";
     public static String VIEW = "view";
 
     public static String PLATFORM_ADDRESS = "platformAddress";
@@ -77,8 +77,8 @@ public class SysProjectBean  extends BasePageBean{
     private String projectNameJa;
 
 
-    private String log;
-    private String logStr;
+    private String logo;
+    private String logoStr;
 
     private String pdfCn;
     private String pdfCnName;
@@ -113,6 +113,9 @@ public class SysProjectBean  extends BasePageBean{
     private String reddit;
     private String officialLink;
     private String biYong;
+    private String kyc;
+    private String tokenTerms;
+    private String privacyPolicy;
 
     private String projectName;
     private String objectName;
@@ -201,14 +204,7 @@ public class SysProjectBean  extends BasePageBean{
         return this;
     }
 
-    public String getLog() {
-        return log;
-    }
 
-    public SysProjectBean setLog(String log) {
-        this.log = log;
-        return this;
-    }
 
     public String getPdfCn() {
         return pdfCn;
@@ -660,12 +656,21 @@ public class SysProjectBean  extends BasePageBean{
         return this;
     }
 
-    public String getLogStr() {
-        return logStr;
+    public String getLogo() {
+        return logo;
     }
 
-    public SysProjectBean setLogStr(String logStr) {
-        this.logStr = logStr;
+    public SysProjectBean setLogo(String logo) {
+        this.logo = logo;
+        return this;
+    }
+
+    public String getLogoStr() {
+        return logoStr;
+    }
+
+    public SysProjectBean setLogoStr(String logoStr) {
+        this.logoStr = logoStr;
         return this;
     }
 
@@ -736,6 +741,33 @@ public class SysProjectBean  extends BasePageBean{
 
     public SysProjectBean setTokenDecimal(Integer tokenDecimal) {
         this.tokenDecimal = tokenDecimal;
+        return this;
+    }
+
+    public String getKyc() {
+        return kyc;
+    }
+
+    public SysProjectBean setKyc(String kyc) {
+        this.kyc = kyc;
+        return this;
+    }
+
+    public String getTokenTerms() {
+        return tokenTerms;
+    }
+
+    public SysProjectBean setTokenTerms(String tokenTerms) {
+        this.tokenTerms = tokenTerms;
+        return this;
+    }
+
+    public String getPrivacyPolicy() {
+        return privacyPolicy;
+    }
+
+    public SysProjectBean setPrivacyPolicy(String privacyPolicy) {
+        this.privacyPolicy = privacyPolicy;
         return this;
     }
 }
