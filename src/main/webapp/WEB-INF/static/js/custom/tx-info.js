@@ -30,6 +30,8 @@ var userTxStatusMap =
 
 
 var canDistributeStatusArr = [2, 22, 23];
+//需要打币的
+var needDistributeStatusArr = [2, 22, 23];
 
 var platformStatusArr = [
     {value: 0, des: '初始状态'},
@@ -38,7 +40,7 @@ var platformStatusArr = [
     {value: 3, des: '失败'},
     {value: 4, des: '交易作废'}
 ]
-
+var canDistributePlatStatusArr = [0, 3];
 var platformStatusMap =
     {
         0: '初始状态',
@@ -66,7 +68,7 @@ var TableInit = function () {
             sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                       //初始化加载第一页，默认第一页
             pageSize: 5,                       //每页的记录行数（*）
-            pageList: [5, 10, 25, 50, 100],        //可供选择的每页的行数（*）
+            pageList: [5, 10, 'All'],        //可供选择的每页的行数（*）
             search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
             strictSearch: true,
             showRefresh: false,                  //是否显示刷新按钮
@@ -78,18 +80,6 @@ var TableInit = function () {
             cardView: false,                    //是否显示详细视图
             detailView: false,                   //是否显示父子表
             showColumns: true,
-            exportDataType: "all",   //导出文件方式  支持: 'basic', 'all', 'selected'. basic：本页数据，all，获取服务器所有数据，selected,本页选择行数据
-            showExport: true,  //是否显示导出按钮
-            buttonsAlign: "right",  //按钮位置
-            exportTypes: ['csv', 'txt', 'sql', 'doc', 'excel', 'xlsx', 'pdf'],  //导出文件支持: 'json', 'xml', 'png', 'csv', 'txt', 'sql'，'doc', 'excel', 'xlsx', 'pdf'
-            Icons: 'glyphicon-export',//导出文件图标
-            exportOptions: {
-                fileName: '统计数据',  //文件名称设置
-                worksheetName: 'sheet1' + projectGid,  //表格工作区名称
-                tableName: '用户列表',
-                onMsoNumberFormat: doOnMsoNumberFormat,
-                onCellHtmlData: DoOnCellHtmlData
-            },
             responseHandler: function (res) {
                 return {
                     "total": res.data.total,//总页数
@@ -180,10 +170,12 @@ var TableInit = function () {
     };
     //得到查询的参数
     oTableInit.queryParams = function (params) {
-        var temp = {
-            pageSize: params.limit,   //页面大小
-            pageNum: params.offset / params.limit + 1  //页码
-        };
+        var temp = {};
+        var pageSize = params.limit;
+        if (pageSize) {
+            temp.pageSize = pageSize;//页面大小
+            temp.pageNum = params.offset / pageSize + 1  //页码
+        }
 
         if (projectGid) {
             temp.projectGid = projectGid;
@@ -215,36 +207,9 @@ var TableInit = function () {
 };
 
 window.txTableEvents = {};
-//数字
-function doOnMsoNumberFormat(cell, row, col){
-    var result = "";
-    if (row > 0 && col == 0){
-        result = "\\@";
-    }
-    return result;
-}
-
-//处理导出内容,这个方法可以自定义某一行、某一列、甚至某个单元格的内容,也就是将其值设置为自己想要的内容
-function DoOnCellHtmlData(cell, row, col, data){
-    if(row == 0){
-        return data;
-    }
-
-    //由于备注列超过6个字的话,通过span标签处理只显示前面6个字,如果直接导出的话会导致内容不完整,因此要将携带完整内容的span标签中title属性的值替换
-    if(col == 4 || col ==11 || col == 7){
-        var spanObj = $(data);//将带 <span title="val"></span> 标签的字符串转换为jQuery对象
-        var title = spanObj.attr("title");//读取<span title="val"></span>中title属性的值
-        //var span = cell[0].firstElementChild;//读取cell数组中的第一个值下的第一个元素
-        if(typeof(title) != 'undefined'){
-            return title;
-        }
-    }
-
-    return data;
-}
 
 function txTableFormatter(value, row, index) {
-    if (row.userTxStatus in canDistributeStatusArr) {
+    if (row.userTxStatus in canDistributeStatusArr && row.platformTxStatus == 3) {
         return [
             '<button type="button"   onclick="distribution(null,' + row.payTxId + ',null)" class="distribution  btn  btn-primary " " >打币</button>'
         ].join('')
@@ -258,9 +223,9 @@ var TableInit_ = function () {
     //初始化Table
     oTableInit_.Init = function () {
         $('#error_table').bootstrapTable({
-            url: contextPath + '/management/distribution-fail-infos?projectGid=' + projectGid,         //请求后台的URL（*）
+            url: contextPath + '/management/distribution-infos?projectGid=' + projectGid,         //请求后台的URL（*）
             method: 'get',                      //请求方式（*）
-            toolbar: '#toolbar1',                //工具按钮用哪个容器
+            toolbar:"toolbar_",
             striped: true,                      //是否显示行间隔色
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
             pagination: true,                   //是否显示分页（*）
@@ -293,45 +258,33 @@ var TableInit_ = function () {
                 field: 'checkStatus',
                 checkbox: true,
                 title: '打币',
-                formatter: stateFormatter
+                formatter: statePlatFormatter
             }, {
-                field: 'status',
+                field: 'platformTxStatus',
                 align: 'center',
                 title: '打币状态',
-                formatter: userTxStatusFormatter
+                formatter: platformStatusFormatter
             }, {
                 field: 'count',
                 align: 'center',
                 title: '数量',
-                formatter: errorCountFormatter
+                formatter: platformCountFormatter
             }, {
-                field: 'status',
+                field: 'platformTxStatus',
                 title: '操作',
                 align: 'center',
                 valign: 'middle',
                 events: distributionEvents,
-                formatter: distributionFormatter
+                formatter: distributionPlatFormatter
             }],
             //注册加载子表的事件。注意下这里的三个参数！
             onExpandRow: function (index, row, $detail) {
-                if (row.status == 21) {
+                if (row.platformTxStatus == 3) {
                     group(index, row, $detail)
                 }
             },
-            onLoadSuccess: function (data) { //加载成功时执行
-                console.log(data);
-            },
-            onLoadError: function (res) { //加载失败时执行
-                console.log(res);
-            },
-            formatLoadingMessage: function () {
-                return "请稍等，正在加载中...";
-            },
-            formatNoMatches: function () {  //没有匹配的结果
-                return '无符合条件的记录';
-            },
-            formatShowingRows: function () {
-                return "";
+            formatShowingRows: function (pageFrom, pageTo, totalRows) {
+                return '';
             }
         });
     };
@@ -350,9 +303,6 @@ function group(index, row, $detail) {
     var parentId = row.status;
     var group_com = $detail.html('<table></table>').find('table');
     $(group_com).bootstrapTable({
-        url: contextPath + '/management/distribution-fail-infos?projectGid=' + projectGid,         //请求后台的URL（*）
-        method: 'get',                      //请求方式（*）
-        toolbar: '#toolbar',                //工具按钮用哪个容器
         striped: true,                      //是否显示行间隔色
         cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
         pageNumber: 1,                       //初始化加载第一页，默认第一页
@@ -361,27 +311,21 @@ function group(index, row, $detail) {
         showRefresh: false,                  //是否显示刷新按钮
         minimumCountColumns: 1,             //最少允许的列数
         clickToSelect: false,                //是否启用点击选中行
-//                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-        uniqueId: "status",                     //每一行的唯一标识，一般为主键列
+        uniqueId: "userTxStatus",                     //每一行的唯一标识，一般为主键列
         showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
         cardView: false,                    //是否显示详细视图
         detailView: false,                   //是否显示父子表
         checkboxHeader: false,
-        responseHandler: function (res) {
-            return {
-                "total": res.data.total,//总页数
-                "rows": res.data.list   //数据
-            };
-        },
+
         columns: [{
             field: 'checkStatus',
             checkbox: true,
             title: '打币',
             formatter: stateFormatter
         }, {
-            field: 'status',
+            field: 'userTxStatus',
             align: 'center',
-            title: '打币状态',
+            title: 'payTx状态',
             formatter: userTxStatusFormatter
         }, {
             field: 'count',
@@ -389,19 +333,33 @@ function group(index, row, $detail) {
             title: '数量',
             formatter: errorCountFormatter
         }, {
-            field: 'status',
+            field: 'userTxStatus',
             title: '操作',
             align: 'center',
             valign: 'middle',
             events: distributionEvents,
             formatter: distributionFormatter
         }]
-    });
+        , data: row.child
+        ,
+        formatShowingRows: function (pageFrom, pageTo, totalRows) {
+            return '';
+        }
+    })
+    ;
 }
 
 
+function statePlatFormatter(value, row, index) {
+    if (parseInt(row.platformTxStatus) != 0) {
+        return {
+            disabled: true
+        };
+    }
+    return value;
+}
 function stateFormatter(value, row, index) {
-    if (row.status in canDistributeStatusArr) {
+    if (row.userTxStatus in canDistributeStatusArr) {
         return {
             disabled: true
         };
@@ -411,46 +369,89 @@ function stateFormatter(value, row, index) {
 
 
 function distributionFormatter(value, row, index) {
-    if (row.status in canDistributeStatusArr) {
+    if (value in canDistributeStatusArr) {
         var array = new Array();
-        array.push(row.status);
+        array.push(value);
         return [
             '<button type="button" id="editRow1"  onclick="distribution(' + array + ',null,null)" class="distribution btn  btn-primary " " >打币</button>'
         ].join('')
+    } else {
+        return ""
+    }
+};
+
+function distributionPlatFormatter(value, row, index) {
+    if (parseInt(value) == 0) {
+        var array = new Array();
+        array.push(value);
+        return [
+            '<button type="button" id="editRow1"  onclick="distribution(null,null,' + array + ')" class="distribution btn  btn-primary " " >打币</button>'
+        ].join('')
+    } else {
+        return ""
     }
 
 };
+
 function errorCountFormatter(value, row, index) {
     return [
-        '<button type="button" id="btn-errorCount"  onclick="errorCountTable(' + row.status + ',$(this))" class="errorCount btn " " >' + row.count + '</button>'
+        '<button type="button" id="btn-errorCount"  onclick="platformCountTable(null,' + row.userTxStatus + ',$(this))" class="errorCount btn " " >' + row.count + '</button>'
+    ].join('')
+};
+function platformCountFormatter(value, row, index) {
+    return [
+        '<button type="button" id="btn-errorCount"  onclick="platformCountTable(' + row.platformTxStatus + ',null,$(this))" class="errorCount btn " " >' + row.count + '</button>'
     ].join('')
 };
 
 
-function errorCountTable(userTxStatus, obj) {
+function platformCountTable(platformTxStatus, userTxStatus, obj) {
+    var plat = parseInt($("#platformTxStatus_ option:selected").val());
+    var user = parseInt($("#userTxStatus_ option:selected").val());
+
     reloadUserTxStatusSelect();
-    $("#userTxStatus_ option[value='" + userTxStatus + "']").attr("selected", "selected");
+    reloadPlatformTxStatusSelect();
     $('.errorCount').removeClass(' btn-primary ')
-    $(obj).addClass(' btn-primary ')
+    if ((platformTxStatus || platformTxStatus == 0)) {
+        if (plat != platformTxStatus) {
+            $(obj).addClass(' btn-primary ')
+            $("#platformTxStatus_ option[value='" + platformTxStatus + "']").attr("selected", "selected");
+        }
+    }
+    if (userTxStatus) {
+        if (user !== userTxStatus) {
+            $(obj).addClass(' btn-primary ')
+            $("#userTxStatus_ option[value='" + userTxStatus + "']").attr("selected", "selected");
+        }
+    }
+
+
     reloadTxTable(1);
 }
 
-
 // error 表格上面的打币按钮
 function error_table_distribution() {
-    var a = $("#error_table").bootstrapTable('getSelections');
-    var $errorTable = $('#error_table tbody tr');
-    if ($errorTable.size() == 1) {
-        alert("无可选数据");
-        return;
-    }
     userTxStatus = new Array()
-    if (a.length <= 0) {
+    platformTxStatus = new Array()
+
+    var plat = $("#error_table").bootstrapTable('getSelections');
+
+    $(".detail-view input:checkbox").each(function () {
+        var parent = $(this).parent().parent();
+        if ($(parent).hasClass('selected')) {
+            var checkedNum = parseInt($(parent).attr('data-uniqueid'));
+            userTxStatus.push(checkedNum);
+        }
+    })
+    if (plat.length <= 0 && userTxStatus.length < 1) {
         alert("请至少选中一行")
     } else {
-        a.forEach(function (e, index) {
-            userTxStatus.push(e.status);
+        plat.forEach(function (e, index) {
+            platformTxStatus.push(e.platformTxStatus);
         })
+        console.log(userTxStatus)
+        console.log(platformTxStatus)
+
         $('#distributionModal').modal('show');
     }
 }
@@ -465,13 +466,19 @@ function distribution(txStatus_, txId_, platformStatus_) {
 
 window.distributionEvents = {
     'click .distribution': function (e, value, row, index) {
-        alert(12)
-
     }
 };
 
 function userTxStatusFormatter(value, row, index) {
     var state = userTxStatusMap[value];
+    var color = '#000';
+    return [
+        '<button class="btn ' + color + '" >' + state + '</button>'
+    ].join('');
+}
+
+function platformStatusFormatter(value, row, index) {
+    var state = platformStatusMap[value];
     var color = '#000';
     return [
         '<button class="btn ' + color + '" >' + state + '</button>'
@@ -577,6 +584,7 @@ $(function () {
                 reloadTable(1);
             }
             loadTableTime = milliseconds;
+            reloadTable(1);
         }
 
         return repo.projectToken || repo.text;
@@ -630,13 +638,13 @@ function reloadPlatformTxStatusSelect() {
         .empty()
         .prepend("<option value='' >请选择</option>");//添加第一个option值
     for (var key in platformStatusMap) {
-        $("#platformTxStatus_").append("<option value='" + key + "'>" + userTxStatusMap[key] + "</option>");
+        $("#platformTxStatus_").append("<option value='" + key + "'>" + platformStatusMap[key] + "</option>");
     }
 }
 
 $(function () {
-    // reloadUserTxStatusSelect();
-    // reloadPlatformTxStatusSelect();
+    reloadUserTxStatusSelect();
+    reloadPlatformTxStatusSelect();
 
     var $table = $('#info-table');
     $(function () {

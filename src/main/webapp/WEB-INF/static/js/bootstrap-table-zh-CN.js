@@ -38,6 +38,9 @@
         },
         formatClearFilters: function () {
             return '清空过滤';
+        },
+        formatAllRows: function () {
+            return 'All';
         }
     };
 

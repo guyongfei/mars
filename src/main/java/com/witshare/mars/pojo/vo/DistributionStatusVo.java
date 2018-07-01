@@ -1,16 +1,20 @@
 package com.witshare.mars.pojo.vo;
 
+import java.util.LinkedList;
+import java.util.Map;
+
 /**
  * Created by user on 2018/6/29.
  */
 public class DistributionStatusVo {
 
     private Long id;
-    private Integer status;
+    private Integer userTxStatus;
+    private Integer platformTxStatus;
     private Integer count;
+    private LinkedList<DistributionStatusVo> child;
 
     public DistributionStatusVo() {
-
     }
 
     public static DistributionStatusVo newInstance() {
@@ -26,21 +30,39 @@ public class DistributionStatusVo {
         return this;
     }
 
-    public Integer getStatus() {
-        return status;
-    }
-
-    public DistributionStatusVo setStatus(Integer status) {
-        this.status = status;
-        return this;
-    }
-
     public Integer getCount() {
         return count;
     }
 
     public DistributionStatusVo setCount(Integer count) {
         this.count = count;
+        return this;
+    }
+
+    public Integer getUserTxStatus() {
+        return userTxStatus;
+    }
+
+    public DistributionStatusVo setUserTxStatus(Integer userTxStatus) {
+        this.userTxStatus = userTxStatus;
+        return this;
+    }
+
+    public Integer getPlatformTxStatus() {
+        return platformTxStatus;
+    }
+
+    public DistributionStatusVo setPlatformTxStatus(Integer platformTxStatus) {
+        this.platformTxStatus = platformTxStatus;
+        return this;
+    }
+
+    public LinkedList<DistributionStatusVo> getChild() {
+        return child;
+    }
+
+    public DistributionStatusVo setChild(LinkedList<DistributionStatusVo> child) {
+        this.child = child;
         return this;
     }
 }

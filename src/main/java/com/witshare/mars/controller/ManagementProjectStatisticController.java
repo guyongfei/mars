@@ -70,7 +70,7 @@ public class ManagementProjectStatisticController {
      * 打币状态明细
      */
     @ResponseBody
-    @RequestMapping(value = "/distribution-fail-infos", method = RequestMethod.GET)
+    @RequestMapping(value = "/distribution-infos", method = RequestMethod.GET)
     public ResponseBean distributions(RecordUserTxBean recordUserTxBean) {
 
         PageInfo<DistributionStatusVo> pageInfo = userTxService.getPlatformStatusCount(recordUserTxBean);

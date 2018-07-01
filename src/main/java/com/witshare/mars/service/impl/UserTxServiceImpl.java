@@ -50,8 +50,14 @@ public class UserTxServiceImpl implements UserTxService {
         Integer userTxStatus = recordUserTxBean.getUserTxStatus();
         Integer platformTxStatus = recordUserTxBean.getPlatformTxStatus();
 
-        if (StringUtils.isEmpty(projectGid) || pageSize == null || pageNum == null) {
+        if (StringUtils.isEmpty(projectGid)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        if (pageSize == null) {
+            pageSize = Integer.MAX_VALUE;
+        }
+        if (pageNum == null) {
+            pageNum = 1;
         }
 
         SysProjectBean sysProjectBean = sysProjectService.selectByProjectGid(projectGid);
@@ -118,25 +124,46 @@ public class UserTxServiceImpl implements UserTxService {
         }
         PageInfo<DistributionStatusVo> distributionStatusVoPageInfo = new PageInfo<>();
         RecordUserTxExample recordUserTxExample = new RecordUserTxExample();
-        recordUserTxExample.or().andProjectGidEqualTo(projectGid).andPlatformTxStatusGreaterThanOrEqualTo(3);
+        recordUserTxExample.or().andProjectGidEqualTo(projectGid);
         List<RecordUserTx> recordUserTxes = recordUserTxMapper.selectByExample(recordUserTxExample);
         LinkedList<DistributionStatusVo> distributionStatusVos = new LinkedList<>();
-        int[] status = new int[100];
+        int[] userTxStatusArr = new int[100];
+        int[] platformTxStatusArr = new int[100];
+        LinkedList<DistributionStatusVo> childList = new LinkedList<>();
         if (CollectionUtils.isNotEmpty(recordUserTxes)) {
             recordUserTxes.forEach(p -> {
-                Integer userTxStatus = p.getUserTxStatus();
-                status[userTxStatus]++;
+                Integer platformTxStatus = p.getPlatformTxStatus();
+                platformTxStatusArr[platformTxStatus]++;
+                if (platformTxStatus == 3) {
+                    Integer userTxStatus = p.getUserTxStatus();
+                    userTxStatusArr[userTxStatus]++;
+                }
             });
         }
+
         for (int i = 0; i < 100; i++) {
-            int value = status[i];
-            if (value != 0) {
+            int value = platformTxStatusArr[i];
+            if (value > 0) {
                 DistributionStatusVo distributionStatusVo = DistributionStatusVo.newInstance()
-                        .setStatus(i)
+                        .setPlatformTxStatus(i)
                         .setCount(value);
                 distributionStatusVos.add(distributionStatusVo);
+                if (i == 3) {
+                    distributionStatusVo.setChild(childList);
+                }
+            }
+
+        }
+        for (int i = 0; i < 100; i++) {
+            int value = userTxStatusArr[i];
+            if (value > 0) {
+                DistributionStatusVo distributionStatusVo = DistributionStatusVo.newInstance()
+                        .setUserTxStatus(i)
+                        .setCount(value);
+                childList.add(distributionStatusVo);
             }
         }
+
         int total = distributionStatusVos.size();
         distributionStatusVoPageInfo.setPageSize(total);
         distributionStatusVoPageInfo.setPageNum(1);
@@ -144,4 +171,6 @@ public class UserTxServiceImpl implements UserTxService {
         distributionStatusVoPageInfo.setList(distributionStatusVos);
         return distributionStatusVoPageInfo;
     }
+
+
 }
