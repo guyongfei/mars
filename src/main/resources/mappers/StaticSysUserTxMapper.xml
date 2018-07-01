@@ -15,7 +15,7 @@
   </insert>
 
     <sql id="Base_Column_List" >
-        id, user_gid, user_email, project_gid, project_token, pay_coin_type, pay_tx, pay_tx_id,
+        id, user_gid, user_email, project_gid, project_token, pay_coin_type, pay_tx,
         pay_amount, price_rate, hope_get_amount, should_get_amount, actual_pay_amount, actual_get_amount,
         user_tx_status, platform_tx, eth_fee, platform_tx_status, distribution_time, create_time,
         update_time
