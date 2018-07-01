@@ -36,6 +36,7 @@ public class UserTxServiceImpl implements UserTxService {
     @Autowired
     private SysUserAddressService sysUserAddressService;
 
+
     @Override
     public PageInfo<RecordUserTxBean> getList(RecordUserTxBean recordUserTxBean) {
         if (recordUserTxBean == null) {
@@ -170,6 +171,23 @@ public class UserTxServiceImpl implements UserTxService {
         distributionStatusVoPageInfo.setTotal(total);
         distributionStatusVoPageInfo.setList(distributionStatusVos);
         return distributionStatusVoPageInfo;
+    }
+    @Override
+    public PageInfo<RecordUserTxBean> getList(String projectGid) {
+        if (StringUtils.isBlank(projectGid)) {
+            return null;
+        }
+        RecordUserTxBean recordUserTxBean = RecordUserTxBean.newInstance().setProjectGid(projectGid);
+        return this.getList(recordUserTxBean);
+    }
+
+    @Override
+    public PageInfo<DistributionStatusVo> getPlatformStatusCount(String projectGid) {
+        if (StringUtils.isBlank(projectGid)) {
+            return null;
+        }
+        RecordUserTxBean recordUserTxBean = RecordUserTxBean.newInstance().setProjectGid(projectGid);
+        return this.getPlatformStatusCount(recordUserTxBean);
     }
 
 

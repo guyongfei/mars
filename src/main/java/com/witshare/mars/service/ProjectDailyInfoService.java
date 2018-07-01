@@ -18,6 +18,8 @@ public interface ProjectDailyInfoService {
 
     PageInfo<ProjectDailyInfoBean> getList(ProjectDailyInfoBean projectDailyInfoBean);
 
+    PageInfo<ProjectDailyInfoBean> getList(String projectGid);
+
     ProjectDailyInfoBean get(String projectGid, Date date);
 
     void syncDailyInfo();

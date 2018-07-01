@@ -91,7 +91,9 @@ function getData(url, type, dataJson, callback) {
         contentType: "application/json",
         data: JSON.stringify(dataJson),
         success: function (data) {
-            callback(data);
+            if (callback) {
+                callback(data);
+            }
         },
         error: function (err) {
             alert("系统出错!")

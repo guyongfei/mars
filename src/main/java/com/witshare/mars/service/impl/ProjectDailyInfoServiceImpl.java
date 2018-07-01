@@ -135,6 +135,18 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
         return projectDailyInfoBeanPageInfo;
     }
 
+    @Override
+    public PageInfo<ProjectDailyInfoBean> getList(String projectGid) {
+        if (StringUtils.isAnyBlank(projectGid)) {
+            return null;
+        }
+        ProjectDailyInfoBean projectDailyInfoBean = new ProjectDailyInfoBean();
+        projectDailyInfoBean.setProjectGid(projectGid)
+                .setPageNum(1)
+                .setPageSize(Integer.MAX_VALUE);
+        return this.getList(projectDailyInfoBean);
+    }
+
     //更新每日统计表和汇总表
     @Override
     public void syncDailyInfo() {

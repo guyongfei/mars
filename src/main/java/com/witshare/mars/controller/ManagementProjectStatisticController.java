@@ -6,6 +6,7 @@ import com.witshare.mars.pojo.dto.ProjectSummaryBean;
 import com.witshare.mars.pojo.dto.RecordUserTxBean;
 import com.witshare.mars.pojo.util.ResponseBean;
 import com.witshare.mars.pojo.vo.DistributionStatusVo;
+import com.witshare.mars.service.ExportService;
 import com.witshare.mars.service.ProjectDailyInfoService;
 import com.witshare.mars.service.ProjectSummaryService;
 import com.witshare.mars.service.UserTxService;
@@ -13,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -32,6 +34,8 @@ public class ManagementProjectStatisticController {
     private ProjectDailyInfoService projectDailyInfoService;
     @Autowired
     private UserTxService userTxService;
+    @Autowired
+    private ExportService exportService;
 
     /**
      * 查询项目统计列表
@@ -75,6 +79,15 @@ public class ManagementProjectStatisticController {
 
         PageInfo<DistributionStatusVo> pageInfo = userTxService.getPlatformStatusCount(recordUserTxBean);
         return ResponseBean.newInstanceSuccess(pageInfo);
+    }
+
+    /**
+     * 导出excel
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project-info-export/excel/{projectGid}", method = RequestMethod.GET)
+    public void infoExport(@PathVariable("projectGid") String projectGid) {
+        exportService.exportProjectExcel(projectGid);
     }
 
 

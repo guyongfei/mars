@@ -272,6 +272,10 @@ public class SysProjectServiceImpl implements SysProjectService {
         SysProjectBeanVo sysProjectBeanVo = new SysProjectBeanVo();
         BeanUtils.copyProperties(sysProject, sysProjectBeanVo);
         sysProjectBeanVo.setProjectLogoLink(this.getPictureUrl(sysProjectBeanVo.getProjectLogoLink()));
+
+        BigDecimal soldAmount = projectDailyInfoService.getSoldAmount(projectGid);
+        sysProjectBeanVo.setSoldAmount(soldAmount);
+
         //依此查询描述表
         Map<String, ProjectDescriptionBean> description = sysProjectBeanVo.getDescriptions();
         Arrays.stream(EnumI18NProject.values()).forEach(p -> {
