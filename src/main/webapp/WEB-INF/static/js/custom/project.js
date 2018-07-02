@@ -12,7 +12,8 @@ var projectNow;
 var projectToken;
 var tokenDecimal;
 var addMethod = true;
-var tokenAddressReg = /^0x[a-fA-F0-9]{40}$/;
+var tokenAddressReg = /^0x[a-fA-F0-9]{60}$/;
+var tokenAddressesReg = /^(0x[a-fA-F0-9]{60}\s*)*$/;
 var regToken = new RegExp(tokenAddressReg);
 var exportTime;
 

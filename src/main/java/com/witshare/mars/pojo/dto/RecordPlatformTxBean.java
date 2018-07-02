@@ -1,9 +1,9 @@
-package com.witshare.mars.pojo.domain;
+package com.witshare.mars.pojo.dto;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class RecordPlatformTx {
+public class RecordPlatformTxBean extends BasePageBean {
     private Long id;
 
     private String projectGid;
@@ -38,139 +38,164 @@ public class RecordPlatformTx {
 
     private Timestamp updateTime;
 
+
+    public RecordPlatformTxBean() {
+    }
+
+    public static RecordPlatformTxBean newInstance() {
+        return new RecordPlatformTxBean();
+    }
+
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public RecordPlatformTxBean setId(Long id) {
         this.id = id;
+        return this;
     }
 
     public String getProjectGid() {
         return projectGid;
     }
 
-    public void setProjectGid(String projectGid) {
-        this.projectGid = projectGid == null ? null : projectGid.trim();
-    }
-
-    public String getProjectToken() {
-        return projectToken;
-    }
-
-    public void setProjectToken(String projectToken) {
-        this.projectToken = projectToken == null ? null : projectToken.trim();
+    public RecordPlatformTxBean setProjectGid(String projectGid) {
+        this.projectGid = projectGid;
+        return this;
     }
 
     public String getTxHash() {
         return txHash;
     }
 
-    public void setTxHash(String txHash) {
-        this.txHash = txHash == null ? null : txHash.trim();
+    public RecordPlatformTxBean setTxHash(String txHash) {
+        this.txHash = txHash;
+        return this;
     }
 
     public Integer getTxType() {
         return txType;
     }
 
-    public void setTxType(Integer txType) {
+    public RecordPlatformTxBean setTxType(Integer txType) {
         this.txType = txType;
+        return this;
     }
 
     public String getFromName() {
         return fromName;
     }
 
-    public void setFromName(String fromName) {
-        this.fromName = fromName == null ? null : fromName.trim();
+    public RecordPlatformTxBean setFromName(String fromName) {
+        this.fromName = fromName;
+        return this;
     }
 
     public String getFromAddress() {
         return fromAddress;
     }
 
-    public void setFromAddress(String fromAddress) {
-        this.fromAddress = fromAddress == null ? null : fromAddress.trim();
+    public RecordPlatformTxBean setFromAddress(String fromAddress) {
+        this.fromAddress = fromAddress;
+        return this;
     }
 
     public String getToName() {
         return toName;
     }
 
-    public void setToName(String toName) {
-        this.toName = toName == null ? null : toName.trim();
+    public RecordPlatformTxBean setToName(String toName) {
+        this.toName = toName;
+        return this;
     }
 
     public String getToAddress() {
         return toAddress;
     }
 
-    public void setToAddress(String toAddress) {
-        this.toAddress = toAddress == null ? null : toAddress.trim();
+    public RecordPlatformTxBean setToAddress(String toAddress) {
+        this.toAddress = toAddress;
+        return this;
     }
 
     public String getTxTokenType() {
         return txTokenType;
     }
 
-    public void setTxTokenType(String txTokenType) {
-        this.txTokenType = txTokenType == null ? null : txTokenType.trim();
+    public RecordPlatformTxBean setTxTokenType(String txTokenType) {
+        this.txTokenType = txTokenType;
+        return this;
     }
 
     public BigDecimal getTxAmount() {
         return txAmount;
     }
 
-    public void setTxAmount(BigDecimal txAmount) {
+    public RecordPlatformTxBean setTxAmount(BigDecimal txAmount) {
         this.txAmount = txAmount;
+        return this;
     }
 
     public BigDecimal getEthFee() {
         return ethFee;
     }
 
-    public void setEthFee(BigDecimal ethFee) {
+    public RecordPlatformTxBean setEthFee(BigDecimal ethFee) {
         this.ethFee = ethFee;
+        return this;
     }
 
     public Integer getTxStatus() {
         return txStatus;
     }
 
-    public void setTxStatus(Integer txStatus) {
+    public RecordPlatformTxBean setTxStatus(Integer txStatus) {
         this.txStatus = txStatus;
+        return this;
     }
 
     public Timestamp getTxVerificationTime() {
         return txVerificationTime;
     }
 
-    public void setTxVerificationTime(Timestamp txVerificationTime) {
+    public RecordPlatformTxBean setTxVerificationTime(Timestamp txVerificationTime) {
         this.txVerificationTime = txVerificationTime;
+        return this;
     }
 
     public Timestamp getTxTime() {
         return txTime;
     }
 
-    public void setTxTime(Timestamp txTime) {
+    public RecordPlatformTxBean setTxTime(Timestamp txTime) {
         this.txTime = txTime;
+        return this;
     }
 
     public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Timestamp createTime) {
+    public RecordPlatformTxBean setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
+        return this;
     }
 
     public Timestamp getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Timestamp updateTime) {
+    public RecordPlatformTxBean setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+        return this;
+    }
+
+    public String getProjectToken() {
+        return projectToken;
+    }
+
+    public RecordPlatformTxBean setProjectToken(String projectToken) {
+        this.projectToken = projectToken;
+        return this;
     }
 }

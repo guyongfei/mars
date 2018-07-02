@@ -54,11 +54,19 @@ public class ManagementPageController {
     }
 
     /**
-     * 交易
+     * 用户交易
      */
-    @RequestMapping(value = "/tx-info", method = RequestMethod.GET)
-    public String txStatisticPage(Map<String, Object> model) throws Exception {
-        return "views/tx-info";
+    @RequestMapping(value = "/user-tx-info", method = RequestMethod.GET)
+    public String userTxInfoPage(Map<String, Object> model) throws Exception {
+        return "views/user-tx-info";
+    }
+
+    /**
+     * 项目交易
+     */
+    @RequestMapping(value = "/platform-tx-info", method = RequestMethod.GET)
+    public String projectTxInfoPage(Map<String, Object> model) throws Exception {
+        return "views/platform-tx-info";
     }
 
     /**

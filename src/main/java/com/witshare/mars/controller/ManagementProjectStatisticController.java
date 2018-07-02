@@ -63,7 +63,7 @@ public class ManagementProjectStatisticController {
      * 交易明细表
      */
     @ResponseBody
-    @RequestMapping(value = "/tx-infos", method = RequestMethod.GET)
+    @RequestMapping(value = "/user-tx-infos", method = RequestMethod.GET)
     public ResponseBean txInfos(RecordUserTxBean recordUserTxBean) {
 
         PageInfo<RecordUserTxBean> pageInfo = userTxService.getList(recordUserTxBean);
