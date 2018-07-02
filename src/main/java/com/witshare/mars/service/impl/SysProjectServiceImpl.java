@@ -250,6 +250,9 @@ public class SysProjectServiceImpl implements SysProjectService {
             SysProjectListVo sysProjectListVo = new SysProjectListVo();
             BeanUtils.copyProperties(p, sysProjectListVo);
             sysProjectListVos.add(sysProjectListVo);
+            SysProjectBean sysProjectBean1 = new SysProjectBean();
+            BeanUtils.copyProperties(p, sysProjectBean1);
+            this.updateProjectStatus(sysProjectBean1);
         });
         pageInfo.setList(null);
         BeanUtils.copyProperties(pageInfo, pageInfo_);
@@ -269,6 +272,10 @@ public class SysProjectServiceImpl implements SysProjectService {
         SysProjectBeanVo sysProjectBeanVo = new SysProjectBeanVo();
         BeanUtils.copyProperties(sysProject, sysProjectBeanVo);
         sysProjectBeanVo.setProjectLogoLink(this.getPictureUrl(sysProjectBeanVo.getProjectLogoLink()));
+
+        BigDecimal soldAmount = projectDailyInfoService.getSoldAmount(projectGid);
+        sysProjectBeanVo.setSoldAmount(soldAmount);
+
         //依此查询描述表
         Map<String, ProjectDescriptionBean> description = sysProjectBeanVo.getDescriptions();
         Arrays.stream(EnumI18NProject.values()).forEach(p -> {
@@ -318,7 +325,7 @@ public class SysProjectServiceImpl implements SysProjectService {
      *
      * @param sysProjectBean
      */
-    private void updateProjectStatus(SysProjectBean sysProjectBean) {
+    public void updateProjectStatus(SysProjectBean sysProjectBean) {
         if (sysProjectBean == null) {
             return;
         }
@@ -337,21 +344,28 @@ public class SysProjectServiceImpl implements SysProjectService {
         //状态修改
         int projectStatusNow = 0;
         if (startTime.after(current)) {
-            projectStatusNow = EnumProjectStatus.Status1.getStatus();
+            projectStatusNow = EnumProjectStatus.Status0.getStatus();
         }
-        if (softCap.compareTo(actualGetEthAmount) >= 0) {
-            projectStatusNow = EnumProjectStatus.Status1.getStatus();
-        }
-        if (hardCap.compareTo(actualGetEthAmount) >= 0) {
+
+        if (startTime.before(current) && hardCap.compareTo(actualGetEthAmount) >= 0) {
             projectStatusNow = EnumProjectStatus.Status2.getStatus();
         }
-        if (endTime.before(current)) {
+
+        if (startTime.before(current) && softCap.compareTo(actualGetEthAmount) >= 0) {
+            projectStatusNow = EnumProjectStatus.Status1.getStatus();
+        }
+
+        if (endTime.before(current) && hardCap.compareTo(actualGetEthAmount) <= 0) {
             projectStatusNow = EnumProjectStatus.Status3.getStatus();
+        }
+        if (endTime.before(current) && hardCap.compareTo(actualGetEthAmount) >= 0) {
+            projectStatusNow = EnumProjectStatus.Status4.getStatus();
         }
         sysProjectBean.setProjectStatus(projectStatusNow);
         //更改数据库，删除redis
         if (projectStatus != projectStatusNow) {
             SysProject sysProject = new SysProject();
+            sysProject.setId(sysProjectBean.getId());
             sysProject.setUpdateTime(current);
             sysProject.setProjectGid(projectGid);
             sysProject.setProjectStatus(projectStatusNow);

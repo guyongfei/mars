@@ -14,6 +14,5 @@ classes/
 build/
 gradle/
 out/
-buildinfo.properties
 argfile*
 dubbo-consumer/

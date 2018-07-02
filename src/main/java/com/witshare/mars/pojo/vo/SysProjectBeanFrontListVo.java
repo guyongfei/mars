@@ -23,7 +23,7 @@ public class SysProjectBeanFrontListVo {
     private Timestamp endTime;
     private BigDecimal startPrice;
     private BigDecimal endPrice;
-    private int projectStatus;
+    private Integer projectStatus;
     private String projectInstruction;
     private String whitePaperLink;
     private String projectContent;
@@ -88,7 +88,6 @@ public class SysProjectBeanFrontListVo {
         this.projectLogoLink = projectLogoLink;
         return this;
     }
-
 
 
     public BigDecimal getSoftCap() {

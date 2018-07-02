@@ -4,20 +4,24 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 项目状态
+ * 用户认购交易状态
  */
-public enum EnumProjectStatus {
+public enum EnumUserTxStatus {
 
-    Status0(0, "未开始"),
-    Status1(1, "未到软顶"),
-    Status2(2, "未到硬顶"),
-    Status3(3, "认筹完成且成功"),
-    Status4(4, "认筹完成但失败"),;
+
+    Status0(0, "初始状态"),
+    Status1(1, "交易还未被打包"),
+    Status2(2, "验证成功"),
+    Status21(21, "验证失败（to不是平台地址)"),
+    Status22(22, "验证失败（from不匹配）"),
+    Status23(23, "验证失败（金额不匹配）"),
+    Status3(3, "交易失败"),
+    Status4(4, "交易不存在"),;
 
     private Integer status;
     private String des;
 
-    EnumProjectStatus(Integer status, String des) {
+    EnumUserTxStatus(Integer status, String des) {
         this.status = status;
         this.des = des;
     }
@@ -39,8 +43,8 @@ public enum EnumProjectStatus {
         return status;
     }
 
-    public static EnumProjectStatus get(Integer status) {
-        for (EnumProjectStatus Status : EnumProjectStatus.values()) {
+    public static EnumUserTxStatus get(Integer status) {
+        for (EnumUserTxStatus Status : EnumUserTxStatus.values()) {
             if (Status.status.equals(status)) {
                 return Status;
             }

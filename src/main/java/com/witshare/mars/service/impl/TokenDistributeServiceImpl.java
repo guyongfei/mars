@@ -63,7 +63,7 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
         Map<String, Object> body = new HashedMap<String, Object>() {{
             put("projectGid", tokenDistributeBean.getProjectGid());
             put("password", tokenDistributeBean.getPassword());
-            put("payTxId", tokenDistributeBean.getPayTxId());
+            put("id", tokenDistributeBean.getId());
             put("userTxStatusArr", tokenDistributeBean.getUserTxStatus());
             put("platformTxStatusArr", tokenDistributeBean.getPlatformTxStatus());
         }};

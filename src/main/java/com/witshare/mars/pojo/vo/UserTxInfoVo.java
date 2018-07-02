@@ -3,6 +3,7 @@ package com.witshare.mars.pojo.vo;
 import com.witshare.mars.pojo.dto.MoonGetPriceResponseBean;
 
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 public class UserTxInfoVo {
 
@@ -28,6 +29,8 @@ public class UserTxInfoVo {
     private String platformAddress;
 
     private BigDecimal minPurchaseAmount;
+
+    private Timestamp endTime;
 
     private MoonGetPriceResponseBean.Result gasPrice;
 
@@ -143,6 +146,15 @@ public class UserTxInfoVo {
 
     public UserTxInfoVo setProjectStatus(Integer projectStatus) {
         this.projectStatus = projectStatus;
+        return this;
+    }
+
+    public Timestamp getEndTime() {
+        return endTime;
+    }
+
+    public UserTxInfoVo setEndTime(Timestamp endTime) {
+        this.endTime = endTime;
         return this;
     }
 }

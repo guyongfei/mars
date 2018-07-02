@@ -7,7 +7,7 @@ public class TokenDistributeBean {
     private String keystore;
     private Integer[] userTxStatus;
     private Integer[] platformTxStatus;
-    private String payTxId;
+    private Integer id;
 
     public String getProjectGid() {
         return projectGid;
@@ -49,11 +49,12 @@ public class TokenDistributeBean {
         this.platformTxStatus = platformTxStatus;
     }
 
-    public String getPayTxId() {
-        return payTxId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setPayTxId(String payTxId) {
-        this.payTxId = payTxId;
+    public TokenDistributeBean setId(Integer id) {
+        this.id = id;
+        return this;
     }
 }

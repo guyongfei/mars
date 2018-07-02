@@ -27,6 +27,8 @@ public class SysProjectBeanVo {
     private int isAvailable;
     private Integer tokenDecimal;
 
+    private BigDecimal soldAmount;
+
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -210,6 +212,15 @@ public class SysProjectBeanVo {
 
     public SysProjectBeanVo setTokenDecimal(Integer tokenDecimal) {
         this.tokenDecimal = tokenDecimal;
+        return this;
+    }
+
+    public BigDecimal getSoldAmount() {
+        return soldAmount;
+    }
+
+    public SysProjectBeanVo setSoldAmount(BigDecimal soldAmount) {
+        this.soldAmount = soldAmount;
         return this;
     }
 }

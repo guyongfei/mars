@@ -2,6 +2,7 @@ package com.witshare.mars.controller;
 
 import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.exception.WitshareException;
+import com.witshare.mars.pojo.dto.SysUserBean;
 import com.witshare.mars.pojo.util.ResponseBean;
 import com.witshare.mars.service.SysUserService;
 import org.slf4j.Logger;
@@ -79,8 +80,8 @@ public class UserController {
     @RequestMapping(value = "/user-info", method = RequestMethod.GET)
     public ResponseBean getuserInfo() throws Exception {
 
-        userService.getCurrentUser();
-        return new ResponseBean(Boolean.TRUE);
+        SysUserBean currentUser = userService.getCurrentUser().setSalt(null).setUserPassword(null);
+        return ResponseBean.newInstanceSuccess(currentUser);
     }
 
 

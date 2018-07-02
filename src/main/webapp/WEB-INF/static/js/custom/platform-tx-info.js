@@ -1,8 +1,11 @@
+var txHashReg = /^0x[a-fA-F0-9]{64}$/;
+
 var TableInit = function () {
     var oTableInit = new Object();
+    //初始化Table
     oTableInit.Init = function () {
         $('#inner_table').bootstrapTable({
-            url: contextPath + '/management/platform-addresses',         //请求后台的URL（*）
+            url: contextPath + '/management/platform-tx-infos',         //请求后台的URL（*）
             method: 'get',                      //请求方式（*）
             toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -21,10 +24,16 @@ var TableInit = function () {
             showRefresh: false,                  //是否显示刷新按钮
             minimumCountColumns: 1,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
-            uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
+            uniqueId: "id",                     //每一行的唯一标识，一般为主键列
             showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
             detailView: false,                   //是否显示父子表
+            responseHandler: function (res) {
+                return {
+                    "total": res.data.total,//总页数
+                    "rows": res.data.list   //数据
+                };
+            },
             columns: [{
                 title: '序号',
                 align: "center",
@@ -37,43 +46,99 @@ var TableInit = function () {
                     return pageSize * (pageNumber - 1) + index + 1;
                 }
             }, {
-                field: 'address',
+                field: 'projectToken',
                 align: 'center',
-                title: '地址'
+                title: 'TOKEN'
+            }, {
+                field: 'txHash',
+                align: 'center',
+                title: '交易号'
+            }, {
+                field: 'txType',
+                align: 'center',
+                title: '交易类型'
+            }, {
+                field: 'fromName',
+                align: 'center',
+                title: '发起方'
+            }, {
+                field: 'fromAddress',
+                align: 'center',
+                title: '发起方地址'
+            }, {
+                field: 'toName',
+                align: 'center',
+                title: '接收方'
+            }, {
+                field: 'toAddress',
+                align: 'center',
+                title: '接收方地址'
+            }, {
+                field: 'txTokenType',
+                align: 'center',
+                title: 'Token类型'
+            }, {
+                field: 'txAmount',
+                align: 'center',
+                title: '交易数额'
+            }, {
+                field: 'ethFee',
+                align: 'center',
+                title: '交易费用'
+            }, {
+                field: 'txStatus',
+                align: 'center',
+                title: '交易状态'
+            }, {
+                field: 'txTime',
+                align: 'center',
+                title: '交易时间'
+            }, {
+                field: 'txVerificationTime',
+                align: 'center',
+                title: '验证时间'
+            }, {
+                field: 'createTime',
+                align: 'center',
+                title: '创建时间'
             }, {
                 field: 'operate',
                 title: '操作',
                 align: 'center',
+                valign: 'middle',
                 events: operateEvents,
                 formatter: operateFormatter
-            }],
-            responseHandler: function (res) {
-                return {
-                    "total": res.data.total,//总页数
-                    "rows": res.data.list   //数据
-                };
-            }
+            }]
         });
     };
+
     //得到查询的参数
     oTableInit.queryParams = function (params) {
         var temp = {
             pageSize: params.limit,   //页面大小
-            pageNum: params.offset / params.limit + 1  //页码
+            pageNum: params.offset / params.limit + 1,  //页码
+            queryStr: $("#txt_search").val().trim() //模糊查询
         };
         return temp;
     };
     return oTableInit;
 };
 
+function operateFormatter(value, row, index) {
+    return [
+        '<button type="button" id="delete"  class="platform-tx btn  btn-primary " txHash="' + row.txHash + '" >删除</button>'
+    ].join('')
+};
+
+
 window.operateEvents = {
-    'click .aaa': function (e, value, row, index) {
-        bootbox.confirm("确认提交", function (result) {
+    'click .platform-tx': function (e, value, row, index) {
+        bootbox.confirm("确认要删除该交易", function (result) {
             if (result) {
+                console.log(row);
                 $.ajax({
-                    url: contextPath + "/management/platform-address/" + row.address,
+                    url: contextPath + "/management/platform-tx-info/" + row.txHash,
                     type: "delete",
-                    contentType: "application/json;charset=UTF-8",
                     beforeSend: function () {
                         loadingIndex = layer.msg('处理中', {
                             icon: 16
@@ -81,17 +146,18 @@ window.operateEvents = {
                         return true;
                     },
                     success: function (data) {
+                        console.log(data);
                         layer.close(loadingIndex);
                         if (data.success) {
-                            $('#inner_table').bootstrapTable('refresh', {pageNumber: 1});
-                            layer.msg("操作成功", {
+                            layer.msg("任务成功", {
                                 time: 1000,
                                 icon: 1,
                                 shift: 1
                             }, function () {
+                                $('#inner_table').bootstrapTable('refresh');
                             })
                         } else {
-                            layer.msg(data.message, {
+                            layer.msg("任务失败，" + data.message, {
                                 time: 2000,
                                 icon: 0,
                                 shift: 1
@@ -101,47 +167,29 @@ window.operateEvents = {
                     }
                 })
             }
-        })
+        });
     }
 };
 
-
-function operateFormatter(value, row, index) {
-    return [
-        '<button type="button" id="aaa"  class="btn am-btn-danger  aaa" ><i class="fa fa-send " aria-hidden="true" ></i>删除</button>']
-};
-
+//查询按钮
 $('#btn_query').click(function () {
-    $('#inner_table').bootstrapTable('refresh', {pageNumber: 1});
-})
-
-
+    reloadTable(1);
+});
 
 $(function () {
+    //加载table
     var oTable = new TableInit();
     oTable.Init();
+
+
     $('#btn_add').click(function () {
         $('#addModal').modal('show')
     });
+
     $('#addresses').on('hidden.bs.modal', function () {
         $(' #addresses').val('');
         $('#inner_table').bootstrapTable('refresh', {pageNumber: 1});
-    })
-
-    // $('#addresses').change(function () {
-    //     var data = $(this).val();
-    //     var arr = new Array(); //定义一数组
-    //     arr = data.split("\n"); //字符分割
-    //     var str = ''
-    //     for (i = 0; i < arr.length; i++) {
-    //         var word = arr[i].trim();
-    //         if (word.length > 1) {
-    //             str += arr[i] + "\n"; //分割后的字符输出
-    //         }
-    //     }
-    //     $('#addEvent').bootstrapValidator("resetForm", true);
-    //     $(this).val(str.substr(0,str.length-1))
-    // })
+    });
 
     $('#addEvent').bootstrapValidator({
         message: 'This value is not valid',
@@ -152,14 +200,14 @@ $(function () {
         },
         excluded: [':disabled'],
         fields: {
-            words: {
+            txHashAdd: {
                 validators: {
                     notEmpty: {
-                        message: '地址不能为空'
+                        message: '交易号不能为空'
                     },
                     regexp: {
-                        regexp: tokenAddressesReg,
-                        message: '请输入正确的地址'
+                        regexp: txHashReg,
+                        message: '请输入正确的交易号'
                     }
                 }
             }
@@ -167,12 +215,11 @@ $(function () {
     }).on('success.form.bv', function (e) {
         // Prevent form submission
         e.preventDefault();
-
         var dataJson = {
-            'data': $(' #addresses').val()
+            'txHash': $(' #txHashAdd').val()
         }
         $.ajax({
-            url: contextPath + "/management/platform-address",
+            url: contextPath + "/management/platform-tx-info",
             type: "post",
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify(dataJson),
@@ -204,6 +251,5 @@ $(function () {
             }
         })
     });
-
-
 })
+

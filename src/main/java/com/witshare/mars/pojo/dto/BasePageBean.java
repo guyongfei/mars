@@ -1,5 +1,7 @@
 package com.witshare.mars.pojo.dto;
 
+import org.apache.poi.ss.formula.functions.T;
+
 /**
  * Created by user on 2018/6/27.
  */
@@ -10,6 +12,8 @@ public class BasePageBean {
     private String orderCondition;
     private String queryStr;
     private Integer ascOrdesc;
+
+
 
     public BasePageBean() {
     }

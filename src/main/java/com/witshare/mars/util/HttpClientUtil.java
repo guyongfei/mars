@@ -37,7 +37,7 @@ public class HttpClientUtil {
             if (bodyJson != null && bodyJson != "") {
                 //设置body参数  
                 StringEntity entity = new StringEntity(bodyJson, "UTF-8");
-                entity.setContentEncoding("UTF-8");
+//                entity.setContentEncoding("UTF-8");
                 entity.setContentType("application/json");
                 httpPost.setEntity(entity);
             }

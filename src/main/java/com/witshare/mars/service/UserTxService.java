@@ -10,8 +10,11 @@ import com.witshare.mars.pojo.vo.DistributionStatusVo;
 public interface UserTxService {
     PageInfo<RecordUserTxBean> getList(RecordUserTxBean recordUserTxBean);
 
+    PageInfo<RecordUserTxBean> getList(String projectGid);
+
     PageInfo<DistributionStatusVo> getPlatformStatusCount(RecordUserTxBean recordUserTxBean);
 
+    PageInfo<DistributionStatusVo> getPlatformStatusCount(String projectGid);
 
 
 }

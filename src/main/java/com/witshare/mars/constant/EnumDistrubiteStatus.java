@@ -4,20 +4,21 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * 项目状态
+ * 打币状态
  */
-public enum EnumProjectStatus {
+public enum EnumDistrubiteStatus {
 
-    Status0(0, "未开始"),
-    Status1(1, "未到软顶"),
-    Status2(2, "未到硬顶"),
-    Status3(3, "认筹完成且成功"),
-    Status4(4, "认筹完成但失败"),;
+        
+    Status0(0, "初始状态"),
+    Status1(1, "打币中"),
+    Status2(2, "成功"),
+    Status3(3, "失败"),
+    Status4(4, "交易作废"),;
 
     private Integer status;
     private String des;
 
-    EnumProjectStatus(Integer status, String des) {
+    EnumDistrubiteStatus(Integer status, String des) {
         this.status = status;
         this.des = des;
     }
@@ -39,8 +40,8 @@ public enum EnumProjectStatus {
         return status;
     }
 
-    public static EnumProjectStatus get(Integer status) {
-        for (EnumProjectStatus Status : EnumProjectStatus.values()) {
+    public static EnumDistrubiteStatus get(Integer status) {
+        for (EnumDistrubiteStatus Status : EnumDistrubiteStatus.values()) {
             if (Status.status.equals(status)) {
                 return Status;
             }

@@ -68,5 +68,10 @@ public interface SysProjectService {
      */
     int getFrontProjectStatus(int status);
 
+    /**
+     * 实时更改项目状态
+     */
+    void updateProjectStatus(SysProjectBean sysProjectBean);
+
 
 }

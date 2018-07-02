@@ -12,8 +12,10 @@ var projectNow;
 var projectToken;
 var tokenDecimal;
 var addMethod = true;
-var tokenAddressReg = /^0x[a-fA-F0-9]{40}$/;
+var tokenAddressReg = /^0x[a-fA-F0-9]{60}$/;
+var tokenAddressesReg = /^(0x[a-fA-F0-9]{60}\s*)*$/;
 var regToken = new RegExp(tokenAddressReg);
+var exportTime;
 
 function getNowFormatDate(date) {
     if (!date) {
@@ -289,7 +291,11 @@ window.operateEvents = {
 
         reloadStatisticTable(1);
         $('#statisticModal').modal('show');
+    },
+    'click .export': function (e, value, row, index) {
+        window.open(contextPath + "/management/project-info-export/excel/" + row.projectGid);
     }
+
 };
 
 
@@ -300,6 +306,8 @@ function operateFormatter(value, row, index) {
     if (row.projectStatus > 0) {
         arr.push('<button type="button" id="editRow1"  class="statistic btn  btn-info " projectGid="' + row.projectGid + '" >统计</button>')
     }
+    arr.push(' <a class="btn btn-info export" ">数据导出</button>');
+
     return arr.join('')
 }
 

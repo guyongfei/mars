@@ -18,7 +18,7 @@
                             <label class="col-md-2 control-label" for="keystore">keystore</label>
                             <div class="col-md-10 control-label">
                                               <textarea class="form-control" type="text" id="keystore" rows="10"
-                                                        name="words" style="border-left:none;"
+                                                        name="keystore" style="border-left:none;"
                                                         autocomplete="off"
                                                         placeholder="" required></textarea>
                             </div>
@@ -26,7 +26,8 @@
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="keystore">password</label>
                             <div class="col-md-10 control-label">
-                                <input id="password" class="form-control" type="password" placeholder="password"/>
+                                <input id="password" name="password" class="form-control" type="password"
+                                       placeholder="password"/>
                             </div>
                         </div>
                     </fieldset>
@@ -45,18 +46,17 @@
 </div>
 <div class="am-popup-inner am-modal-active " style="display: block;margin-top:-60px">
     <div>
-        <div class="form-group" style="margin:10px 0 0 0">
-            <select class="js-project-data-ajax js-states form-control "
+        <div class="form-group" style="margin:28px 0 10px 0">
+            <select class="js-project-data-ajax js-states"
                     style="width:100%"
                     id="id_label_single"></select>
         </div>
-
         <fieldset class="error-infos">
-            <legend>打币异常</legend>
-            <div class="form-group error-infos" style="margin-top: -20px">
-                <div class="col-md-1 col-md-offset-11 form-group " style="text-align:left;">
+            <legend>打币状态</legend>
+            <div class="form-group error-infos" style="margin-top: -35px">
+                <div id="toolbar_" class="col-md-1 col-md-offset-11 form-group " style="text-align:left;">
                     <button type="button" id="error_table_distribution" onclick="error_table_distribution()"
-                            style="margin-bottom: 10px" class="btn btn-primary">打币
+                            style="margin-top: 15px" class="btn btn-primary">打币
                     </button>
                 </div>
                 <div class="form-group" style="padding-top:15px">
@@ -65,25 +65,26 @@
             </div>
         </fieldset>
 
-        <fieldset class="tx-infos">
+        <fieldset class="tx-infos" style="margin-top: -75px">
             <legend>交易记录</legend>
-            <div class="form-group  tx-infos" style="display: none;margin-top: -20px">
-                <div class="col-md-12" style="text-align:center;margin-bottom: 20px">
+            <div class="form-group col-md-12 tx-infos " id="toolbar" style="margin-top: -15px">
+                <div class="col-md-12" style="text-align:center;margin-bottom: 20px;">
                     <form class="form-inline">
-                        <div class="form-group  col-md-4 ">
+                        <div class="form-group  col-md-3 ">
                             <label for="email_" class="control-label col-md-4"
                                    style="text-align: left">Email</label>
                             <input type="email" class="form-control col-md-8 "
                                    style="text-align: left;width: 66.66%"
                                    id="email_" placeholder="">
                         </div>
+
                         <div class="form-group col-md-4">
-                            <label for="userTxStatus_" class="control-label col-md-3"
+                            <label for="userTxStatus_" class="control-label col-md-4"
                                    style="text-align: left">Tx状态</label>
-                            <select class="form-control  col-md-9 " style="text-align: left;width: 75%"
+                            <select class="form-control  col-md-8 " style="text-align: left;width: 66.6%"
                                     id="userTxStatus_"> </select>
                         </div>
-                        <div class="form-group col-md-4">
+                        <div class="form-group col-md-5">
                             <label for="platformTxStatus_" class="control-label col-md-4"
                                    style="text-align: left">打币状态</label>
                             <select class="form-control  col-md-8 " style="text-align: left;width: 66.66%"
@@ -92,13 +93,13 @@
 
                     </form>
                 </div>
-                <div class="col-md-12" style="text-align:center;">
+                <div class="col-md-12 " style="text-align:center;">
                     <div class="form-inline">
-                        <div class="form-group col-md-8 ">
+                        <div class="form-group col-md-7">
                             <label for="payTx_" class="control-label col-md-2"
                                    style="text-align: left">TxHash</label>
                             <input type="text" class="form-control col-md-10 "
-                                   style="text-align: left;width: 83.33%"
+                                   style="text-align: left;width: 83%"
                                    id="payTx_" placeholder="">
                         </div>
                         <div class="form-group col-md-3 ">
@@ -107,20 +108,21 @@
                             <input type="text" class="form-control  col-md-6 " style="text-align: left;width: 50%"
                                    id="payTxId_" placeholder="">
                         </div>
-                        <div class="form-group  col-md-1 ">
+                        <div class="form-group  col-md-2 ">
                             <button type="button" id="btn_query" class="btn btn-primary">
                                 查询
                             </button>
+                            <button id="export-excel" class="btn btn-info">数据导出</button>
                         </div>
                     </div>
                 </div>
-                <div class="form-group" style="margin-top:15px">
-                    <table id="tx_table"></table>
-                </div>
+            </div>
+            <div class="form-group" style="margin-top:15px">
+                <table id="tx_table"></table>
             </div>
         </fieldset>
     </div>
 </div>
-<script th:src="@{/js/custom/tx-info.js}"></script>
+<script th:src="@{/js/custom/user-tx-info.js}"></script>
 </body>
 </html>

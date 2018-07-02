@@ -233,7 +233,6 @@ public class LogAspect implements ThrowsAdvice {
                 }
             }
         }
-        CurrentThreadContext.setToken("595a0da001794855bf50b3853c221c53");
         if (StringUtils.isEmpty(CurrentThreadContext.getInternationalTableName())) {
             EnumI18NProject i18NProject = EnumI18NProject.getObjByLanguage(null);
             CurrentThreadContext.setInternationalTableName(i18NProject.getTableName());

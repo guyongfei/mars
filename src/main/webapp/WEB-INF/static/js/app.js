@@ -91,7 +91,9 @@ function getData(url, type, dataJson, callback) {
         contentType: "application/json",
         data: JSON.stringify(dataJson),
         success: function (data) {
-            callback(data);
+            if (callback) {
+                callback(data);
+            }
         },
         error: function (err) {
             alert("系统出错!")
@@ -126,8 +128,11 @@ $("li").on("click", "#gotoPlatformAddressPage", function () {
 $("li").on("click", "#gotoProjectStatisticPage", function () {
     $('#content').load(contextPath + '/management/page/project-statistic');
 });
-$("li").on("click", "#gotoTxStatisticPage", function () {
-    $('#content').load(contextPath + '/management/page/tx-info');
+$("li").on("click", "#gotoUserTxInfoPage", function () {
+    $('#content').load(contextPath + '/management/page/user-tx-info');
+});
+$("li").on("click", "#gotoProjectTxInfoPage", function () {
+    $('#content').load(contextPath + '/management/page/platform-tx-info');
 });
 $("li").on("click", "#gotoProjectType", function () {
     $('#content').load(contextPath + '/management/page/projecttype');

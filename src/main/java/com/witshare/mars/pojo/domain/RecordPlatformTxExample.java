@@ -236,6 +236,76 @@ public class RecordPlatformTxExample {
             return (Criteria) this;
         }
 
+        public Criteria andProjectTokenIsNull() {
+            addCriterion("project_token is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenIsNotNull() {
+            addCriterion("project_token is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenEqualTo(String value) {
+            addCriterion("project_token =", value, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenNotEqualTo(String value) {
+            addCriterion("project_token <>", value, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenGreaterThan(String value) {
+            addCriterion("project_token >", value, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenGreaterThanOrEqualTo(String value) {
+            addCriterion("project_token >=", value, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenLessThan(String value) {
+            addCriterion("project_token <", value, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenLessThanOrEqualTo(String value) {
+            addCriterion("project_token <=", value, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenLike(String value) {
+            addCriterion("project_token like", value, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenNotLike(String value) {
+            addCriterion("project_token not like", value, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenIn(List<String> values) {
+            addCriterion("project_token in", values, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenNotIn(List<String> values) {
+            addCriterion("project_token not in", values, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenBetween(String value1, String value2) {
+            addCriterion("project_token between", value1, value2, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andProjectTokenNotBetween(String value1, String value2) {
+            addCriterion("project_token not between", value1, value2, "projectToken");
+            return (Criteria) this;
+        }
+
         public Criteria andTxHashIsNull() {
             addCriterion("tx_hash is null");
             return (Criteria) this;
@@ -726,62 +796,52 @@ public class RecordPlatformTxExample {
             return (Criteria) this;
         }
 
-        public Criteria andTxAmountEqualTo(String value) {
+        public Criteria andTxAmountEqualTo(BigDecimal value) {
             addCriterion("tx_amount =", value, "txAmount");
             return (Criteria) this;
         }
 
-        public Criteria andTxAmountNotEqualTo(String value) {
+        public Criteria andTxAmountNotEqualTo(BigDecimal value) {
             addCriterion("tx_amount <>", value, "txAmount");
             return (Criteria) this;
         }
 
-        public Criteria andTxAmountGreaterThan(String value) {
+        public Criteria andTxAmountGreaterThan(BigDecimal value) {
             addCriterion("tx_amount >", value, "txAmount");
             return (Criteria) this;
         }
 
-        public Criteria andTxAmountGreaterThanOrEqualTo(String value) {
+        public Criteria andTxAmountGreaterThanOrEqualTo(BigDecimal value) {
             addCriterion("tx_amount >=", value, "txAmount");
             return (Criteria) this;
         }
 
-        public Criteria andTxAmountLessThan(String value) {
+        public Criteria andTxAmountLessThan(BigDecimal value) {
             addCriterion("tx_amount <", value, "txAmount");
             return (Criteria) this;
         }
 
-        public Criteria andTxAmountLessThanOrEqualTo(String value) {
+        public Criteria andTxAmountLessThanOrEqualTo(BigDecimal value) {
             addCriterion("tx_amount <=", value, "txAmount");
             return (Criteria) this;
         }
 
-        public Criteria andTxAmountLike(String value) {
-            addCriterion("tx_amount like", value, "txAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andTxAmountNotLike(String value) {
-            addCriterion("tx_amount not like", value, "txAmount");
-            return (Criteria) this;
-        }
-
-        public Criteria andTxAmountIn(List<String> values) {
+        public Criteria andTxAmountIn(List<BigDecimal> values) {
             addCriterion("tx_amount in", values, "txAmount");
             return (Criteria) this;
         }
 
-        public Criteria andTxAmountNotIn(List<String> values) {
+        public Criteria andTxAmountNotIn(List<BigDecimal> values) {
             addCriterion("tx_amount not in", values, "txAmount");
             return (Criteria) this;
         }
 
-        public Criteria andTxAmountBetween(String value1, String value2) {
+        public Criteria andTxAmountBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("tx_amount between", value1, value2, "txAmount");
             return (Criteria) this;
         }
 
-        public Criteria andTxAmountNotBetween(String value1, String value2) {
+        public Criteria andTxAmountNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("tx_amount not between", value1, value2, "txAmount");
             return (Criteria) this;
         }
@@ -843,6 +903,186 @@ public class RecordPlatformTxExample {
 
         public Criteria andEthFeeNotBetween(BigDecimal value1, BigDecimal value2) {
             addCriterion("eth_fee not between", value1, value2, "ethFee");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusIsNull() {
+            addCriterion("tx_status is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusIsNotNull() {
+            addCriterion("tx_status is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusEqualTo(Integer value) {
+            addCriterion("tx_status =", value, "txStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusNotEqualTo(Integer value) {
+            addCriterion("tx_status <>", value, "txStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusGreaterThan(Integer value) {
+            addCriterion("tx_status >", value, "txStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusGreaterThanOrEqualTo(Integer value) {
+            addCriterion("tx_status >=", value, "txStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusLessThan(Integer value) {
+            addCriterion("tx_status <", value, "txStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusLessThanOrEqualTo(Integer value) {
+            addCriterion("tx_status <=", value, "txStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusIn(List<Integer> values) {
+            addCriterion("tx_status in", values, "txStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusNotIn(List<Integer> values) {
+            addCriterion("tx_status not in", values, "txStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusBetween(Integer value1, Integer value2) {
+            addCriterion("tx_status between", value1, value2, "txStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxStatusNotBetween(Integer value1, Integer value2) {
+            addCriterion("tx_status not between", value1, value2, "txStatus");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeIsNull() {
+            addCriterion("tx_verification_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeIsNotNull() {
+            addCriterion("tx_verification_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeEqualTo(Timestamp value) {
+            addCriterion("tx_verification_time =", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeNotEqualTo(Timestamp value) {
+            addCriterion("tx_verification_time <>", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeGreaterThan(Timestamp value) {
+            addCriterion("tx_verification_time >", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeGreaterThanOrEqualTo(Timestamp value) {
+            addCriterion("tx_verification_time >=", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeLessThan(Timestamp value) {
+            addCriterion("tx_verification_time <", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeLessThanOrEqualTo(Timestamp value) {
+            addCriterion("tx_verification_time <=", value, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeIn(List<Timestamp> values) {
+            addCriterion("tx_verification_time in", values, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeNotIn(List<Timestamp> values) {
+            addCriterion("tx_verification_time not in", values, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("tx_verification_time between", value1, value2, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxVerificationTimeNotBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("tx_verification_time not between", value1, value2, "txVerificationTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeIsNull() {
+            addCriterion("tx_time is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeIsNotNull() {
+            addCriterion("tx_time is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeEqualTo(Timestamp value) {
+            addCriterion("tx_time =", value, "txTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeNotEqualTo(Timestamp value) {
+            addCriterion("tx_time <>", value, "txTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeGreaterThan(Timestamp value) {
+            addCriterion("tx_time >", value, "txTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeGreaterThanOrEqualTo(Timestamp value) {
+            addCriterion("tx_time >=", value, "txTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeLessThan(Timestamp value) {
+            addCriterion("tx_time <", value, "txTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeLessThanOrEqualTo(Timestamp value) {
+            addCriterion("tx_time <=", value, "txTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeIn(List<Timestamp> values) {
+            addCriterion("tx_time in", values, "txTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeNotIn(List<Timestamp> values) {
+            addCriterion("tx_time not in", values, "txTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("tx_time between", value1, value2, "txTime");
+            return (Criteria) this;
+        }
+
+        public Criteria andTxTimeNotBetween(Timestamp value1, Timestamp value2) {
+            addCriterion("tx_time not between", value1, value2, "txTime");
             return (Criteria) this;
         }
 
