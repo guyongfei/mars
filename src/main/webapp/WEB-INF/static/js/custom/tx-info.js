@@ -29,9 +29,7 @@ var userTxStatusMap =
     }
 
 
-var canDistributeStatusArr = [2, 22, 23];
-//需要打币的
-var needDistributeStatusArr = [2, 22, 23];
+var canDistributeUserTxStatusArr = [2, 22, 23];
 
 var platformStatusArr = [
     {value: 0, des: '初始状态'},
@@ -40,7 +38,6 @@ var platformStatusArr = [
     {value: 3, des: '失败'},
     {value: 4, des: '交易作废'}
 ]
-var canDistributePlatStatusArr = [0, 3];
 var platformStatusMap =
     {
         0: '初始状态',
@@ -209,7 +206,9 @@ var TableInit = function () {
 window.txTableEvents = {};
 
 function txTableFormatter(value, row, index) {
-    if (row.userTxStatus in canDistributeStatusArr && row.platformTxStatus == 3) {
+    var userTxStatus = parseInt(row.userTxStatus);
+    var platformTxStatus = parseInt(row.platformTxStatus);
+    if ((platformTxStatus == 3 && (userTxStatus == 2 || userTxStatus == 22 || userTxStatus == 23)) || (userTxStatus == 2 && platformTxStatus === 0)) {
         return [
             '<button type="button"   onclick="distribution(null,' + row.payTxId + ',null)" class="distribution  btn  btn-primary " " >打币</button>'
         ].join('')
@@ -359,7 +358,7 @@ function statePlatFormatter(value, row, index) {
     return value;
 }
 function stateFormatter(value, row, index) {
-    if (row.userTxStatus in canDistributeStatusArr) {
+    if (row.userTxStatus in canDistributeUserTxStatusArr) {
         return {
             disabled: true
         };
@@ -369,7 +368,8 @@ function stateFormatter(value, row, index) {
 
 
 function distributionFormatter(value, row, index) {
-    if (value in canDistributeStatusArr) {
+    value = parseInt(value);
+    if (value == 2 || value == 22 || value == 23) {
         var array = new Array();
         array.push(value);
         return [
@@ -656,7 +656,6 @@ $(function () {
     })
 
 
-
     $("#export-excel").click(function () {
         window.open(contextPath + "/management/project-info-export/excel/" + projectGid);
     });
@@ -736,7 +735,6 @@ $(function () {
             }
         })
     });
-
 
 
 })
