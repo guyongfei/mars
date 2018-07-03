@@ -8,7 +8,7 @@ var moonPath = $("#moonPath").text();
 
 
 var tokenAddressReg = /^0x[a-fA-F0-9]{40}$/;
-var tokenAddressesReg = /^(0x[a-fA-F0-9]{40}\s+)*$/;
+var tokenAddressesReg = /^(0x[a-fA-F0-9]{40}(\s+)*)*$/;
 var regToken = new RegExp(tokenAddressReg);
 
 

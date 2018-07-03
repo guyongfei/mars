@@ -3,13 +3,17 @@ package com.witshare.mars.controller;
 import com.github.pagehelper.PageInfo;
 import com.witshare.mars.config.DistributedLocker;
 import com.witshare.mars.constant.EnumResponseText;
+import com.witshare.mars.dao.mysql.SysProjectMapper;
 import com.witshare.mars.exception.WitshareException;
+import com.witshare.mars.pojo.domain.SysProject;
+import com.witshare.mars.pojo.domain.SysProjectExample;
 import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.pojo.util.ResponseBean;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.pojo.vo.SysProjectListVo;
 import com.witshare.mars.service.PlatformAddressService;
 import com.witshare.mars.service.SysProjectService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 项目管理控制类
@@ -29,6 +34,8 @@ public class ManagementProjectController {
 
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
+    @Autowired
+    private SysProjectMapper sysProjectMapper;
     @Autowired
     private SysProjectService sysProjectService;
     @Autowired
@@ -90,6 +97,25 @@ public class ManagementProjectController {
 
         SysProjectBeanVo sysProjectBeanVo = sysProjectService.selectManagementByProjectGid(projectGid);
         return ResponseBean.newInstanceSuccess(sysProjectBeanVo);
+    }
+
+    /**
+     * 根据条件获取项目
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project", method = RequestMethod.GET)
+    public ResponseBean getProjectByTokenAddress(@RequestParam("tokenAddress") String tokenAddress) {
+
+        if (StringUtils.isAnyBlank(tokenAddress)) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        SysProjectExample sysProjectExample = new SysProjectExample();
+        sysProjectExample.or().andTokenAddressEqualTo(tokenAddress);
+        List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
+        if (CollectionUtils.isEmpty(sysProjects)) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        return ResponseBean.newInstanceSuccess(sysProjects.get(0));
     }
 
     /**

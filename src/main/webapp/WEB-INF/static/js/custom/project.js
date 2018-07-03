@@ -584,16 +584,17 @@ $('#btn_add').click(function () {
             if (data.success) {
                 var addressCount = parseInt(data.data);
                 if (addressCount < 1) {
-                    layer.msg("平台地址还剩" + addressCount + "个，建议添加地址后再新增项目。", {
-                        time: 5000,
+                    layer.msg("平台地址还剩" + addressCount + "个，添加地址后再新增项目", {
+                        time: 3000,
                         icon: 2,
                         shift: 1
                     }, function () {
                         $('.close').click()
                     })
+                }else{
+                    $('#addModal').modal('show');
+                    addMethod = true;
                 }
-                $('#addModal').modal('show');
-                addMethod = true;
             }
         }
     });
@@ -1335,59 +1336,83 @@ $(function () {
                             tokenDecimal = result.decimal;
                             $('#tokenDecimal').html(tokenDecimal);
                             $('#projectNameEn').val(data.name);
-                        } else {
-                            layer.msg("智能合约地址未找到，请再次输入", {
-                                time: 2000,
-                                icon: 0,
-                                shift: 1
-                            }, function () {
-                                $('#tokenAddress').val('')
-                            })
+                            $.ajax({
+                                url: contextPath + "/management/project?tokenAddress="+tokenAddress,
+                                type: "get",
+                                contentType: "application/json;charset=UTF-8",
+                                beforeSend: function () {
+                                    loadingIndex = layer.msg('处理中', {
+                                        icon: 16
+                                    });
+                                    return true;
+                                },
+                                success: function (data) {
+                                    console.log(data);
+                                    layer.close(loadingIndex);
+                                    if (data.success) {
+                                        layer.msg("已有该项目，请检查后输入", {
+                                            time: 2000,
+                                            icon: 0,
+                                            shift: 1
+                                        }, function () {
+                                            $('#tokenAddress').val('')
+                                        })
+                                    }
+                                }});
+                        } else
+                            {
+                                layer.msg("智能合约地址未找到，请再次输入", {
+                                    time: 2000,
+                                    icon: 0,
+                                    shift: 1
+                                }, function () {
+                                    $('#tokenAddress').val('')
+                                })
+                            }
                         }
-                    }
-                })
+                    })
             }
         })
     });
-    /*    {
-     "code": "0",
-     "message": "成功",
-     "result": {
-     "name": "Bee Honey Token",
-     "symbol": "HONEY",
-     "decimal": "9"
-     }
-     }*/
+        /*    {
+         "code": "0",
+         "message": "成功",
+         "result": {
+         "name": "Bee Honey Token",
+         "symbol": "HONEY",
+         "decimal": "9"
+         }
+         }*/
 
-    function checkPrice() {
-        var priceRate = numeral($('#priceRate').val()).value();
+        function checkPrice() {
+            var priceRate = numeral($('#priceRate').val()).value();
 
-        if (!priceRate) {
-            layer.msg("价格设置有误", {
-                time: 2000,
-                icon: 0,
-                shift: 1
-            });
-            return false;
-        }
-        return true;
-    };
+            if (!priceRate) {
+                layer.msg("价格设置有误", {
+                    time: 2000,
+                    icon: 0,
+                    shift: 1
+                });
+                return false;
+            }
+            return true;
+        };
 
-    function checkCap() {
-        var softCap = numeral($('#softCap').val()).value();
-        var hardCap = numeral($('#hardCap').val()).value();
-        var minPurchaseAmount = numeral($('#minPurchaseAmount').val()).value();
+        function checkCap() {
+            var softCap = numeral($('#softCap').val()).value();
+            var hardCap = numeral($('#hardCap').val()).value();
+            var minPurchaseAmount = numeral($('#minPurchaseAmount').val()).value();
 
-        if (!hardCap || !softCap || !minPurchaseAmount || hardCap <= softCap || minPurchaseAmount >= softCap) {
-            layer.msg("软硬顶或认购数量设置有误", {
-                time: 2000,
-                icon: 0,
-                shift: 1
-            });
-            return false;
-        }
-        return true;
-    };
+            if (!hardCap || !softCap || !minPurchaseAmount || hardCap <= softCap || minPurchaseAmount >= softCap) {
+                layer.msg("软硬顶或认购数量设置有误", {
+                    time: 2000,
+                    icon: 0,
+                    shift: 1
+                });
+                return false;
+            }
+            return true;
+        };
 
 
-})
+    })
