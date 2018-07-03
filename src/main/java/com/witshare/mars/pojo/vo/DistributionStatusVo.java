@@ -1,7 +1,6 @@
 package com.witshare.mars.pojo.vo;
 
 import java.util.LinkedList;
-import java.util.Map;
 
 /**
  * Created by user on 2018/6/29.
@@ -12,6 +11,7 @@ public class DistributionStatusVo {
     private Integer userTxStatus;
     private Integer platformTxStatus;
     private Integer count;
+    private Integer needDistributeCount;
     private LinkedList<DistributionStatusVo> child;
 
     public DistributionStatusVo() {
@@ -63,6 +63,15 @@ public class DistributionStatusVo {
 
     public DistributionStatusVo setChild(LinkedList<DistributionStatusVo> child) {
         this.child = child;
+        return this;
+    }
+
+    public Integer getNeedDistributeCount() {
+        return needDistributeCount;
+    }
+
+    public DistributionStatusVo setNeedDistributeCount(Integer needDistributeCount) {
+        this.needDistributeCount = needDistributeCount;
         return this;
     }
 }

@@ -36,7 +36,7 @@ public interface SysProjectService {
     /**
      * 新增项目
      */
-    void save(String requestBody);
+    void save(String requestBody,String platformAddress);
 
     /**
      * 更新项目

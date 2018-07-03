@@ -37,7 +37,7 @@ var TableInit = function () {
                     return pageSize * (pageNumber - 1) + index + 1;
                 }
             }, {
-                field: 'address',
+                field: 'platformAddress',
                 align: 'center',
                 title: '地址'
             }, {
@@ -71,7 +71,7 @@ window.operateEvents = {
         bootbox.confirm("确认提交", function (result) {
             if (result) {
                 $.ajax({
-                    url: contextPath + "/management/platform-address/" + row.address,
+                    url: contextPath + "/management/platform-address/" + row.platformAddress,
                     type: "delete",
                     contentType: "application/json;charset=UTF-8",
                     beforeSend: function () {
@@ -89,6 +89,7 @@ window.operateEvents = {
                                 icon: 1,
                                 shift: 1
                             }, function () {
+
                             })
                         } else {
                             layer.msg(data.message, {
@@ -123,7 +124,7 @@ $(function () {
     $('#btn_add').click(function () {
         $('#addModal').modal('show')
     });
-    $('#addresses').on('hidden.bs.modal', function () {
+    $('#addModal').on('hidden.bs.modal', function () {
         $(' #addresses').val('');
         $('#inner_table').bootstrapTable('refresh', {pageNumber: 1});
     })

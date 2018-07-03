@@ -35,7 +35,8 @@ public class PlatformTxInfoServiceImpl implements PlatformTxInfoService {
         if (recordPlatformTxBean == null) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        String queryStr = recordPlatformTxBean.getQueryStr();
+        String txHash = recordPlatformTxBean.getTxHash();
+        String projectToken = recordPlatformTxBean.getProjectToken();
 
         Integer pageNum = recordPlatformTxBean.getPageNum();
         Integer pageSize = recordPlatformTxBean.getPageSize();
@@ -44,7 +45,13 @@ public class PlatformTxInfoServiceImpl implements PlatformTxInfoService {
         pageSize = pageSize == null ? Integer.MAX_VALUE : pageSize;
 
         RecordPlatformTxExample recordPlatformTxExample = new RecordPlatformTxExample();
-        recordPlatformTxExample.or().andProjectTokenLike("%" + queryStr + "%");
+        RecordPlatformTxExample.Criteria or = recordPlatformTxExample.or();
+        if (!StringUtils.isBlank(txHash)) {
+            or.andTxHashEqualTo(txHash);
+        }
+        if (!StringUtils.isBlank(projectToken)) {
+            or.andProjectTokenLike("%" + projectToken + "%");
+        }
         PageInfo<RecordPlatformTx> pageInfo = PageHelper.startPage(pageNum, pageSize)
                 .doSelectPageInfo(() -> recordPlatformTxMapper.selectByExample(recordPlatformTxExample));
         LinkedList<RecordPlatformTxBean> recordPlatformTxBeans = new LinkedList<>();
@@ -75,7 +82,7 @@ public class PlatformTxInfoServiceImpl implements PlatformTxInfoService {
         recordPlatformTx.setTxHash(txHash);
         recordPlatformTx.setCreateTime(current);
         recordPlatformTx.setUpdateTime(current);
-        recordPlatformTxMapper.insert(recordPlatformTx);
+        recordPlatformTxMapper.insertSelective(recordPlatformTx);
     }
 
 

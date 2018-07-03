@@ -1,11 +1,16 @@
 package com.witshare.mars.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.witshare.mars.config.DistributedLocker;
+import com.witshare.mars.constant.EnumResponseText;
+import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.pojo.util.ResponseBean;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.pojo.vo.SysProjectListVo;
+import com.witshare.mars.service.PlatformAddressService;
 import com.witshare.mars.service.SysProjectService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +31,13 @@ public class ManagementProjectController {
 
     @Autowired
     private SysProjectService sysProjectService;
+    @Autowired
+    private PlatformAddressService platformAddressService;
+    @Autowired
+    private DistributedLocker distributedLocker;
+
+    private final static String PLATFORM_ADDRESS_LOCK = "platformAddressLock:";
+    private final static int PLATFORM_ADDRESS_TIME = 60;
 
     /**
      * 新增项目
@@ -36,7 +48,22 @@ public class ManagementProjectController {
                                    HttpServletResponse response,
                                    @RequestBody String requestBody) {
 
-        sysProjectService.save(requestBody);
+        //加锁
+        String platformAddress = platformAddressService.getPlatformAddress();
+        if (StringUtils.isEmpty(platformAddress)) {
+            throw new WitshareException(EnumResponseText.NoPlatformAddress);
+        }
+        String txLockKey = PLATFORM_ADDRESS_LOCK + platformAddress;
+        String lockId = distributedLocker.lock(txLockKey, PLATFORM_ADDRESS_TIME);
+        if (StringUtils.isEmpty(lockId)) {
+            throw new WitshareException(EnumResponseText.NoPlatformAddress);
+        }
+        //保存
+        sysProjectService.save(requestBody, platformAddress);
+
+        //释放锁
+        distributedLocker.unlock(txLockKey, lockId);
+
         return ResponseBean.newInstanceSuccess();
     }
 

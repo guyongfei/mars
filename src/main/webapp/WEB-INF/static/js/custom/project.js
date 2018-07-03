@@ -1,4 +1,3 @@
-var logStr;
 var view;
 var pdfEn;
 var pdfEnName;
@@ -12,9 +11,6 @@ var projectNow;
 var projectToken;
 var tokenDecimal;
 var addMethod = true;
-var tokenAddressReg = /^0x[a-fA-F0-9]{60}$/;
-var tokenAddressesReg = /^(0x[a-fA-F0-9]{60}\s*)*$/;
-var regToken = new RegExp(tokenAddressReg);
 var exportTime;
 
 function getNowFormatDate(date) {
@@ -22,7 +18,7 @@ function getNowFormatDate(date) {
         date = new Date();
     }
     if (date.getFullYear() == 2000) {
-        return "-"
+        return ""
     }
     var seperator1 = "-";
     var seperator2 = ":";
@@ -229,8 +225,9 @@ function projectStatusFormatter(value, row, index) {
 }
 
 function timeFormatter(value, row, index) {
+    var nowFormatDate = getNowFormatDate(new Date(value));
     return [
-        '<label  >' + getNowFormatDate(new Date(value)) + '</label>'
+        '<label  >' + nowFormatDate + '</label>'
     ].join('');
 }
 
@@ -486,6 +483,8 @@ function getProject(row) {
                 tokenDecimal = project.tokenDecimal;
                 projectToken = project.projectToken;
                 $('#projectToken').html(project.projectToken);
+                $('#platformAddressDiv').show();
+                $('#platformAddress').html(project.platformAddress);
                 $('#tokenAddress').val(project.tokenAddress);
                 $('#projectAddress').val(project.projectAddress);
                 $('#softCap').val(numberFormat(project.softCap));
@@ -584,7 +583,7 @@ $('#btn_add').click(function () {
             console.log(data);
             if (data.success) {
                 var addressCount = parseInt(data.data);
-                if (addressCount <= 1) {
+                if (addressCount < 1) {
                     layer.msg("平台地址还剩" + addressCount + "个，建议添加地址后再新增项目。", {
                         time: 5000,
                         icon: 2,
@@ -629,6 +628,9 @@ $('#addModal').on('hidden.bs.modal', function () {
     $('#logoImg').attr('src', "");
     logoStr = "";
     addMethod = true;
+    $('#platformAddress').html('');
+    $('#platformAddressDiv').hide();
+    $('#projectToken').html('');
 })
 
 

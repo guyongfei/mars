@@ -1,20 +1,26 @@
 package com.witshare.mars.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.witshare.mars.constant.EnumResponseText;
-import com.witshare.mars.dao.redis.RedisCommonDao;
+import com.witshare.mars.dao.mysql.PlatformAddressMapper;
+import com.witshare.mars.dao.mysql.StaticPlatformAddressMapper;
 import com.witshare.mars.exception.WitshareException;
+import com.witshare.mars.pojo.domain.PlatformAddress;
+import com.witshare.mars.pojo.domain.PlatformAddressExample;
 import com.witshare.mars.pojo.dto.BasePageBean;
-import com.witshare.mars.pojo.dto.PlatformAddressBean;
 import com.witshare.mars.service.PlatformAddressService;
-import com.witshare.mars.util.RedisKeyUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
-import org.apache.commons.lang3.RandomUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.sql.Timestamp;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 import static com.witshare.mars.constant.CacheConsts.KEY_DATA;
 
@@ -25,12 +31,15 @@ import static com.witshare.mars.constant.CacheConsts.KEY_DATA;
 public class PlatformAddressServiceImpl implements PlatformAddressService {
 
     @Autowired
-    private RedisCommonDao redisCommonDao;
+    private PlatformAddressMapper platformAddressMapper;
+    @Autowired
+    private StaticPlatformAddressMapper staticPlatformAddressMapper;
 
     @Override
     public void delete(String address) {
-        String platformAddressKey = RedisKeyUtil.getPlatformAddressKey();
-        redisCommonDao.zDel(platformAddressKey, address);
+        PlatformAddressExample platformAddressExample = new PlatformAddressExample();
+        platformAddressExample.or().andPlatformAddressEqualTo(address);
+        platformAddressMapper.deleteByExample(platformAddressExample);
     }
 
     @Override
@@ -39,39 +48,53 @@ public class PlatformAddressServiceImpl implements PlatformAddressService {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
         String words = requestBody.get(KEY_DATA);
-        String[] split = words.split("\n");
+        String[] split = words.split("\\s");
         List<String> list = Arrays.asList(split);
         HashSet<String> set = new HashSet<>();
-        set.addAll(list);
+        list.forEach(p -> {
+            if (!StringUtils.isAnyBlank(p)) {
+                set.add(p.trim());
+            }
+        });
         if (CollectionUtils.isEmpty(set)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        long nowTime = System.currentTimeMillis();
-        //保存
-        set.forEach(p -> {
-            double v = nowTime + RandomUtils.nextDouble(0, 1);
-            redisCommonDao.zAdd(RedisKeyUtil.getPlatformAddressKey(), p, v);
-        });
+        staticPlatformAddressMapper.saveOrUpdate(set);
+
     }
 
     @Override
+    public void add(String address) {
+        if (StringUtils.isAnyBlank(address)) {
+            return;
+        }
+        Timestamp current = new Timestamp(System.currentTimeMillis());
+        PlatformAddress platformAddress = new PlatformAddress();
+        platformAddress.setPlatformAddress(address);
+        platformAddress.setCreateTime(current);
+        platformAddress.setUpdateTime(current);
+        platformAddressMapper.insert(platformAddress);
+    }
+
+
+    @Override
     public String getPlatformAddress() {
-        Set<String> strings = redisCommonDao.zGetAndDelete(RedisKeyUtil.getPlatformAddressKey());
-        if (CollectionUtils.isNotEmpty(strings)) {
-            return strings.iterator().next();
+        PlatformAddressExample platformAddressExample = new PlatformAddressExample();
+        List<PlatformAddress> platformAddresses = platformAddressMapper.selectByExample(platformAddressExample);
+        if (CollectionUtils.isNotEmpty(platformAddresses)) {
+            return platformAddresses.get(0).getPlatformAddress();
         }
         return null;
     }
 
     @Override
     public int count() {
-        String platformAddressKey = RedisKeyUtil.getPlatformAddressKey();
-        return (int) redisCommonDao.zCount(platformAddressKey);
-//        return 1;
+        PlatformAddressExample platformAddressExample = new PlatformAddressExample();
+        return platformAddressMapper.countByExample(platformAddressExample);
     }
 
     @Override
-    public PageInfo<PlatformAddressBean> getList(BasePageBean basePageBean) {
+    public PageInfo<PlatformAddress> getList(BasePageBean basePageBean) {
         if (basePageBean == null) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
@@ -80,32 +103,9 @@ public class PlatformAddressServiceImpl implements PlatformAddressService {
         if (pageSize == null || pageNum == null) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        pageSize = pageSize <= 0 ? 10 : pageSize;
-        pageNum = pageNum <= 0 ? 1 : pageNum;
-
-        int total = this.count();
-
-        PageInfo<PlatformAddressBean> pageInfo = new PageInfo<>();
-        pageInfo.setPageNum(pageNum);
-        pageInfo.setPageSize(pageSize);
-        pageInfo.setTotal(total);
-
-        if (total == 0) {
-            return pageInfo;
-        }
-        int totalPage = total / pageSize + 1;
-        pageNum = pageNum <= totalPage ? pageNum : totalPage;
-        int offset = (pageNum - 1) * pageSize;
-
-
-        String platformAddressKey = RedisKeyUtil.getPlatformAddressKey();
-        Set<String> set = redisCommonDao.zRevRangeByScore(platformAddressKey, Double.MIN_VALUE, Double.MAX_VALUE, offset, pageSize);
-        LinkedList<PlatformAddressBean> list = new LinkedList<>();
-        set.forEach(p -> {
-            PlatformAddressBean platformAddressBean = PlatformAddressBean.newInstance().setAddress(p);
-            list.add(platformAddressBean);
-        });
-        pageInfo.setList(list);
+        PlatformAddressExample platformAddressExample = new PlatformAddressExample();
+        PageInfo<PlatformAddress> pageInfo = PageHelper.startPage(pageNum, pageSize)
+                .doSelectPageInfo(() -> platformAddressMapper.selectByExample(platformAddressExample));
         return pageInfo;
     }
 

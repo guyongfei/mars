@@ -1,6 +1,7 @@
 package com.witshare.mars.controller;
 
 import com.github.pagehelper.PageInfo;
+import com.witshare.mars.pojo.domain.PlatformAddress;
 import com.witshare.mars.pojo.dto.BasePageBean;
 import com.witshare.mars.pojo.dto.PlatformAddressBean;
 import com.witshare.mars.pojo.util.ResponseBean;
@@ -41,7 +42,7 @@ public class ManagementPlatformAddressController {
     @RequestMapping(value = "/platform-addresses", method = RequestMethod.GET)
     public ResponseBean list(BasePageBean basePageBean) {
 
-        PageInfo<PlatformAddressBean> pageInfo = platformAddressService.getList(basePageBean);
+        PageInfo<PlatformAddress> pageInfo = platformAddressService.getList(basePageBean);
         return ResponseBean.newInstanceSuccess(pageInfo);
     }
 

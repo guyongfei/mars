@@ -172,6 +172,7 @@ public class UserTxServiceImpl implements UserTxService {
         distributionStatusVoPageInfo.setList(distributionStatusVos);
         return distributionStatusVoPageInfo;
     }
+
     @Override
     public PageInfo<RecordUserTxBean> getList(String projectGid) {
         if (StringUtils.isBlank(projectGid)) {
@@ -190,5 +191,54 @@ public class UserTxServiceImpl implements UserTxService {
         return this.getPlatformStatusCount(recordUserTxBean);
     }
 
+    @Override
+    public PageInfo<DistributionStatusVo> getUserTxStatusCount(String projectGid) {
+        RecordUserTxBean recordUserTxBean = RecordUserTxBean.newInstance().setProjectGid(projectGid);
+        return this.getUserTxStatusCount(recordUserTxBean);
+    }
 
+    @Override
+    public PageInfo<DistributionStatusVo> getUserTxStatusCount(RecordUserTxBean recordUserTxBean) {
+
+        if (recordUserTxBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String projectGid = recordUserTxBean.getProjectGid();
+        if (StringUtils.isEmpty(projectGid)) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+
+        PageInfo<DistributionStatusVo> distributionStatusVoPageInfo = new PageInfo<>();
+        RecordUserTxExample recordUserTxExample = new RecordUserTxExample();
+        recordUserTxExample.or().andProjectGidEqualTo(projectGid);
+        List<RecordUserTx> recordUserTxes = recordUserTxMapper.selectByExample(recordUserTxExample);
+        LinkedList<DistributionStatusVo> distributionStatusVos = new LinkedList<>();
+        int[] userTxStatusArr = new int[100];
+        int[] needDistributeArr = new int[100];
+        recordUserTxes.forEach(p -> {
+            Integer userTxStatus = p.getUserTxStatus();
+            Integer platformTxStatus = p.getPlatformTxStatus();
+            userTxStatusArr[userTxStatus]++;
+            if ((userTxStatus == 2 || userTxStatus == 22 || userTxStatus == 23) && (platformTxStatus == 3 || platformTxStatus == 0)) {
+                needDistributeArr[userTxStatus]++;
+            }
+        });
+
+        for (int i = 0; i < 100; i++) {
+            int value = userTxStatusArr[i];
+            if (value > 0) {
+                DistributionStatusVo distributionStatusVo = DistributionStatusVo.newInstance()
+                        .setUserTxStatus(i)
+                        .setCount(value);
+                distributionStatusVos.add(distributionStatusVo);
+                distributionStatusVo.setNeedDistributeCount(needDistributeArr[i]);
+            }
+        }
+        int total = distributionStatusVos.size();
+        distributionStatusVoPageInfo.setPageSize(total);
+        distributionStatusVoPageInfo.setPageNum(1);
+        distributionStatusVoPageInfo.setTotal(total);
+        distributionStatusVoPageInfo.setList(distributionStatusVos);
+        return distributionStatusVoPageInfo;
+    }
 }

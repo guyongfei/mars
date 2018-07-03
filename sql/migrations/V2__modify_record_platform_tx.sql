@@ -20,3 +20,12 @@ CREATE TABLE `record_platform_tx` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uk_tx_hash` (`tx_hash`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='平台交易流水表';
+
+CREATE TABLE `platform_address` (
+  `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `platform_address` VARCHAR(50) NOT NULL DEFAULT '' COMMENT '平台地址',
+  `create_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '创建时间',
+  `update_time` TIMESTAMP NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '修改时间',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `platform_address` (`platform_address`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8 COMMENT='平台地址表';
