@@ -129,20 +129,6 @@ $(function () {
         $('#inner_table').bootstrapTable('refresh', {pageNumber: 1});
     })
 
-    // $('#addresses').change(function () {
-    //     var data = $(this).val();
-    //     var arr = new Array(); //定义一数组
-    //     arr = data.split("\n"); //字符分割
-    //     var str = ''
-    //     for (i = 0; i < arr.length; i++) {
-    //         var word = arr[i].trim();
-    //         if (word.length > 1) {
-    //             str += arr[i] + "\n"; //分割后的字符输出
-    //         }
-    //     }
-    //     $('#addEvent').bootstrapValidator("resetForm", true);
-    //     $(this).val(str.substr(0,str.length-1))
-    // })
 
     $('#addEvent').bootstrapValidator({
         message: 'This value is not valid',

@@ -322,57 +322,6 @@ var TableInit_ = function () {
     return oTableInit_;
 };
 
-// function group(index, row, $detail) {
-//     var parentId = row.status;
-//     var group_com = $detail.html('<table></table>').find('table');
-//     $(group_com).bootstrapTable({
-//         striped: true,                      //是否显示行间隔色
-//         cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-//         pageNumber: 1,                       //初始化加载第一页，默认第一页
-//         pageSize: 10,                       //每页的记录行数（*）
-//         showColumns: false,                  //是否显示所有的列
-//         showRefresh: false,                  //是否显示刷新按钮
-//         minimumCountColumns: 1,             //最少允许的列数
-//         clickToSelect: false,                //是否启用点击选中行
-//         uniqueId: "userTxStatus",                     //每一行的唯一标识，一般为主键列
-//         showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
-//         cardView: false,                    //是否显示详细视图
-//         detailView: false,                   //是否显示父子表
-//         checkboxHeader: false,
-//
-//         columns: [{
-//             field: 'checkStatus',
-//             checkbox: true,
-//             title: '打币',
-//             formatter: stateFormatter
-//         }, {
-//             field: 'userTxStatus',
-//             align: 'center',
-//             title: 'payTx状态',
-//             formatter: userTxStatusFormatter
-//         }, {
-//             field: 'count',
-//             align: 'center',
-//             title: '数量',
-//             formatter: errorCountFormatter
-//         }, {
-//             field: 'userTxStatus',
-//             title: '操作',
-//             align: 'center',
-//             valign: 'middle',
-//             events: distributionEvents,
-//             formatter: distributionFormatter
-//         }]
-//         , data: row.child
-//         ,
-//         formatShowingRows: function (pageFrom, pageTo, totalRows) {
-//             return '';
-//         }
-//     })
-//     ;
-// }
-
-
 function statePlatFormatter(value, row, index) {
     if (parseInt(row.platformTxStatus) != 0) {
         return {
@@ -485,11 +434,22 @@ function error_table_distribution() {
 
 // 打币设置模态框
 function distribution(txStatus_, txId_, platformStatus_) {
+
+    var projectStatus = project.projectStatus;
+
+    // if (projectStatus == 1 || projectStatus == 2) {
+    //     bootbox.confirm("项目还在认筹中，确认需要提前打币？", function (result) {
+    //         if (result) {
+    //             return;
+    //         }
+    //     })
+    // }
     userTxStatus = txStatus_;
     txId = txId_;
     platformTxStatus = platformStatus_;
     $('#distributionModal').modal('show');
 }
+
 
 window.distributionEvents = {
     'click .distribution': function (e, value, row, index) {
@@ -587,12 +547,16 @@ $(function () {
         //如果 项目状态已经开始则加载 交易记录表
         if (repo.projectToken && repo.projectStatus >= 1 && !init) {
 
-            //加载table
+            //加载 交易详情表
             var oTable = new TableInit();
             oTable.Init();
 
 
-            //加载table
+            //加载 打币状态表
+            var oTable_ = new TableInit_();
+            oTable_.Init();
+
+            //加载 查询状态表
             var oTable_tx_status = new TableInit_tx_status();
             oTable_tx_status.Init();
 
@@ -602,23 +566,20 @@ $(function () {
             }
         }
         //如果 项目状态为已完成则加载打币异常表
-        if (repo.projectToken && repo.projectStatus >= 3 && !init) {
-
-            //加载error table
-            var oTable_ = new TableInit_();
-            oTable_.Init();
-            var $error = $('.error-infos');
-            for (i = 0; i < $error.length; i++) {
-                $error[i].style.display = "block";
-            }
-        }
+        // if (repo.projectToken && repo.projectStatus >= 3 && !init) {
+        //
+        //
+        //     var $error = $('.error-infos');
+        //     for (i = 0; i < $error.length; i++) {
+        //         $error[i].style.display = "block";
+        //     }
+        // }
 
         if (projectGid) {
             var milliseconds = new Date().getMilliseconds();
             if (loadTableTime || milliseconds - loadTableTime > 100) {
                 reloadTable(1);
             }
-
             if (!loadTableTime) {
                 loadTableTime = milliseconds;
                 reloadTable(1);
@@ -629,88 +590,6 @@ $(function () {
         return repo.projectToken || repo.text;
     }
 
-
-    /* $('#projectList').change(function () {
-     var i;
-     var $txError = $('.tx-infos,.error-infos');
-     for (i = 0; i < $txError.length; i++) {
-     $txError[i].style.display = "none";
-     }
-     projectGid = $(this).val()
-     alert(projectGid)
-     $.ajax({
-     url: contextPath + "/management/project/" + projectGid,
-     type: "get",
-     contentType: "application/json;charset=UTF-8",
-     beforeSend: function () {
-     loadingIndex = layer.msg('处理中', {
-     icon: 16
-     });
-     return true;
-     },
-     success: function (data) {
-     console.log(data);
-     layer.close(loadingIndex);
-     if (data.success) {
-     project = data.data;
-     var i;
-     var $txError = $('.tx-infos,.error-infos');
-     for (i = 0; i < $txError.length; i++) {
-     $txError[i].style.display = "none";
-     }
-
-     //如果 项目状态已经开始则加载 交易记录表
-     if (project.projectToken && project.projectStatus >= 1 && !init) {
-
-     //加载table
-     var oTable = new TableInit();
-     oTable.Init();
-
-
-     //加载table
-     var oTable_tx_status = new TableInit_tx_status();
-     oTable_tx_status.Init();
-
-     var $tx = $('.tx-infos');
-     for (i = 0; i < $tx.length; i++) {
-     $tx[i].style.display = "block";
-     }
-
-     }
-     //如果 项目状态为已完成则加载打币异常表
-     if (project.projectToken && project.projectStatus >= 3 && !init) {
-
-     //加载error table
-     var oTable_ = new TableInit_();
-     oTable_.Init();
-     var $error = $('.error-infos');
-     for (i = 0; i < $error.length; i++) {
-     $error[i].style.display = "block";
-     }
-     }
-
-     if (projectGid) {
-     var milliseconds = new Date().getMilliseconds();
-     if (!loadTableTime || milliseconds - loadTableTime > 100) {
-     reloadTable(1);
-     }
-     loadTableTime = milliseconds;
-     reloadTable(1);
-     }
-
-     } else {
-     layer.msg(data.message, {
-     time: 2000,
-     icon: 0,
-     shift: 1
-     }, function () {
-     })
-     }
-     }
-     })
-
-
-     })*/
 
     ////////////////////////////////////以下为打币异常表/////////////////////////////////////////////
 
