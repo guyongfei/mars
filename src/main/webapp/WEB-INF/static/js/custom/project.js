@@ -10,6 +10,7 @@ var pdfJaName;
 var projectNow;
 var projectToken;
 var tokenDecimal;
+var logoStr;
 var addMethod = true;
 var exportTime;
 
@@ -485,6 +486,9 @@ function getProject(row) {
                 $('#projectToken').html(project.projectToken);
                 $('#platformAddressDiv').show();
                 $('#platformAddress').html(project.platformAddress);
+                $('#tokenAddressDiv_').show();
+                $('#tokenAddressDiv').hide();
+                $('#tokenAddress_').html(project.tokenAddress);
                 $('#tokenAddress').val(project.tokenAddress);
                 $('#projectAddress').val(project.projectAddress);
                 $('#softCap').val(numberFormat(project.softCap));
@@ -591,7 +595,7 @@ $('#btn_add').click(function () {
                     }, function () {
                         $('.close').click()
                     })
-                }else{
+                } else {
                     $('#addModal').modal('show');
                     addMethod = true;
                 }
@@ -608,7 +612,7 @@ $('#addModal').on('hidden.bs.modal', function () {
     $('#addEvent')[0].reset();
     $('#addEvent')
         .bootstrapValidator("resetForm", true)
-        .bootstrapValidator('addField', 'log', {
+        .bootstrapValidator('addField', 'logo', {
             validators: {
                 notEmpty: {
                     message: '图像不能为空'
@@ -1175,7 +1179,7 @@ $(function () {
             'projectGid': projectGid,
             'tokenDecimal': addMethod ? tokenDecimal : projectNow.tokenDecimal,
             'projectToken': addMethod ? projectToken : projectNow.projectToken,
-            'tokenAddress': $(' #tokenAddress').val(),
+            'tokenAddress': addMethod ? $(' #tokenAddress').val() : projectNow.tokenAddress,
             'projectNameEn': $(' #projectNameEn').val(),
             'projectNameCn': $(' #projectNameCn').val(),
             'projectNameKo': $(' #projectNameKo').val(),
@@ -1337,7 +1341,7 @@ $(function () {
                             $('#tokenDecimal').html(tokenDecimal);
                             $('#projectNameEn').val(data.name);
                             $.ajax({
-                                url: contextPath + "/management/project?tokenAddress="+tokenAddress,
+                                url: contextPath + "/management/project?tokenAddress=" + tokenAddress,
                                 type: "get",
                                 contentType: "application/json;charset=UTF-8",
                                 beforeSend: function () {
@@ -1358,61 +1362,61 @@ $(function () {
                                             $('#tokenAddress').val('')
                                         })
                                     }
-                                }});
-                        } else
-                            {
-                                layer.msg("智能合约地址未找到，请再次输入", {
-                                    time: 2000,
-                                    icon: 0,
-                                    shift: 1
-                                }, function () {
-                                    $('#tokenAddress').val('')
-                                })
-                            }
+                                }
+                            });
+                        } else {
+                            layer.msg("智能合约地址未找到，请再次输入", {
+                                time: 2000,
+                                icon: 0,
+                                shift: 1
+                            }, function () {
+                                $('#tokenAddress').val('')
+                            })
                         }
-                    })
+                    }
+                })
             }
         })
     });
-        /*    {
-         "code": "0",
-         "message": "成功",
-         "result": {
-         "name": "Bee Honey Token",
-         "symbol": "HONEY",
-         "decimal": "9"
-         }
-         }*/
+    /*    {
+     "code": "0",
+     "message": "成功",
+     "result": {
+     "name": "Bee Honey Token",
+     "symbol": "HONEY",
+     "decimal": "9"
+     }
+     }*/
 
-        function checkPrice() {
-            var priceRate = numeral($('#priceRate').val()).value();
+    function checkPrice() {
+        var priceRate = numeral($('#priceRate').val()).value();
 
-            if (!priceRate) {
-                layer.msg("价格设置有误", {
-                    time: 2000,
-                    icon: 0,
-                    shift: 1
-                });
-                return false;
-            }
-            return true;
-        };
+        if (!priceRate) {
+            layer.msg("价格设置有误", {
+                time: 2000,
+                icon: 0,
+                shift: 1
+            });
+            return false;
+        }
+        return true;
+    };
 
-        function checkCap() {
-            var softCap = numeral($('#softCap').val()).value();
-            var hardCap = numeral($('#hardCap').val()).value();
-            var minPurchaseAmount = numeral($('#minPurchaseAmount').val()).value();
+    function checkCap() {
+        var softCap = numeral($('#softCap').val()).value();
+        var hardCap = numeral($('#hardCap').val()).value();
+        var minPurchaseAmount = numeral($('#minPurchaseAmount').val()).value();
 
-            if (!hardCap || !softCap || !minPurchaseAmount || hardCap <= softCap || minPurchaseAmount >= softCap) {
-                layer.msg("软硬顶或认购数量设置有误", {
-                    time: 2000,
-                    icon: 0,
-                    shift: 1
-                });
-                return false;
-            }
-            return true;
-        };
+        if (!hardCap || !softCap || !minPurchaseAmount || hardCap <= softCap || minPurchaseAmount >= softCap) {
+            layer.msg("软硬顶或认购数量设置有误", {
+                time: 2000,
+                icon: 0,
+                shift: 1
+            });
+            return false;
+        }
+        return true;
+    };
 
 
-    })
+})
