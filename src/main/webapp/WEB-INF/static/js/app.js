@@ -1,19 +1,48 @@
-var commonId = null;
-var commonIndex = null;
-var taskTypeName = null;
-var appInfoDetailIndex = null;
-var appInfoDetailId = null;
-var appInfoId = null;
-var appInfoIndex = null;
 var taskType = null;
-var appKey = null;
-var noticeId, noticeIndex;
 var projectGid;
 var project;
 
 var contextPath = $("#contextPath").text();
 var frontPath = $("#frontPath").text();
 var moonPath = $("#moonPath").text();
+
+
+var tokenAddressReg = /^0x[a-fA-F0-9]{40}$/;
+var tokenAddressesReg = /^(0x[a-fA-F0-9]{40}(\s+)*)*$/;
+var regToken = new RegExp(tokenAddressReg);
+
+
+var txHashReg = /^0x[a-fA-F0-9]{64}$/;
+//平台交易
+var platformTxStatusMap =
+    {
+        0: '未验证',
+        1: '交易中',
+        2: '交易成功',
+        3: '交易失败',
+        4: '交易作废'
+    };
+
+var userTxStatusMap =
+    {
+        0: '初始状态',
+        1: '交易还未被打包',
+        2: '验证成功',
+        21: '验证失败（to不是平台地址)',
+        22: '验证失败（from不匹配）',
+        23: '验证失败（金额不匹配）',
+        3: '交易失败',
+        4: '交易不存在'
+    };
+
+var disTributeStatusMap =
+    {
+        0: '初始状态',
+        1: '打币中',
+        2: '成功',
+        3: '失败',
+        4: '交易作废'
+    };
 
 
 $(function () {

@@ -3,47 +3,11 @@ var userTxStatus = new Array();
 var txId;
 var platformTxStatus = new Array();
 var loadTableTime;
-//
-// var userTxStatusArr = [
-//     {value: 0, des: '初始状态'},
-//     {value: 1, des: '交易还未被打包'},
-//     {value: 2, des: '验证成功'},
-//     {value: 21, des: '验证失败（to不是平台地址'},
-//     {value: 22, des: '验证失败（from不匹配）'},
-//     {value: 23, des: '验证失败（金额不匹配）'},
-//     {value: 3, des: '交易失败'},
-//     {value: 4, des: '交易不存在'}
-// ]
 
 
-var userTxStatusMap =
-    {
-        0: '初始状态',
-        1: '交易还未被打包',
-        2: '验证成功',
-        21: '验证失败（to不是平台地址)',
-        22: '验证失败（from不匹配）',
-        23: '验证失败（金额不匹配）',
-        3: '交易失败',
-        4: '交易不存在'
-    };
-
-
-var canDistributeUserTxStatusArr = [2, 22, 23];
-
-
-var platformStatusMap =
-    {
-        0: '初始状态',
-        1: '打币中',
-        2: '成功',
-        3: '失败',
-        4: '交易作废'
-    };
-
+var oTableInit = new Object();
 
 var TableInit = function () {
-    var oTableInit = new Object();
     //初始化Table
     oTableInit.Init = function () {
         $('#tx_table').bootstrapTable({
@@ -159,44 +123,44 @@ var TableInit = function () {
             }]
         });
     };
-    //得到查询的参数
-    oTableInit.queryParams = function (params) {
-        var temp = {};
-        var pageSize = params.limit;
-        if (pageSize) {
-            temp.pageSize = pageSize;//页面大小
-            temp.pageNum = params.offset / pageSize + 1  //页码
-        }
 
-        if (projectGid) {
-            temp.projectGid = projectGid;
-        }
-        var email = $('#email_').val().trim();
-        if (email) {
-            temp.email = email;
-        }
-        var payTxId = $('#payTxId_').val().trim();
-        if (payTxId) {
-            temp.payTxId = payTxId;
-        }
-        var payTx = $('#payTx_').val().trim();
-        if (payTx) {
-            temp.payTx = payTx;
-        }
-        var userTxStatus = $('#userTxStatus_ option:selected').val();
-
-        if (userTxStatus) {
-            temp.userTxStatus = userTxStatus;
-        }
-        var platformTxStatus = $('#platformTxStatus_ option:selected').val();
-        if (platformTxStatus) {
-            temp.platformTxStatus = platformTxStatus;
-        }
-        return temp;
-    };
     return oTableInit;
 };
+//得到查询的参数
+oTableInit.queryParams = function (params) {
+    var temp = {};
+    var pageSize = params.limit;
+    if (pageSize) {
+        temp.pageSize = pageSize;//页面大小
+        temp.pageNum = params.offset / pageSize + 1  //页码
+    }
 
+    if (projectGid) {
+        temp.projectGid = projectGid;
+    }
+    var email = $('#email_').val().trim();
+    if (email) {
+        temp.email = email;
+    }
+    var payTxId = $('#payTxId_').val().trim();
+    if (payTxId) {
+        temp.payTxId = payTxId;
+    }
+    var payTx = $('#payTx_').val().trim();
+    if (payTx) {
+        temp.payTx = payTx;
+    }
+    var userTxStatus = $('#userTxStatus_ option:selected').val();
+
+    if (userTxStatus) {
+        temp.userTxStatus = userTxStatus;
+    }
+    var platformTxStatus = $('#platformTxStatus_ option:selected').val();
+    if (platformTxStatus) {
+        temp.platformTxStatus = platformTxStatus;
+    }
+    return temp;
+};
 window.txTableEvents = {};
 
 function txTableFormatter(value, row, index) {
@@ -211,12 +175,12 @@ function txTableFormatter(value, row, index) {
 }
 
 
-var TableInit_ = function () {
-    var oTableInit_ = new Object();
+var TableInit_tx_status = function () {
+    var oTableInit_tx_status = new Object();
     //初始化Table
-    oTableInit_.Init = function () {
-        $('#error_table').bootstrapTable({
-            url: contextPath + '/management/distribution-infos?projectGid=' + projectGid,         //请求后台的URL（*）
+    oTableInit_tx_status.Init = function () {
+        $('#tx_status_table').bootstrapTable({
+            url: contextPath + '/management/tx-status-infos',         //请求后台的URL（*）
             method: 'get',                      //请求方式（*）
             toolbar: "toolbar_",
             striped: true,                      //是否显示行间隔色
@@ -224,6 +188,89 @@ var TableInit_ = function () {
             pagination: true,                   //是否显示分页（*）
             sortable: false,                     //是否启用排序
             sortOrder: "asc",                   //排序方式
+            queryParams: oTableInit.queryParams,//传递参数（*）
+            // queryParams: oTableInit_tx_status.queryParams,//传递参数（*）
+            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                       //初始化加载第一页，默认第一页
+            pageSize: 10,                       //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+            strictSearch: true,
+            showColumns: false,                  //是否显示所有的列
+            showRefresh: false,                  //是否显示刷新按钮
+            minimumCountColumns: 1,             //最少允许的列数
+            clickToSelect: false,                //是否启用点击选中行
+//                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
+            uniqueId: "userTxStatus",                     //每一行的唯一标识，一般为主键列
+            showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
+            cardView: false,                    //是否显示详细视图
+            detailView: false,                   //是否显示父子表
+            checkboxHeader: false,
+            responseHandler: function (res) {
+                console.log(res)
+                return {
+                    "total": 10,//总页数
+                    "rows": res.data.list   //数据
+                };
+            },
+            columns: [{
+                field: 'userTxStatus',
+                align: 'center',
+                title: '查询状态',
+                width: '50%',
+                formatter: userTxStatusFormatter
+            }, {
+                field: 'count',
+                align: 'center',
+                title: '数量',
+                width: '20%',
+                formatter: errorCountFormatter
+            }, {
+                field: 'needDistributeCount',
+                title: '操作',
+                align: 'center',
+                valign: 'middle',
+                events: distributionEvents,
+                formatter: distributionUserTxFormatter
+            }],
+
+            formatShowingRows: function (pageFrom, pageTo, totalRows) {
+                return '';
+            },
+        });
+        //得到查询的参数
+        oTableInit_tx_status.queryParams = function (params) {
+            var temp = {};
+            var pageSize = params.limit;
+            if (pageSize) {
+                temp.pageSize = pageSize;//页面大小
+                temp.pageNum = params.offset / pageSize + 1  //页码
+            }
+            alert(projectGid)
+
+            if (projectGid) {
+                temp.projectGid = projectGid;
+            }
+            return temp;
+        };
+    };
+    return oTableInit_tx_status;
+};
+
+var TableInit_ = function () {
+    var oTableInit_ = new Object();
+    //初始化Table
+    oTableInit_.Init = function () {
+        $('#error_table').bootstrapTable({
+            url: contextPath + '/management/distribution-infos',         //请求后台的URL（*）
+            method: 'get',                      //请求方式（*）
+            toolbar: "toolbar_",
+            striped: true,                      //是否显示行间隔色
+            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            pagination: true,                   //是否显示分页（*）
+            sortable: false,                     //是否启用排序
+            sortOrder: "asc",                   //排序方式
+            queryParams: oTableInit.queryParams,//传递参数（*）
             // queryParams: oTableInit_.queryParams,//传递参数（*）
             sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                       //初始化加载第一页，默认第一页
@@ -239,7 +286,7 @@ var TableInit_ = function () {
             uniqueId: "projectGid",                     //每一行的唯一标识，一般为主键列
             showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
-            detailView: true,                   //是否显示父子表
+            detailView: false,                   //是否显示父子表
             checkboxHeader: false,
             responseHandler: function (res) {
                 return {
@@ -248,19 +295,16 @@ var TableInit_ = function () {
                 };
             },
             columns: [{
-                field: 'checkStatus',
-                checkbox: true,
-                title: '打币',
-                formatter: statePlatFormatter
-            }, {
                 field: 'platformTxStatus',
                 align: 'center',
                 title: '打币状态',
+                width: '50%',
                 formatter: platformStatusFormatter
             }, {
                 field: 'count',
                 align: 'center',
                 title: '数量',
+                width: '20%',
                 formatter: platformCountFormatter
             }, {
                 field: 'platformTxStatus',
@@ -270,77 +314,63 @@ var TableInit_ = function () {
                 events: distributionEvents,
                 formatter: distributionPlatFormatter
             }],
-            //注册加载子表的事件。注意下这里的三个参数！
-            onExpandRow: function (index, row, $detail) {
-                if (row.platformTxStatus == 3) {
-                    group(index, row, $detail)
-                }
-            },
             formatShowingRows: function (pageFrom, pageTo, totalRows) {
                 return '';
             }
         });
     };
-    //得到查询的参数
-    oTableInit_.queryParams = function (params) {
-        var temp = {};
-        if (projectGid) {
-            temp.projectGid = projectGid;
-        }
-        return temp;
-    };
     return oTableInit_;
 };
 
-function group(index, row, $detail) {
-    var parentId = row.status;
-    var group_com = $detail.html('<table></table>').find('table');
-    $(group_com).bootstrapTable({
-        striped: true,                      //是否显示行间隔色
-        cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-        pageNumber: 1,                       //初始化加载第一页，默认第一页
-        pageSize: 10,                       //每页的记录行数（*）
-        showColumns: false,                  //是否显示所有的列
-        showRefresh: false,                  //是否显示刷新按钮
-        minimumCountColumns: 1,             //最少允许的列数
-        clickToSelect: false,                //是否启用点击选中行
-        uniqueId: "userTxStatus",                     //每一行的唯一标识，一般为主键列
-        showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
-        cardView: false,                    //是否显示详细视图
-        detailView: false,                   //是否显示父子表
-        checkboxHeader: false,
-
-        columns: [{
-            field: 'checkStatus',
-            checkbox: true,
-            title: '打币',
-            formatter: stateFormatter
-        }, {
-            field: 'userTxStatus',
-            align: 'center',
-            title: 'payTx状态',
-            formatter: userTxStatusFormatter
-        }, {
-            field: 'count',
-            align: 'center',
-            title: '数量',
-            formatter: errorCountFormatter
-        }, {
-            field: 'userTxStatus',
-            title: '操作',
-            align: 'center',
-            valign: 'middle',
-            events: distributionEvents,
-            formatter: distributionFormatter
-        }]
-        , data: row.child
-        ,
-        formatShowingRows: function (pageFrom, pageTo, totalRows) {
-            return '';
-        }
-    })
-    ;
-}
+// function group(index, row, $detail) {
+//     var parentId = row.status;
+//     var group_com = $detail.html('<table></table>').find('table');
+//     $(group_com).bootstrapTable({
+//         striped: true,                      //是否显示行间隔色
+//         cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+//         pageNumber: 1,                       //初始化加载第一页，默认第一页
+//         pageSize: 10,                       //每页的记录行数（*）
+//         showColumns: false,                  //是否显示所有的列
+//         showRefresh: false,                  //是否显示刷新按钮
+//         minimumCountColumns: 1,             //最少允许的列数
+//         clickToSelect: false,                //是否启用点击选中行
+//         uniqueId: "userTxStatus",                     //每一行的唯一标识，一般为主键列
+//         showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
+//         cardView: false,                    //是否显示详细视图
+//         detailView: false,                   //是否显示父子表
+//         checkboxHeader: false,
+//
+//         columns: [{
+//             field: 'checkStatus',
+//             checkbox: true,
+//             title: '打币',
+//             formatter: stateFormatter
+//         }, {
+//             field: 'userTxStatus',
+//             align: 'center',
+//             title: 'payTx状态',
+//             formatter: userTxStatusFormatter
+//         }, {
+//             field: 'count',
+//             align: 'center',
+//             title: '数量',
+//             formatter: errorCountFormatter
+//         }, {
+//             field: 'userTxStatus',
+//             title: '操作',
+//             align: 'center',
+//             valign: 'middle',
+//             events: distributionEvents,
+//             formatter: distributionFormatter
+//         }]
+//         , data: row.child
+//         ,
+//         formatShowingRows: function (pageFrom, pageTo, totalRows) {
+//             return '';
+//         }
+//     })
+//     ;
+// }
 
 
 function statePlatFormatter(value, row, index) {
@@ -362,11 +392,11 @@ function stateFormatter(value, row, index) {
 }
 
 
-function distributionFormatter(value, row, index) {
+function distributionUserTxFormatter(value, row, index) {
     value = parseInt(value);
-    if (value == 2 || value == 22 || value == 23) {
+    if (value > 0) {
         var array = new Array();
-        array.push(value);
+        array.push(row.userTxStatus);
         return [
             '<button type="button" id="editRow1"  onclick="distribution(' + array + ',null,null)" class="distribution btn  btn-primary " " >打币</button>'
         ].join('')
@@ -382,7 +412,7 @@ function distributionPlatFormatter(value, row, index) {
         return [
             '<button type="button" id="editRow1"  onclick="distribution(null,null,' + array + ')" class="distribution btn  btn-primary " " >打币</button>'
         ].join('')
-    }else if(parseInt(value) == 3 && parseInt(row.count) > 0){
+    } else if (parseInt(value) == 3 && parseInt(row.count) > 0) {
         return '可点击行首 + 展开细节'
     } else {
         return ""
@@ -415,7 +445,7 @@ function platformCountTable(platformTxStatus, userTxStatus, obj) {
             $("#platformTxStatus_ option[value='" + platformTxStatus + "']").attr("selected", "selected");
         }
     }
-    if (userTxStatus) {
+    if (userTxStatus || userTxStatus == 0) {
         if (user !== userTxStatus) {
             $(obj).addClass(' btn-primary ')
             $("#userTxStatus_ option[value='" + userTxStatus + "']").attr("selected", "selected");
@@ -441,7 +471,7 @@ function error_table_distribution() {
         }
     })
     if (plat.length <= 0 && userTxStatus.length < 1) {
-        alert("请至少选中一行")
+        alert("请至少选中下面表格的一行")
     } else {
         plat.forEach(function (e, index) {
             platformTxStatus.push(e.platformTxStatus);
@@ -474,15 +504,18 @@ function userTxStatusFormatter(value, row, index) {
     ].join('');
 }
 
+
 function platformStatusFormatter(value, row, index) {
-    var state = platformStatusMap[value];
+    var state = disTributeStatusMap[value];
     var color = '#000';
     return [
         '<button class="btn ' + color + '" >' + state + '</button>'
     ].join('');
 }
+
+
 function platformTxStatusFormatter(value, row, index) {
-    var state = platformStatusMap[value];
+    var state = disTributeStatusMap[value];
     var color = '#000';
     var color_green = 'btn-danger';
     return [
@@ -517,6 +550,7 @@ $(function () {
             cache: true
         },
         placeholder: '请点击输入TOKEN',
+        allowClear: true,//允许清空
         escapeMarkup: function (markup) {
             return markup;
         }, // let our custom formatter work
@@ -524,6 +558,7 @@ $(function () {
         templateResult: formatRepo,
         templateSelection: formatRepoSelection
     });
+
 
     function formatRepo(repo) {
         if (repo.loading) {
@@ -549,7 +584,6 @@ $(function () {
         projectGid = repo.projectGid;
         project = repo;
 
-
         //如果 项目状态已经开始则加载 交易记录表
         if (repo.projectToken && repo.projectStatus >= 1 && !init) {
 
@@ -557,11 +591,15 @@ $(function () {
             var oTable = new TableInit();
             oTable.Init();
 
+
+            //加载table
+            var oTable_tx_status = new TableInit_tx_status();
+            oTable_tx_status.Init();
+
             var $tx = $('.tx-infos');
             for (i = 0; i < $tx.length; i++) {
                 $tx[i].style.display = "block";
             }
-
         }
         //如果 项目状态为已完成则加载打币异常表
         if (repo.projectToken && repo.projectStatus >= 3 && !init) {
@@ -577,15 +615,102 @@ $(function () {
 
         if (projectGid) {
             var milliseconds = new Date().getMilliseconds();
-            if (!loadTableTime || milliseconds - loadTableTime > 100) {
+            if (loadTableTime || milliseconds - loadTableTime > 100) {
                 reloadTable(1);
             }
-            loadTableTime = milliseconds;
-            reloadTable(1);
+
+            if (!loadTableTime) {
+                loadTableTime = milliseconds;
+                reloadTable(1);
+            }
+
         }
 
         return repo.projectToken || repo.text;
     }
+
+
+    /* $('#projectList').change(function () {
+     var i;
+     var $txError = $('.tx-infos,.error-infos');
+     for (i = 0; i < $txError.length; i++) {
+     $txError[i].style.display = "none";
+     }
+     projectGid = $(this).val()
+     alert(projectGid)
+     $.ajax({
+     url: contextPath + "/management/project/" + projectGid,
+     type: "get",
+     contentType: "application/json;charset=UTF-8",
+     beforeSend: function () {
+     loadingIndex = layer.msg('处理中', {
+     icon: 16
+     });
+     return true;
+     },
+     success: function (data) {
+     console.log(data);
+     layer.close(loadingIndex);
+     if (data.success) {
+     project = data.data;
+     var i;
+     var $txError = $('.tx-infos,.error-infos');
+     for (i = 0; i < $txError.length; i++) {
+     $txError[i].style.display = "none";
+     }
+
+     //如果 项目状态已经开始则加载 交易记录表
+     if (project.projectToken && project.projectStatus >= 1 && !init) {
+
+     //加载table
+     var oTable = new TableInit();
+     oTable.Init();
+
+
+     //加载table
+     var oTable_tx_status = new TableInit_tx_status();
+     oTable_tx_status.Init();
+
+     var $tx = $('.tx-infos');
+     for (i = 0; i < $tx.length; i++) {
+     $tx[i].style.display = "block";
+     }
+
+     }
+     //如果 项目状态为已完成则加载打币异常表
+     if (project.projectToken && project.projectStatus >= 3 && !init) {
+
+     //加载error table
+     var oTable_ = new TableInit_();
+     oTable_.Init();
+     var $error = $('.error-infos');
+     for (i = 0; i < $error.length; i++) {
+     $error[i].style.display = "block";
+     }
+     }
+
+     if (projectGid) {
+     var milliseconds = new Date().getMilliseconds();
+     if (!loadTableTime || milliseconds - loadTableTime > 100) {
+     reloadTable(1);
+     }
+     loadTableTime = milliseconds;
+     reloadTable(1);
+     }
+
+     } else {
+     layer.msg(data.message, {
+     time: 2000,
+     icon: 0,
+     shift: 1
+     }, function () {
+     })
+     }
+     }
+     })
+
+
+     })*/
 
     ////////////////////////////////////以下为打币异常表/////////////////////////////////////////////
 
@@ -611,6 +736,7 @@ $(function () {
 //重新加载表格
 function reloadTable(pageNum) {
     reloadErrorTable(pageNum);
+    reloadTxStatusTable(pageNum);
     reloadTxTable(pageNum);
 
 }
@@ -618,8 +744,13 @@ function reloadTable(pageNum) {
 function reloadErrorTable(pageNum) {
     $('#error_table').bootstrapTable('refresh', {pageNumber: pageNum});
 }
+
 function reloadTxTable(pageNum) {
     $('#tx_table').bootstrapTable('refresh', {pageNumber: pageNum});
+}
+
+function reloadTxStatusTable(pageNum) {
+    $('#tx_status_table').bootstrapTable('refresh', {pageNumber: pageNum});
 }
 
 function reloadUserTxStatusSelect() {
@@ -634,8 +765,8 @@ function reloadPlatformTxStatusSelect() {
     $('#platformTxStatus_')
         .empty()
         .prepend("<option value='' >请选择</option>");//添加第一个option值
-    for (var key in platformStatusMap) {
-        $("#platformTxStatus_").append("<option value='" + key + "'>" + platformStatusMap[key] + "</option>");
+    for (var key in disTributeStatusMap) {
+        $("#platformTxStatus_").append("<option value='" + key + "'>" + disTributeStatusMap[key] + "</option>");
     }
 }
 

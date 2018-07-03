@@ -1,4 +1,3 @@
-var txHashReg = /^0x[a-fA-F0-9]{64}$/;
 
 var TableInit = function () {
     var oTableInit = new Object();
@@ -20,7 +19,7 @@ var TableInit = function () {
             pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
             search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
             strictSearch: true,
-            showColumns: false,                  //是否显示所有的列
+            showColumns: true,                  //是否显示所有的列
             showRefresh: false,                  //是否显示刷新按钮
             minimumCountColumns: 1,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
@@ -48,66 +47,85 @@ var TableInit = function () {
             }, {
                 field: 'projectToken',
                 align: 'center',
-                title: 'TOKEN'
+                title: 'TOKEN',
+                visible: true
             }, {
                 field: 'txHash',
                 align: 'center',
-                title: '交易号'
+                title: '交易号',
+                visible: false
             }, {
                 field: 'txType',
                 align: 'center',
-                title: '交易类型'
+                title: '交易类型',
+                visible: false
             }, {
                 field: 'fromName',
                 align: 'center',
-                title: '发起方'
+                title: '发起方',
+                visible: true
             }, {
                 field: 'fromAddress',
                 align: 'center',
-                title: '发起方地址'
+                title: '发起方地址',
+                visible: false
             }, {
                 field: 'toName',
                 align: 'center',
-                title: '接收方'
+                title: '接收方',
+                visible: true
             }, {
                 field: 'toAddress',
                 align: 'center',
-                title: '接收方地址'
+                title: '接收方地址',
+                visible: false
             }, {
                 field: 'txTokenType',
                 align: 'center',
-                title: 'Token类型'
+                title: 'Token类型',
+                visible: true
             }, {
                 field: 'txAmount',
                 align: 'center',
-                title: '交易数额'
+                title: '交易数额',
+                visible: true
             }, {
                 field: 'ethFee',
                 align: 'center',
-                title: '交易费用'
+                title: '交易费用',
+                visible: false
             }, {
                 field: 'txStatus',
                 align: 'center',
-                title: '交易状态'
+                title: '交易状态',
+                formatter: platformTxStatusFormatter,
+                visible: true
             }, {
                 field: 'txTime',
                 align: 'center',
-                title: '交易时间'
+                title: '交易时间',
+                formatter: timeFormatter,
+                visible: true
             }, {
                 field: 'txVerificationTime',
                 align: 'center',
-                title: '验证时间'
+                title: '验证时间',
+                formatter: timeFormatter,
+                visible: false
             }, {
                 field: 'createTime',
                 align: 'center',
-                title: '创建时间'
+                title: '创建时间',
+                formatter: timeFormatter,
+                visible: false
             }, {
                 field: 'operate',
                 title: '操作',
                 align: 'center',
                 valign: 'middle',
                 events: operateEvents,
-                formatter: operateFormatter
+                formatter: operateFormatter,
+                visible: true
             }]
         });
     };
@@ -117,7 +135,8 @@ var TableInit = function () {
         var temp = {
             pageSize: params.limit,   //页面大小
             pageNum: params.offset / params.limit + 1,  //页码
-            queryStr: $("#txt_search").val().trim() //模糊查询
+            txHash: $("#txHash_search").val().trim(), //模糊查询
+            projectToken: $("#token_search").val().trim() //模糊查询
         };
         return temp;
     };
@@ -126,10 +145,17 @@ var TableInit = function () {
 
 function operateFormatter(value, row, index) {
     return [
-        '<button type="button" id="delete"  class="platform-tx btn  btn-primary " txHash="' + row.txHash + '" >删除</button>'
+        '<button type="button" id="delete"  class="platform-tx btn  btn-danger " txHash="' + row.txHash + '" >删除</button>'
     ].join('')
 };
-
+function platformTxStatusFormatter(value, row, index) {
+    var state = platformTxStatusMap[value];
+    var color = '#000';
+    var color_green = 'btn-danger';
+    return [
+        '<button class="btn ' + color + '" >' + state + '</button>'
+    ].join('');
+}
 
 window.operateEvents = {
     'click .platform-tx': function (e, value, row, index) {
@@ -234,15 +260,16 @@ $(function () {
                 layer.close(loadingIndex);
                 if (data.success) {
                     layer.msg("添加成功", {
-                        time: 1000,
+                        time: 2000,
                         icon: 1,
                         shift: 1
                     }, function () {
+                        $('#inner_table').bootstrapTable('refresh');
                         $('.close').click()
                     })
                 } else {
                     layer.msg(data.message, {
-                        time: 2000,
+                        time: 3000,
                         icon: 0,
                         shift: 1
                     }, function () {

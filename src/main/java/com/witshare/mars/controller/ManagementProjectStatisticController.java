@@ -71,6 +71,17 @@ public class ManagementProjectStatisticController {
     }
 
     /**
+     * 用户状态明细
+     */
+    @ResponseBody
+    @RequestMapping(value = "/tx-status-infos", method = RequestMethod.GET)
+    public ResponseBean userTxInfo(RecordUserTxBean recordUserTxBean) {
+
+        PageInfo<DistributionStatusVo> pageInfo = userTxService.getUserTxStatusCount(recordUserTxBean);
+        return ResponseBean.newInstanceSuccess(pageInfo);
+    }
+
+    /**
      * 打币状态明细
      */
     @ResponseBody

@@ -79,7 +79,7 @@ public class SysProjectServiceImpl implements SysProjectService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(String jsonBody) {
+    public void save(String jsonBody, String platformAddress) {
         if (StringUtils.isEmpty(jsonBody)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
@@ -94,10 +94,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         sysProjectBean.setProjectLogoLink(objectName);
 
         Timestamp current = new Timestamp(System.currentTimeMillis());
-        String platformAddress = platformAddressService.getPlatformAddress();
-        if (StringUtils.isEmpty(platformAddress)) {
-            throw new WitshareException(EnumResponseText.NoPlatformAddress);
-        }
+
         sysProjectBean.setPlatformAddress(platformAddress)
                 .setStartTime(sysProjectBean.getStartTime())
                 .setEndTime(sysProjectBean.getEndTime())
@@ -111,6 +108,8 @@ public class SysProjectServiceImpl implements SysProjectService {
         staticProjectDescriptionMapper.saveOrUpdate(sysProjectBean);
 
         staticProjectWebsiteMapper.saveOrUpdate(sysProjectBean);
+
+        platformAddressService.delete(platformAddress);
     }
 
 
@@ -240,8 +239,13 @@ public class SysProjectServiceImpl implements SysProjectService {
         Integer pageSize = sysProjectBean.getPageSize();
         pageSize = pageSize == null ? 10 : pageSize;
         pageNum = pageNum == null ? 1 : pageNum;
+        String queryStr = sysProjectBean.getQueryStr();
+        boolean blankQuery = StringUtils.isAnyBlank(queryStr);
         SysProjectExample sysProjectExample = new SysProjectExample();
-        sysProjectExample.or().andProjectTokenLike("%" + sysProjectBean.getQueryStr() + "%");
+        SysProjectExample.Criteria or = sysProjectExample.or();
+        if (!blankQuery) {
+            or.andProjectTokenLike("%" + queryStr + "%");
+        }
         PageInfo<SysProject> pageInfo = PageHelper.startPage(pageNum, pageSize)
                 .doSelectPageInfo(() -> sysProjectMapper.selectByExample(sysProjectExample));
         PageInfo<SysProjectListVo> pageInfo_ = new PageInfo<>();

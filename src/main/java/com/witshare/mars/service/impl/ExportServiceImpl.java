@@ -71,14 +71,15 @@ public class ExportServiceImpl implements ExportService {
             HSSFCellStyle cellStyleRight = book.createCellStyle();
             cellStyleRight.setAlignment(HSSFCellStyle.ALIGN_RIGHT); // 居右
 
-            HSSFSheet sheet1 = book.getSheet("项目详情");
-            HSSFSheet sheet2 = book.getSheet("每日统计");
-            HSSFSheet sheet3 = book.getSheet("打币统计");
-            HSSFSheet sheet4 = book.getSheet("交易明细");
+            HSSFSheet projectInfoSheet = book.getSheet("项目详情");
+            HSSFSheet dailyInfoSheet = book.getSheet("每日统计");
+            HSSFSheet txSheet = book.getSheet("交易统计");
+            HSSFSheet distributeSheet = book.getSheet("打币统计");
+            HSSFSheet txInfoSheet = book.getSheet("交易明细");
             //获取数据
             SysProjectBeanVo sysProjectBeanVo = sysProjectService.selectManagementByProjectGid(projectGid);
             try {
-                this.assembleProjectInfo(sheet1, sysProjectBeanVo, cellStyleLeft);
+                this.assembleProjectInfo(projectInfoSheet, sysProjectBeanVo, cellStyleLeft);
             } catch (Exception e) {
                 LOG.error("exportProjectExcel fail projectGid:{},assembleProjectInfo .", projectGid, e);
             }
@@ -86,19 +87,30 @@ public class ExportServiceImpl implements ExportService {
             ProjectSummaryBean summary = projectDailyInfoService.getSummary(projectGid);
             PageInfo<ProjectDailyInfoBean> dailyInfoList = projectDailyInfoService.getList(projectGid);
             try {
-                this.assembleStatisticInfo(sheet2, summary, dailyInfoList, cellStyleLeft, cellStyleCenter, cellStyleRight);
+                this.assembleStatisticInfo(dailyInfoSheet, summary, dailyInfoList, cellStyleLeft, cellStyleCenter, cellStyleRight);
             } catch (Exception e) {
                 LOG.error("exportProjectExcel fail projectGid:{},assembleStatisticInfo .", projectGid, e);
             }
+
+            PageInfo<DistributionStatusVo> userTxStatusCount = userTxService.getUserTxStatusCount(projectGid);
+
             PageInfo<DistributionStatusVo> platformStatusCount = userTxService.getPlatformStatusCount(projectGid);
-            PageInfo<RecordUserTxBean> txList = userTxService.getList(projectGid);
             try {
-                this.assembleDistributeInfo(sheet3, platformStatusCount, cellStyleLeft, cellStyleCenter, cellStyleRight);
+                this.assembleDistributeInfo(distributeSheet, platformStatusCount, cellStyleLeft, cellStyleCenter, cellStyleRight);
             } catch (Exception e) {
                 LOG.error("exportProjectExcel fail projectGid:{},assembleDistributeInfo .", projectGid, e);
             }
+
+
             try {
-                this.assembleUserTxInfo(sheet4, txList, cellStyleLeft, cellStyleCenter, cellStyleRight);
+                this.assembleTxStatus(txSheet, userTxStatusCount, cellStyleLeft, cellStyleCenter, cellStyleRight);
+            } catch (Exception e) {
+                LOG.error("exportProjectExcel fail projectGid:{},assembleTxStatus .", projectGid, e);
+            }
+
+            PageInfo<RecordUserTxBean> txList = userTxService.getList(projectGid);
+            try {
+                this.assembleUserTxInfo(txInfoSheet, txList, cellStyleLeft, cellStyleCenter, cellStyleRight);
             } catch (Exception e) {
                 LOG.error("exportProjectExcel fail projectGid:{},assembleUserTxInfo .", projectGid, e);
             }
@@ -288,49 +300,71 @@ public class ExportServiceImpl implements ExportService {
 
 
     /**
-     * 组装交易信息表
+     * 组装交易状态表
+     */
+    private void assembleTxStatus(HSSFSheet sheet, PageInfo<DistributionStatusVo> platformStatusCount, HSSFCellStyle... cellStyleLeft) {
+        int column = 2;
+        List<DistributionStatusVo> list = platformStatusCount.getList();
+        int[] ints = new int[50];
+        list.forEach(p -> {
+            Integer userTxStatus = p.getUserTxStatus();
+            Integer count = p.getCount();
+            ints[userTxStatus] = count;
+        });
+        int row = 1;
+//        Status0(0, "初始状态"),
+//                Status1(1, "交易还未被打包"),
+//                Status2(2, "验证成功"),
+//                Status21(21, "验证失败（to不是平台地址)"),
+//                Status22(22, "验证失败（from不匹配）"),
+//                Status23(23, "验证失败（金额不匹配）"),
+//                Status3(3, "交易失败"),
+//                Status4(4, "交易不存在"),;
+
+        int i0= ints[EnumUserTxStatus.Status0.getStatus()];
+        int i1 = ints[EnumUserTxStatus.Status1.getStatus()];
+        int i2 = ints[EnumUserTxStatus.Status2.getStatus()];
+        int i21 = ints[EnumUserTxStatus.Status21.getStatus()];
+        int i22 = ints[EnumUserTxStatus.Status22.getStatus()];
+        int i23 = ints[EnumUserTxStatus.Status23.getStatus()];
+        int i3 = ints[EnumUserTxStatus.Status3.getStatus()];
+        int i4 = ints[EnumUserTxStatus.Status4.getStatus()];
+
+        sheet.getRow(row++).createCell(column).setCellValue(i0);
+        sheet.getRow(row++).createCell(column).setCellValue(i1);
+        sheet.getRow(row++).createCell(column).setCellValue(i2);
+        sheet.getRow(row++).createCell(column).setCellValue(i21);
+        sheet.getRow(row++).createCell(column).setCellValue(i22);
+        sheet.getRow(row++).createCell(column).setCellValue(i23);
+        sheet.getRow(row++).createCell(column).setCellValue(i3);
+        sheet.getRow(row).createCell(column).setCellValue(i4);
+    }
+
+
+    /**
+     * 组装打币表
      */
     private void assembleDistributeInfo(HSSFSheet sheet, PageInfo<DistributionStatusVo> platformStatusCount, HSSFCellStyle... cellStyleLeft) {
         int column = 2;
         List<DistributionStatusVo> list = platformStatusCount.getList();
-        int[][] ints = new int[30][30];
+        int[] ints = new int[10];
         list.forEach(p -> {
             Integer platformTxStatus = p.getPlatformTxStatus();
             Integer count = p.getCount();
             LinkedList<DistributionStatusVo> child = p.getChild();
             if (count != null) {
-                ints[platformTxStatus][0] = count;
-            }
-            if (EnumDistrubiteStatus.Status3.getStatus().intValue() == platformTxStatus) {
-                LinkedList<DistributionStatusVo> children = p.getChild();
-                children.forEach(pp -> {
-                    Integer userTxStatus = pp.getUserTxStatus();
-                    Integer count1 = pp.getCount();
-                    if (count1 != null) {
-                        ints[platformTxStatus][userTxStatus] = count1;
-                    }
-                });
+                ints[platformTxStatus] = count;
             }
         });
         int row = 1;
-        int i1 = ints[EnumDistrubiteStatus.Status0.getStatus()][0];
-        int i2 = ints[EnumDistrubiteStatus.Status1.getStatus()][0];
-        int i3 = ints[EnumDistrubiteStatus.Status2.getStatus()][0];
-        int i4 = ints[EnumDistrubiteStatus.Status3.getStatus()][0];
-        int i5 = ints[EnumDistrubiteStatus.Status3.getStatus()][EnumUserTxStatus.Status4.getStatus()];
-        int i6 = ints[EnumDistrubiteStatus.Status3.getStatus()][EnumUserTxStatus.Status21.getStatus()];
-        int i7 = ints[EnumDistrubiteStatus.Status3.getStatus()][EnumUserTxStatus.Status22.getStatus()];
-        int i8 = ints[EnumDistrubiteStatus.Status3.getStatus()][EnumUserTxStatus.Status23.getStatus()];
-        int i9 = ints[EnumDistrubiteStatus.Status4.getStatus()][0];
+        int i1 = ints[EnumDistrubiteStatus.Status0.getStatus()];
+        int i2 = ints[EnumDistrubiteStatus.Status1.getStatus()];
+        int i3 = ints[EnumDistrubiteStatus.Status2.getStatus()];
+        int i4 = ints[EnumDistrubiteStatus.Status3.getStatus()];
         sheet.getRow(row++).createCell(column).setCellValue(i1);
         sheet.getRow(row++).createCell(column).setCellValue(i2);
         sheet.getRow(row++).createCell(column).setCellValue(i3);
-        sheet.getRow(row++).createCell(column).setCellValue(i4);
-        sheet.getRow(row++).createCell(column).setCellValue(i5);
-        sheet.getRow(row++).createCell(column).setCellValue(i6);
-        sheet.getRow(row++).createCell(column).setCellValue(i7);
-        sheet.getRow(row++).createCell(column).setCellValue(i8);
-        sheet.getRow(row).createCell(column).setCellValue(i9);
+        sheet.getRow(row).createCell(column).setCellValue(i4);
 
     }
 

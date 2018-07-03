@@ -9,11 +9,10 @@ import java.util.List;
 public enum EnumDistrubiteStatus {
 
         
-    Status0(0, "初始状态"),
+    Status0(0, "未打币"),
     Status1(1, "打币中"),
     Status2(2, "成功"),
-    Status3(3, "失败"),
-    Status4(4, "交易作废"),;
+    Status3(3, "失败"),;
 
     private Integer status;
     private String des;
@@ -33,10 +32,10 @@ public enum EnumDistrubiteStatus {
 
     public static List<Integer> getStatisticStatuses() {
         LinkedList<Integer> status = new LinkedList<>();
+        status.add(Status0.getStatus());
         status.add(Status1.getStatus());
         status.add(Status2.getStatus());
         status.add(Status3.getStatus());
-        status.add(Status4.getStatus());
         return status;
     }
 

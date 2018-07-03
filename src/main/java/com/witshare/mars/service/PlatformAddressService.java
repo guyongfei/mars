@@ -1,6 +1,7 @@
 package com.witshare.mars.service;
 
 import com.github.pagehelper.PageInfo;
+import com.witshare.mars.pojo.domain.PlatformAddress;
 import com.witshare.mars.pojo.dto.BasePageBean;
 import com.witshare.mars.pojo.dto.PlatformAddressBean;
 
@@ -19,7 +20,9 @@ public interface PlatformAddressService {
 
     void add(Map<String, String> requestBody);
 
-    PageInfo<PlatformAddressBean> getList(BasePageBean basePageBean);
+    void add(String address);
+
+    PageInfo<PlatformAddress> getList(BasePageBean basePageBean);
 
 
 }

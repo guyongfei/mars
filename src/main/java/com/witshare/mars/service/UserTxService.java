@@ -12,9 +12,13 @@ public interface UserTxService {
 
     PageInfo<RecordUserTxBean> getList(String projectGid);
 
+    PageInfo<DistributionStatusVo> getUserTxStatusCount(String projectGid);
+
     PageInfo<DistributionStatusVo> getPlatformStatusCount(RecordUserTxBean recordUserTxBean);
 
     PageInfo<DistributionStatusVo> getPlatformStatusCount(String projectGid);
+
+    PageInfo<DistributionStatusVo> getUserTxStatusCount(RecordUserTxBean recordUserTxBean);
 
 
 }
