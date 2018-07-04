@@ -150,7 +150,7 @@ var TableInit = function () {
                 title: '项目状态',
                 formatter: projectStatusFormatter
             }, {
-                title: '是否关闭',
+                title: '开启状态',
                 field: 'isAvailable',
                 align: 'center',
                 valign: 'middle',
@@ -206,8 +206,13 @@ function lockFormatter(value, row, index) {
 }
 
 function defaultProjectFormatter(value, row, index) {
-    var state = '--';
+    var state = '';
     var color = '#000';
+
+    if (!row.isAvailable) {
+        return ''
+    }
+
     if (value) {
         state = '是';
         color = 'btn-success';
@@ -264,6 +269,13 @@ function dayFormatter(value, row, index) {
 
 window.lockEvents = {
     'click .lock': function (e, value, row, index) {
+        console.log(row.isAvailable)
+        console.log(typeof  row.isAvailable)
+        console.log(row.defaultProject)
+        if ((row.isAvailable == 1 || parseInt(row.isAvailable) == 1 ) && (row.defaultProject == 1 || parseInt(row.defaultProject) == 1)) {
+            alert("该项目是首页展示项目,不能关闭");
+            return;
+        }
         bootbox.confirm("确认要更改状态", function (result) {
             if (result) {
                 console.log(row);
@@ -307,7 +319,7 @@ window.defaultProjectEvents = {
     'click .lock': function (e, value, row, index) {
 
         if (value == 1 || parseInt(value) == 1) {
-            alert("该项目已是首页项目");
+            alert("该项目已是首页展示项目");
             return;
         }
         bootbox.confirm("确认要修改为首页项目", function (result) {

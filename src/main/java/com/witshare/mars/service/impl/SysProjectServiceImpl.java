@@ -246,7 +246,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         if (!blankQuery) {
             or.andProjectTokenLike("%" + queryStr + "%");
         }
-        sysProjectExample.setOrderByClause("default_project desc ,end_time desc");
+        sysProjectExample.setOrderByClause("default_project desc ,is_available desc, end_time desc");
         PageInfo<SysProject> pageInfo = PageHelper.startPage(pageNum, pageSize)
                 .doSelectPageInfo(() -> sysProjectMapper.selectByExample(sysProjectExample));
         PageInfo<SysProjectListVo> pageInfo_ = new PageInfo<>();
@@ -472,7 +472,7 @@ public class SysProjectServiceImpl implements SysProjectService {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
         SysProjectBean sysProjectBean = this.selectByProjectGid(projectGid);
-        if (sysProjectBean == null) {
+        if (sysProjectBean == null || (sysProjectBean.getIsAvailable() == 1 && sysProjectBean.getDefaultProject() == 1)) {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
         Long id = sysProjectBean.getId();
@@ -488,7 +488,7 @@ public class SysProjectServiceImpl implements SysProjectService {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
         SysProjectBean sysProjectBean = this.selectByProjectGid(projectGid);
-        if (sysProjectBean == null) {
+        if (sysProjectBean == null || sysProjectBean.getIsAvailable() == 0) {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
         //查出原有的 默认项目
@@ -496,7 +496,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         sysProjectExample.or().andDefaultProjectEqualTo(1);
         List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
         Long id = sysProjectBean.getId();
-        //保存项目
+        //设置为默认项目
         staticSysProjectMapper.modifyDefaultProject(id);
         //清缓存
         this.deleteProjectCache(projectGid);
