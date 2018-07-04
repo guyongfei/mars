@@ -356,7 +356,7 @@ function distributionUserTxFormatter(value, row, index) {
 };
 
 function distributionPlatFormatter(value, row, index) {
-    if (parseInt(value) == 0) {
+    if (parseInt(value) == 0 && row.needDistributeCount > 0) {
         var array = new Array();
         array.push(value);
         return [
