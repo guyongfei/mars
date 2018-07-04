@@ -1,7 +1,7 @@
 var init = false;
-var userTxStatus = new Array();
+var userTxStatus;
 var txId;
-var platformTxStatus = new Array();
+var platformTxStatus;
 var loadTableTime;
 
 
@@ -166,7 +166,7 @@ window.txTableEvents = {};
 function txTableFormatter(value, row, index) {
     var userTxStatus = parseInt(row.userTxStatus);
     var platformTxStatus = parseInt(row.platformTxStatus);
-    if ((platformTxStatus == 3 && (userTxStatus == 2 || userTxStatus == 22 || userTxStatus == 23)) || (userTxStatus == 2 && platformTxStatus === 0)) {
+    if (((platformTxStatus == 3 || platformTxStatus == 0) && (userTxStatus == 2 || userTxStatus == 22 || userTxStatus == 23)) || (userTxStatus == 2 && platformTxStatus === 0)) {
         return [
             '<button type="button"   onclick="distribution(null,' + row.payTxId + ',null)" class="distribution  btn  btn-primary " " >打币</button>'
         ].join('')
@@ -346,6 +346,7 @@ function distributionUserTxFormatter(value, row, index) {
     if (value > 0) {
         var array = new Array();
         array.push(row.userTxStatus);
+        console.log(array);
         return [
             '<button type="button" id="editRow1"  onclick="distribution(' + array + ',null,null)" class="distribution btn  btn-primary " " >打币</button>'
         ].join('')
@@ -361,8 +362,6 @@ function distributionPlatFormatter(value, row, index) {
         return [
             '<button type="button" id="editRow1"  onclick="distribution(null,null,' + array + ')" class="distribution btn  btn-primary " " >打币</button>'
         ].join('')
-    } else if (parseInt(value) == 3 && parseInt(row.count) > 0) {
-        return '可点击行首 + 展开细节'
     } else {
         return ""
     }
@@ -445,8 +444,10 @@ function distribution(txStatus_, txId_, platformStatus_) {
     //     })
     // }
     userTxStatus = txStatus_;
-    txId = txId_;
+    txId = parseInt(txId_);
     platformTxStatus = platformStatus_;
+
+
     $('#distributionModal').modal('show');
 }
 
@@ -565,15 +566,6 @@ $(function () {
                 $tx[i].style.display = "block";
             }
         }
-        //如果 项目状态为已完成则加载打币异常表
-        // if (repo.projectToken && repo.projectStatus >= 3 && !init) {
-        //
-        //
-        //     var $error = $('.error-infos');
-        //     for (i = 0; i < $error.length; i++) {
-        //         $error[i].style.display = "block";
-        //     }
-        // }
 
         if (projectGid) {
             var milliseconds = new Date().getMilliseconds();
@@ -704,14 +696,24 @@ $(function () {
         var dataJson = {
             'password': $(' #password').val(),
             'keystore': $(' #keystore').val(),
-            'projectGid': projectGid,
-            'id': txId - 10000,
-            'platformTxStatusArr': platformTxStatus,
-            'userTxStatusArr': userTxStatus
+            'projectGid': projectGid
         }
+
+        if (txId) {
+            dataJson.id = txId - 10000;
+        }
+        if (userTxStatus) {
+            dataJson.userTxStatusStr = userTxStatus + '';
+        }
+        console.log(platformTxStatus);
+        if (platformTxStatus || parseInt(platformTxStatus) === 0) {
+            dataJson.platformTxStatusStr = platformTxStatus + '';
+        }
+        console.log(dataJson);
         $.ajax({
             url: contextPath + "/pay-record/token/distribute",
             type: "post",
+            traditional: true,
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify(dataJson),
             beforeSend: function () {

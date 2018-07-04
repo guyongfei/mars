@@ -5,6 +5,8 @@ public class TokenDistributeBean {
     private String projectGid;
     private String password;
     private String keystore;
+    private String userTxStatusStr;
+    private String platformTxStatusStr;
     private Integer[] userTxStatus;
     private Integer[] platformTxStatus;
     private Integer id;
@@ -55,6 +57,24 @@ public class TokenDistributeBean {
 
     public TokenDistributeBean setId(Integer id) {
         this.id = id;
+        return this;
+    }
+
+    public String getUserTxStatusStr() {
+        return userTxStatusStr;
+    }
+
+    public TokenDistributeBean setUserTxStatusStr(String userTxStatusStr) {
+        this.userTxStatusStr = userTxStatusStr;
+        return this;
+    }
+
+    public String getPlatformTxStatusStr() {
+        return platformTxStatusStr;
+    }
+
+    public TokenDistributeBean setPlatformTxStatusStr(String platformTxStatusStr) {
+        this.platformTxStatusStr = platformTxStatusStr;
         return this;
     }
 }

@@ -2,7 +2,6 @@ package com.witshare.mars.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.org.apache.regexp.internal.RE;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.pojo.dto.TokenDistributeBean;
@@ -21,7 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
+import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Objects;
 
@@ -47,6 +47,7 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
     @Override
     public ResponseBean execTokenDistribute(TokenDistributeBean tokenDistributeBean) {
         String keystore = tokenDistributeBean.getKeystore();
+        transArray(tokenDistributeBean);
         SysProjectBean sysProjectBean = sysProjectService.selectByProjectGid(tokenDistributeBean.getProjectGid());
         if (Objects.nonNull(sysProjectBean)) {
             String address = sysProjectBean.getPlatformAddress();
@@ -70,10 +71,38 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
         String bodyJson = JSON.toJSONString(body);
         String reqToken = getToken(reqPath, "POST", null, bodyJson);
         logger.info("execTokenDistribute() request==>rid={}; url={}; param={}", rid, url, body);
-        String result = HttpClientUtil.doPost(url, bodyJson,reqToken, MOON_TOKEN_HEADER_NAME);
+        String result = HttpClientUtil.doPost(url, bodyJson, reqToken, MOON_TOKEN_HEADER_NAME);
         logger.info("execTokenDistribute() response==>rid={}; res={}", rid, result);
         ResponseBean responseBean = parseResult(result);
         return responseBean;
+    }
+
+    void transArray(TokenDistributeBean tokenDistributeBean) {
+        String userTxStatusStr = tokenDistributeBean.getUserTxStatusStr();
+        String platformTxStatusStr = tokenDistributeBean.getPlatformTxStatusStr();
+        LinkedList<Integer> userTx = new LinkedList<>();
+        LinkedList<Integer> platformStatus = new LinkedList<>();
+        if (!StringUtils.isAnyBlank(userTxStatusStr)) {
+            String[] split = userTxStatusStr.split(",");
+            Arrays.stream(split).forEach(p -> {
+                userTx.add(Integer.parseInt(p));
+            });
+            Integer[] userTxStatus = new Integer[userTx.size()];
+            Integer[] integers = userTx.toArray(userTxStatus);
+            tokenDistributeBean.setUserTxStatus(integers);
+        }
+        if (!StringUtils.isAnyBlank(platformTxStatusStr)) {
+            String[] split = platformTxStatusStr.split(",");
+            Arrays.stream(split).forEach(p -> {
+                platformStatus.add(Integer.parseInt(p));
+            });
+            Integer[] platformStatuses = new Integer[platformStatus.size()];
+            Integer[] integers = platformStatus.toArray(platformStatuses);
+            tokenDistributeBean.setPlatformTxStatus(integers);
+        }
+
+
+
     }
 
     @Override

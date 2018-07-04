@@ -144,7 +144,7 @@ public class SysProjectServiceImpl implements SysProjectService {
             sysProjectBean.setHardCap(sysProjectBeanDb.getHardCap());
             sysProjectBean.setPriceRate(sysProjectBeanDb.getPriceRate());
             sysProjectBean.setMinPurchaseAmount(sysProjectBeanDb.getMinPurchaseAmount());
-            sysProjectBean.setEndTime(sysProjectBeanDb.getEndTime());
+//            sysProjectBean.setEndTime(sysProjectBeanDb.getEndTime());
         }
 
         //存储s3
