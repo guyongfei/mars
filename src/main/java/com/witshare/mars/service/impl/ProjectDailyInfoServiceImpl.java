@@ -219,8 +219,9 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
         String projectToken = recordUserTxBean.getProjectToken();
         Timestamp current = new Timestamp(System.currentTimeMillis());
 
-        BigDecimal actualGetEthAmount = userTxList.stream().map(RecordUserTxBean::getActualPayAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal actualPayTokenAmount = userTxList.stream().map(RecordUserTxBean::getShouldGetAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal actualGetEthAmount = userTxList.stream().filter(p -> (BigDecimal.ZERO.compareTo(p.getShouldGetAmount()) < 0)).map(RecordUserTxBean::getActualPayAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal actualPayTokenAmount = userTxList.stream().filter(p -> (BigDecimal.ZERO.compareTo(p.getShouldGetAmount()) < 0)).map(RecordUserTxBean::getShouldGetAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
+
         BigDecimal getEthAmount = userTxList.stream().map(RecordUserTxBean::getPayAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
         BigDecimal payTokenAmount = userTxList.stream().map(RecordUserTxBean::getHopeGetAmount).reduce(BigDecimal.ZERO, BigDecimal::add);
         Set<String> userSet = userTxList.stream().map(RecordUserTxBean::getUserGid).collect(Collectors.toSet());
