@@ -372,7 +372,7 @@
         showFooter: false,
         showColumns: false,
         showPaginationSwitch: false,
-        showRefresh: false,
+        showRefresh: true,
         showToggle: false,
         showFullscreen: false,
         smartDisplay: true,

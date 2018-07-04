@@ -18,7 +18,7 @@ var TableInit = function () {
             search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
             strictSearch: true,
             showColumns: false,                  //是否显示所有的列
-            showRefresh: false,                  //是否显示刷新按钮
+            showRefresh: true,                  //是否显示刷新按钮
             minimumCountColumns: 1,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
             uniqueId: "ID",                     //每一行的唯一标识，一般为主键列
@@ -129,20 +129,6 @@ $(function () {
         $('#inner_table').bootstrapTable('refresh', {pageNumber: 1});
     })
 
-    // $('#addresses').change(function () {
-    //     var data = $(this).val();
-    //     var arr = new Array(); //定义一数组
-    //     arr = data.split("\n"); //字符分割
-    //     var str = ''
-    //     for (i = 0; i < arr.length; i++) {
-    //         var word = arr[i].trim();
-    //         if (word.length > 1) {
-    //             str += arr[i] + "\n"; //分割后的字符输出
-    //         }
-    //     }
-    //     $('#addEvent').bootstrapValidator("resetForm", true);
-    //     $(this).val(str.substr(0,str.length-1))
-    // })
 
     $('#addEvent').bootstrapValidator({
         message: 'This value is not valid',

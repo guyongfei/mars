@@ -10,6 +10,7 @@ var pdfJaName;
 var projectNow;
 var projectToken;
 var tokenDecimal;
+var logoStr;
 var addMethod = true;
 var exportTime;
 
@@ -104,7 +105,7 @@ var TableInit = function () {
             search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
             strictSearch: true,
             showColumns: false,                  //是否显示所有的列
-            showRefresh: false,                  //是否显示刷新按钮
+            showRefresh: true,                  //是否显示刷新按钮
             minimumCountColumns: 1,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
 //                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
@@ -156,6 +157,13 @@ var TableInit = function () {
                 events: lockEvents,
                 formatter: lockFormatter
             }, {
+                title: '首页展示',
+                field: 'defaultProject',
+                align: 'center',
+                valign: 'middle',
+                events: defaultProjectEvents,
+                formatter: defaultProjectFormatter
+            }, {
                 field: 'operate',
                 title: '其他',
                 align: 'left',
@@ -197,9 +205,26 @@ function lockFormatter(value, row, index) {
     ].join('');
 }
 
+function defaultProjectFormatter(value, row, index) {
+    var state = '--';
+    var color = '#000';
+    if (value) {
+        state = '是';
+        color = 'btn-success';
+    } else if (!value) {
+        state = "否";
+        // color = 'btn-default';
+    }
+    return [
+        '<a class="lock" href="javascript:void(0)" title="切换状态">',
+        '<button class="btn ' + color + '" >' + state + '</button>',
+        '</a>'
+    ].join('');
+}
+
 
 function projectStatusFormatter(value, row, index) {
-    var state = '--';
+    var state = '';
     var color = '#000';
     var color_green = 'btn-danger';
     switch (value) {
@@ -220,7 +245,7 @@ function projectStatusFormatter(value, row, index) {
             break;
     }
     return [
-        '<button class="btn ' + color + '" >' + state + '</button>'
+        '<label class="btn " >' + state + '</label>'
     ].join('');
 }
 
@@ -244,6 +269,52 @@ window.lockEvents = {
                 console.log(row);
                 $.ajax({
                     url: contextPath + "/management/project/hide/" + row.projectGid,
+                    type: "put",
+                    contentType: "application/json;charset=UTF-8",
+                    beforeSend: function () {
+                        loadingIndex = layer.msg('处理中', {
+                            icon: 16
+                        });
+                        return true;
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        layer.close(loadingIndex);
+                        if (data.success) {
+                            layer.msg("任务成功", {
+                                time: 1000,
+                                icon: 1,
+                                shift: 1
+                            }, function () {
+                                $('#inner_table').bootstrapTable('refresh');
+                            })
+                        } else {
+                            layer.msg("任务失败，" + data.message, {
+                                time: 2000,
+                                icon: 0,
+                                shift: 1
+                            }, function () {
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    }
+};
+
+window.defaultProjectEvents = {
+    'click .lock': function (e, value, row, index) {
+
+        if (value == 1 || parseInt(value) == 1) {
+            alert("该项目已是首页项目");
+            return;
+        }
+        bootbox.confirm("确认要修改为首页项目", function (result) {
+            if (result) {
+                console.log(row);
+                $.ajax({
+                    url: contextPath + "/management/project/default/" + row.projectGid,
                     type: "put",
                     contentType: "application/json;charset=UTF-8",
                     beforeSend: function () {
@@ -334,7 +405,7 @@ var TableInit_ = function () {
             search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
             strictSearch: true,
             showColumns: false,                  //是否显示所有的列
-            showRefresh: false,                  //是否显示刷新按钮
+            showRefresh: true,                  //是否显示刷新按钮
             minimumCountColumns: 1,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
 //                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
@@ -485,6 +556,9 @@ function getProject(row) {
                 $('#projectToken').html(project.projectToken);
                 $('#platformAddressDiv').show();
                 $('#platformAddress').html(project.platformAddress);
+                $('#tokenAddressDiv_').show();
+                $('#tokenAddressDiv').hide();
+                $('#tokenAddress_').html(project.tokenAddress);
                 $('#tokenAddress').val(project.tokenAddress);
                 $('#projectAddress').val(project.projectAddress);
                 $('#softCap').val(numberFormat(project.softCap));
@@ -591,7 +665,7 @@ $('#btn_add').click(function () {
                     }, function () {
                         $('.close').click()
                     })
-                }else{
+                } else {
                     $('#addModal').modal('show');
                     addMethod = true;
                 }
@@ -608,7 +682,7 @@ $('#addModal').on('hidden.bs.modal', function () {
     $('#addEvent')[0].reset();
     $('#addEvent')
         .bootstrapValidator("resetForm", true)
-        .bootstrapValidator('addField', 'log', {
+        .bootstrapValidator('addField', 'logo', {
             validators: {
                 notEmpty: {
                     message: '图像不能为空'
@@ -1175,7 +1249,7 @@ $(function () {
             'projectGid': projectGid,
             'tokenDecimal': addMethod ? tokenDecimal : projectNow.tokenDecimal,
             'projectToken': addMethod ? projectToken : projectNow.projectToken,
-            'tokenAddress': $(' #tokenAddress').val(),
+            'tokenAddress': addMethod ? $(' #tokenAddress').val() : projectNow.tokenAddress,
             'projectNameEn': $(' #projectNameEn').val(),
             'projectNameCn': $(' #projectNameCn').val(),
             'projectNameKo': $(' #projectNameKo').val(),
@@ -1281,7 +1355,7 @@ $(function () {
         $('.time').change(function () {
             var start = new Date($('#startTimePicker').val());
             var end = new Date($('#endTimePicker').val());
-            if (start >= end || start < new Date()) {
+            if (start >= end) {
                 layer.msg("时间设置有误", {
                     time: 2000,
                     icon: 0,
@@ -1337,7 +1411,7 @@ $(function () {
                             $('#tokenDecimal').html(tokenDecimal);
                             $('#projectNameEn').val(data.name);
                             $.ajax({
-                                url: contextPath + "/management/project?tokenAddress="+tokenAddress,
+                                url: contextPath + "/management/project?tokenAddress=" + tokenAddress,
                                 type: "get",
                                 contentType: "application/json;charset=UTF-8",
                                 beforeSend: function () {
@@ -1358,61 +1432,61 @@ $(function () {
                                             $('#tokenAddress').val('')
                                         })
                                     }
-                                }});
-                        } else
-                            {
-                                layer.msg("智能合约地址未找到，请再次输入", {
-                                    time: 2000,
-                                    icon: 0,
-                                    shift: 1
-                                }, function () {
-                                    $('#tokenAddress').val('')
-                                })
-                            }
+                                }
+                            });
+                        } else {
+                            layer.msg("智能合约地址未找到，请再次输入", {
+                                time: 2000,
+                                icon: 0,
+                                shift: 1
+                            }, function () {
+                                $('#tokenAddress').val('')
+                            })
                         }
-                    })
+                    }
+                })
             }
         })
     });
-        /*    {
-         "code": "0",
-         "message": "成功",
-         "result": {
-         "name": "Bee Honey Token",
-         "symbol": "HONEY",
-         "decimal": "9"
-         }
-         }*/
+    /*    {
+     "code": "0",
+     "message": "成功",
+     "result": {
+     "name": "Bee Honey Token",
+     "symbol": "HONEY",
+     "decimal": "9"
+     }
+     }*/
 
-        function checkPrice() {
-            var priceRate = numeral($('#priceRate').val()).value();
+    function checkPrice() {
+        var priceRate = numeral($('#priceRate').val()).value();
 
-            if (!priceRate) {
-                layer.msg("价格设置有误", {
-                    time: 2000,
-                    icon: 0,
-                    shift: 1
-                });
-                return false;
-            }
-            return true;
-        };
+        if (!priceRate) {
+            layer.msg("价格设置有误", {
+                time: 2000,
+                icon: 0,
+                shift: 1
+            });
+            return false;
+        }
+        return true;
+    };
 
-        function checkCap() {
-            var softCap = numeral($('#softCap').val()).value();
-            var hardCap = numeral($('#hardCap').val()).value();
-            var minPurchaseAmount = numeral($('#minPurchaseAmount').val()).value();
+    function checkCap() {
+        var softCap = numeral($('#softCap').val()).value();
+        var hardCap = numeral($('#hardCap').val()).value();
+        var minPurchaseAmount = numeral($('#minPurchaseAmount').val()).value();
 
-            if (!hardCap || !softCap || !minPurchaseAmount || hardCap <= softCap || minPurchaseAmount >= softCap) {
-                layer.msg("软硬顶或认购数量设置有误", {
-                    time: 2000,
-                    icon: 0,
-                    shift: 1
-                });
-                return false;
-            }
-            return true;
-        };
+        if (!hardCap || !softCap || !minPurchaseAmount || hardCap <= softCap || minPurchaseAmount >= softCap) {
+            layer.msg("软硬顶或认购数量设置有误", {
+                time: 2000,
+                icon: 0,
+                shift: 1
+            });
+            return false;
+        }
+        return true;
+    };
 
 
-    })
+})

@@ -25,6 +25,8 @@ public interface StaticSysProjectMapper {
 
     int modifyProjectStatus(Long id);
 
+    int modifyDefaultProject(Long id);
+
     List<ProjectPageBean> selectMyProjects(@Param("tableName") String tableName, @Param("userId") Long userId);
 
     List<GlobalSimpleBean> selectSimpleProjectList(@Param("indexShow") Integer indexShow, @Param("name") String name);

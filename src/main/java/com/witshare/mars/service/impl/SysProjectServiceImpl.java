@@ -144,7 +144,7 @@ public class SysProjectServiceImpl implements SysProjectService {
             sysProjectBean.setHardCap(sysProjectBeanDb.getHardCap());
             sysProjectBean.setPriceRate(sysProjectBeanDb.getPriceRate());
             sysProjectBean.setMinPurchaseAmount(sysProjectBeanDb.getMinPurchaseAmount());
-            sysProjectBean.setEndTime(sysProjectBeanDb.getEndTime());
+//            sysProjectBean.setEndTime(sysProjectBeanDb.getEndTime());
         }
 
         //存储s3
@@ -246,6 +246,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         if (!blankQuery) {
             or.andProjectTokenLike("%" + queryStr + "%");
         }
+        sysProjectExample.setOrderByClause("default_project desc ,end_time desc");
         PageInfo<SysProject> pageInfo = PageHelper.startPage(pageNum, pageSize)
                 .doSelectPageInfo(() -> sysProjectMapper.selectByExample(sysProjectExample));
         PageInfo<SysProjectListVo> pageInfo_ = new PageInfo<>();
@@ -408,6 +409,14 @@ public class SysProjectServiceImpl implements SysProjectService {
 
     }
 
+    @Override
+    public SysProjectBeanFrontInfoVo getDefaultProject() {
+        SysProjectExample sysProjectExample = new SysProjectExample();
+        sysProjectExample.setOrderByClause("default_project desc");
+        List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
+        return this.selectProject(sysProjects.get(0).getProjectGid());
+    }
+
     /**
      * @see SysProjectService#selectProject(String)
      **/
@@ -421,8 +430,8 @@ public class SysProjectServiceImpl implements SysProjectService {
         String projectDetailName = i18n.getProjectDetailName();
         //查找redis
         String projectStatisticKey = RedisKeyUtil.getProjectFrontKey(projectGid);
-        String projectDetail = null;
-//        String projectDetail = redisCommonDao.getHash(projectStatisticKey, projectDetailName);
+//        String projectDetail = null;
+        String projectDetail = redisCommonDao.getHash(projectStatisticKey, projectDetailName);
         if (StringUtils.isNotEmpty(projectDetail)) {
             frontInfoVo = gson.fromJson(projectDetail, SysProjectBeanFrontInfoVo.class);
             frontInfoVo.setSoldAmount(projectDailyInfoService.getSoldAmount(projectGid));
@@ -470,6 +479,32 @@ public class SysProjectServiceImpl implements SysProjectService {
         staticSysProjectMapper.modifyProjectStatus(id);
         //清缓存
         this.deleteProjectCache(projectGid);
+
+    }
+
+    @Override
+    public void defaultProject(String projectGid) {
+        if (StringUtils.isEmpty(projectGid)) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
+        }
+        SysProjectBean sysProjectBean = this.selectByProjectGid(projectGid);
+        if (sysProjectBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
+        }
+        //查出原有的 默认项目
+        SysProjectExample sysProjectExample = new SysProjectExample();
+        sysProjectExample.or().andDefaultProjectEqualTo(1);
+        List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
+        Long id = sysProjectBean.getId();
+        //保存项目
+        staticSysProjectMapper.modifyDefaultProject(id);
+        //清缓存
+        this.deleteProjectCache(projectGid);
+        if (CollectionUtils.isNotEmpty(sysProjects)) {
+            sysProjects.forEach(p -> {
+                this.deleteProjectCache(p.getProjectGid());
+            });
+        }
 
     }
 

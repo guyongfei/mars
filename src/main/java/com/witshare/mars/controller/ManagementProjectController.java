@@ -130,6 +130,17 @@ public class ManagementProjectController {
     }
 
     /**
+     * 修改项目是否首页展示
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/default/{projectGid}", method = RequestMethod.PUT)
+    public ResponseBean defaultProject(@PathVariable String projectGid) {
+
+        sysProjectService.defaultProject(projectGid);
+        return ResponseBean.newInstanceSuccess();
+    }
+
+    /**
      * 获取项目列表
      */
     @ResponseBody

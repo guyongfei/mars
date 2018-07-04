@@ -119,7 +119,7 @@
         SELECT id, `project_gid`,`project_token`,`start_time`,`end_time`,`project_status`,`is_available`
         FROM `sys_project`
         <if test="queryStr!=null and queryStr!=''">
-           WHERE project_token LIKE '%${queryStr}%'
+            WHERE project_token LIKE '%${queryStr}%'
         </if>
         ORDER BY
         <choose>
@@ -269,6 +269,11 @@
 
     <update id="modifyProjectStatus" parameterType="java.lang.Long">
         UPDATE `sys_project` SET `is_available` = !`is_available` WHERE `id` = #{id}
+    </update>
+
+    <update id="modifyDefaultProject" parameterType="java.lang.Long">
+        UPDATE `sys_project` SET `default_project` = 0;
+        UPDATE `sys_project` SET `default_project` = 1 WHERE `id` = #{id};
     </update>
 
 
