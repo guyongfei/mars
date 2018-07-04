@@ -53,7 +53,7 @@ var TableInit = function () {
                 field: 'txHash',
                 align: 'center',
                 title: '交易号',
-                visible: false
+                visible: true
             }, {
                 field: 'txType',
                 align: 'center',
