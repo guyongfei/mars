@@ -36,6 +36,8 @@ public class SysProject {
 
     private Integer isAvailable;
 
+    private Integer defaultProject;
+
     private Timestamp createTime;
 
     private Timestamp updateTime;
@@ -168,6 +170,14 @@ public class SysProject {
 
     public void setIsAvailable(Integer isAvailable) {
         this.isAvailable = isAvailable;
+    }
+
+    public Integer getDefaultProject() {
+        return defaultProject;
+    }
+
+    public void setDefaultProject(Integer defaultProject) {
+        this.defaultProject = defaultProject;
     }
 
     public Timestamp getCreateTime() {

@@ -146,6 +146,7 @@ public class SysProjectBean  extends BasePageBean{
     private BigDecimal priceRate;
     private Integer projectStatus;
     private Integer isAvailable;
+    private Integer defaultProject;
     private Timestamp createTime;
     private Timestamp updateTime;
     private Integer tokenDecimal;
@@ -768,6 +769,15 @@ public class SysProjectBean  extends BasePageBean{
 
     public SysProjectBean setPrivacyPolicy(String privacyPolicy) {
         this.privacyPolicy = privacyPolicy;
+        return this;
+    }
+
+    public Integer getDefaultProject() {
+        return defaultProject;
+    }
+
+    public SysProjectBean setDefaultProject(Integer defaultProject) {
+        this.defaultProject = defaultProject;
         return this;
     }
 }

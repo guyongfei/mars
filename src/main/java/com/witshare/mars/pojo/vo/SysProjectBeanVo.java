@@ -25,6 +25,7 @@ public class SysProjectBeanVo {
     private BigDecimal priceRate;
     private int projectStatus;
     private int isAvailable;
+    private Integer defaultProject;
     private Integer tokenDecimal;
 
     private BigDecimal soldAmount;
@@ -221,6 +222,15 @@ public class SysProjectBeanVo {
 
     public SysProjectBeanVo setSoldAmount(BigDecimal soldAmount) {
         this.soldAmount = soldAmount;
+        return this;
+    }
+
+    public Integer getDefaultProject() {
+        return defaultProject;
+    }
+
+    public SysProjectBeanVo setDefaultProject(Integer defaultProject) {
+        this.defaultProject = defaultProject;
         return this;
     }
 }

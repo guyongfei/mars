@@ -1136,6 +1136,66 @@ public class SysProjectExample {
             return (Criteria) this;
         }
 
+        public Criteria andDefaultProjectIsNull() {
+            addCriterion("default_project is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultProjectIsNotNull() {
+            addCriterion("default_project is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultProjectEqualTo(Integer value) {
+            addCriterion("default_project =", value, "defaultProject");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultProjectNotEqualTo(Integer value) {
+            addCriterion("default_project <>", value, "defaultProject");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultProjectGreaterThan(Integer value) {
+            addCriterion("default_project >", value, "defaultProject");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultProjectGreaterThanOrEqualTo(Integer value) {
+            addCriterion("default_project >=", value, "defaultProject");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultProjectLessThan(Integer value) {
+            addCriterion("default_project <", value, "defaultProject");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultProjectLessThanOrEqualTo(Integer value) {
+            addCriterion("default_project <=", value, "defaultProject");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultProjectIn(List<Integer> values) {
+            addCriterion("default_project in", values, "defaultProject");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultProjectNotIn(List<Integer> values) {
+            addCriterion("default_project not in", values, "defaultProject");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultProjectBetween(Integer value1, Integer value2) {
+            addCriterion("default_project between", value1, value2, "defaultProject");
+            return (Criteria) this;
+        }
+
+        public Criteria andDefaultProjectNotBetween(Integer value1, Integer value2) {
+            addCriterion("default_project not between", value1, value2, "defaultProject");
+            return (Criteria) this;
+        }
+
         public Criteria andCreateTimeIsNull() {
             addCriterion("create_time is null");
             return (Criteria) this;

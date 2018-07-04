@@ -43,6 +43,9 @@ public class SysProjectListVo {
 
     private Integer tokenDecimal;
 
+
+    private Integer defaultProject;
+
     public SysProjectListVo() {
     }
 
@@ -218,6 +221,15 @@ public class SysProjectListVo {
 
     public SysProjectListVo setTokenDecimal(Integer tokenDecimal) {
         this.tokenDecimal = tokenDecimal;
+        return this;
+    }
+
+    public Integer getDefaultProject() {
+        return defaultProject;
+    }
+
+    public SysProjectListVo setDefaultProject(Integer defaultProject) {
+        this.defaultProject = defaultProject;
         return this;
     }
 }

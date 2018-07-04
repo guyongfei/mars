@@ -21,6 +21,8 @@ public class SysProjectBeanFrontInfoVo {
     private Timestamp startTime;
     private Timestamp endTime;
     private int projectStatus;
+
+    private Integer defaultProject;
     private String projectInstruction;
     private String projectContent;
 
@@ -206,6 +208,15 @@ public class SysProjectBeanFrontInfoVo {
 
     public SysProjectBeanFrontInfoVo setProjectContent(String projectContent) {
         this.projectContent = projectContent;
+        return this;
+    }
+
+    public Integer getDefaultProject() {
+        return defaultProject;
+    }
+
+    public SysProjectBeanFrontInfoVo setDefaultProject(Integer defaultProject) {
+        this.defaultProject = defaultProject;
         return this;
     }
 }

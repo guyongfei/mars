@@ -461,7 +461,7 @@ function userTxStatusFormatter(value, row, index) {
     var state = userTxStatusMap[value];
     var color = '#000';
     return [
-        '<button class="btn ' + color + '" >' + state + '</button>'
+        '<label class="btn " >' + state + '</label>'
     ].join('');
 }
 
@@ -470,7 +470,7 @@ function platformStatusFormatter(value, row, index) {
     var state = disTributeStatusMap[value];
     var color = '#000';
     return [
-        '<button class="btn ' + color + '" >' + state + '</button>'
+        '<label class="btn  " >' + state + '</label>'
     ].join('');
 }
 
@@ -480,7 +480,7 @@ function platformTxStatusFormatter(value, row, index) {
     var color = '#000';
     var color_green = 'btn-danger';
     return [
-        '<button class="btn ' + color + '" >' + state + '</button>'
+        '<label class="btn  " >' + state + '</label>'
     ].join('');
 }
 

@@ -18,6 +18,7 @@
     <result column="price_rate" property="priceRate" jdbcType="DECIMAL" />
     <result column="project_status" property="projectStatus" jdbcType="TINYINT" />
     <result column="is_available" property="isAvailable" jdbcType="TINYINT" />
+    <result column="default_project" property="defaultProject" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="token_decimal" property="tokenDecimal" jdbcType="INTEGER" />
@@ -83,7 +84,8 @@
   <sql id="Base_Column_List" >
     id, project_gid, project_token, token_address, platform_address, project_address, 
     project_logo_link, project_img_link, soft_cap, hard_cap, min_purchase_amount, start_time, 
-    end_time, price_rate, project_status, is_available, create_time, update_time, token_decimal
+    end_time, price_rate, project_status, is_available, default_project, create_time, 
+    update_time, token_decimal
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.witshare.mars.pojo.domain.SysProjectExample" >
     select
@@ -122,15 +124,15 @@
       project_img_link, soft_cap, hard_cap, 
       min_purchase_amount, start_time, end_time, 
       price_rate, project_status, is_available, 
-      create_time, update_time, token_decimal
-      )
+      default_project, create_time, update_time, 
+      token_decimal)
     values (#{projectGid,jdbcType=CHAR}, #{projectToken,jdbcType=VARCHAR}, #{tokenAddress,jdbcType=VARCHAR}, 
       #{platformAddress,jdbcType=VARCHAR}, #{projectAddress,jdbcType=VARCHAR}, #{projectLogoLink,jdbcType=VARCHAR}, 
       #{projectImgLink,jdbcType=VARCHAR}, #{softCap,jdbcType=DECIMAL}, #{hardCap,jdbcType=DECIMAL}, 
       #{minPurchaseAmount,jdbcType=DECIMAL}, #{startTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP}, 
       #{priceRate,jdbcType=DECIMAL}, #{projectStatus,jdbcType=TINYINT}, #{isAvailable,jdbcType=TINYINT}, 
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{tokenDecimal,jdbcType=INTEGER}
-      )
+      #{defaultProject,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{tokenDecimal,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.witshare.mars.pojo.domain.SysProject" useGeneratedKeys="true" keyProperty="id" >
     insert into sys_project
@@ -179,6 +181,9 @@
       </if>
       <if test="isAvailable != null" >
         is_available,
+      </if>
+      <if test="defaultProject != null" >
+        default_project,
       </if>
       <if test="createTime != null" >
         create_time,
@@ -235,6 +240,9 @@
       </if>
       <if test="isAvailable != null" >
         #{isAvailable,jdbcType=TINYINT},
+      </if>
+      <if test="defaultProject != null" >
+        #{defaultProject,jdbcType=TINYINT},
       </if>
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
@@ -304,6 +312,9 @@
       <if test="record.isAvailable != null" >
         is_available = #{record.isAvailable,jdbcType=TINYINT},
       </if>
+      <if test="record.defaultProject != null" >
+        default_project = #{record.defaultProject,jdbcType=TINYINT},
+      </if>
       <if test="record.createTime != null" >
         create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
@@ -336,6 +347,7 @@
       price_rate = #{record.priceRate,jdbcType=DECIMAL},
       project_status = #{record.projectStatus,jdbcType=TINYINT},
       is_available = #{record.isAvailable,jdbcType=TINYINT},
+      default_project = #{record.defaultProject,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       token_decimal = #{record.tokenDecimal,jdbcType=INTEGER}
@@ -391,6 +403,9 @@
       <if test="isAvailable != null" >
         is_available = #{isAvailable,jdbcType=TINYINT},
       </if>
+      <if test="defaultProject != null" >
+        default_project = #{defaultProject,jdbcType=TINYINT},
+      </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
@@ -420,6 +435,7 @@
       price_rate = #{priceRate,jdbcType=DECIMAL},
       project_status = #{projectStatus,jdbcType=TINYINT},
       is_available = #{isAvailable,jdbcType=TINYINT},
+      default_project = #{defaultProject,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       token_decimal = #{tokenDecimal,jdbcType=INTEGER}

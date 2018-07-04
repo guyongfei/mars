@@ -28,6 +28,7 @@ public class SysProjectBeanFrontListVo {
     private String whitePaperLink;
     private String projectContent;
     private String projectName;
+    private Integer defaultProject;
 
     private Timestamp createTime;
     private Timestamp updateTime;
@@ -232,6 +233,20 @@ public class SysProjectBeanFrontListVo {
 
     public SysProjectBeanFrontListVo setProjectName(String projectName) {
         this.projectName = projectName;
+        return this;
+    }
+
+    public SysProjectBeanFrontListVo setProjectStatus(Integer projectStatus) {
+        this.projectStatus = projectStatus;
+        return this;
+    }
+
+    public Integer getDefaultProject() {
+        return defaultProject;
+    }
+
+    public SysProjectBeanFrontListVo setDefaultProject(Integer defaultProject) {
+        this.defaultProject = defaultProject;
         return this;
     }
 }

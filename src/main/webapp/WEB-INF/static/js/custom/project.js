@@ -157,6 +157,13 @@ var TableInit = function () {
                 events: lockEvents,
                 formatter: lockFormatter
             }, {
+                title: '首页展示',
+                field: 'defaultProject',
+                align: 'center',
+                valign: 'middle',
+                events: defaultProjectEvents,
+                formatter: defaultProjectFormatter
+            }, {
                 field: 'operate',
                 title: '其他',
                 align: 'left',
@@ -198,9 +205,26 @@ function lockFormatter(value, row, index) {
     ].join('');
 }
 
+function defaultProjectFormatter(value, row, index) {
+    var state = '--';
+    var color = '#000';
+    if (value) {
+        state = '是';
+        color = 'btn-success';
+    } else if (!value) {
+        state = "否";
+        // color = 'btn-default';
+    }
+    return [
+        '<a class="lock" href="javascript:void(0)" title="切换状态">',
+        '<button class="btn ' + color + '" >' + state + '</button>',
+        '</a>'
+    ].join('');
+}
+
 
 function projectStatusFormatter(value, row, index) {
-    var state = '--';
+    var state = '';
     var color = '#000';
     var color_green = 'btn-danger';
     switch (value) {
@@ -221,7 +245,7 @@ function projectStatusFormatter(value, row, index) {
             break;
     }
     return [
-        '<button class="btn ' + color + '" >' + state + '</button>'
+        '<label class="btn " >' + state + '</label>'
     ].join('');
 }
 
@@ -245,6 +269,52 @@ window.lockEvents = {
                 console.log(row);
                 $.ajax({
                     url: contextPath + "/management/project/hide/" + row.projectGid,
+                    type: "put",
+                    contentType: "application/json;charset=UTF-8",
+                    beforeSend: function () {
+                        loadingIndex = layer.msg('处理中', {
+                            icon: 16
+                        });
+                        return true;
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        layer.close(loadingIndex);
+                        if (data.success) {
+                            layer.msg("任务成功", {
+                                time: 1000,
+                                icon: 1,
+                                shift: 1
+                            }, function () {
+                                $('#inner_table').bootstrapTable('refresh');
+                            })
+                        } else {
+                            layer.msg("任务失败，" + data.message, {
+                                time: 2000,
+                                icon: 0,
+                                shift: 1
+                            }, function () {
+                            })
+                        }
+                    }
+                })
+            }
+        })
+    }
+};
+
+window.defaultProjectEvents = {
+    'click .lock': function (e, value, row, index) {
+
+        if (value == 1 || parseInt(value) == 1) {
+            alert("该项目已是首页项目");
+            return;
+        }
+        bootbox.confirm("确认要修改为首页项目", function (result) {
+            if (result) {
+                console.log(row);
+                $.ajax({
+                    url: contextPath + "/management/project/default/" + row.projectGid,
                     type: "put",
                     contentType: "application/json;charset=UTF-8",
                     beforeSend: function () {
