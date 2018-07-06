@@ -190,6 +190,10 @@ public class SysUserServiceImpl implements SysUserService {
         } else {
             userBean = JsonUtils.jsonToObjByGson(userBeanJson, SysUserBean.class);
         }
+        String managementPage = userBean.getManagementPage();
+        if (userBean.isAdmin() && !StringUtils.isAnyBlank(managementPage)) {
+            userBean.setManagementPage(propertiesConfig.contextPath + managementPage);
+        }
         return userBean;
     }
 
