@@ -171,6 +171,11 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.16'
     compile group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '3.16'
 
+    // https://mvnrepository.com/artifact/com.google.code.kaptcha/kaptcha
+    compile group: 'com.google.code.kaptcha', name: 'kaptcha', version: '2.3'
+
+
+
 
 
 

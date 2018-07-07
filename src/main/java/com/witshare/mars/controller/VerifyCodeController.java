@@ -3,6 +3,7 @@ package com.witshare.mars.controller;
 import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.util.ResponseBean;
+import com.witshare.mars.service.CaptchaService;
 import com.witshare.mars.service.EmailService;
 import com.witshare.mars.service.VerifyCodeService;
 import org.slf4j.Logger;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -24,6 +27,8 @@ public class VerifyCodeController {
     private VerifyCodeService verifyCodeService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private CaptchaService captchaService;
 
     /**
      * 注册时发送验证码
@@ -45,5 +50,19 @@ public class VerifyCodeController {
         }
         return new ResponseBean(Boolean.TRUE);
     }
+
+    /**
+     * 获取图形验证码
+     */
+    @ResponseBody
+    @RequestMapping(value = "/img", method = RequestMethod.GET)
+    public void getVerifyCodeImg(HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 @RequestParam("imgToken") String token) throws Exception {
+
+        captchaService.genCaptcha(request, response, token);
+
+    }
+
 
 }

@@ -9,6 +9,8 @@ public class SysUserBean {
     public static final String ORIGIN_PASSWORD = "originPassword";
     public static final String EMAIL = "email";
     public static final String VERIFY_CODE = "verifyCode";
+    public static final String IMG_VERIFY_CODE = "imgVerifyCode";
+    public static final String IMG_TOKEN = "imgToken";
     public static final String EMAIL_LIKE = "emailLike";
     public static final String START = "start";
     public static final String AVATAR = "avatar";
