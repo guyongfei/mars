@@ -20,9 +20,10 @@
       "success": true
     }
   ```
+  
 ## 2.获取图片验证码
 
-- url : /verify-code/img?imgToken=
+- url : /verify-code/img?imgToken=3e50fc7ee9ac4e65aaa3262431bf00a8
 
 - method:get
 - request param
