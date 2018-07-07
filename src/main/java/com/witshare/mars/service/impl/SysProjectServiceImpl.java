@@ -360,10 +360,10 @@ public class SysProjectServiceImpl implements SysProjectService {
             projectStatusNow = EnumProjectStatus.Status1.getStatus();
         }
 
-        if (endTime.before(current) && hardCap.compareTo(actualGetEthAmount) <= 0) {
+        if (endTime.before(current) && softCap.compareTo(actualGetEthAmount) <= 0) {
             projectStatusNow = EnumProjectStatus.Status3.getStatus();
         }
-        if (endTime.before(current) && hardCap.compareTo(actualGetEthAmount) >= 0) {
+        if (endTime.before(current) && softCap.compareTo(actualGetEthAmount) >= 0) {
             projectStatusNow = EnumProjectStatus.Status4.getStatus();
         }
         sysProjectBean.setProjectStatus(projectStatusNow);
