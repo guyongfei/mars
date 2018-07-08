@@ -11,11 +11,14 @@
                     <props>
                         <!-- Kaptcha 配置 -->
                         <prop key="kaptcha.border">no</prop>
-                        <prop key="kaptcha.image.width">250</prop>
-                        <prop key="kaptcha.textproducer.font.size">80</prop>
-                        <prop key="kaptcha.image.height">90</prop>
-                        <prop key="kaptcha.session.key">code</prop>
-                        <prop key="kaptcha.textproducer.char.length">4</prop>
+                        <prop key="kaptcha.image.width">200</prop>
+                        <prop key="kaptcha.textproducer.font.size">40</prop>
+                        <prop key="kaptcha.image.height">75</prop>
+                        <prop key="kaptcha.textproducer.char.length">6</prop>
+                        <prop key="kaptcha.textproducer.char.space">2</prop>
+                        <prop key="kaptcha.textproducer.font.names">Arial, Courier</prop>
+                        <prop key="kaptcha.textproducer.char.string">acdefhkmnprstuvwxy34578</prop>
+                        <prop key="kaptcha.obscurificator.impl">com.google.code.kaptcha.impl.WaterRipple</prop>
                     </props>
                 </constructor-arg>
             </bean>

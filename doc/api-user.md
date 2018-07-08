@@ -51,8 +51,8 @@
   |字段|类型|是否必须|说明|
   |---|---|---|---|
   |verifyCode|string|是|邮箱验证码|
-  |imgToken|string|是|第2接口所带|
-  |imgVverifyCode|string|是|图片验证码|
+  |imgToken|string|是|第2接口所带imgToken|
+  |imgVerifyCode|string|是|图片验证码|
 
 - response body
 
