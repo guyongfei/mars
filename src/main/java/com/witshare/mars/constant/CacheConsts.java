@@ -29,6 +29,8 @@ public class CacheConsts {
     private final static String REDIS_PREFIX = "tokenpie:" + PROJECT_NAME + ":";
     public static final String REDIS_KEY_PHONE_NO_VERIFY_CODE_LIST_REGISTER = REDIS_PREFIX + "cache:register-verify-code-list";
     public static final String REDIS_KEY_PHONE_NO_VERIFY_CODE_LIST = REDIS_PREFIX + "cache:verify-code-list";
+    public static final String REDIS_KEY_VERIFY_CODE_IMG = REDIS_PREFIX + "cache:verify-code-img";
+
     public static final String REDIS_KEY_USER_VERIFY_CODE_REGISTER = REDIS_PREFIX + "cache:register-email:";
     public static final String REDIS_KEY_USER_VERIFY_CODE = REDIS_PREFIX + "cache:email:";
     public static final String REDIS_KEY_USER_INFO_STATISTIC = REDIS_PREFIX + "cache:user-info-statistic";

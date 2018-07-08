@@ -258,6 +258,18 @@
 
     </select>
 
+    <select id="selectByTxAddress"  resultType="com.witshare.mars.pojo.dto.SysProjectBean">
+
+        SELECT *
+        FROM sys_project
+        WHERE
+
+        (`platform_address` = #{fromAddress} AND `project_address` = #{toAddress})
+              OR
+        (`platform_address` = #{toAddress} AND `project_address` = #{fromAddress})
+
+    </select>
+
     <update id="updateProjectFollowCommentCount" parameterType="map">
 
         UPDATE sys_project

@@ -20,8 +20,17 @@
       "success": true
     }
   ```
+  
+## 2.获取图片验证码
 
-## 2.注册
+- url : /verify-code/img?imgToken=3e50fc7ee9ac4e65aaa3262431bf00a8
+
+- method:get
+- request param
+  - imgToken = 32位uuid
+
+
+## 3.注册
 
 > 注册成功后，后台会直接处理登录,前端需通过请求 /user/user-info 接口来获取该用户的相关信息；
 - url：/register
@@ -32,9 +41,18 @@
     {
       "email":"",
       "password":"",
-      "verifyCode":""
+      "verifyCode":"",
+      "imgToken":"",
+      "imgVerifyCode":""
     }
   ```
+  >data参数说明
+  
+  |字段|类型|是否必须|说明|
+  |---|---|---|---|
+  |verifyCode|string|是|邮箱验证码|
+  |imgToken|string|是|第2接口所带imgToken|
+  |imgVerifyCode|string|是|图片验证码|
 
 - response body
 
@@ -45,7 +63,7 @@
     }
   ```
 
-## 3.登录
+## 4.登录
 
 - url：/login
 - method:post
@@ -73,7 +91,7 @@
 |---|---|---|---|
 |success|bool|是|是否登陆成功，当登陆成功后 token将会置于Cookie中|
 
-## 4.登出
+## 5.登出
 
 - url：/logout
 - method:post
@@ -86,7 +104,7 @@
     }
   ```
 
-## 4.修改重置密码
+## 6.修改重置密码
 
 - url：/user/password?action=modify|reset
 - method:post
@@ -116,7 +134,7 @@
     }
   ```
 
-## 5.获取用户信息（只争对本人）
+## 7.获取用户信息（只争对本人）
 
 - url：/user/user-info
 - method:get

@@ -246,18 +246,16 @@ public class SysProjectServiceImpl implements SysProjectService {
         if (!blankQuery) {
             or.andProjectTokenLike("%" + queryStr + "%");
         }
-        sysProjectExample.setOrderByClause("default_project desc ,end_time desc");
+        sysProjectExample.setOrderByClause("default_project desc ,is_available desc, end_time desc");
         PageInfo<SysProject> pageInfo = PageHelper.startPage(pageNum, pageSize)
                 .doSelectPageInfo(() -> sysProjectMapper.selectByExample(sysProjectExample));
         PageInfo<SysProjectListVo> pageInfo_ = new PageInfo<>();
         LinkedList<SysProjectListVo> sysProjectListVos = new LinkedList<>();
         pageInfo.getList().forEach(p -> {
+            this.updateProjectStatus(p);
             SysProjectListVo sysProjectListVo = new SysProjectListVo();
             BeanUtils.copyProperties(p, sysProjectListVo);
             sysProjectListVos.add(sysProjectListVo);
-            SysProjectBean sysProjectBean1 = new SysProjectBean();
-            BeanUtils.copyProperties(p, sysProjectBean1);
-            this.updateProjectStatus(sysProjectBean1);
         });
         pageInfo.setList(null);
         BeanUtils.copyProperties(pageInfo, pageInfo_);
@@ -328,19 +326,19 @@ public class SysProjectServiceImpl implements SysProjectService {
     /**
      * 根据已售数量判断和更改项目状态
      *
-     * @param sysProjectBean
+     * @param sysProject
      */
-    public void updateProjectStatus(SysProjectBean sysProjectBean) {
-        if (sysProjectBean == null) {
+    public void updateProjectStatus(SysProject sysProject) {
+        if (sysProject == null) {
             return;
         }
-        int projectStatus = sysProjectBean.getProjectStatus();
-        String projectGid = sysProjectBean.getProjectGid();
-        Timestamp startTime = sysProjectBean.getStartTime();
-        Timestamp endTime = sysProjectBean.getEndTime();
+        int projectStatus = sysProject.getProjectStatus();
+        String projectGid = sysProject.getProjectGid();
+        Timestamp startTime = sysProject.getStartTime();
+        Timestamp endTime = sysProject.getEndTime();
         Timestamp current = new Timestamp(System.currentTimeMillis());
-        BigDecimal softCap = sysProjectBean.getSoftCap();
-        BigDecimal hardCap = sysProjectBean.getHardCap();
+        BigDecimal softCap = sysProject.getSoftCap();
+        BigDecimal hardCap = sysProject.getHardCap();
         BigDecimal actualGetEthAmount = BigDecimal.ZERO;
         ProjectSummaryBean summary = projectDailyInfoService.getSummary(projectGid);
         if (summary != null) {
@@ -348,8 +346,9 @@ public class SysProjectServiceImpl implements SysProjectService {
         }
         //状态修改
         int projectStatusNow = 0;
-        if (startTime.after(current)) {
-            projectStatusNow = EnumProjectStatus.Status0.getStatus();
+
+        if (startTime.before(current)) {
+            projectStatusNow = EnumProjectStatus.Status1.getStatus();
         }
 
         if (startTime.before(current) && hardCap.compareTo(actualGetEthAmount) >= 0) {
@@ -360,25 +359,34 @@ public class SysProjectServiceImpl implements SysProjectService {
             projectStatusNow = EnumProjectStatus.Status1.getStatus();
         }
 
-        if (endTime.before(current) && hardCap.compareTo(actualGetEthAmount) <= 0) {
+        if (endTime.before(current) && softCap.compareTo(actualGetEthAmount) <= 0) {
             projectStatusNow = EnumProjectStatus.Status3.getStatus();
         }
-        if (endTime.before(current) && hardCap.compareTo(actualGetEthAmount) >= 0) {
+        if (endTime.before(current) && softCap.compareTo(actualGetEthAmount) >= 0) {
             projectStatusNow = EnumProjectStatus.Status4.getStatus();
         }
-        sysProjectBean.setProjectStatus(projectStatusNow);
+        sysProject.setProjectStatus(projectStatusNow);
         //更改数据库，删除redis
         if (projectStatus != projectStatusNow) {
-            SysProject sysProject = new SysProject();
-            sysProject.setId(sysProjectBean.getId());
             sysProject.setUpdateTime(current);
-            sysProject.setProjectGid(projectGid);
             sysProject.setProjectStatus(projectStatusNow);
             sysProjectMapper.updateByPrimaryKeySelective(sysProject);
             this.deleteProjectCache(projectGid);
         }
     }
 
+    /**
+     * 更新状态，将状态返回对象
+     */
+    private void updateProjectStatus(SysProjectBean sysProjectBean) {
+        if (sysProjectBean == null) {
+            return;
+        }
+        SysProject sysProject = new SysProject();
+        BeanUtils.copyProperties(sysProjectBean, sysProject);
+        this.updateProjectStatus(sysProject);
+        sysProjectBean.setProjectStatus(sysProject.getProjectStatus());
+    }
 
     /**
      * @see SysProjectService#selectSysProjects(ProjectReqBean)
@@ -426,7 +434,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         if (StringUtils.isEmpty(projectGid)) {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
-        EnumI18NProject i18n = EnumI18NProject.getObjByLanguage(CurrentThreadContext.getInternationalTableName());
+        EnumI18NProject i18n = EnumI18NProject.getObjByLanguage(CurrentThreadContext.getI18N());
         String projectDetailName = i18n.getProjectDetailName();
         //查找redis
         String projectStatisticKey = RedisKeyUtil.getProjectFrontKey(projectGid);
@@ -448,13 +456,14 @@ public class SysProjectServiceImpl implements SysProjectService {
 
         // 获取des
         ProjectDescriptionBean descriptionBean = staticProjectDescriptionMapper.selectByTableName(i18n.getTableName(), projectGid);
-        frontInfoVo.setProjectInstruction(descriptionBean.getProjectInstruction())
-                .setProjectContent(descriptionBean.getProjectContent())
-                .setProjectName(descriptionBean.getProjectName());
-
-        //获取webSite
         Map<String, String> webSiteMap = projectWebSiteService.select(projectGid);
-        webSiteMap.put(WHITE_PAPER_LINK, descriptionBean.getWhitePaperLink());
+        if (descriptionBean != null) {
+            frontInfoVo.setProjectInstruction(descriptionBean.getProjectInstruction())
+                    .setProjectContent(descriptionBean.getProjectContent())
+                    .setProjectName(descriptionBean.getProjectName());
+            webSiteMap.put(WHITE_PAPER_LINK, descriptionBean.getWhitePaperLink());
+        }
+        //获取webSite
         frontInfoVo.setWebsites(webSiteMap);
 
         //返回状态做修改
@@ -472,7 +481,7 @@ public class SysProjectServiceImpl implements SysProjectService {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
         SysProjectBean sysProjectBean = this.selectByProjectGid(projectGid);
-        if (sysProjectBean == null) {
+        if (sysProjectBean == null || (sysProjectBean.getIsAvailable() == 1 && sysProjectBean.getDefaultProject() == 1)) {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
         Long id = sysProjectBean.getId();
@@ -488,7 +497,7 @@ public class SysProjectServiceImpl implements SysProjectService {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
         SysProjectBean sysProjectBean = this.selectByProjectGid(projectGid);
-        if (sysProjectBean == null) {
+        if (sysProjectBean == null || sysProjectBean.getIsAvailable() == 0) {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
         //查出原有的 默认项目
@@ -496,7 +505,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         sysProjectExample.or().andDefaultProjectEqualTo(1);
         List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
         Long id = sysProjectBean.getId();
-        //保存项目
+        //设置为默认项目
         staticSysProjectMapper.modifyDefaultProject(id);
         //清缓存
         this.deleteProjectCache(projectGid);

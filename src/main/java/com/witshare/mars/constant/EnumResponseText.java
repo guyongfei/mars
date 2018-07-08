@@ -8,6 +8,7 @@ public enum EnumResponseText {
     ErrorRequest(0, "请求错误", "Error request."),
     ErrorPassword(1, "密码错误", "Error Password."),
     ErrorEmailOrPassword(1, "邮箱或密码错误", "Error email or Password."),
+    ErrorKaptcha(1, "图像验证码错误", "Error kaptcha code."),
     ErrorVerifyCode(2, "验证码错误", "Error verifyCode."),
     ErrorOriginPassword(3, "原密码错误", "Error originPassword."),
     ErrorEmail(4, "邮箱不合法", "Error email."),

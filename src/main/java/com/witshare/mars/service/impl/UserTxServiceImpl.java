@@ -128,16 +128,16 @@ public class UserTxServiceImpl implements UserTxService {
         recordUserTxExample.or().andProjectGidEqualTo(projectGid);
         List<RecordUserTx> recordUserTxes = recordUserTxMapper.selectByExample(recordUserTxExample);
         LinkedList<DistributionStatusVo> distributionStatusVos = new LinkedList<>();
-        int[] userTxStatusArr = new int[100];
+        int[] needDistributeArr = new int[100];
         int[] platformTxStatusArr = new int[100];
-        LinkedList<DistributionStatusVo> childList = new LinkedList<>();
         if (CollectionUtils.isNotEmpty(recordUserTxes)) {
             recordUserTxes.forEach(p -> {
                 Integer platformTxStatus = p.getPlatformTxStatus();
                 platformTxStatusArr[platformTxStatus]++;
-                if (platformTxStatus == 3) {
-                    Integer userTxStatus = p.getUserTxStatus();
-                    userTxStatusArr[userTxStatus]++;
+                Integer userTxStatus = p.getUserTxStatus();
+                if ((userTxStatus == 2 || userTxStatus == 22 || userTxStatus == 23)
+                        && (platformTxStatus == 3 || platformTxStatus == 0)) {
+                    needDistributeArr[platformTxStatus]++;
                 }
             });
         }
@@ -147,21 +147,9 @@ public class UserTxServiceImpl implements UserTxService {
             if (value > 0) {
                 DistributionStatusVo distributionStatusVo = DistributionStatusVo.newInstance()
                         .setPlatformTxStatus(i)
+                        .setNeedDistributeCount(needDistributeArr[i])
                         .setCount(value);
                 distributionStatusVos.add(distributionStatusVo);
-                if (i == 3) {
-                    distributionStatusVo.setChild(childList);
-                }
-            }
-
-        }
-        for (int i = 0; i < 100; i++) {
-            int value = userTxStatusArr[i];
-            if (value > 0) {
-                DistributionStatusVo distributionStatusVo = DistributionStatusVo.newInstance()
-                        .setUserTxStatus(i)
-                        .setCount(value);
-                childList.add(distributionStatusVo);
             }
         }
 
@@ -229,9 +217,9 @@ public class UserTxServiceImpl implements UserTxService {
             if (value > 0) {
                 DistributionStatusVo distributionStatusVo = DistributionStatusVo.newInstance()
                         .setUserTxStatus(i)
+                        .setNeedDistributeCount(needDistributeArr[i])
                         .setCount(value);
                 distributionStatusVos.add(distributionStatusVo);
-                distributionStatusVo.setNeedDistributeCount(needDistributeArr[i]);
             }
         }
         int total = distributionStatusVos.size();

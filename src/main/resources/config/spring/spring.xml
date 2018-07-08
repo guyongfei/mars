@@ -22,4 +22,5 @@
     <util:properties id="buildInfo" location="classpath:properties/buildinfo.properties"/>
     <import resource="mybatis.xml"/>
     <import resource="mail.xml"/>
+    <import resource="kaptcha.xml"/>
 </beans>

@@ -16,7 +16,9 @@ public final class RedisKeyUtil {
         StringBuilder redisKey = new StringBuilder(REDIS_KEY_USER_VERIFY_CODE_REGISTER).append(email);
         return redisKey.toString();
     }
-
+    public static String getVerifyCodeImgKey(String token) {
+        return String.format("%s:%s", REDIS_KEY_VERIFY_CODE_IMG, token);
+    }
 
     public static String getCallApiInfo(String email) {
         StringBuilder redisKey = new StringBuilder(REDIS_KEY_CALL_API_INFO).append(email);
@@ -79,6 +81,7 @@ public final class RedisKeyUtil {
     public static String getWalletV3JsonKey(String walletAddress) {
         return String.format("%s:%s", REDIS_KEY_WALLET_V3JSON, walletAddress);
     }
+
 
 
 }

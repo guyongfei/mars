@@ -35,12 +35,12 @@ compileTestJava {
 repositories {
     mavenCentral()
     maven { url "https://jitpack.io" }
-    maven { url 'http://maven.oschina.net/content/groups/public/' }
+    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
     maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
     maven { url "http://maven.springframework.org/release" }
     maven { url "http://maven.restlet.org" }
     maven { url "http://mirrors.ibiblio.org/maven2" }
-    maven { url "http://maven.aliyun.com/nexus/content/groups/public/" }
+    maven { url 'http://maven.oschina.net/content/groups/public/' }
     maven {
         url "http://repo.baichuan-android.taobao.com/content/groups/BaichuanRepositories/"
     }
@@ -76,6 +76,8 @@ task buildinfo << {
 }
 processResources.dependsOn buildinfo
 dependencies {
+
+     compile fileTree(dir:'libs',include:['*.jar'])
 
     compile "org.springframework.boot:spring-boot-starter-web:${springBootVersion}"
     providedCompile("org.springframework.boot:spring-boot-starter-tomcat")
@@ -170,6 +172,11 @@ dependencies {
     compile group: 'org.apache.poi', name: 'poi', version: '3.16'
     compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.16'
     compile group: 'org.apache.poi', name: 'poi-ooxml-schemas', version: '3.16'
+
+    // https://mvnrepository.com/artifact/com.google.code.kaptcha/kaptcha
+//    compile group: 'com.google.code.kaptcha', name: 'kaptcha', version: '2.3'
+
+
 
 
 
