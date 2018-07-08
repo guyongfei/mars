@@ -326,19 +326,19 @@ public class SysProjectServiceImpl implements SysProjectService {
     /**
      * 根据已售数量判断和更改项目状态
      *
-     * @param sysProjectBean
+     * @param sysProject
      */
-    public void updateProjectStatus(SysProject sysProjectBean) {
-        if (sysProjectBean == null) {
+    public void updateProjectStatus(SysProject sysProject) {
+        if (sysProject == null) {
             return;
         }
-        int projectStatus = sysProjectBean.getProjectStatus();
-        String projectGid = sysProjectBean.getProjectGid();
-        Timestamp startTime = sysProjectBean.getStartTime();
-        Timestamp endTime = sysProjectBean.getEndTime();
+        int projectStatus = sysProject.getProjectStatus();
+        String projectGid = sysProject.getProjectGid();
+        Timestamp startTime = sysProject.getStartTime();
+        Timestamp endTime = sysProject.getEndTime();
         Timestamp current = new Timestamp(System.currentTimeMillis());
-        BigDecimal softCap = sysProjectBean.getSoftCap();
-        BigDecimal hardCap = sysProjectBean.getHardCap();
+        BigDecimal softCap = sysProject.getSoftCap();
+        BigDecimal hardCap = sysProject.getHardCap();
         BigDecimal actualGetEthAmount = BigDecimal.ZERO;
         ProjectSummaryBean summary = projectDailyInfoService.getSummary(projectGid);
         if (summary != null) {
@@ -365,26 +365,27 @@ public class SysProjectServiceImpl implements SysProjectService {
         if (endTime.before(current) && softCap.compareTo(actualGetEthAmount) >= 0) {
             projectStatusNow = EnumProjectStatus.Status4.getStatus();
         }
-        sysProjectBean.setProjectStatus(projectStatusNow);
+        sysProject.setProjectStatus(projectStatusNow);
         //更改数据库，删除redis
         if (projectStatus != projectStatusNow) {
-            SysProject sysProject = new SysProject();
-            sysProject.setId(sysProjectBean.getId());
             sysProject.setUpdateTime(current);
-            sysProject.setProjectGid(projectGid);
             sysProject.setProjectStatus(projectStatusNow);
             sysProjectMapper.updateByPrimaryKeySelective(sysProject);
             this.deleteProjectCache(projectGid);
         }
     }
 
-    void updateProjectStatus(SysProjectBean sysProjectBean) {
+    /**
+     * 更新状态，将状态返回对象
+     */
+    private void updateProjectStatus(SysProjectBean sysProjectBean) {
         if (sysProjectBean == null) {
             return;
         }
         SysProject sysProject = new SysProject();
         BeanUtils.copyProperties(sysProjectBean, sysProject);
         this.updateProjectStatus(sysProject);
+        sysProjectBean.setProjectStatus(sysProject.getProjectStatus());
     }
 
     /**
