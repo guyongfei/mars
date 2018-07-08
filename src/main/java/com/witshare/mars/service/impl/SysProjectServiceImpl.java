@@ -368,9 +368,11 @@ public class SysProjectServiceImpl implements SysProjectService {
         sysProject.setProjectStatus(projectStatusNow);
         //更改数据库，删除redis
         if (projectStatus != projectStatusNow) {
-            sysProject.setUpdateTime(current);
-            sysProject.setProjectStatus(projectStatusNow);
-            sysProjectMapper.updateByPrimaryKeySelective(sysProject);
+            SysProject sysProject1 = new SysProject();
+            sysProject1.setId(sysProject.getId());
+            sysProject1.setUpdateTime(current);
+            sysProject1.setProjectStatus(projectStatusNow);
+            sysProjectMapper.updateByPrimaryKeySelective(sysProject1);
             this.deleteProjectCache(projectGid);
         }
     }
