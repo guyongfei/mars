@@ -1,14 +1,18 @@
 package com.witshare.mars.service.impl;
 
+import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.alibaba.dubbo.common.utils.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.witshare.mars.constant.EnumProjectTxStatus;
 import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.dao.mysql.RecordPlatformTxMapper;
+import com.witshare.mars.dao.mysql.StaticSysProjectMapper;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.domain.RecordPlatformTx;
 import com.witshare.mars.pojo.domain.RecordPlatformTxExample;
 import com.witshare.mars.pojo.dto.RecordPlatformTxBean;
+import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.service.PlatformTxInfoService;
 import com.witshare.mars.service.SysProjectService;
 import org.springframework.beans.BeanUtils;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by user on 2018/7/2.
@@ -28,6 +33,8 @@ public class PlatformTxInfoServiceImpl implements PlatformTxInfoService {
     private RecordPlatformTxMapper recordPlatformTxMapper;
     @Autowired
     private SysProjectService sysProjectService;
+    @Autowired
+    private StaticSysProjectMapper sysProjectMapper;
 
 
     @Override
@@ -57,6 +64,33 @@ public class PlatformTxInfoServiceImpl implements PlatformTxInfoService {
         LinkedList<RecordPlatformTxBean> recordPlatformTxBeans = new LinkedList<>();
         pageInfo.getList().forEach(p -> {
             RecordPlatformTxBean recordPlatformTxBean_ = RecordPlatformTxBean.newInstance();
+            //修改状态
+            Integer txStatus = p.getTxStatus();
+            Integer txType = p.getTxType();
+            if (txStatus == 2 && txType == 0) {
+                String fromAddress = p.getFromAddress();
+                Timestamp current = new Timestamp(System.currentTimeMillis());
+                List<SysProjectBean> sysProjectBeans = sysProjectMapper.selectByTxAddress(p);
+                if (CollectionUtils.isNotEmpty(sysProjectBeans)) {
+                    SysProjectBean sysProjectBean = sysProjectBeans.get(0);
+                    String platformAddress = sysProjectBean.getPlatformAddress();
+                    if (StringUtils.isEquals(fromAddress, platformAddress)) {
+                        p.setFromName("平台");
+                        p.setToName(sysProjectBean.getProjectToken());
+                        p.setTxType(EnumProjectTxStatus.Status2.getStatus());
+                    } else {
+                        p.setToName("平台");
+                        p.setFromName(sysProjectBean.getProjectToken());
+                        p.setTxType(EnumProjectTxStatus.Status1.getStatus());
+                    }
+                    p.setProjectToken(sysProjectBean.getProjectToken());
+                    p.setProjectGid(sysProjectBean.getProjectGid());
+                } else {
+                    p.setTxType(EnumProjectTxStatus.Status3.getStatus());
+                }
+                p.setUpdateTime(current);
+                recordPlatformTxMapper.updateByPrimaryKeySelective(p);
+            }
             BeanUtils.copyProperties(p, recordPlatformTxBean_);
             recordPlatformTxBeans.add(recordPlatformTxBean_);
         });

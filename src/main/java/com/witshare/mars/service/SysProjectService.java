@@ -1,6 +1,7 @@
 package com.witshare.mars.service;
 
 import com.github.pagehelper.PageInfo;
+import com.witshare.mars.pojo.domain.SysProject;
 import com.witshare.mars.pojo.dto.ProjectReqBean;
 import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.pojo.vo.SysProjectBeanFrontInfoVo;
@@ -81,7 +82,7 @@ public interface SysProjectService {
     /**
      * 实时更改项目状态
      */
-    void updateProjectStatus(SysProjectBean sysProjectBean);
+    void updateProjectStatus(SysProject sysProjectBean);
 
 
 }

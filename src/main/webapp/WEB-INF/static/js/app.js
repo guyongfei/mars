@@ -44,6 +44,14 @@ var disTributeStatusMap =
         4: '交易作废'
     };
 
+var projectTxTypeMap =
+    {
+        0: '初始状态',
+        1: '项目方-->平台',
+        2: '平台-->项目方',
+        3: '其他类型'
+    };
+
 
 $(function () {
     $("body").on("click", ".cancel,.am-close", function () {

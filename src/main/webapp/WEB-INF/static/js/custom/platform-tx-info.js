@@ -1,4 +1,3 @@
-
 var TableInit = function () {
     var oTableInit = new Object();
     //初始化Table
@@ -58,7 +57,8 @@ var TableInit = function () {
                 field: 'txType',
                 align: 'center',
                 title: '交易类型',
-                visible: false
+                visible: false,
+                formatter: txTypeFormatter
             }, {
                 field: 'fromName',
                 align: 'center',
@@ -156,6 +156,19 @@ function platformTxStatusFormatter(value, row, index) {
         '<label class="btn " >' + state + '</label>'
     ].join('');
 }
+
+function txTypeFormatter(value, row, index) {
+    var color = '#000';
+    var color_green = 'btn-danger';
+    return [
+        '<label class="btn " >' + projectTxTypeMap[value] + '</label>'
+    ].join('');
+}
+
+
+$('#btn_query').click(function () {
+    $('#inner_table').bootstrapTable('refresh', {pageNumber: 1});
+})
 
 window.operateEvents = {
     'click .platform-tx': function (e, value, row, index) {

@@ -252,12 +252,10 @@ public class SysProjectServiceImpl implements SysProjectService {
         PageInfo<SysProjectListVo> pageInfo_ = new PageInfo<>();
         LinkedList<SysProjectListVo> sysProjectListVos = new LinkedList<>();
         pageInfo.getList().forEach(p -> {
+            this.updateProjectStatus(p);
             SysProjectListVo sysProjectListVo = new SysProjectListVo();
             BeanUtils.copyProperties(p, sysProjectListVo);
             sysProjectListVos.add(sysProjectListVo);
-            SysProjectBean sysProjectBean1 = new SysProjectBean();
-            BeanUtils.copyProperties(p, sysProjectBean1);
-            this.updateProjectStatus(sysProjectBean1);
         });
         pageInfo.setList(null);
         BeanUtils.copyProperties(pageInfo, pageInfo_);
@@ -330,7 +328,7 @@ public class SysProjectServiceImpl implements SysProjectService {
      *
      * @param sysProjectBean
      */
-    public void updateProjectStatus(SysProjectBean sysProjectBean) {
+    public void updateProjectStatus(SysProject sysProjectBean) {
         if (sysProjectBean == null) {
             return;
         }
@@ -379,6 +377,14 @@ public class SysProjectServiceImpl implements SysProjectService {
         }
     }
 
+    void updateProjectStatus(SysProjectBean sysProjectBean) {
+        if (sysProjectBean == null) {
+            return;
+        }
+        SysProject sysProject = new SysProject();
+        BeanUtils.copyProperties(sysProjectBean, sysProject);
+        this.updateProjectStatus(sysProject);
+    }
 
     /**
      * @see SysProjectService#selectSysProjects(ProjectReqBean)
@@ -426,7 +432,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         if (StringUtils.isEmpty(projectGid)) {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
-        EnumI18NProject i18n = EnumI18NProject.getObjByLanguage(CurrentThreadContext.getInternationalTableName());
+        EnumI18NProject i18n = EnumI18NProject.getObjByLanguage(CurrentThreadContext.getI18N());
         String projectDetailName = i18n.getProjectDetailName();
         //查找redis
         String projectStatisticKey = RedisKeyUtil.getProjectFrontKey(projectGid);
@@ -448,13 +454,14 @@ public class SysProjectServiceImpl implements SysProjectService {
 
         // 获取des
         ProjectDescriptionBean descriptionBean = staticProjectDescriptionMapper.selectByTableName(i18n.getTableName(), projectGid);
-        frontInfoVo.setProjectInstruction(descriptionBean.getProjectInstruction())
-                .setProjectContent(descriptionBean.getProjectContent())
-                .setProjectName(descriptionBean.getProjectName());
-
-        //获取webSite
         Map<String, String> webSiteMap = projectWebSiteService.select(projectGid);
-        webSiteMap.put(WHITE_PAPER_LINK, descriptionBean.getWhitePaperLink());
+        if (descriptionBean != null) {
+            frontInfoVo.setProjectInstruction(descriptionBean.getProjectInstruction())
+                    .setProjectContent(descriptionBean.getProjectContent())
+                    .setProjectName(descriptionBean.getProjectName());
+            webSiteMap.put(WHITE_PAPER_LINK, descriptionBean.getWhitePaperLink());
+        }
+        //获取webSite
         frontInfoVo.setWebsites(webSiteMap);
 
         //返回状态做修改
