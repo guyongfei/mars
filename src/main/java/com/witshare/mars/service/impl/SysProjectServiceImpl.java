@@ -346,8 +346,9 @@ public class SysProjectServiceImpl implements SysProjectService {
         }
         //状态修改
         int projectStatusNow = 0;
-        if (startTime.after(current)) {
-            projectStatusNow = EnumProjectStatus.Status0.getStatus();
+
+        if (startTime.before(current)) {
+            projectStatusNow = EnumProjectStatus.Status1.getStatus();
         }
 
         if (startTime.before(current) && hardCap.compareTo(actualGetEthAmount) >= 0) {
