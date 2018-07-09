@@ -535,12 +535,12 @@ public class SysProjectServiceImpl implements SysProjectService {
 
     @Override
     public int getFrontProjectStatus(int status) {
-        if (status == EnumProjectStatus.Status2.getStatus()) {
-            status = EnumProjectStatus.Status1.getStatus();
-        }
-        if (status == EnumProjectStatus.Status4.getStatus()) {
-            status = EnumProjectStatus.Status3.getStatus();
-        }
+//        if (status == EnumProjectStatus.Status2.getStatus()) {
+//            status = EnumProjectStatus.Status1.getStatus();
+//        }
+//        if (status == EnumProjectStatus.Status4.getStatus()) {
+//            status = EnumProjectStatus.Status3.getStatus();
+//        }
         return status;
     }
 

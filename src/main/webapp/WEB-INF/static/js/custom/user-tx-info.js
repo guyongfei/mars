@@ -662,6 +662,12 @@ $(function () {
 })
 
 ////////////////////////////////以下为打币///////////////////////////////////////////
+
+$('#distributionModal').on('hidden.bs.modal', function () {
+    $(' #password').val('');
+    $(' #keystore').val('');
+})
+
 $(function () {
     $('#addEvent').bootstrapValidator({
         message: 'This value is not valid',
