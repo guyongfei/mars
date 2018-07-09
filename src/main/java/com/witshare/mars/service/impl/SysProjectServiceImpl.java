@@ -138,12 +138,12 @@ public class SysProjectServiceImpl implements SysProjectService {
             sysProjectBean.setStartTime(sysProjectBeanDb.getStartTime());
         }
         if (projectStatus >= EnumProjectStatus.Status2.getStatus()) {
-            sysProjectBean.setSoftCap(sysProjectBeanDb.getSoftCap());
+//            sysProjectBean.setSoftCap(sysProjectBeanDb.getSoftCap());
         }
         if (projectStatus >= EnumProjectStatus.Status3.getStatus()) {
-            sysProjectBean.setHardCap(sysProjectBeanDb.getHardCap());
-            sysProjectBean.setPriceRate(sysProjectBeanDb.getPriceRate());
-            sysProjectBean.setMinPurchaseAmount(sysProjectBeanDb.getMinPurchaseAmount());
+//            sysProjectBean.setHardCap(sysProjectBeanDb.getHardCap());
+//            sysProjectBean.setPriceRate(sysProjectBeanDb.getPriceRate());
+//            sysProjectBean.setMinPurchaseAmount(sysProjectBeanDb.getMinPurchaseAmount());
 //            sysProjectBean.setEndTime(sysProjectBeanDb.getEndTime());
         }
 
