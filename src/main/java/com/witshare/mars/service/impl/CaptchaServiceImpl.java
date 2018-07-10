@@ -2,6 +2,7 @@ package com.witshare.mars.service.impl;
 
 import com.google.code.kaptcha.Constants;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.witshare.mars.config.DistributedLocker;
 import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
@@ -29,6 +30,35 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Autowired
     private RedisCommonDao redisCommonDao;
+    @Autowired
+    private DistributedLocker distributedLocker;
+
+    private final static String CAPTCHA_LOCK = "captchaLock:";
+    private final static int CAPTCHA_TIME = 60;
+
+    @Override
+    public void checkCaptcha(String code, String token) {
+
+        if (StringUtils.isAnyBlank(code, token)) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String verifyCodeImgKey = RedisKeyUtil.getVerifyCodeImgKey(token);
+        boolean existsKey = redisCommonDao.existsKey(verifyCodeImgKey);
+        if (!existsKey) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String captchaLockKey = CAPTCHA_LOCK + token;
+        boolean locked = distributedLocker.isLocked(captchaLockKey);
+        if (locked) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String redisCode = redisCommonDao.getString(verifyCodeImgKey);
+        if (!StringUtils.equals(redisCode, code)) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        distributedLocker.lock(captchaLockKey, CAPTCHA_TIME);
+    }
+
 
     @Override
     public void genCaptcha(HttpServletRequest request, HttpServletResponse response, String token) throws IOException {

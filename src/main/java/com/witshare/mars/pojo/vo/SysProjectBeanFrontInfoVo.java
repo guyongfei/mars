@@ -28,6 +28,7 @@ public class SysProjectBeanFrontInfoVo {
 
     private BigDecimal priceRate;
     private BigDecimal soldAmount;
+    private BigDecimal soldTokenAmount;
     private Long nextPriceInterval;
 
 
@@ -217,6 +218,15 @@ public class SysProjectBeanFrontInfoVo {
 
     public SysProjectBeanFrontInfoVo setDefaultProject(Integer defaultProject) {
         this.defaultProject = defaultProject;
+        return this;
+    }
+
+    public BigDecimal getSoldTokenAmount() {
+        return soldTokenAmount;
+    }
+
+    public SysProjectBeanFrontInfoVo setSoldTokenAmount(BigDecimal soldTokenAmount) {
+        this.soldTokenAmount = soldTokenAmount;
         return this;
     }
 }

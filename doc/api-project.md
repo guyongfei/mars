@@ -92,6 +92,7 @@
                 },
             "priceRate":0.00,
             "soldAmount":3215456,
+            "soldTokenAmount":3215456,
             "nextPriceInterval":32156420,
             "startTime":1523212345600,
             "endTime":1523212345600
@@ -114,7 +115,8 @@
 |projectContent|string|是|项目详情|
 |webSites|object|是|网站链接集合|
 |priceRate|number|是|当前单价比（ETH:Token）|
-|soldAmount|number|是|已售数量|
+|soldAmount|number|是|已售折算Eth数量|
+|soldTokenAmount|number|是|已售折算token数量|
 |nextPriceInterval|number|是|距下一个价格开始时间的间隔，单位ms|
 |startTime|number|是|开始时间，单位ms|
 |endTime|number|是|结束时间，单位ms|
