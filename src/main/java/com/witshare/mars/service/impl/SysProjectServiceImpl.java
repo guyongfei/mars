@@ -138,12 +138,12 @@ public class SysProjectServiceImpl implements SysProjectService {
             sysProjectBean.setStartTime(sysProjectBeanDb.getStartTime());
         }
         if (projectStatus >= EnumProjectStatus.Status2.getStatus()) {
-            sysProjectBean.setSoftCap(sysProjectBeanDb.getSoftCap());
+//            sysProjectBean.setSoftCap(sysProjectBeanDb.getSoftCap());
         }
         if (projectStatus >= EnumProjectStatus.Status3.getStatus()) {
-            sysProjectBean.setHardCap(sysProjectBeanDb.getHardCap());
-            sysProjectBean.setPriceRate(sysProjectBeanDb.getPriceRate());
-            sysProjectBean.setMinPurchaseAmount(sysProjectBeanDb.getMinPurchaseAmount());
+//            sysProjectBean.setHardCap(sysProjectBeanDb.getHardCap());
+//            sysProjectBean.setPriceRate(sysProjectBeanDb.getPriceRate());
+//            sysProjectBean.setMinPurchaseAmount(sysProjectBeanDb.getMinPurchaseAmount());
 //            sysProjectBean.setEndTime(sysProjectBeanDb.getEndTime());
         }
 
@@ -368,9 +368,11 @@ public class SysProjectServiceImpl implements SysProjectService {
         sysProject.setProjectStatus(projectStatusNow);
         //更改数据库，删除redis
         if (projectStatus != projectStatusNow) {
-            sysProject.setUpdateTime(current);
-            sysProject.setProjectStatus(projectStatusNow);
-            sysProjectMapper.updateByPrimaryKeySelective(sysProject);
+            SysProject sysProject1 = new SysProject();
+            sysProject1.setId(sysProject.getId());
+            sysProject1.setUpdateTime(current);
+            sysProject1.setProjectStatus(projectStatusNow);
+            sysProjectMapper.updateByPrimaryKeySelective(sysProject1);
             this.deleteProjectCache(projectGid);
         }
     }
@@ -533,12 +535,12 @@ public class SysProjectServiceImpl implements SysProjectService {
 
     @Override
     public int getFrontProjectStatus(int status) {
-        if (status == EnumProjectStatus.Status2.getStatus()) {
-            status = EnumProjectStatus.Status1.getStatus();
-        }
-        if (status == EnumProjectStatus.Status4.getStatus()) {
-            status = EnumProjectStatus.Status3.getStatus();
-        }
+//        if (status == EnumProjectStatus.Status2.getStatus()) {
+//            status = EnumProjectStatus.Status1.getStatus();
+//        }
+//        if (status == EnumProjectStatus.Status4.getStatus()) {
+//            status = EnumProjectStatus.Status3.getStatus();
+//        }
         return status;
     }
 
