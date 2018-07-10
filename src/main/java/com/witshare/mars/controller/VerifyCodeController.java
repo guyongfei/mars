@@ -71,7 +71,7 @@ public class VerifyCodeController {
     @RequestMapping(value = "/img", method = RequestMethod.POST)
     public void checkVerifyCodeImg(HttpServletRequest request,
                                    HttpServletResponse response,
-                                   @RequestParam("code") String code,
+                                   @RequestParam("imgVerifyCode") String code,
                                    @RequestParam("imgToken") String token) throws Exception {
 
         captchaService.checkCaptcha(code, token);
