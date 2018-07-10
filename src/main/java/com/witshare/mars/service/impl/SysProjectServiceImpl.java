@@ -440,11 +440,15 @@ public class SysProjectServiceImpl implements SysProjectService {
         String projectDetailName = i18n.getProjectDetailName();
         //查找redis
         String projectStatisticKey = RedisKeyUtil.getProjectFrontKey(projectGid);
+        ProjectSummaryBean summary = projectDailyInfoService.getSummary(projectGid);
+        BigDecimal soldAmount = summary == null ? BigDecimal.ZERO:summary.getActualGetEthAmount();
+        BigDecimal soldTokenAmount = summary == null ? BigDecimal.ZERO:summary.getActualPayTokenAmount();
 //        String projectDetail = null;
         String projectDetail = redisCommonDao.getHash(projectStatisticKey, projectDetailName);
         if (StringUtils.isNotEmpty(projectDetail)) {
             frontInfoVo = gson.fromJson(projectDetail, SysProjectBeanFrontInfoVo.class);
-            frontInfoVo.setSoldAmount(projectDailyInfoService.getSoldAmount(projectGid));
+            frontInfoVo.setSoldAmount(soldAmount);
+            frontInfoVo.setSoldTokenAmount(soldTokenAmount);
             return frontInfoVo;
         }
 
@@ -473,7 +477,9 @@ public class SysProjectServiceImpl implements SysProjectService {
 
         redisCommonDao.putHash(projectStatisticKey, projectDetailName, gson.toJson(frontInfoVo));
 
-        frontInfoVo.setSoldAmount(projectDailyInfoService.getSoldAmount(projectGid));
+        frontInfoVo.setSoldAmount(soldAmount);
+        frontInfoVo.setSoldTokenAmount(soldTokenAmount);
+
         return frontInfoVo;
     }
 

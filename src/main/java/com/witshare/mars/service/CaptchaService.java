@@ -9,5 +9,7 @@ import java.io.IOException;
  */
 public interface CaptchaService {
 
-    void genCaptcha(HttpServletRequest request, HttpServletResponse response ,String token) throws IOException;
+    void checkCaptcha(String code, String imgToken);
+
+    void genCaptcha(HttpServletRequest request, HttpServletResponse response, String token) throws IOException;
 }
