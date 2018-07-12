@@ -246,7 +246,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         if (!blankQuery) {
             or.andProjectTokenLike("%" + queryStr + "%");
         }
-        sysProjectExample.setOrderByClause("default_project desc ,is_available desc, end_time desc");
+        sysProjectExample.setOrderByClause("default_project desc ,is_available desc, end_time asc");
         PageInfo<SysProject> pageInfo = PageHelper.startPage(pageNum, pageSize)
                 .doSelectPageInfo(() -> sysProjectMapper.selectByExample(sysProjectExample));
         PageInfo<SysProjectListVo> pageInfo_ = new PageInfo<>();
