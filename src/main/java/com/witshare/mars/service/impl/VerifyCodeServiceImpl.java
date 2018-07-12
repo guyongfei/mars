@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import static com.witshare.mars.pojo.dto.SysUserBean.EMAIL;
+import static com.witshare.mars.pojo.dto.SysUserBean.*;
 
 
 /**
@@ -52,6 +52,16 @@ public class VerifyCodeServiceImpl implements VerifyCodeService {
     public void sendRegisterVerificationCode(Map<String, String> requestBody) {
         if (requestBody == null || requestBody.size() < 1) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        String imgVerifyCode = requestBody.get(IMG_VERIFY_CODE);
+        String imgToken = requestBody.get(IMG_TOKEN);
+        if (StringUtils.isAnyBlank(imgVerifyCode, imgToken) || imgToken.trim().length() != 32) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        //获取图像验证码
+        String imgVerifyCodeDb = redisCommonDao.getAndDelete(RedisKeyUtil.getVerifyCodeImgKey(imgToken.trim()));
+        if (!StringUtils.equals(imgVerifyCodeDb, imgVerifyCode)) {
+            throw new WitshareException(EnumResponseText.ErrorKaptcha);
         }
         if (!requestBody.containsKey(EMAIL)) {
             throw new WitshareException(EnumResponseText.ErrorEmail);

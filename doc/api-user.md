@@ -2,7 +2,28 @@
 
 # 用户相关
 
-## 1.获取邮箱验证码
+
+## 1.1 获取图片验证码
+
+- url : /verify-code/img?imgToken=3e50fc7ee9ac4e65aaa3262431bf00a8
+
+- method:get
+- request param
+  - imgToken = 32位uuid  
+  
+## 1.2 校验图片验证码
+
+- url : /verify-code/img?imgToken=3e50fc7ee9ac4e65aaa3262431bf00a8 & imgVerifyCode=xxx
+
+- method:post
+- request param
+  - imgToken = 32位uuid
+  - imgVerifyCode = xxx
+  
+>校验失败后需再次获取新的校验图片；<br>
+获取邮箱验证码时一并将成功的校验对发送后台；<br>
+  
+## 2.获取邮箱验证码
 
 - url : /verify-code/email?action=register|other
 
@@ -12,6 +33,9 @@
   - action = other :其他场景
 - request body
   - email ：用户的邮箱，用于收取验证码
+  - imgToken: 注册时带，第1.1接口所带imgToken
+  - imgVerifyCode: 注册时带，第1.2成功校验的图片验证码
+
 - response body
 
   ```json
@@ -20,14 +44,6 @@
       "success": true
     }
   ```
-  
-## 2.获取图片验证码
-
-- url : /verify-code/img?imgToken=3e50fc7ee9ac4e65aaa3262431bf00a8
-
-- method:get
-- request param
-  - imgToken = 32位uuid
 
 
 ## 3.注册
@@ -41,9 +57,7 @@
     {
       "email":"",
       "password":"",
-      "verifyCode":"",
-      "imgToken":"",
-      "imgVerifyCode":""
+      "verifyCode":""
     }
   ```
   >data参数说明
@@ -51,8 +65,6 @@
   |字段|类型|是否必须|说明|
   |---|---|---|---|
   |verifyCode|string|是|邮箱验证码|
-  |imgToken|string|是|第2接口所带imgToken|
-  |imgVerifyCode|string|是|图片验证码|
 
 - response body
 

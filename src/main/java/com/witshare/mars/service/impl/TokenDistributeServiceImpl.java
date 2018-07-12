@@ -2,6 +2,7 @@ package com.witshare.mars.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.witshare.mars.config.CurrentThreadContext;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.pojo.dto.TokenDistributeBean;
@@ -70,7 +71,11 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
         }};
         String bodyJson = JSON.toJSONString(body);
         String reqToken = getToken(reqPath, "POST", null, bodyJson);
-        logger.info("execTokenDistribute() request==>rid={}; url={}; param={}", rid, url, body);
+        //记录当前操作人
+        String email = CurrentThreadContext.getEmail();
+        //移除密码
+        body.remove("password");
+        logger.info("execTokenDistribute() request==>email={};rid={}; url={}; param={}", email, rid, url, body);
         String result = HttpClientUtil.doPost(url, bodyJson, reqToken, MOON_TOKEN_HEADER_NAME);
         logger.info("execTokenDistribute() response==>rid={}; res={}", rid, result);
         ResponseBean responseBean = parseResult(result);
@@ -100,7 +105,6 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
             Integer[] integers = platformStatus.toArray(platformStatuses);
             tokenDistributeBean.setPlatformTxStatus(integers);
         }
-
 
 
     }

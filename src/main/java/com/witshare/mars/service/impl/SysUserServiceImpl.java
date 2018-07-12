@@ -74,16 +74,16 @@ public class SysUserServiceImpl implements SysUserService {
         String email = requestBody.get(EMAIL);
         String password = requestBody.get(PASSWORD);
         String verifyCode = requestBody.get(VERIFY_CODE);
-        String imgVerifyCode = requestBody.get(IMG_VERIFY_CODE);
-        String imgToken = requestBody.get(IMG_TOKEN);
-        if (StringUtils.isAnyBlank(email, password, verifyCode, imgVerifyCode, imgToken) || imgToken.trim().length() != 32) {
+//        String imgVerifyCode = requestBody.get(IMG_VERIFY_CODE);
+//        String imgToken = requestBody.get(IMG_TOKEN);
+        if (StringUtils.isAnyBlank(email, password, verifyCode)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
         //获取图像验证码
-        String imgVerifyCodeDb = redisCommonDao.getAndDelete(RedisKeyUtil.getVerifyCodeImgKey(imgToken.trim()));
-        if (!StringUtils.equals(imgVerifyCodeDb, imgVerifyCode)) {
-            throw new WitshareException(EnumResponseText.ErrorKaptcha);
-        }
+//        String imgVerifyCodeDb = redisCommonDao.getAndDelete(RedisKeyUtil.getVerifyCodeImgKey(imgToken.trim()));
+//        if (!StringUtils.equals(imgVerifyCodeDb, imgVerifyCode)) {
+//            throw new WitshareException(EnumResponseText.ErrorKaptcha);
+//        }
         SysUserBean userBean = getByEmail(email, null);
         if (userBean != null && EnumStatus.Valid.getValue() == userBean.getUserStatus() && StringUtils.equals(email, userBean.getEmail())) {
             throw new WitshareException(EnumResponseText.ExistEmail);
