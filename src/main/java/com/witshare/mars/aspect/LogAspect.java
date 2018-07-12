@@ -111,8 +111,8 @@ public class LogAspect implements ThrowsAdvice {
                     s = s.substring(0, 40) + "*****" + s.substring(length - 40);
                 }
                 String key = next.getKey();
-                if ("password".equals(key) || "keystore".equals(key)) {
-                    s = s.length() + "";
+                if (key.contains("password") || "keystore".equals(key)) {
+                    s = "已加密";
                 }
                 requestParam.put(next.getKey(), s);
             }
@@ -121,39 +121,35 @@ public class LogAspect implements ThrowsAdvice {
 
         //将请求体置入
         String body = (String) requestBody;
-        if (body.length() > 1500) {
-            try {
-                Map<String, Object> map = JsonUtils.jsonToPojo((String) requestBody, Map.class);
-                HashMap<String, Object> newMap = new HashMap<>();
-                Set<Map.Entry<String, Object>> entries = map.entrySet();
-                Iterator<Map.Entry<String, Object>> iterator = entries.iterator();
-                while (iterator.hasNext()) {
-                    try {
-                        Map.Entry<String, Object> next = iterator.next();
-                        String key = next.getKey();
-                        Object value = next.getValue();
-                        if (value instanceof String && ((String) value).length() > 100) {
-                            value = ((String) value).substring(0, 40) + "*****" + ((String) value).substring(((String) value).length() - 40);
-                        }
-                        if (value instanceof String){
-                            if ("password".equals(key) || "keystore".equals(key)) {
-                                value = ((String) value).length() + "";
-                            }
-                        }
-                        newMap.put(key, value);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+        try {
+            Map<String, Object> map = JsonUtils.jsonToPojo((String) requestBody, Map.class);
+            HashMap<String, Object> newMap = new HashMap<>();
+            Set<Map.Entry<String, Object>> entries = map.entrySet();
+            Iterator<Map.Entry<String, Object>> iterator = entries.iterator();
+            while (iterator.hasNext()) {
+                try {
+                    Map.Entry<String, Object> next = iterator.next();
+                    String key = next.getKey();
+                    Object value = next.getValue();
+                    if (value instanceof String && ((String) value).length() > 100) {
+                        value = ((String) value).substring(0, 40) + "*****" + ((String) value).substring(((String) value).length() - 40);
                     }
+                    if (value instanceof String) {
+                        if (key.contains("password") || "keystore".equals(key)) {
+                            value = "已加密";
+                        }
+                    }
+                    newMap.put(key, value);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                requestMap.put("requestBody", newMap);
-            } catch (Exception e) {
-                e.printStackTrace();
-                requestMap.put("requestBody", JSONObject.stringToValue((String) requestBody));
             }
-
-        } else {
+            requestMap.put("requestBody", newMap);
+        } catch (Exception e) {
+            e.printStackTrace();
             requestMap.put("requestBody", JSONObject.stringToValue((String) requestBody));
         }
+
 
         requestMap.put("startTime", new Date());
 
