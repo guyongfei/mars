@@ -441,12 +441,19 @@ public class SysProjectServiceImpl implements SysProjectService {
         //查找redis
         String projectStatisticKey = RedisKeyUtil.getProjectFrontKey(projectGid);
         ProjectSummaryBean summary = projectDailyInfoService.getSummary(projectGid);
-        BigDecimal soldAmount = summary == null ? BigDecimal.ZERO:summary.getActualGetEthAmount();
-        BigDecimal soldTokenAmount = summary == null ? BigDecimal.ZERO:summary.getActualPayTokenAmount();
+        BigDecimal soldAmount = summary == null ? BigDecimal.ZERO : summary.getActualGetEthAmount();
+        BigDecimal soldTokenAmount = summary == null ? BigDecimal.ZERO : summary.getActualPayTokenAmount();
 //        String projectDetail = null;
         String projectDetail = redisCommonDao.getHash(projectStatisticKey, projectDetailName);
         if (StringUtils.isNotEmpty(projectDetail)) {
             frontInfoVo = gson.fromJson(projectDetail, SysProjectBeanFrontInfoVo.class);
+
+            //修改项目状态
+            SysProject sysProject = new SysProject();
+            BeanUtils.copyProperties(frontInfoVo, sysProject);
+            this.updateProjectStatus(sysProject);
+            frontInfoVo.setProjectStatus(sysProject.getProjectStatus());
+
             frontInfoVo.setSoldAmount(soldAmount);
             frontInfoVo.setSoldTokenAmount(soldTokenAmount);
             return frontInfoVo;
@@ -471,6 +478,13 @@ public class SysProjectServiceImpl implements SysProjectService {
         }
         //获取webSite
         frontInfoVo.setWebsites(webSiteMap);
+
+        //修改项目状态
+        SysProject sysProject = new SysProject();
+        BeanUtils.copyProperties(frontInfoVo, sysProject);
+        this.updateProjectStatus(sysProject);
+        frontInfoVo.setProjectStatus(sysProject.getProjectStatus());
+
 
         //返回状态做修改
         frontInfoVo.setProjectStatus(this.getFrontProjectStatus(frontInfoVo.getProjectStatus()));
