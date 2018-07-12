@@ -2,6 +2,7 @@ package com.witshare.mars.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
 import com.witshare.mars.config.CurrentThreadContext;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.pojo.dto.SysProjectBean;
@@ -75,7 +76,7 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
         String email = CurrentThreadContext.getEmail();
         //移除密码
         body.remove("password");
-        logger.info("execTokenDistribute() request==>email={};rid={}; url={}; param={}", email, rid, url, body);
+        logger.info("execTokenDistribute() request==>email={};rid={}; url={}; param={}", email, rid, url, new Gson().toJson(body));
         String result = HttpClientUtil.doPost(url, bodyJson, reqToken, MOON_TOKEN_HEADER_NAME);
         logger.info("execTokenDistribute() response==>rid={}; res={}", rid, result);
         ResponseBean responseBean = parseResult(result);

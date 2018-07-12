@@ -95,7 +95,7 @@ public class TokenHelper {
                 sbSign.append(body);
             }
             sbSign.append("|");
-            logger.info("md5 sbSign before:{}", sbSign.toString());
+//            logger.info("md5 sbSign before:{}", sbSign.toString());
             MessageDigest digest = MessageDigest.getInstance("MD5");
             digest.reset();
             digest.update(sbSign.toString().getBytes("UTF-8"));

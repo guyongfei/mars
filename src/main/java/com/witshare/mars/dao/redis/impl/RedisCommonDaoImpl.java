@@ -59,7 +59,7 @@ public class RedisCommonDaoImpl implements RedisCommonDao {
 
     @Override
     public void setString(String redisKey, String redisValue) {
-        logger.info("redisDao setString :  key={}, value={}", redisKey, redisValue);
+        logger.info("redisDao setString :  key={}, length={}", redisKey, redisValue.length());
         TryBase.ofr(
                 CacheConsts.RETRY_TIMES,
                 () -> stringRedisTemplate.opsForValue().set(redisKey, redisValue)
