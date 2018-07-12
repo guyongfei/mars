@@ -75,8 +75,9 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
         //记录当前操作人
         String email = CurrentThreadContext.getEmail();
         //移除密码
-        body.remove("password");
-        logger.info("execTokenDistribute() request==>email={};rid={}; url={}; param={}", email, rid, url, new Gson().toJson(body));
+        tokenDistributeBean.setPassword(null);
+        tokenDistributeBean.setKeystore(null);
+        logger.info("execTokenDistribute() request==>email={};rid={}; url={}; param={}", email, rid, url, new Gson().toJson(tokenDistributeBean));
         String result = HttpClientUtil.doPost(url, bodyJson, reqToken, MOON_TOKEN_HEADER_NAME);
         logger.info("execTokenDistribute() response==>rid={}; res={}", rid, result);
         ResponseBean responseBean = parseResult(result);
