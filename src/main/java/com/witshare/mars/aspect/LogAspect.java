@@ -36,9 +36,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import java.io.BufferedReader;
 import java.util.*;
 
-import static com.witshare.mars.constant.CacheConsts.COOKIE_USER_TOKEN;
 import static com.witshare.mars.constant.CacheConsts.PROJECT_NAME;
-import static com.witshare.mars.constant.CacheConsts.SHIRO_SESSION_EXPIRE_TIME;
 
 
 @Aspect
@@ -112,6 +110,10 @@ public class LogAspect implements ThrowsAdvice {
                 if (length > 100) {
                     s = s.substring(0, 40) + "*****" + s.substring(length - 40);
                 }
+                String key = next.getKey();
+                if ("password".equals(key) || "keystore".equals(key)) {
+                    s = s.length() + "";
+                }
                 requestParam.put(next.getKey(), s);
             }
         }
@@ -132,6 +134,11 @@ public class LogAspect implements ThrowsAdvice {
                         Object value = next.getValue();
                         if (value instanceof String && ((String) value).length() > 100) {
                             value = ((String) value).substring(0, 40) + "*****" + ((String) value).substring(((String) value).length() - 40);
+                        }
+                        if (value instanceof String){
+                            if ("password".equals(key) || "keystore".equals(key)) {
+                                value = ((String) value).length() + "";
+                            }
                         }
                         newMap.put(key, value);
                     } catch (Exception e) {
@@ -186,8 +193,6 @@ public class LogAspect implements ThrowsAdvice {
         String requestBody = charReader(request);
         Map requestMap = getRequestMap(joinPoint, request, requestBody);
         CurrentThreadContext.setRequestMap(requestMap);
-
-
 
 
         loadCookie(request);
