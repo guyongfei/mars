@@ -458,7 +458,7 @@ window.distributionEvents = {
 };
 
 function userTxStatusFormatter(value, row, index) {
-    var state = userTxStatusMap[value];
+    var state = userTxSelectStatusMap[value];
     var color = '#000';
     return [
         '<label class="btn " >' + state + '</label>'

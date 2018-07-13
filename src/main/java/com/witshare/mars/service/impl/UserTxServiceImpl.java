@@ -116,8 +116,11 @@ public class UserTxServiceImpl implements UserTxService {
             //设置平台受币地址
             recordUserTxBean_.setPlatformAddress(platformAddress);
             recordUserTxBean_.setPayTxId(p.getId() + 10000);
+            //将状态4归一为状态3
             Integer userTxStatusDb = p.getUserTxStatus();
-            recordUserTxBean_.setUserTxStatus(userTxStatusDb == 4 ? 3 : userTxStatusDb);
+            userTxStatusDb = userTxStatusDb == 4 ? 3 : userTxStatusDb;
+            //因前端需要排序显示，映射状态
+            recordUserTxBean_.setUserTxStatus(EnumUserTxStatus.get(userTxStatusDb).getOrder());
 
             recordUserTxBeans.add(recordUserTxBean_);
         });
@@ -231,9 +234,10 @@ public class UserTxServiceImpl implements UserTxService {
         for (int i = 0; i < 100; i++) {
             int value = userTxStatusArr[i];
             if (value > 0) {
+                EnumUserTxStatus enumUserTxStatus = EnumUserTxStatus.get(i);
                 DistributionStatusVo distributionStatusVo = DistributionStatusVo.newInstance()
-                        .setUserTxStatus(i)
-                        .setOrder(EnumUserTxStatus.get(i).getOrder())
+                        .setUserTxStatus(enumUserTxStatus.getOrder())
+                        .setOrder(enumUserTxStatus.getOrder())
                         .setNeedDistributeCount(needDistributeArr[i])
                         .setCount(value);
                 distributionStatusVos.add(distributionStatusVo);

@@ -148,6 +148,7 @@ public class ExportServiceImpl implements ExportService {
         BigDecimal softCap = sysProjectBeanVo.getSoftCap();
         BigDecimal hardCap = sysProjectBeanVo.getHardCap();
         BigDecimal minPurchaseAmount = sysProjectBeanVo.getMinPurchaseAmount();
+        BigDecimal maxPurchaseAmount = sysProjectBeanVo.getMaxPurchaseAmount();
         Timestamp startTime = sysProjectBeanVo.getStartTime();
         Timestamp endTime = sysProjectBeanVo.getEndTime();
         BigDecimal priceRate = sysProjectBeanVo.getPriceRate();
@@ -160,20 +161,27 @@ public class ExportServiceImpl implements ExportService {
         Map<String, String> websites = sysProjectBeanVo.getWebsites();
         Map<String, ProjectDescriptionBean> descriptions = sysProjectBeanVo.getDescriptions();
         ProjectDescriptionBean descriptionBeanEn = descriptions.get("en");
+        ProjectDescriptionBean descriptionBeanCn = descriptions.get("cn");
         String projectName = descriptionBeanEn.getProjectName();
+        String projectNameCn = descriptionBeanCn.getProjectName();
         String projectContent = descriptionBeanEn.getProjectContent();
+        String projectInstructionCn = descriptionBeanCn.getProjectInstruction();
         String projectInstruction = descriptionBeanEn.getProjectInstruction();
+        String projectContentCn = descriptionBeanCn.getProjectContent();
         String whitePaperLink = descriptionBeanEn.getWhitePaperLink();
+        String whitePaperLinkCn = descriptionBeanCn.getWhitePaperLink();
         int row = 1;
         int column = 1;
         sheet.getRow(row++).createCell(column).setCellValue(projectGid);
         sheet.getRow(row++).createCell(column).setCellValue(projectToken);
         sheet.getRow(row++).createCell(column).setCellValue(projectName);
+        sheet.getRow(row++).createCell(column).setCellValue(StringUtils.isEmpty(projectNameCn) ? "-" : projectNameCn);
         sheet.getRow(row++).createCell(column).setCellValue(tokenAddress);
         sheet.getRow(row++).createCell(column).setCellValue(platformAddress);
         sheet.getRow(row++).createCell(column).setCellValue(projectAddress);
         sheet.getRow(row++).createCell(column).setCellValue(tokenDecimal.toString());
         sheet.getRow(row++).createCell(column).setCellValue(minPurchaseAmount.stripTrailingZeros().toPlainString());
+        sheet.getRow(row++).createCell(column).setCellValue(maxPurchaseAmount.stripTrailingZeros().toPlainString());
         sheet.getRow(row++).createCell(column).setCellValue(priceRate.stripTrailingZeros().toPlainString());
         sheet.getRow(row++).createCell(column).setCellValue(softCap.stripTrailingZeros().toPlainString());
         sheet.getRow(row++).createCell(column).setCellValue(hardCap.stripTrailingZeros().toPlainString());
@@ -182,8 +190,11 @@ public class ExportServiceImpl implements ExportService {
         sheet.getRow(row++).createCell(column).setCellValue(startTime.toLocalDateTime().toString());
         sheet.getRow(row++).createCell(column).setCellValue(endTime.toLocalDateTime().toString());
         sheet.getRow(row++).createCell(column).setCellValue(projectInstruction);
+        sheet.getRow(row++).createCell(column).setCellValue(StringUtils.isEmpty(projectInstructionCn) ? "-" : projectInstructionCn);
         sheet.getRow(row++).createCell(column).setCellValue(projectContent);
+        sheet.getRow(row++).createCell(column).setCellValue(StringUtils.isEmpty(projectContentCn) ? "-" : projectContentCn);
         sheet.getRow(row++).createCell(column).setCellValue(whitePaperLink);
+        sheet.getRow(row++).createCell(column).setCellValue(StringUtils.isEmpty(whitePaperLinkCn) ? "-" : whitePaperLinkCn);
         sheet.getRow(row++).createCell(column).setCellValue(projectLogoLink);
         Iterator<Map.Entry<String, String>> webs = websites.entrySet().iterator();
 
@@ -292,7 +303,7 @@ public class ExportServiceImpl implements ExportService {
             row_.createCell(column++).setCellValue(actualReceivingAddress);
             row_.createCell(column++).setCellValue(payAmount.stripTrailingZeros().toPlainString());
             row_.createCell(column++).setCellValue(actualPayAmount.stripTrailingZeros().toPlainString());
-            row_.createCell(column++).setCellValue(EnumUserTxStatus.get(userTxStatus).getDes());
+            row_.createCell(column++).setCellValue(EnumUserTxStatus.getByOrder(userTxStatus).getDes());
             row_.createCell(column).setCellValue(EnumDistrubiteStatus.get(platformTxStatus).getDes());
             row++;
         }
@@ -303,39 +314,17 @@ public class ExportServiceImpl implements ExportService {
      * 组装交易状态表
      */
     private void assembleTxStatus(HSSFSheet sheet, PageInfo<DistributionStatusVo> platformStatusCount, HSSFCellStyle... cellStyleLeft) {
-        int column = 2;
+        int column = 0;
         List<DistributionStatusVo> list = platformStatusCount.getList();
-        int[] ints = new int[50];
-        list.forEach(p -> {
-            Integer userTxStatus = p.getUserTxStatus();
-            Integer count = p.getCount();
-            ints[userTxStatus] = count;
-        });
-        int row = 1;
-//        Status0(0, "初始状态"),
-//                Status1(1, "交易还未被打包"),
-//                Status2(2, "验证成功"),
-//                Status21(21, "验证失败（to不是平台地址)"),
-//                Status22(22, "验证失败（from不匹配）"),
-//                Status23(23, "验证失败（金额不匹配）"),
-//                Status3(3, "交易失败"),
-//                Status4(4, "交易不存在"),;
-
-        int i0= ints[EnumUserTxStatus.Status0.getStatus()];
-        int i1 = ints[EnumUserTxStatus.Status1.getStatus()];
-        int i2 = ints[EnumUserTxStatus.Status2.getStatus()];
-        int i21 = ints[EnumUserTxStatus.Status21.getStatus()];
-        int i22 = ints[EnumUserTxStatus.Status22.getStatus()];
-        int i23 = ints[EnumUserTxStatus.Status23.getStatus()];
-        int i3 = ints[EnumUserTxStatus.Status3.getStatus()];
-
-        sheet.getRow(row++).createCell(column).setCellValue(i0);
-        sheet.getRow(row++).createCell(column).setCellValue(i1);
-        sheet.getRow(row++).createCell(column).setCellValue(i2);
-        sheet.getRow(row++).createCell(column).setCellValue(i21);
-        sheet.getRow(row++).createCell(column).setCellValue(i22);
-        sheet.getRow(row++).createCell(column).setCellValue(i23);
-        sheet.getRow(row++).createCell(column).setCellValue(i3);
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            DistributionStatusVo distributionStatusVo = list.get(i);
+            Integer order = distributionStatusVo.getOrder();
+            EnumUserTxStatus orderStatus = EnumUserTxStatus.getByOrder(order);
+            sheet.getRow(i + 1).createCell(column).setCellValue(i+1);
+            sheet.getRow(i + 1).createCell(column + 1).setCellValue(orderStatus.getDes());
+            sheet.getRow(i + 1).createCell(column + 2).setCellValue(distributionStatusVo.getCount());
+        }
     }
 
 
