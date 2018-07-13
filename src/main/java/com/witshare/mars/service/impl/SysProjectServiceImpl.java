@@ -190,6 +190,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         Timestamp startTime = new Timestamp(sysProjectBean.getStartTimeLong());
         BigDecimal hardCap = sysProjectBean.getHardCap();
         BigDecimal minPurchaseAmount = sysProjectBean.getMinPurchaseAmount();
+        BigDecimal maxPurchaseAmount = sysProjectBean.getMaxPurchaseAmount();
         String instructionEn = sysProjectBean.getInstructionEn();
         String contentEn = sysProjectBean.getContentEn();
         String officialLink = sysProjectBean.getOfficialLink();
@@ -215,7 +216,7 @@ public class SysProjectServiceImpl implements SysProjectService {
                 || priceRate.compareTo(BigDecimal.ZERO) < 0
                 || softCap == null || softCap.compareTo(BigDecimal.ZERO) <= 0
                 || hardCap == null || softCap.compareTo(hardCap) > 0
-                || minPurchaseAmount == null || softCap.compareTo(minPurchaseAmount) <= 0
+                || minPurchaseAmount == null || maxPurchaseAmount == null || minPurchaseAmount.compareTo(maxPurchaseAmount) > 0
                 || StringUtils.isAnyBlank(instructionEn, contentEn)
                 || StringUtils.isAnyBlank(officialLink, whitePaperLinkEn, facebook, twitter, biYong, gitHub, reddit, telegram, kyc, tokenTerms, privacyPolicy)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
@@ -345,26 +346,30 @@ public class SysProjectServiceImpl implements SysProjectService {
             actualGetEthAmount = summary.getActualGetEthAmount();
         }
         //状态修改
-        int projectStatusNow = 0;
+        int projectStatusNow = projectStatus;
 
-        if (startTime.before(current)) {
+        if (startTime.before(current) && projectStatus < 1) {
             projectStatusNow = EnumProjectStatus.Status1.getStatus();
         }
 
-        if (startTime.before(current) && hardCap.compareTo(actualGetEthAmount) >= 0) {
-            projectStatusNow = EnumProjectStatus.Status2.getStatus();
-        }
-
-        if (startTime.before(current) && softCap.compareTo(actualGetEthAmount) >= 0) {
-            projectStatusNow = EnumProjectStatus.Status1.getStatus();
-        }
-
-        if (endTime.before(current) && softCap.compareTo(actualGetEthAmount) <= 0) {
+        if (endTime.before(current) && projectStatus < 3) {
             projectStatusNow = EnumProjectStatus.Status3.getStatus();
         }
-        if (endTime.before(current) && softCap.compareTo(actualGetEthAmount) >= 0) {
-            projectStatusNow = EnumProjectStatus.Status4.getStatus();
-        }
+
+//        if (startTime.before(current) && hardCap.compareTo(actualGetEthAmount) >= 0) {
+//            projectStatusNow = EnumProjectStatus.Status2.getStatus();
+//        }
+//
+//        if (startTime.before(current) && softCap.compareTo(actualGetEthAmount) >= 0) {
+//            projectStatusNow = EnumProjectStatus.Status1.getStatus();
+//        }
+//
+//        if (endTime.before(current) && softCap.compareTo(actualGetEthAmount) <= 0) {
+//            projectStatusNow = EnumProjectStatus.Status3.getStatus();
+//        }
+//        if (endTime.before(current) && softCap.compareTo(actualGetEthAmount) >= 0) {
+//            projectStatusNow = EnumProjectStatus.Status4.getStatus();
+//        }
         sysProject.setProjectStatus(projectStatusNow);
         //更改数据库，删除redis
         if (projectStatus != projectStatusNow) {
@@ -441,8 +446,8 @@ public class SysProjectServiceImpl implements SysProjectService {
         //查找redis
         String projectStatisticKey = RedisKeyUtil.getProjectFrontKey(projectGid);
         ProjectSummaryBean summary = projectDailyInfoService.getSummary(projectGid);
-        BigDecimal soldAmount = summary == null ? BigDecimal.ZERO : summary.getActualGetEthAmount();
-        BigDecimal soldTokenAmount = summary == null ? BigDecimal.ZERO : summary.getActualPayTokenAmount();
+        BigDecimal soldAmount = summary == null ? BigDecimal.ZERO : summary.getGetEthAmount();
+        BigDecimal soldTokenAmount = summary == null ? BigDecimal.ZERO : summary.getPayTokenAmount();
 //        String projectDetail = null;
         String projectDetail = redisCommonDao.getHash(projectStatisticKey, projectDetailName);
         if (StringUtils.isNotEmpty(projectDetail)) {
@@ -537,6 +542,31 @@ public class SysProjectServiceImpl implements SysProjectService {
             });
         }
 
+    }
+
+
+    @Override
+    public void projectStatus(String projectGid, Integer projectStatus) {
+        if (StringUtils.isEmpty(projectGid)) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
+        }
+        if (projectStatus == null || !WitshareUtils.rangeInDefined(projectStatus, 0, 3)) {
+            throw new WitshareException(EnumResponseText.ErrorProjectStatus);
+        }
+        SysProjectBean sysProjectBean = this.selectByProjectGid(projectGid);
+        if (sysProjectBean == null) {
+            throw new WitshareException(EnumResponseText.ErrorProjectGId);
+        }
+        //查出原有的 默认项目
+        SysProject sysProject = new SysProject();
+        sysProject.setId(sysProjectBean.getId());
+        sysProject.setProjectStatus(projectStatus);
+        Timestamp current = new Timestamp(System.currentTimeMillis());
+        sysProject.setUpdateTime(current);
+        //设置为默认项目
+        sysProjectMapper.updateByPrimaryKeySelective(sysProject);
+        //清缓存
+        this.deleteProjectCache(projectGid);
     }
 
     /**

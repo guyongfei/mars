@@ -328,7 +328,6 @@ public class ExportServiceImpl implements ExportService {
         int i22 = ints[EnumUserTxStatus.Status22.getStatus()];
         int i23 = ints[EnumUserTxStatus.Status23.getStatus()];
         int i3 = ints[EnumUserTxStatus.Status3.getStatus()];
-        int i4 = ints[EnumUserTxStatus.Status4.getStatus()];
 
         sheet.getRow(row++).createCell(column).setCellValue(i0);
         sheet.getRow(row++).createCell(column).setCellValue(i1);
@@ -337,7 +336,6 @@ public class ExportServiceImpl implements ExportService {
         sheet.getRow(row++).createCell(column).setCellValue(i22);
         sheet.getRow(row++).createCell(column).setCellValue(i23);
         sheet.getRow(row++).createCell(column).setCellValue(i3);
-        sheet.getRow(row).createCell(column).setCellValue(i4);
     }
 
 

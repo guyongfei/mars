@@ -14,6 +14,7 @@ public enum EnumResponseText {
     ErrorEmail(4, "邮箱不合法", "Error email."),
     ErrorId(5, "id错误", "Error id."),
     ErrorProjectGId(5, "项目唯一标识错误", "Error projectGid."),
+    ErrorProjectStatus(5, "项目状态错误", "Error project status."),
     ErrorLinkName(6, "名称错误", "Error linkName."),
     ErrorPicture(7, "图片错误", "Error picture."),
     ErrorNickname(8, "昵称不合法", "Error nickname."),

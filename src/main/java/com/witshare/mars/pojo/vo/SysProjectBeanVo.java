@@ -20,6 +20,7 @@ public class SysProjectBeanVo {
     private BigDecimal softCap;
     private BigDecimal hardCap;
     private BigDecimal minPurchaseAmount;
+    private BigDecimal maxPurchaseAmount;
     private Timestamp startTime;
     private Timestamp endTime;
     private BigDecimal priceRate;
@@ -231,6 +232,15 @@ public class SysProjectBeanVo {
 
     public SysProjectBeanVo setDefaultProject(Integer defaultProject) {
         this.defaultProject = defaultProject;
+        return this;
+    }
+
+    public BigDecimal getMaxPurchaseAmount() {
+        return maxPurchaseAmount;
+    }
+
+    public SysProjectBeanVo setMaxPurchaseAmount(BigDecimal maxPurchaseAmount) {
+        this.maxPurchaseAmount = maxPurchaseAmount;
         return this;
     }
 }

@@ -5,10 +5,11 @@ import java.util.LinkedList;
 /**
  * Created by user on 2018/6/29.
  */
-public class DistributionStatusVo {
+public class DistributionStatusVo implements Comparable<DistributionStatusVo> {
 
     private Long id;
     private Integer userTxStatus;
+    private Integer order;
     private Integer platformTxStatus;
     private Integer count;
     private Integer needDistributeCount;
@@ -73,5 +74,21 @@ public class DistributionStatusVo {
     public DistributionStatusVo setNeedDistributeCount(Integer needDistributeCount) {
         this.needDistributeCount = needDistributeCount;
         return this;
+    }
+
+    public Integer getOrder() {
+        return order;
+    }
+
+    public DistributionStatusVo setOrder(Integer order) {
+        this.order = order;
+        return this;
+    }
+
+    @Override
+    public int compareTo(DistributionStatusVo o) {
+        Integer order = this.getOrder();
+        Integer orderObject = o.getOrder();
+        return order - orderObject;
     }
 }

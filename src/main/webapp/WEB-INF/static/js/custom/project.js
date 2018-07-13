@@ -148,6 +148,7 @@ var TableInit = function () {
                 field: 'projectStatus',
                 align: 'center',
                 title: '项目状态',
+                events: changeEvents,
                 formatter: projectStatusFormatter
             }, {
                 title: '开启状态',
@@ -229,28 +230,45 @@ function defaultProjectFormatter(value, row, index) {
 
 
 function projectStatusFormatter(value, row, index) {
-    var state = '';
-    var color = '#000';
-    var color_green = 'btn-danger';
+
+    var status0 = '<option value="0">未开始</option> ';
+    var status1 = '<option value="1">未到软顶</option> ';
+    var status2 = '<option value="2">未到硬顶</option> ';
+    var status3 = '<option value="3">已完成</option> ';
+    var startTime = row.startTime;
+    var endTime = row.endTime;
+    var now = new Date().getTime();
+    if (startTime < now) {
+        status0 = '<option value="0" disabled="disabled">未开始</option> ';
+    }
+    if (endTime < now) {
+        status0 = '<option value="0" disabled="disabled">未开始</option> ';
+        status1 = '<option value="1" disabled="disabled">未到软顶</option> ';
+        status2 = '<option value="2" disabled="disabled">未到硬顶</option> ';
+    }
+
     switch (value) {
         case 0:
-            state = '未开始';
+            status0 = '<option value="0" selected>未开始</option> ';
             break;
         case 1:
-            state = '未到软顶';
+            status1 = '<option value="1" selected>未到软顶</option> ';
             break;
         case 2:
-            state = '未到硬顶';
+            status2 = '<option value="2" selected>未到硬顶</option> ';
             break;
         case 3:
-            state = '成功';
-            break;
         case 4:
-            state = '失败';
+            status3 = '<option value="3" selected>已完成</option> ';
+            break;
+        default:
+            status0 = '<option value="0" selected>未开始</option> ';
             break;
     }
     return [
-        '<label class="btn " >' + state + '</label>'
+        '<select  class="changeStatus">' +
+        status0 + status1 + status2 + status3 +
+        '</select>'
     ].join('');
 }
 
@@ -308,6 +326,49 @@ window.lockEvents = {
                             }, function () {
                             })
                         }
+                    }
+                })
+            }
+        })
+    }
+};
+
+window.changeEvents = {
+    'change .changeStatus': function (e, value, row, index) {
+        var status = parseInt($(this).val());
+        console.log(status)
+        console.log(typeof  status)
+        bootbox.confirm("确认要更改项目状态", function (result) {
+            if (result) {
+                console.log(row);
+                $.ajax({
+                    url: contextPath + "/management/project/status/" + row.projectGid + "/" + status,
+                    type: "put",
+                    contentType: "application/json;charset=UTF-8",
+                    beforeSend: function () {
+                        loadingIndex = layer.msg('处理中', {
+                            icon: 16
+                        });
+                        return true;
+                    },
+
+                    success: function (data) {
+                        console.log(data);
+                        layer.close(loadingIndex);
+                        if (data.success) {
+                            layer.msg("任务成功", {
+                                time: 1000,
+                                icon: 1,
+                                shift: 1
+                            })
+                        } else {
+                            layer.msg("任务失败，" + data.message, {
+                                time: 2000,
+                                icon: 0,
+                                shift: 1
+                            })
+                        }
+                        $('#inner_table').bootstrapTable('refresh');
                     }
                 })
             }
@@ -576,6 +637,7 @@ function getProject(row) {
                 $('#softCap').val(numberFormat(project.softCap));
                 $('#hardCap').val(numberFormat(project.hardCap));
                 $('#minPurchaseAmount').val(numberFormat(project.minPurchaseAmount));
+                $('#maxPurchaseAmount').val(numberFormat(project.maxPurchaseAmount));
                 $('#priceRate').val(numberFormat(project.priceRate));
                 $('#startTimePicker').val(getNowFormatDate(new Date(project.startTime)));
                 $('#endTimePicker').val(getNowFormatDate(new Date(project.endTime)));
@@ -917,6 +979,13 @@ $(function () {
                 validators: {
                     notEmpty: {
                         message: '最低认购数量不能为空'
+                    }
+                }
+            },
+            maxPurchaseAmount: {
+                validators: {
+                    notEmpty: {
+                        message: '最高认购数量不能为空'
                     }
                 }
             },
@@ -1271,6 +1340,7 @@ $(function () {
             'softCap': numeral($('#softCap').val()).value(),
             'hardCap': numeral($('#hardCap').val()).value(),
             'minPurchaseAmount': numeral($('#minPurchaseAmount').val()).value(),
+            'maxPurchaseAmount': numeral($('#maxPurchaseAmount').val()).value(),
 
             'priceRate': numeral($('#priceRate').val()).value(),
             'startTimeLong': new Date($('#startTimePicker').val()).getTime(),
@@ -1488,9 +1558,18 @@ $(function () {
         var softCap = numeral($('#softCap').val()).value();
         var hardCap = numeral($('#hardCap').val()).value();
         var minPurchaseAmount = numeral($('#minPurchaseAmount').val()).value();
+        var maxPurchaseAmount = numeral($('#maxPurchaseAmount').val()).value();
 
-        if (!hardCap || !softCap || !minPurchaseAmount || hardCap <= softCap || minPurchaseAmount >= softCap) {
-            layer.msg("软硬顶或认购数量设置有误", {
+        if (!hardCap || !softCap || hardCap < softCap) {
+            layer.msg("软硬顶设置有误", {
+                time: 2000,
+                icon: 0,
+                shift: 1
+            });
+            return false;
+        }
+        if (!minPurchaseAmount || !maxPurchaseAmount || maxPurchaseAmount < minPurchaseAmount) {
+            layer.msg("认购限额设置有误", {
                 time: 2000,
                 icon: 0,
                 shift: 1

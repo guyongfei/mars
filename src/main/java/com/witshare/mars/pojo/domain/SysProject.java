@@ -26,6 +26,8 @@ public class SysProject {
 
     private BigDecimal minPurchaseAmount;
 
+    private BigDecimal maxPurchaseAmount;
+
     private Timestamp startTime;
 
     private Timestamp endTime;
@@ -130,6 +132,14 @@ public class SysProject {
 
     public void setMinPurchaseAmount(BigDecimal minPurchaseAmount) {
         this.minPurchaseAmount = minPurchaseAmount;
+    }
+
+    public BigDecimal getMaxPurchaseAmount() {
+        return maxPurchaseAmount;
+    }
+
+    public void setMaxPurchaseAmount(BigDecimal maxPurchaseAmount) {
+        this.maxPurchaseAmount = maxPurchaseAmount;
     }
 
     public Timestamp getStartTime() {

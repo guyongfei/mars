@@ -60,6 +60,11 @@ public interface SysProjectService {
     void defaultProject(String projectGid);
 
     /**
+     * 修改项目状态
+     */
+    void projectStatus(String projectGid, Integer projectStatus);
+
+    /**
      * 查询单个项目
      */
     SysProjectBean selectByProjectGid(String projectGid);
