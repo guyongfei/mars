@@ -30,6 +30,8 @@ public class UserTxInfoVo {
 
     private BigDecimal minPurchaseAmount;
 
+    private BigDecimal maxPurchaseAmount;
+
     private Timestamp endTime;
 
     private MoonGetPriceResponseBean.Result gasPrice;
@@ -155,6 +157,15 @@ public class UserTxInfoVo {
 
     public UserTxInfoVo setEndTime(Timestamp endTime) {
         this.endTime = endTime;
+        return this;
+    }
+
+    public BigDecimal getMaxPurchaseAmount() {
+        return maxPurchaseAmount;
+    }
+
+    public UserTxInfoVo setMaxPurchaseAmount(BigDecimal maxPurchaseAmount) {
+        this.maxPurchaseAmount = maxPurchaseAmount;
         return this;
     }
 }

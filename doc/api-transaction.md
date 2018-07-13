@@ -21,7 +21,6 @@
 |22|验证失败（from不匹配）||
 |23|验证失败（金额不匹配）||
 |3|交易失败||
-|4|交易不存在||
 
 > platformTxStatus 打币验证状态
 
@@ -52,6 +51,7 @@
         "priceRate":5.0,
         "platformAddress":"",
         "minPurchaseAmount":5.0,
+        "maxPurchaseAmount":100.0,
         "txCount":1,
         "txCountLimit":false,
         "gasPrice": {
@@ -73,6 +73,7 @@
 |priceRate|number|是|eth:token的价格比|
 |platformAddress|string|是|项目平台地址|
 |minPurchaseAmount|number|是|最低购买Eth数量|
+|maxPurchaseAmount|number|是|最多购买Eth数量|
 |txCount|number|是|购买次数|
 |txCountLimit|boolean|是|是否交易数量限制，如true表示达到交易次数上限不能再次交易|
 |gasPrice|object|是|gas价格|
