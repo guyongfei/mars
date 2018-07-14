@@ -368,11 +368,14 @@ window.changeEvents = {
                                 shift: 1
                             })
                         }
-                        $('#inner_table').bootstrapTable('refresh');
+
                     }
                 })
             }
+            $('#inner_table').bootstrapTable('refresh');
         })
+
+
     }
 };
 
