@@ -42,6 +42,7 @@ public enum EnumResponseText {
     ErrorPayTx(25, "错误的交易号", "error pay tx."),
     ErrorTxDoing(25, "已有交易在进行", "There is already a transactions going on."),
     NotReachMinPurchaseAmount(25, "不满足最低认购数量", "The minimum purchase amount is not reached."),
+    NotReachMaxPurchaseAmount(25, "已达到最高认购数量", "The maximum purchase amount is  reached."),
     NoPlatformAddress(25, "项目平台地址已用完", "The project platform address has been used up."),
     ReachTxMax(25, "用户达到交易上线", "Reach Number of transactions max."),;
 

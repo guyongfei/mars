@@ -186,6 +186,10 @@ public class TransactionServiceImpl implements TransactionService {
         if (sysProjectBean.getMinPurchaseAmount().compareTo(payAmount) > 0) {
             throw new WitshareException(EnumResponseText.NotReachMinPurchaseAmount);
         }
+        // 最高认购数量判断
+        if (sysProjectBean.getMaxPurchaseAmount().compareTo(payAmount) < 0) {
+            throw new WitshareException(EnumResponseText.NotReachMaxPurchaseAmount);
+        }
         //价格判断
         BigDecimal price = sysProjectBean.getPriceRate();
         if (price.compareTo(priceRate) != 0
