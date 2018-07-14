@@ -361,18 +361,22 @@ window.changeEvents = {
                                 icon: 1,
                                 shift: 1
                             })
+                            $('#inner_table').bootstrapTable('refresh');
                         } else {
                             layer.msg("任务失败，" + data.message, {
                                 time: 2000,
                                 icon: 0,
                                 shift: 1
                             })
+                            $('#inner_table').bootstrapTable('refresh');
                         }
 
                     }
                 })
+            } else {
+                $('#inner_table').bootstrapTable('refresh');
             }
-            $('#inner_table').bootstrapTable('refresh');
+
         })
 
 
