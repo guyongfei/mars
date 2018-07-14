@@ -458,7 +458,7 @@ window.distributionEvents = {
 };
 
 function userTxStatusFormatter(value, row, index) {
-    var state = userTxStatusMap[value];
+    var state = userTxSelectStatusMap[value];
     var color = '#000';
     return [
         '<label class="btn " >' + state + '</label>'
@@ -628,8 +628,8 @@ function reloadUserTxStatusSelect() {
     $('#userTxStatus_')
         .empty()
         .prepend("<option value='' >请选择</option>");//添加第一个option值
-    for (var key in userTxStatusMap) {
-        $("#userTxStatus_").append("<option value='" + key + "'>" + userTxStatusMap[key] + "</option>");
+    for (var key in userTxSelectStatusMap) {
+        $("#userTxStatus_").append("<option value='" + key + "'>" + userTxSelectStatusMap[key] + "</option>");
     }
 }
 function reloadPlatformTxStatusSelect() {

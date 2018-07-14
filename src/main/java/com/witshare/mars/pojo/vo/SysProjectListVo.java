@@ -27,6 +27,8 @@ public class SysProjectListVo {
 
     private BigDecimal minPurchaseAmount;
 
+    private BigDecimal maxPurchaseAmount;
+
     private Timestamp startTime;
 
     private Timestamp endTime;
@@ -230,6 +232,15 @@ public class SysProjectListVo {
 
     public SysProjectListVo setDefaultProject(Integer defaultProject) {
         this.defaultProject = defaultProject;
+        return this;
+    }
+
+    public BigDecimal getMaxPurchaseAmount() {
+        return maxPurchaseAmount;
+    }
+
+    public SysProjectListVo setMaxPurchaseAmount(BigDecimal maxPurchaseAmount) {
+        this.maxPurchaseAmount = maxPurchaseAmount;
         return this;
     }
 }

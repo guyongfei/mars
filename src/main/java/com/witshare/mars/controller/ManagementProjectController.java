@@ -141,6 +141,18 @@ public class ManagementProjectController {
     }
 
     /**
+     * 修改项目状态
+     */
+    @ResponseBody
+    @RequestMapping(value = "/project/status/{projectGid}/{projectStatus}", method = RequestMethod.PUT)
+    public ResponseBean projectStatus(@PathVariable String projectGid,
+                                      @PathVariable Integer projectStatus) {
+
+        sysProjectService.projectStatus(projectGid, projectStatus);
+        return ResponseBean.newInstanceSuccess();
+    }
+
+    /**
      * 获取项目列表
      */
     @ResponseBody

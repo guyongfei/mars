@@ -141,6 +141,7 @@ public class SysProjectBean  extends BasePageBean{
     private BigDecimal softCap;
     private BigDecimal hardCap;
     private BigDecimal minPurchaseAmount;
+    private BigDecimal maxPurchaseAmount;
     private Timestamp startTime;
     private Timestamp endTime;
     private BigDecimal priceRate;
@@ -778,6 +779,15 @@ public class SysProjectBean  extends BasePageBean{
 
     public SysProjectBean setDefaultProject(Integer defaultProject) {
         this.defaultProject = defaultProject;
+        return this;
+    }
+
+    public BigDecimal getMaxPurchaseAmount() {
+        return maxPurchaseAmount;
+    }
+
+    public SysProjectBean setMaxPurchaseAmount(BigDecimal maxPurchaseAmount) {
+        this.maxPurchaseAmount = maxPurchaseAmount;
         return this;
     }
 }

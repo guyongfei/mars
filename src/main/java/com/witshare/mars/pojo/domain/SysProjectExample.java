@@ -836,6 +836,66 @@ public class SysProjectExample {
             return (Criteria) this;
         }
 
+        public Criteria andMaxPurchaseAmountIsNull() {
+            addCriterion("max_purchase_amount is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPurchaseAmountIsNotNull() {
+            addCriterion("max_purchase_amount is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPurchaseAmountEqualTo(BigDecimal value) {
+            addCriterion("max_purchase_amount =", value, "maxPurchaseAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPurchaseAmountNotEqualTo(BigDecimal value) {
+            addCriterion("max_purchase_amount <>", value, "maxPurchaseAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPurchaseAmountGreaterThan(BigDecimal value) {
+            addCriterion("max_purchase_amount >", value, "maxPurchaseAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPurchaseAmountGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("max_purchase_amount >=", value, "maxPurchaseAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPurchaseAmountLessThan(BigDecimal value) {
+            addCriterion("max_purchase_amount <", value, "maxPurchaseAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPurchaseAmountLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("max_purchase_amount <=", value, "maxPurchaseAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPurchaseAmountIn(List<BigDecimal> values) {
+            addCriterion("max_purchase_amount in", values, "maxPurchaseAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPurchaseAmountNotIn(List<BigDecimal> values) {
+            addCriterion("max_purchase_amount not in", values, "maxPurchaseAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPurchaseAmountBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("max_purchase_amount between", value1, value2, "maxPurchaseAmount");
+            return (Criteria) this;
+        }
+
+        public Criteria andMaxPurchaseAmountNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("max_purchase_amount not between", value1, value2, "maxPurchaseAmount");
+            return (Criteria) this;
+        }
+
         public Criteria andStartTimeIsNull() {
             addCriterion("start_time is null");
             return (Criteria) this;

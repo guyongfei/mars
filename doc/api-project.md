@@ -10,7 +10,6 @@
 |1|开始认筹还未到软顶|已开始|
 |2|开始认筹还未到硬顶|-|
 |3|认筹完成且成功|已完成|
-|4|认筹完成但失败|-|
 
 ## 1.获取项目列表
 
@@ -91,6 +90,8 @@
                     "reddit":""
                 },
             "priceRate":0.00,
+            "minPurchaseAmount":0.00,
+            "maxPurchaseAmount":0.00,
             "soldAmount":3215456,
             "soldTokenAmount":3215456,
             "nextPriceInterval":32156420,
@@ -115,6 +116,8 @@
 |projectContent|string|是|项目详情|
 |webSites|object|是|网站链接集合|
 |priceRate|number|是|当前单价比（ETH:Token）|
+|minPurchaseAmount|number|是|单笔最小认购数（ETH）|
+|maxPurchaseAmount|number|是|单笔最大认购数（ETH）|
 |soldAmount|number|是|已售折算Eth数量|
 |soldTokenAmount|number|是|已售折算token数量|
 |nextPriceInterval|number|是|距下一个价格开始时间的间隔，单位ms|

@@ -18,6 +18,7 @@ public class SysProjectBeanFrontInfoVo {
     private BigDecimal softCap;
     private BigDecimal hardCap;
     private BigDecimal minPurchaseAmount;
+    private BigDecimal maxPurchaseAmount;
     private Timestamp startTime;
     private Timestamp endTime;
     private int projectStatus;
@@ -227,6 +228,15 @@ public class SysProjectBeanFrontInfoVo {
 
     public SysProjectBeanFrontInfoVo setSoldTokenAmount(BigDecimal soldTokenAmount) {
         this.soldTokenAmount = soldTokenAmount;
+        return this;
+    }
+
+    public BigDecimal getMaxPurchaseAmount() {
+        return maxPurchaseAmount;
+    }
+
+    public SysProjectBeanFrontInfoVo setMaxPurchaseAmount(BigDecimal maxPurchaseAmount) {
+        this.maxPurchaseAmount = maxPurchaseAmount;
         return this;
     }
 }

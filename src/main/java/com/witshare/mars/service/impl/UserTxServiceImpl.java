@@ -5,6 +5,7 @@ import com.alibaba.dubbo.common.utils.StringUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.witshare.mars.constant.EnumResponseText;
+import com.witshare.mars.constant.EnumUserTxStatus;
 import com.witshare.mars.dao.mysql.RecordUserTxMapper;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.domain.RecordUserTx;
@@ -20,6 +21,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,7 +51,7 @@ public class UserTxServiceImpl implements UserTxService {
         String email = recordUserTxBean.getEmail();
         Long payTxId = recordUserTxBean.getPayTxId();
         String payTx = recordUserTxBean.getPayTx();
-        Integer userTxStatus = recordUserTxBean.getUserTxStatus();
+        Integer orderStatus = recordUserTxBean.getUserTxStatus();
         Integer platformTxStatus = recordUserTxBean.getPlatformTxStatus();
 
         if (StringUtils.isEmpty(projectGid)) {
@@ -80,8 +83,16 @@ public class UserTxServiceImpl implements UserTxService {
         if (StringUtils.isNotEmpty(payTx)) {
             or.andPayTxEqualTo(payTx);
         }
-        if (userTxStatus != null) {
-            or.andUserTxStatusEqualTo(userTxStatus);
+        if (orderStatus != null) {
+            EnumUserTxStatus order = EnumUserTxStatus.getByOrder(orderStatus);
+            if (order != null) {
+                Integer status = order.getStatus();
+                if (status == 3) {
+                    or.andUserTxStatusBetween(3, 4);
+                } else {
+                    or.andUserTxStatusEqualTo(status);
+                }
+            }
         }
         if (platformTxStatus != null) {
             or.andPlatformTxStatusEqualTo(platformTxStatus);
@@ -105,6 +116,12 @@ public class UserTxServiceImpl implements UserTxService {
             //设置平台受币地址
             recordUserTxBean_.setPlatformAddress(platformAddress);
             recordUserTxBean_.setPayTxId(p.getId() + 10000);
+            //将状态4归一为状态3
+            Integer userTxStatusDb = p.getUserTxStatus();
+            userTxStatusDb = userTxStatusDb == 4 ? 3 : userTxStatusDb;
+            //因前端需要排序显示，映射状态
+            recordUserTxBean_.setUserTxStatus(EnumUserTxStatus.get(userTxStatusDb).getOrder());
+
             recordUserTxBeans.add(recordUserTxBean_);
         });
         pageInfo_.setList(recordUserTxBeans);
@@ -200,11 +217,13 @@ public class UserTxServiceImpl implements UserTxService {
         RecordUserTxExample recordUserTxExample = new RecordUserTxExample();
         recordUserTxExample.or().andProjectGidEqualTo(projectGid);
         List<RecordUserTx> recordUserTxes = recordUserTxMapper.selectByExample(recordUserTxExample);
-        LinkedList<DistributionStatusVo> distributionStatusVos = new LinkedList<>();
+        ArrayList<DistributionStatusVo> distributionStatusVos = new ArrayList<>();
         int[] userTxStatusArr = new int[100];
         int[] needDistributeArr = new int[100];
         recordUserTxes.forEach(p -> {
             Integer userTxStatus = p.getUserTxStatus();
+            //34状态合并
+            userTxStatus = userTxStatus == 4 ? 3 : userTxStatus;
             Integer platformTxStatus = p.getPlatformTxStatus();
             userTxStatusArr[userTxStatus]++;
             if ((userTxStatus == 2 || userTxStatus == 22 || userTxStatus == 23) && (platformTxStatus == 3 || platformTxStatus == 0)) {
@@ -215,13 +234,16 @@ public class UserTxServiceImpl implements UserTxService {
         for (int i = 0; i < 100; i++) {
             int value = userTxStatusArr[i];
             if (value > 0) {
+                EnumUserTxStatus enumUserTxStatus = EnumUserTxStatus.get(i);
                 DistributionStatusVo distributionStatusVo = DistributionStatusVo.newInstance()
-                        .setUserTxStatus(i)
+                        .setUserTxStatus(enumUserTxStatus.getOrder())
+                        .setOrder(enumUserTxStatus.getOrder())
                         .setNeedDistributeCount(needDistributeArr[i])
                         .setCount(value);
                 distributionStatusVos.add(distributionStatusVo);
             }
         }
+        Collections.sort(distributionStatusVos);
         int total = distributionStatusVos.size();
         distributionStatusVoPageInfo.setPageSize(total);
         distributionStatusVoPageInfo.setPageNum(1);
