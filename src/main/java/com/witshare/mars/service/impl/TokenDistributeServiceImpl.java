@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.gson.Gson;
 import com.witshare.mars.config.CurrentThreadContext;
+import com.witshare.mars.constant.EnumUserTxStatus;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.pojo.dto.SysProjectBean;
 import com.witshare.mars.pojo.dto.TokenDistributeBean;
@@ -92,7 +93,7 @@ public class TokenDistributeServiceImpl implements TokenDistributeService {
         if (!StringUtils.isAnyBlank(userTxStatusStr)) {
             String[] split = userTxStatusStr.split(",");
             Arrays.stream(split).forEach(p -> {
-                userTx.add(Integer.parseInt(p));
+                userTx.add(EnumUserTxStatus.getByOrder(Integer.parseInt(p)).getStatus());
             });
             Integer[] userTxStatus = new Integer[userTx.size()];
             Integer[] integers = userTx.toArray(userTxStatus);

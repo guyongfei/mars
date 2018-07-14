@@ -166,7 +166,7 @@ window.txTableEvents = {};
 function txTableFormatter(value, row, index) {
     var userTxStatus = parseInt(row.userTxStatus);
     var platformTxStatus = parseInt(row.platformTxStatus);
-    if (((platformTxStatus == 3 || platformTxStatus == 0) && (userTxStatus == 2 || userTxStatus == 22 || userTxStatus == 23)) || (userTxStatus == 2 && platformTxStatus === 0)) {
+    if (((platformTxStatus == 3 || platformTxStatus == 0) && (userTxStatus == 2 || userTxStatus == 3 || userTxStatus == 4)) || (userTxStatus == 2 && platformTxStatus === 0)) {
         return [
             '<button type="button"   onclick="distribution(null,' + row.payTxId + ',null)" class="distribution  btn  btn-primary " " >打币</button>'
         ].join('')
