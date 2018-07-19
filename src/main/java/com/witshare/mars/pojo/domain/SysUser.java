@@ -19,6 +19,8 @@ public class SysUser {
 
     private Integer projectNum;
 
+    private String channel;
+
     private Integer userStatus;
 
     private Timestamp createTime;
@@ -87,6 +89,14 @@ public class SysUser {
 
     public void setProjectNum(Integer projectNum) {
         this.projectNum = projectNum;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel == null ? null : channel.trim();
     }
 
     public Integer getUserStatus() {

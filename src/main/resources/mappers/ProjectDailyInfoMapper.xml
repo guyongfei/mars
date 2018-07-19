@@ -13,6 +13,7 @@
     <result column="actual_user_count" property="actualUserCount" jdbcType="INTEGER" />
     <result column="tx_count" property="txCount" jdbcType="INTEGER" />
     <result column="actual_tx_count" property="actualTxCount" jdbcType="INTEGER" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
     <result column="current_day" property="currentDay" jdbcType="DATE" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -78,7 +79,7 @@
   <sql id="Base_Column_List" >
     id, project_gid, project_token, get_eth_amount, actual_get_eth_amount, pay_token_amount, 
     actual_pay_token_amount, user_count, actual_user_count, tx_count, actual_tx_count, 
-    current_day, create_time, update_time
+    channel, current_day, create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.witshare.mars.pojo.domain.ProjectDailyInfoExample" >
     select
@@ -115,13 +116,13 @@
     insert into project_daily_info (project_gid, project_token, get_eth_amount, 
       actual_get_eth_amount, pay_token_amount, actual_pay_token_amount, 
       user_count, actual_user_count, tx_count, 
-      actual_tx_count, current_day, create_time, 
-      update_time)
+      actual_tx_count, channel, current_day, 
+      create_time, update_time)
     values (#{projectGid,jdbcType=CHAR}, #{projectToken,jdbcType=VARCHAR}, #{getEthAmount,jdbcType=DECIMAL}, 
       #{actualGetEthAmount,jdbcType=DECIMAL}, #{payTokenAmount,jdbcType=DECIMAL}, #{actualPayTokenAmount,jdbcType=DECIMAL}, 
       #{userCount,jdbcType=INTEGER}, #{actualUserCount,jdbcType=INTEGER}, #{txCount,jdbcType=INTEGER}, 
-      #{actualTxCount,jdbcType=INTEGER}, #{currentDay,jdbcType=DATE}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{actualTxCount,jdbcType=INTEGER}, #{channel,jdbcType=VARCHAR}, #{currentDay,jdbcType=DATE}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.witshare.mars.pojo.domain.ProjectDailyInfo" useGeneratedKeys="true" keyProperty="id" >
     insert into project_daily_info
@@ -155,6 +156,9 @@
       </if>
       <if test="actualTxCount != null" >
         actual_tx_count,
+      </if>
+      <if test="channel != null" >
+        channel,
       </if>
       <if test="currentDay != null" >
         current_day,
@@ -196,6 +200,9 @@
       </if>
       <if test="actualTxCount != null" >
         #{actualTxCount,jdbcType=INTEGER},
+      </if>
+      <if test="channel != null" >
+        #{channel,jdbcType=VARCHAR},
       </if>
       <if test="currentDay != null" >
         #{currentDay,jdbcType=DATE},
@@ -250,6 +257,9 @@
       <if test="record.actualTxCount != null" >
         actual_tx_count = #{record.actualTxCount,jdbcType=INTEGER},
       </if>
+      <if test="record.channel != null" >
+        channel = #{record.channel,jdbcType=VARCHAR},
+      </if>
       <if test="record.currentDay != null" >
         current_day = #{record.currentDay,jdbcType=DATE},
       </if>
@@ -277,6 +287,7 @@
       actual_user_count = #{record.actualUserCount,jdbcType=INTEGER},
       tx_count = #{record.txCount,jdbcType=INTEGER},
       actual_tx_count = #{record.actualTxCount,jdbcType=INTEGER},
+      channel = #{record.channel,jdbcType=VARCHAR},
       current_day = #{record.currentDay,jdbcType=DATE},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
@@ -317,6 +328,9 @@
       <if test="actualTxCount != null" >
         actual_tx_count = #{actualTxCount,jdbcType=INTEGER},
       </if>
+      <if test="channel != null" >
+        channel = #{channel,jdbcType=VARCHAR},
+      </if>
       <if test="currentDay != null" >
         current_day = #{currentDay,jdbcType=DATE},
       </if>
@@ -341,6 +355,7 @@
       actual_user_count = #{actualUserCount,jdbcType=INTEGER},
       tx_count = #{txCount,jdbcType=INTEGER},
       actual_tx_count = #{actualTxCount,jdbcType=INTEGER},
+      channel = #{channel,jdbcType=VARCHAR},
       current_day = #{currentDay,jdbcType=DATE},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}

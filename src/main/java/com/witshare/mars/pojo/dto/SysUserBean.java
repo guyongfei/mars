@@ -38,6 +38,7 @@ public class SysUserBean {
     private Integer projectNum;
     private Integer commentNum;
     private Integer userStatus;
+    private String channel;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -228,6 +229,15 @@ public class SysUserBean {
 
     public SysUserBean setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+        return this;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public SysUserBean setChannel(String channel) {
+        this.channel = channel;
         return this;
     }
 }

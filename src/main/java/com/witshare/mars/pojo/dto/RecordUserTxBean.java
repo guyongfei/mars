@@ -40,6 +40,7 @@ public class RecordUserTxBean extends BasePageBean {
     private Timestamp distributionTime;
     private Timestamp createTime;
     private Timestamp updateTime;
+    private String channel;
 
 
     private LocalDate localDate;
@@ -58,6 +59,15 @@ public class RecordUserTxBean extends BasePageBean {
         this.updateTime = time;
         this.createTime = time;
         this.distributionTime = time;
+        return this;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public RecordUserTxBean setChannel(String channel) {
+        this.channel = channel;
         return this;
     }
 
