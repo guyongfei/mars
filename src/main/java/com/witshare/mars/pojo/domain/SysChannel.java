@@ -2,16 +2,12 @@ package com.witshare.mars.pojo.domain;
 
 import java.sql.Timestamp;
 
-public class SysProjectChannel {
+public class SysChannel {
     private Long id;
 
-    private String projectGid;
-
-    private String projectToken;
+    private String channel;
 
     private String name;
-
-    private String channel;
 
     private String note;
 
@@ -27,20 +23,12 @@ public class SysProjectChannel {
         this.id = id;
     }
 
-    public String getProjectGid() {
-        return projectGid;
+    public String getChannel() {
+        return channel;
     }
 
-    public void setProjectGid(String projectGid) {
-        this.projectGid = projectGid == null ? null : projectGid.trim();
-    }
-
-    public String getProjectToken() {
-        return projectToken;
-    }
-
-    public void setProjectToken(String projectToken) {
-        this.projectToken = projectToken == null ? null : projectToken.trim();
+    public void setChannel(String channel) {
+        this.channel = channel == null ? null : channel.trim();
     }
 
     public String getName() {
@@ -49,14 +37,6 @@ public class SysProjectChannel {
 
     public void setName(String name) {
         this.name = name == null ? null : name.trim();
-    }
-
-    public String getChannel() {
-        return channel;
-    }
-
-    public void setChannel(String channel) {
-        this.channel = channel == null ? null : channel.trim();
     }
 
     public String getNote() {

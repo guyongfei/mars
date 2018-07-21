@@ -44,6 +44,8 @@ public enum EnumResponseText {
     NotReachMinPurchaseAmount(25, "不满足最低认购数量", "The minimum purchase amount is not reached."),
     NotReachMaxPurchaseAmount(25, "已达到最高认购数量", "The maximum purchase amount is  reached."),
     NoPlatformAddress(25, "项目平台地址已用完", "The project platform address has been used up."),
+    ErrorChannel(25, "渠道号不能使用", "Channel  cannot be used."),
+    ErrorChannelName(25, "渠道名称不能使用", "Channel name cannot be used."),
     ReachTxMax(25, "用户达到交易上线", "Reach Number of transactions max."),;
 
     private int value;

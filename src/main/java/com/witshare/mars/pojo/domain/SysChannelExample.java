@@ -4,14 +4,14 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SysProjectChannelExample {
+public class SysChannelExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public SysProjectChannelExample() {
+    public SysChannelExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -165,143 +165,73 @@ public class SysProjectChannelExample {
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidIsNull() {
-            addCriterion("project_gid is null");
+        public Criteria andChannelIsNull() {
+            addCriterion("channel is null");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidIsNotNull() {
-            addCriterion("project_gid is not null");
+        public Criteria andChannelIsNotNull() {
+            addCriterion("channel is not null");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidEqualTo(String value) {
-            addCriterion("project_gid =", value, "projectGid");
+        public Criteria andChannelEqualTo(String value) {
+            addCriterion("channel =", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidNotEqualTo(String value) {
-            addCriterion("project_gid <>", value, "projectGid");
+        public Criteria andChannelNotEqualTo(String value) {
+            addCriterion("channel <>", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidGreaterThan(String value) {
-            addCriterion("project_gid >", value, "projectGid");
+        public Criteria andChannelGreaterThan(String value) {
+            addCriterion("channel >", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidGreaterThanOrEqualTo(String value) {
-            addCriterion("project_gid >=", value, "projectGid");
+        public Criteria andChannelGreaterThanOrEqualTo(String value) {
+            addCriterion("channel >=", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidLessThan(String value) {
-            addCriterion("project_gid <", value, "projectGid");
+        public Criteria andChannelLessThan(String value) {
+            addCriterion("channel <", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidLessThanOrEqualTo(String value) {
-            addCriterion("project_gid <=", value, "projectGid");
+        public Criteria andChannelLessThanOrEqualTo(String value) {
+            addCriterion("channel <=", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidLike(String value) {
-            addCriterion("project_gid like", value, "projectGid");
+        public Criteria andChannelLike(String value) {
+            addCriterion("channel like", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidNotLike(String value) {
-            addCriterion("project_gid not like", value, "projectGid");
+        public Criteria andChannelNotLike(String value) {
+            addCriterion("channel not like", value, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidIn(List<String> values) {
-            addCriterion("project_gid in", values, "projectGid");
+        public Criteria andChannelIn(List<String> values) {
+            addCriterion("channel in", values, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidNotIn(List<String> values) {
-            addCriterion("project_gid not in", values, "projectGid");
+        public Criteria andChannelNotIn(List<String> values) {
+            addCriterion("channel not in", values, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidBetween(String value1, String value2) {
-            addCriterion("project_gid between", value1, value2, "projectGid");
+        public Criteria andChannelBetween(String value1, String value2) {
+            addCriterion("channel between", value1, value2, "channel");
             return (Criteria) this;
         }
 
-        public Criteria andProjectGidNotBetween(String value1, String value2) {
-            addCriterion("project_gid not between", value1, value2, "projectGid");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenIsNull() {
-            addCriterion("project_token is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenIsNotNull() {
-            addCriterion("project_token is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenEqualTo(String value) {
-            addCriterion("project_token =", value, "projectToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenNotEqualTo(String value) {
-            addCriterion("project_token <>", value, "projectToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenGreaterThan(String value) {
-            addCriterion("project_token >", value, "projectToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenGreaterThanOrEqualTo(String value) {
-            addCriterion("project_token >=", value, "projectToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenLessThan(String value) {
-            addCriterion("project_token <", value, "projectToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenLessThanOrEqualTo(String value) {
-            addCriterion("project_token <=", value, "projectToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenLike(String value) {
-            addCriterion("project_token like", value, "projectToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenNotLike(String value) {
-            addCriterion("project_token not like", value, "projectToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenIn(List<String> values) {
-            addCriterion("project_token in", values, "projectToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenNotIn(List<String> values) {
-            addCriterion("project_token not in", values, "projectToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenBetween(String value1, String value2) {
-            addCriterion("project_token between", value1, value2, "projectToken");
-            return (Criteria) this;
-        }
-
-        public Criteria andProjectTokenNotBetween(String value1, String value2) {
-            addCriterion("project_token not between", value1, value2, "projectToken");
+        public Criteria andChannelNotBetween(String value1, String value2) {
+            addCriterion("channel not between", value1, value2, "channel");
             return (Criteria) this;
         }
 
@@ -372,76 +302,6 @@ public class SysProjectChannelExample {
 
         public Criteria andNameNotBetween(String value1, String value2) {
             addCriterion("name not between", value1, value2, "name");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelIsNull() {
-            addCriterion("channel is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelIsNotNull() {
-            addCriterion("channel is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelEqualTo(String value) {
-            addCriterion("channel =", value, "channel");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelNotEqualTo(String value) {
-            addCriterion("channel <>", value, "channel");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelGreaterThan(String value) {
-            addCriterion("channel >", value, "channel");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelGreaterThanOrEqualTo(String value) {
-            addCriterion("channel >=", value, "channel");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelLessThan(String value) {
-            addCriterion("channel <", value, "channel");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelLessThanOrEqualTo(String value) {
-            addCriterion("channel <=", value, "channel");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelLike(String value) {
-            addCriterion("channel like", value, "channel");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelNotLike(String value) {
-            addCriterion("channel not like", value, "channel");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelIn(List<String> values) {
-            addCriterion("channel in", values, "channel");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelNotIn(List<String> values) {
-            addCriterion("channel not in", values, "channel");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelBetween(String value1, String value2) {
-            addCriterion("channel between", value1, value2, "channel");
-            return (Criteria) this;
-        }
-
-        public Criteria andChannelNotBetween(String value1, String value2) {
-            addCriterion("channel not between", value1, value2, "channel");
             return (Criteria) this;
         }
 
