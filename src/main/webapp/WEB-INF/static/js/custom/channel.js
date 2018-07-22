@@ -1,5 +1,5 @@
 var channelAddMethod = true;
-var channelId = '';
+var channelGid = '';
 
 //重新加载表格
 function reloadChannelTable(pageNum) {
@@ -30,7 +30,7 @@ var TableInitChannel = function () {
             minimumCountColumns: 1,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
 //                height: 500,                        //行高，如果没有设置height属性，表格自动根据记录条数觉得表格高度
-            uniqueId: "id",                     //每一行的唯一标识，一般为主键列
+            uniqueId: "channelGid",                     //每一行的唯一标识，一般为主键列
             showToggle: false,                    //是否显示详细视图和列表视图的切换按钮
             cardView: false,                    //是否显示详细视图
             detailView: false,                   //是否显示父子表
@@ -83,6 +83,12 @@ var TableInitChannel = function () {
                 title: '备注',
                 formatter: channelNoteFormatter
             }, {
+                field: 'registerCount',
+                align: 'right',
+                valign: 'middle',
+                title: '注册人数',
+                formatter: channelRegisterCountFormatter
+            }, {
                 field: 'channel',
                 align: 'center',
                 valign: 'middle',
@@ -91,6 +97,7 @@ var TableInitChannel = function () {
             }]
         });
     };
+
 
     //得到查询的参数
     oTableInitChannel.queryParams = function (params) {
@@ -107,6 +114,7 @@ var TableInitChannel = function () {
     return oTableInitChannel;
 };
 
+
 function channelLinkFormatter(value, row, index) {
     return [
         '<label>' + frontPath + '?channel=' + value + '</label>'
@@ -118,17 +126,26 @@ function channelNoteFormatter(value, row, index) {
     ].join('');
 }
 
+function channelRegisterCountFormatter(value, row, index) {
+    return [
+        '<label >' + value + "/" + row.totalRegisterCount + '</label>'
+    ].join('');
+}
+
 function channelOperatorFormatter(value, row, index) {
+
     var arr = [];
-    arr.push('<button type="button" id="channelEdit"  style="margin: 0 10px 0 0 "  channelId="' + row.id + '" channel="' + row.channel + '" name="' + row.name + '" note="' + row.note + '" onclick="editChannel($(this))" class="btn btn-primary  channelEdit" ><i class="fa fa-send " aria-hidden="true" ></i>编辑</button>');
-    arr.push('<button type="button" id="channelDelete"  style="margin: 0 10px 0 0 "  channelId="' + row.id + '" onclick="deleteChannel($(this))"   class="btn btn-danger  channelDelete" ><i class="fa fa-send " aria-hidden="true" ></i>删除</button>');
+    arr.push('<button type="button" id="channelEdit"  style="margin: 0 10px 0 0 "  channelGid="' + row.channelGid + '" channel="' + row.channel + '" name="' + row.name + '" note="' + row.note + '" onclick="editChannel($(this))" class="btn btn-primary  channelEdit" ><i class="fa fa-send " aria-hidden="true" ></i>编辑</button>');
+    arr.push('<button type="button" id="channelDelete"  style="margin: 0 10px 0 0 "  channelGid="' + row.channelGid + '" onclick="deleteChannel($(this))"   class="btn btn-danger  channelDelete" ><i class="fa fa-send " aria-hidden="true" ></i>删除</button>');
     return arr.join('')
 }
 
 function editChannel(obj) {
-
-    channelId = $(obj).attr('channelId');
+    channelGid = $(obj).attr('channelGid');
+    $('#channelShow').show();
+    $('#channelAdd').hide();
     $('#channel').val($(obj).attr('channel'));
+    $('#channelShow').html($(obj).attr('channel'));
     $('#channelName').val($(obj).attr('name'));
     $('#channelNote').val($(obj).attr('note'));
     $('#channelInfoModal').modal('show');
@@ -141,7 +158,7 @@ function deleteChannel(obj) {
     bootbox.confirm("删除渠道后，既有用户及交易数据将不会纳入统计", function (result) {
         if (result) {
             $.ajax({
-                url: contextPath + "/management/channel/" +  channelId,
+                url: contextPath + "/management/channel/" + channelGid,
                 type: "DELETE",
                 contentType: "application/json;charset=UTF-8",
                 beforeSend: function () {
@@ -194,8 +211,10 @@ $('#channelInfoModal').on('hidden.bs.modal', function () {
     //重新加载表格
     reloadChannelTable(1);
     $('#channel').val('');
+    $('#channelAdd').show();
     $('#channelName').val('');
     $('#channelNote').val('');
+    $('#channelShow').hide()
     $('#channelInfoEvent').bootstrapValidator("resetForm", true);
 
 })
@@ -211,6 +230,10 @@ $(function () {
     //加载统计table
     var oTableChannel = new TableInitChannel();
     oTableChannel.Init();
+    //表格加载完成
+    $('#channel_table').on('load-success.bs.table', function (data) {
+        $("td,th").addClass("text-center");
+    });
 
     //渠道新增
     $('#channelInfoEvent').bootstrapValidator({
@@ -269,7 +292,8 @@ $(function () {
             'id': channelAddMethod ? '' : channelId,
             'channel': $(' #channel').val(),
             'name': $(' #channelName').val(),
-            'note': $(' #channelNote').val()
+            'note': $(' #channelNote').val(),
+            'channelGid': channelGid
         };
         console.log(dataJson);
         var requestType = channelAddMethod ? "post" : "put";

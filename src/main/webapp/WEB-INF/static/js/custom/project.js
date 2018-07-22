@@ -69,7 +69,6 @@ function getAddDay(addDay) {
 }
 
 function initTimer() {
-    console.log("initTimer");
     $('#startTimePicker').datetimepicker().val(getNowFormatDate(getAddDay(1))).datetimepicker('update');
     $('#endTimePicker').datetimepicker().val(getNowFormatDate(getAddDay(3))).datetimepicker('update');
 }

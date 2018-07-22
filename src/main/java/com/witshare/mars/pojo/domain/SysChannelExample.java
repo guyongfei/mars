@@ -165,6 +165,76 @@ public class SysChannelExample {
             return (Criteria) this;
         }
 
+        public Criteria andChannelGidIsNull() {
+            addCriterion("channel_gid is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidIsNotNull() {
+            addCriterion("channel_gid is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidEqualTo(String value) {
+            addCriterion("channel_gid =", value, "channelGid");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidNotEqualTo(String value) {
+            addCriterion("channel_gid <>", value, "channelGid");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidGreaterThan(String value) {
+            addCriterion("channel_gid >", value, "channelGid");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidGreaterThanOrEqualTo(String value) {
+            addCriterion("channel_gid >=", value, "channelGid");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidLessThan(String value) {
+            addCriterion("channel_gid <", value, "channelGid");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidLessThanOrEqualTo(String value) {
+            addCriterion("channel_gid <=", value, "channelGid");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidLike(String value) {
+            addCriterion("channel_gid like", value, "channelGid");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidNotLike(String value) {
+            addCriterion("channel_gid not like", value, "channelGid");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidIn(List<String> values) {
+            addCriterion("channel_gid in", values, "channelGid");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidNotIn(List<String> values) {
+            addCriterion("channel_gid not in", values, "channelGid");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidBetween(String value1, String value2) {
+            addCriterion("channel_gid between", value1, value2, "channelGid");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGidNotBetween(String value1, String value2) {
+            addCriterion("channel_gid not between", value1, value2, "channelGid");
+            return (Criteria) this;
+        }
+
         public Criteria andChannelIsNull() {
             addCriterion("channel is null");
             return (Criteria) this;

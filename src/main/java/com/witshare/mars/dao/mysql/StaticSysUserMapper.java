@@ -1,6 +1,7 @@
 package com.witshare.mars.dao.mysql;
 
 import com.witshare.mars.pojo.dto.GlobalSimpleBean;
+import com.witshare.mars.pojo.dto.SyncChannelRegisterCount;
 import com.witshare.mars.pojo.dto.SysUserBean;
 import com.witshare.mars.pojo.vo.SysUserViewVo;
 import org.apache.ibatis.annotations.Param;
@@ -9,7 +10,8 @@ import java.util.List;
 
 public interface StaticSysUserMapper {
 
-    List<SysUserViewVo> getUserList(SysUserBean sysUserBean);
+    List<SyncChannelRegisterCount> syncChannelRegisterCount();
+
 
     Long saveOrUpdate(SysUserBean sysUserBean);
 

@@ -7,14 +7,14 @@ import com.witshare.mars.constant.EnumProjectStatus;
 import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.constant.EnumUserTxStatus;
 import com.witshare.mars.exception.WitshareException;
-import com.witshare.mars.pojo.dto.ProjectDailyInfoBean;
+import com.witshare.mars.pojo.dto.ProjectStatisticBean;
 import com.witshare.mars.pojo.dto.ProjectDescriptionBean;
 import com.witshare.mars.pojo.dto.ProjectSummaryBean;
 import com.witshare.mars.pojo.dto.RecordUserTxBean;
 import com.witshare.mars.pojo.vo.DistributionStatusVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
 import com.witshare.mars.service.ExportService;
-import com.witshare.mars.service.ProjectDailyInfoService;
+import com.witshare.mars.service.ProjectStatisticService;
 import com.witshare.mars.service.SysProjectService;
 import com.witshare.mars.service.UserTxService;
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +50,7 @@ public class ExportServiceImpl implements ExportService {
     @Autowired
     private SysProjectService sysProjectService;
     @Autowired
-    private ProjectDailyInfoService projectDailyInfoService;
+    private ProjectStatisticService projectStatisticService;
     @Autowired
     private UserTxService userTxService;
 
@@ -84,8 +84,8 @@ public class ExportServiceImpl implements ExportService {
                 LOG.error("exportProjectExcel fail projectGid:{},assembleProjectInfo .", projectGid, e);
             }
 
-            ProjectSummaryBean summary = projectDailyInfoService.getSummary(projectGid);
-            PageInfo<ProjectDailyInfoBean> dailyInfoList = projectDailyInfoService.getList(projectGid);
+            ProjectSummaryBean summary = projectStatisticService.getSummary(projectGid);
+            PageInfo<ProjectStatisticBean> dailyInfoList = projectStatisticService.getList(projectGid);
             try {
                 this.assembleStatisticInfo(dailyInfoSheet, summary, dailyInfoList, cellStyleLeft, cellStyleCenter, cellStyleRight);
             } catch (Exception e) {
@@ -221,19 +221,19 @@ public class ExportServiceImpl implements ExportService {
     /**
      * 组装统计信息表
      */
-    private void assembleStatisticInfo(HSSFSheet sheet, ProjectSummaryBean projectSummaryBean, PageInfo<ProjectDailyInfoBean> dailyInfoList, HSSFCellStyle... cellStyleLeft) {
+    private void assembleStatisticInfo(HSSFSheet sheet, ProjectSummaryBean projectSummaryBean, PageInfo<ProjectStatisticBean> dailyInfoList, HSSFCellStyle... cellStyleLeft) {
         if (projectSummaryBean == null || dailyInfoList == null) {
             return;
         }
-        List<ProjectDailyInfoBean> list = dailyInfoList.getList();
-        ProjectDailyInfoBean projectDailyInfoBean = ProjectDailyInfoBean.newInstance();
-        BeanUtils.copyProperties(projectSummaryBean, projectDailyInfoBean);
-        list.add(0, projectDailyInfoBean);
+        List<ProjectStatisticBean> list = dailyInfoList.getList();
+        ProjectStatisticBean projectStatisticBean = ProjectStatisticBean.newInstance();
+        BeanUtils.copyProperties(projectSummaryBean, projectStatisticBean);
+        list.add(0, projectStatisticBean);
         int size = list.size();
         int column = 0;
         for (int row = 1; row < size + 1; row++) {
             sheet.createRow(row);
-            ProjectDailyInfoBean bean = list.get(row - 1);
+            ProjectStatisticBean bean = list.get(row - 1);
             Date currentDay = bean.getCurrentDay();
             BigDecimal getEthAmount = bean.getGetEthAmount();
             BigDecimal actualGetEthAmount = bean.getActualGetEthAmount();

@@ -27,8 +27,6 @@ public class ProjectDailyInfo {
 
     private Integer actualTxCount;
 
-    private String channel;
-
     private Date currentDay;
 
     private Timestamp createTime;
@@ -121,14 +119,6 @@ public class ProjectDailyInfo {
 
     public void setActualTxCount(Integer actualTxCount) {
         this.actualTxCount = actualTxCount;
-    }
-
-    public String getChannel() {
-        return channel;
-    }
-
-    public void setChannel(String channel) {
-        this.channel = channel == null ? null : channel.trim();
     }
 
     public Date getCurrentDay() {

@@ -6,11 +6,16 @@ public class SysChannelVo {
 
     private Long id;
 
+    private String  channelName;
+
     private String name;
 
     private String channel;
 
     private String note;
+
+    private Integer registerCount;
+    private Integer totalRegisterCount;
 
     private Timestamp createTime;
 
@@ -74,6 +79,33 @@ public class SysChannelVo {
 
     public SysChannelVo setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+        return this;
+    }
+
+    public Integer getRegisterCount() {
+        return registerCount;
+    }
+
+    public SysChannelVo setRegisterCount(Integer registerCount) {
+        this.registerCount = registerCount;
+        return this;
+    }
+
+    public Integer getTotalRegisterCount() {
+        return totalRegisterCount;
+    }
+
+    public SysChannelVo setTotalRegisterCount(Integer totalRegisterCount) {
+        this.totalRegisterCount = totalRegisterCount;
+        return this;
+    }
+
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public SysChannelVo setChannelName(String channelName) {
+        this.channelName = channelName;
         return this;
     }
 }

@@ -3,18 +3,16 @@ package com.witshare.mars.pojo.domain;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
-public class ProjectDailyInfoExample {
+public class ProjectChannelStatisticExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public ProjectDailyInfoExample() {
+    public ProjectChannelStatisticExample() {
         oredCriteria = new ArrayList<Criteria>();
     }
 
@@ -106,32 +104,6 @@ public class ProjectDailyInfoExample {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
             }
             criteria.add(new Criterion(condition, value1, value2));
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value, String property) {
-            if (value == null) {
-                throw new RuntimeException("Value for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value.getTime()), property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, List<Date> values, String property) {
-            if (values == null || values.size() == 0) {
-                throw new RuntimeException("Value list for " + property + " cannot be null or empty");
-            }
-            List<java.sql.Date> dateList = new ArrayList<java.sql.Date>();
-            Iterator<Date> iter = values.iterator();
-            while (iter.hasNext()) {
-                dateList.add(new java.sql.Date(iter.next().getTime()));
-            }
-            addCriterion(condition, dateList, property);
-        }
-
-        protected void addCriterionForJDBCDate(String condition, Date value1, Date value2, String property) {
-            if (value1 == null || value2 == null) {
-                throw new RuntimeException("Between values for " + property + " cannot be null");
-            }
-            addCriterion(condition, new java.sql.Date(value1.getTime()), new java.sql.Date(value2.getTime()), property);
         }
 
         public Criteria andIdIsNull() {
@@ -331,6 +303,146 @@ public class ProjectDailyInfoExample {
 
         public Criteria andProjectTokenNotBetween(String value1, String value2) {
             addCriterion("project_token not between", value1, value2, "projectToken");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIsNull() {
+            addCriterion("channel is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIsNotNull() {
+            addCriterion("channel is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelEqualTo(String value) {
+            addCriterion("channel =", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNotEqualTo(String value) {
+            addCriterion("channel <>", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGreaterThan(String value) {
+            addCriterion("channel >", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelGreaterThanOrEqualTo(String value) {
+            addCriterion("channel >=", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelLessThan(String value) {
+            addCriterion("channel <", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelLessThanOrEqualTo(String value) {
+            addCriterion("channel <=", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelLike(String value) {
+            addCriterion("channel like", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNotLike(String value) {
+            addCriterion("channel not like", value, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelIn(List<String> values) {
+            addCriterion("channel in", values, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNotIn(List<String> values) {
+            addCriterion("channel not in", values, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelBetween(String value1, String value2) {
+            addCriterion("channel between", value1, value2, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNotBetween(String value1, String value2) {
+            addCriterion("channel not between", value1, value2, "channel");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameIsNull() {
+            addCriterion("channel_name is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameIsNotNull() {
+            addCriterion("channel_name is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameEqualTo(String value) {
+            addCriterion("channel_name =", value, "channelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameNotEqualTo(String value) {
+            addCriterion("channel_name <>", value, "channelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameGreaterThan(String value) {
+            addCriterion("channel_name >", value, "channelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameGreaterThanOrEqualTo(String value) {
+            addCriterion("channel_name >=", value, "channelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameLessThan(String value) {
+            addCriterion("channel_name <", value, "channelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameLessThanOrEqualTo(String value) {
+            addCriterion("channel_name <=", value, "channelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameLike(String value) {
+            addCriterion("channel_name like", value, "channelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameNotLike(String value) {
+            addCriterion("channel_name not like", value, "channelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameIn(List<String> values) {
+            addCriterion("channel_name in", values, "channelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameNotIn(List<String> values) {
+            addCriterion("channel_name not in", values, "channelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameBetween(String value1, String value2) {
+            addCriterion("channel_name between", value1, value2, "channelName");
+            return (Criteria) this;
+        }
+
+        public Criteria andChannelNameNotBetween(String value1, String value2) {
+            addCriterion("channel_name not between", value1, value2, "channelName");
             return (Criteria) this;
         }
 
@@ -811,66 +923,6 @@ public class ProjectDailyInfoExample {
 
         public Criteria andActualTxCountNotBetween(Integer value1, Integer value2) {
             addCriterion("actual_tx_count not between", value1, value2, "actualTxCount");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayIsNull() {
-            addCriterion("current_day is null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayIsNotNull() {
-            addCriterion("current_day is not null");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayEqualTo(Date value) {
-            addCriterionForJDBCDate("current_day =", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayNotEqualTo(Date value) {
-            addCriterionForJDBCDate("current_day <>", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayGreaterThan(Date value) {
-            addCriterionForJDBCDate("current_day >", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayGreaterThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("current_day >=", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayLessThan(Date value) {
-            addCriterionForJDBCDate("current_day <", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayLessThanOrEqualTo(Date value) {
-            addCriterionForJDBCDate("current_day <=", value, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayIn(List<Date> values) {
-            addCriterionForJDBCDate("current_day in", values, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayNotIn(List<Date> values) {
-            addCriterionForJDBCDate("current_day not in", values, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("current_day between", value1, value2, "currentDay");
-            return (Criteria) this;
-        }
-
-        public Criteria andCurrentDayNotBetween(Date value1, Date value2) {
-            addCriterionForJDBCDate("current_day not between", value1, value2, "currentDay");
             return (Criteria) this;
         }
 

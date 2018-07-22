@@ -11,10 +11,12 @@ public interface ChannelService {
 
     void update(SysChannelBean sysChannelBean);
 
-    void delete( Long id);
+    void delete(String channelGid);
 
     PageInfo<SysChannelVo> list(SysChannelBean sysChannelBean);
 
     SysChannelVo get(SysChannelBean sysChannelBean);
+
+    SysChannelBean get(String channel);
 
 }

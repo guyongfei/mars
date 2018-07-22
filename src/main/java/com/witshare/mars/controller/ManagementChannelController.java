@@ -75,10 +75,10 @@ public class ManagementChannelController {
      * 删除
      */
     @ResponseBody
-    @RequestMapping(value = "/channel/{channel}", method = RequestMethod.DELETE)
-    public ResponseBean getProjectById(@PathVariable("channel") Long id) {
+    @RequestMapping(value = "/channel/{channelGid}", method = RequestMethod.DELETE)
+    public ResponseBean getProjectById(@PathVariable("channelGid") String channelGid) {
 
-        channelService.delete(id);
+        channelService.delete(channelGid);
         return ResponseBean.newInstanceSuccess();
     }
 

@@ -3,17 +3,17 @@ package com.witshare.mars.service.impl;
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.witshare.mars.constant.EnumProjectStatus;
 import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.dao.mysql.*;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.domain.*;
-import com.witshare.mars.pojo.dto.ProjectDailyInfoBean;
+import com.witshare.mars.pojo.dto.ProjectStatisticBean;
 import com.witshare.mars.pojo.dto.ProjectSummaryBean;
 import com.witshare.mars.pojo.dto.RecordUserTxBean;
-import com.witshare.mars.service.ProjectDailyInfoService;
-import com.witshare.mars.service.SysProjectService;
+import com.witshare.mars.pojo.dto.SysChannelBean;
+import com.witshare.mars.service.ChannelService;
+import com.witshare.mars.service.ProjectStatisticService;
 import com.witshare.mars.util.WitshareUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -29,10 +29,12 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
+public class ProjectStatisticServiceImpl implements ProjectStatisticService {
 
     @Autowired
     private ProjectDailyInfoMapper projectDailyInfoMapper;
+    @Autowired
+    private ProjectChannelStatisticMapper projectChannelStatisticMapper;
     @Autowired
     private ProjectSummaryMapper projectSummaryMapper;
     @Autowired
@@ -40,11 +42,11 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
     @Autowired
     private RecordUserTxMapper recordUserTxMapper;
     @Autowired
-    private StaticProjectDailyInfoMapper staticProjectDailyInfoMapper;
+    private StaticProjectStatisticInfoMapper staticProjectStatisticInfoMapper;
     @Autowired
     private StaticProjectSummaryMapper staticProjectSummaryMapper;
     @Autowired
-    private SysProjectService sysProjectService;
+    private ChannelService channelService;
     @Autowired
     private RedisCommonDao redisCommonDao;
 
@@ -79,7 +81,7 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
     }
 
     @Override
-    public ProjectDailyInfoBean get(String projectGid, Date date) {
+    public ProjectStatisticBean get(String projectGid, Date date) {
         if (StringUtils.isEmpty(projectGid)) {
             return null;
         }
@@ -91,72 +93,90 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
         List<ProjectDailyInfo> projectDailyInfos = projectDailyInfoMapper.selectByExample(projectDailyInfoExample);
         if (CollectionUtils.isNotEmpty(projectDailyInfos)) {
             ProjectDailyInfo projectDailyInfo = projectDailyInfos.get(0);
-            ProjectDailyInfoBean projectDailyInfoBean = ProjectDailyInfoBean.newInstance();
-            BeanUtils.copyProperties(projectDailyInfo, projectDailyInfoBean);
-            return projectDailyInfoBean;
+            ProjectStatisticBean projectStatisticBean = ProjectStatisticBean.newInstance();
+            BeanUtils.copyProperties(projectDailyInfo, projectStatisticBean);
+            return projectStatisticBean;
         }
         return null;
     }
 
 
     @Override
-    public PageInfo<ProjectDailyInfoBean> getList(ProjectDailyInfoBean projectDailyInfoBean) {
-        if (projectDailyInfoBean == null) {
+    public PageInfo<ProjectStatisticBean> getList(ProjectStatisticBean projectStatisticBean) {
+        if (projectStatisticBean == null) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        Integer pageNum = projectDailyInfoBean.getPageNum();
-        Integer pageSize = projectDailyInfoBean.getPageSize();
-        String projectGid = projectDailyInfoBean.getProjectGid();
+        Integer pageNum = projectStatisticBean.getPageNum();
+        Integer pageSize = projectStatisticBean.getPageSize();
+        String projectGid = projectStatisticBean.getProjectGid();
         if (pageNum == null || pageSize == null) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        PageInfo<ProjectDailyInfoBean> projectDailyInfoBeanPageInfo = new PageInfo<>();
+        PageInfo<ProjectStatisticBean> projectDailyInfoBeanPageInfo = new PageInfo<>();
         if (StringUtils.isEmpty(projectGid)) {
             return projectDailyInfoBeanPageInfo;
         }
+        String action = projectStatisticBean.getAction();
 
-        ProjectDailyInfoExample projectDailyInfoExample = new ProjectDailyInfoExample();
-        projectDailyInfoExample.or().andProjectGidEqualTo(projectGid);
-        projectDailyInfoExample.setOrderByClause("current_day desc");
-        PageInfo<ProjectDailyInfo> pageInfos = PageHelper.startPage(pageNum, pageSize)
-                .doSelectPageInfo(() -> projectDailyInfoMapper.selectByExample(projectDailyInfoExample));
-
-
-        List<ProjectDailyInfo> list = pageInfos.getList();
-        LinkedList<ProjectDailyInfoBean> projectDailyInfoBeans = new LinkedList<>();
-        list.forEach(p -> {
-            ProjectDailyInfoBean bean = new ProjectDailyInfoBean();
-            BeanUtils.copyProperties(p, bean);
-            projectDailyInfoBeans.add(bean);
-        });
-        pageInfos.setList(null);
-        BeanUtils.copyProperties(pageInfos, projectDailyInfoBeanPageInfo);
-        projectDailyInfoBeanPageInfo.setList(projectDailyInfoBeans);
+        if (StringUtils.equals("channel", action)) {
+            ProjectChannelStatisticExample projectChannelStatisticExample = new ProjectChannelStatisticExample();
+            projectChannelStatisticExample.or().andProjectGidEqualTo(projectGid);
+            projectChannelStatisticExample.setOrderByClause("channel asc");
+            PageInfo<ProjectChannelStatistic> pageInfos = PageHelper.startPage(pageNum, pageSize)
+                    .doSelectPageInfo(() -> projectChannelStatisticMapper.selectByExample(projectChannelStatisticExample));
+            List<ProjectChannelStatistic> list = pageInfos.getList();
+            LinkedList<ProjectStatisticBean> projectStatisticBeans = new LinkedList<>();
+            list.forEach(p -> {
+                ProjectStatisticBean bean = new ProjectStatisticBean();
+                BeanUtils.copyProperties(p, bean);
+                projectStatisticBeans.add(bean);
+            });
+            pageInfos.setList(null);
+            BeanUtils.copyProperties(pageInfos, projectDailyInfoBeanPageInfo);
+            projectDailyInfoBeanPageInfo.setList(projectStatisticBeans);
+        } else {
+            ProjectDailyInfoExample projectDailyInfoExample = new ProjectDailyInfoExample();
+            projectDailyInfoExample.or().andProjectGidEqualTo(projectGid);
+            projectDailyInfoExample.setOrderByClause("current_day desc");
+            PageInfo<ProjectDailyInfo> pageInfos = PageHelper.startPage(pageNum, pageSize)
+                    .doSelectPageInfo(() -> projectDailyInfoMapper.selectByExample(projectDailyInfoExample));
+            List<ProjectDailyInfo> list = pageInfos.getList();
+            LinkedList<ProjectStatisticBean> projectStatisticBeans = new LinkedList<>();
+            list.forEach(p -> {
+                ProjectStatisticBean bean = new ProjectStatisticBean();
+                BeanUtils.copyProperties(p, bean);
+                projectStatisticBeans.add(bean);
+            });
+            pageInfos.setList(null);
+            BeanUtils.copyProperties(pageInfos, projectDailyInfoBeanPageInfo);
+            projectDailyInfoBeanPageInfo.setList(projectStatisticBeans);
+        }
         return projectDailyInfoBeanPageInfo;
     }
 
     @Override
-    public PageInfo<ProjectDailyInfoBean> getList(String projectGid) {
+    public PageInfo<ProjectStatisticBean> getList(String projectGid) {
         if (StringUtils.isAnyBlank(projectGid)) {
             return null;
         }
-        ProjectDailyInfoBean projectDailyInfoBean = new ProjectDailyInfoBean();
-        projectDailyInfoBean.setProjectGid(projectGid)
+        ProjectStatisticBean projectStatisticBean = new ProjectStatisticBean();
+        projectStatisticBean.setProjectGid(projectGid)
                 .setPageNum(1)
                 .setPageSize(Integer.MAX_VALUE);
-        return this.getList(projectDailyInfoBean);
+        return this.getList(projectStatisticBean);
     }
 
     //更新每日统计表和汇总表
     @Override
     public void syncDailyInfo() {
         LinkedList<String> projects = new LinkedList<>();
-        LinkedList<ProjectDailyInfoBean> projectDailyInfoBeans = new LinkedList<>();
+        LinkedList<ProjectStatisticBean> projectStatisticDailyBeans = new LinkedList<>();
+        LinkedList<ProjectStatisticBean> projectStatisticChannelBeans = new LinkedList<>();
         LinkedList<ProjectSummaryBean> projectSummaryBeans = new LinkedList<>();
 
-        //查询 还未打币完成的项目
+        //查询 首页展示项目
         SysProjectExample sysProjectExample = new SysProjectExample();
-        sysProjectExample.or().andProjectStatusIn(EnumProjectStatus.getStatisticStatuses());
+        sysProjectExample.or().andDefaultProjectEqualTo(1);
         List<SysProject> sysProjects = sysProjectMapper.selectByExample(sysProjectExample);
         sysProjects.forEach(p -> projects.add(p.getProjectGid()));
 
@@ -170,30 +190,53 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
             BeanUtils.copyProperties(p, recordUserTxBean);
             recordUserTxBeans.add(recordUserTxBean);
         });
-        //将所有交易分组
-        Map<String, Map<LocalDate, List<RecordUserTxBean>>> collect = recordUserTxBeans.stream()
+        //将所有交易按照日期分组
+        Map<String, Map<LocalDate, List<RecordUserTxBean>>> dailyCollect = recordUserTxBeans.stream()
                 .collect(Collectors.groupingBy(RecordUserTxBean::getProjectGid,
                         Collectors.groupingBy(RecordUserTxBean::getLocalDate,
                                 Collectors.toList())));
 
+        //将所有交易按照渠道号分组
+        //2.按照渠道号分组
+        Map<String, Map<String, List<RecordUserTxBean>>> channelCollect = recordUserTxBeans.stream()
+                .collect(Collectors.groupingBy(RecordUserTxBean::getProjectGid,
+                        Collectors.groupingBy(RecordUserTxBean::getChannel,
+                                Collectors.toList())));
+        channelCollect.forEach((projectGid, v1) -> {
+            v1.forEach((channel, v2) -> {
+                ProjectSummaryBean projectSummaryBean = getProjectSummaryBean(v2);
+                if (projectSummaryBean == null) {
+                    return;
+                }
+                ProjectStatisticBean projectStatisticBean = ProjectStatisticBean.newInstance();
+                BeanUtils.copyProperties(projectSummaryBean, projectStatisticBean);
+                String channelName = "";
+                SysChannelBean sysChannelBean = channelService.get(channel);
+                if (sysChannelBean != null) {
+                    channelName = sysChannelBean.getName();
+                }
+                projectStatisticBean.setChannel(channel).setChannelName(channelName);
+                projectStatisticChannelBeans.add(projectStatisticBean);
+            });
+        });
+
+
         //汇总数据
-        collect.forEach((projectGid, v1) -> {
+        dailyCollect.forEach((projectGid, v1) -> {
             LinkedList<RecordUserTxBean> userTxList = new LinkedList<>();
             v1.forEach((localDate, v2) -> {
                 ProjectSummaryBean projectSummaryBean = getProjectSummaryBean(v2);
                 if (projectSummaryBean == null) {
                     return;
                 }
-
-                ProjectDailyInfoBean projectDailyInfoBean = ProjectDailyInfoBean.newInstance();
-                BeanUtils.copyProperties(projectSummaryBean, projectDailyInfoBean);
+                ProjectStatisticBean projectStatisticBean = ProjectStatisticBean.newInstance();
+                BeanUtils.copyProperties(projectSummaryBean, projectStatisticBean);
                 Date currentDay = WitshareUtils.getDateByLocalDate(localDate);
-                projectDailyInfoBean.setCurrentDay(currentDay);
+                projectStatisticBean.setCurrentDay(currentDay);
 
                 //置入list
                 userTxList.addAll(v2);
-                projectDailyInfoBeans.add(projectDailyInfoBean);
-
+                projectStatisticDailyBeans.add(projectStatisticBean);
             });
             //置入list
             ProjectSummaryBean projectSummaryBean = getProjectSummaryBean(userTxList);
@@ -201,7 +244,8 @@ public class ProjectDailyInfoServiceImpl implements ProjectDailyInfoService {
         });
 
         //存表
-        staticProjectDailyInfoMapper.saveOrUpdate(projectDailyInfoBeans);
+        staticProjectStatisticInfoMapper.saveOrUpdateDaily(projectStatisticDailyBeans);
+        staticProjectStatisticInfoMapper.saveOrUpdateChannel(projectStatisticChannelBeans);
         staticProjectSummaryMapper.saveOrUpdate(projectSummaryBeans);
     }
 

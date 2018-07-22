@@ -3,17 +3,21 @@ package com.witshare.mars.service.impl;
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import com.witshare.mars.config.DistributedLocker;
 import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.dao.mysql.SysChannelMapper;
+import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.domain.SysChannel;
 import com.witshare.mars.pojo.domain.SysChannelExample;
 import com.witshare.mars.pojo.dto.SysChannelBean;
 import com.witshare.mars.pojo.vo.SysChannelVo;
 import com.witshare.mars.service.ChannelService;
-import com.witshare.mars.service.SysProjectService;
+import com.witshare.mars.util.RedisKeyUtil;
+import com.witshare.mars.util.WitshareUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +35,7 @@ public class ChannelServiceImpl implements ChannelService {
     @Autowired
     private SysChannelMapper sysChannelMapper;
     @Autowired
-    private SysProjectService sysProjectService;
+    private RedisCommonDao redisCommonDao;
     @Autowired
     private DistributedLocker distributedLocker;
 
@@ -77,14 +81,15 @@ public class ChannelServiceImpl implements ChannelService {
             //存库
             Timestamp current = new Timestamp(System.currentTimeMillis());
             SysChannel sysChannel = new SysChannel();
-            channelBean.setCreateTime(current)
+            channelBean.
+                    setChannelGid(WitshareUtils.getUUID())
+                    .setCreateTime(current)
                     .setUpdateTime(current);
             BeanUtils.copyProperties(channelBean, sysChannel);
             sysChannelMapper.insertSelective(sysChannel);
-        } catch (WitshareException e) {
-            throw e;
+            redisCommonDao.setString(RedisKeyUtil.getChannelInfoKey(channel), new Gson().toJson(sysChannel));
         } catch (Exception e) {
-            throw new WitshareException(EnumResponseText.SysError);
+            throw e;
         } finally {
             distributedLocker.unlock(channelLockKey, lockId);
         }
@@ -113,9 +118,14 @@ public class ChannelServiceImpl implements ChannelService {
 
         PageInfo<SysChannelVo> pageInfo_ = new PageInfo<>();
         LinkedList<SysChannelVo> sysChannelVos = new LinkedList<>();
+        final int totalRegisterCount = getRegisterCount(null);
         pageInfo.getList().forEach(p -> {
+            String channel = p.getChannel();
             SysChannelVo sysChannelVo = SysChannelVo.newInstance();
             BeanUtils.copyProperties(p, sysChannelVo);
+            //获取注册人数
+            sysChannelVo.setRegisterCount(getRegisterCount(channel));
+            sysChannelVo.setTotalRegisterCount(totalRegisterCount);
             sysChannelVos.add(sysChannelVo);
         });
         pageInfo.setList(null);
@@ -123,6 +133,16 @@ public class ChannelServiceImpl implements ChannelService {
         pageInfo_.setList(sysChannelVos);
 
         return pageInfo_;
+    }
+
+    /**
+     * 获取注册用户数
+     */
+    private int getRegisterCount(String channel) {
+        channel = StringUtils.isEmpty(channel) ? "total" : channel;
+        String registerCountKey = RedisKeyUtil.getChannelRegisterCountKey();
+        String countStr = redisCommonDao.getHash(registerCountKey, channel);
+        return NumberUtils.isNumber(countStr) ? Integer.parseInt(countStr) : 0;
     }
 
 
@@ -135,7 +155,6 @@ public class ChannelServiceImpl implements ChannelService {
         if (StringUtils.isAnyBlank(channel)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-
         SysChannelExample sysChannelExample = new SysChannelExample();
         sysChannelExample.or().andChannelEqualTo(channel);
         List<SysChannel> sysChannels = sysChannelMapper.selectByExample(sysChannelExample);
@@ -148,17 +167,42 @@ public class ChannelServiceImpl implements ChannelService {
         return null;
     }
 
+    @Override
+    public SysChannelBean get(String channel) {
+        if (StringUtils.isAnyBlank(channel) || "0".equals(channel)) {
+            return null;
+        }
+        String json = redisCommonDao.getString(RedisKeyUtil.getChannelInfoKey(channel));
+        if (!StringUtils.isAnyBlank(json)) {
+            return new Gson().fromJson(json, SysChannelBean.class);
+        }
+        SysChannelExample sysChannelExample = new SysChannelExample();
+        sysChannelExample.or().andChannelEqualTo(channel);
+        List<SysChannel> sysChannels = sysChannelMapper.selectByExample(sysChannelExample);
+        if (CollectionUtils.isNotEmpty(sysChannels)) {
+            SysChannel sysChannel = sysChannels.get(0);
+            SysChannelBean sysChannelBean = SysChannelBean.newInstance();
+            BeanUtils.copyProperties(sysChannel, sysChannelBean);
+            this.cacheChannel(sysChannelBean);
+            return sysChannelBean;
+        }
+        return null;
+    }
+
 
     @Override
-    public void delete(Long id) {
-        if (id == null) {
+    public void delete(String channelGid) {
+        if (StringUtils.isAnyBlank(channelGid)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        SysChannel sysChannel = sysChannelMapper.selectByPrimaryKey(id);
-        if (sysChannel == null) {
+        SysChannelExample sysChannelExample = new SysChannelExample();
+        sysChannelExample.or().andChannelGidEqualTo(channelGid);
+        List<SysChannel> sysChannels = sysChannelMapper.selectByExample(sysChannelExample);
+        if (CollectionUtils.isEmpty(sysChannels)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        sysChannelMapper.deleteByPrimaryKey(id);
+        sysChannelMapper.deleteByExample(sysChannelExample);
+        this.deleteCacheChannel(sysChannels.get(0).getChannel());
     }
 
 
@@ -167,30 +211,30 @@ public class ChannelServiceImpl implements ChannelService {
         if (sysChannelBean == null) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
-        String channel = sysChannelBean.getChannel();
         String name = sysChannelBean.getName();
         String note = sysChannelBean.getNote();
-        Long id = sysChannelBean.getId();
-        if (StringUtils.isAnyBlank(channel, name) || id == null) {
+        String channelGid = sysChannelBean.getChannelGid();
+        if (StringUtils.isAnyBlank(name, channelGid)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
+        SysChannelExample sysChannelExample = new SysChannelExample();
+        sysChannelExample.or().andChannelGidEqualTo(channelGid);
+        List<SysChannel> sysChannels = sysChannelMapper.selectByExample(sysChannelExample);
+        if (CollectionUtils.isEmpty(sysChannels)) {
+            throw new WitshareException(EnumResponseText.ErrorRequest);
+        }
+        SysChannel sysChannelDb = sysChannels.get(0);
         //加锁校验
         //TODO 渠道名未 加锁
-        String channelLockKey = String.format(PROJECT_CHANNEL_LOCK, channel);
+        String channelLockKey = String.format(PROJECT_CHANNEL_LOCK, sysChannelDb.getChannel());
         String lockId = distributedLocker.lock(channelLockKey, PROJECT_CHANNEL_TIME);
         try {
             if (StringUtils.isEmpty(lockId)) {
                 throw new WitshareException(EnumResponseText.ErrorChannel);
             }
-            SysChannelExample sysChannelExample = new SysChannelExample();
-            sysChannelExample.or().andIdEqualTo(id);
-            List<SysChannel> sysChannels = sysChannelMapper.selectByExample(sysChannelExample);
-            if (CollectionUtils.isEmpty(sysChannels)) {
-                throw new WitshareException(EnumResponseText.ErrorRequest);
-            }
+
             sysChannelExample.clear();
-            sysChannelExample.or().andChannelEqualTo(channel).andIdNotEqualTo(id);
-            sysChannelExample.or().andNameEqualTo(name).andIdNotEqualTo(id);
+            sysChannelExample.or().andNameEqualTo(name).andChannelGidEqualTo(channelGid);
             List<SysChannel> sysChannels1 = sysChannelMapper.selectByExample(sysChannelExample);
             if (CollectionUtils.isNotEmpty(sysChannels1)) {
                 SysChannel sysChannel = sysChannels.get(0);
@@ -199,13 +243,11 @@ public class ChannelServiceImpl implements ChannelService {
                 }
                 throw new WitshareException(EnumResponseText.ErrorChannel);
             }
-            SysChannel sysChannel = sysChannels.get(0);
-            sysChannel.setId(id);
-            sysChannel.setName(name);
-            sysChannel.setNote(note);
-            sysChannel.setChannel(channel);
-            sysChannel.setUpdateTime(new Timestamp(System.currentTimeMillis()));
-            sysChannelMapper.updateByPrimaryKeySelective(sysChannel);
+            sysChannelDb.setName(name);
+            sysChannelDb.setNote(note);
+            sysChannelDb.setUpdateTime(new Timestamp(System.currentTimeMillis()));
+            sysChannelMapper.updateByPrimaryKeySelective(sysChannelDb);
+            this.deleteCacheChannel(sysChannelDb.getChannel());
         } catch (WitshareException e) {
             throw e;
         } catch (Exception e) {
@@ -216,5 +258,19 @@ public class ChannelServiceImpl implements ChannelService {
 
     }
 
+    public void cacheChannel(SysChannelBean sysChannelBean) {
+        if (sysChannelBean == null) {
+            return;
+        }
+        String redisKey = RedisKeyUtil.getChannelInfoKey(sysChannelBean.getChannel());
+        String json = new Gson().toJson(sysChannelBean);
+        redisCommonDao.setString(redisKey, json);
+
+    }
+
+    public void deleteCacheChannel(String channel) {
+        String redisKey = RedisKeyUtil.getChannelInfoKey(channel);
+        redisCommonDao.delRedisKey(redisKey);
+    }
 
 }

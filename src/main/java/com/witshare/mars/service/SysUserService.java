@@ -115,4 +115,7 @@ public interface SysUserService {
     void modifyUserInfo(Long id, Map<String, String> requestBody);
 
 
+    void syncChannelRegisterCount();
+
+
 }

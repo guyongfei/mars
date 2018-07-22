@@ -6,6 +6,8 @@ public class SysChannelBean extends BasePageBean {
 
     private Long id;
 
+    private String channelGid;
+
     private String name;
 
     private String channel;
@@ -74,6 +76,15 @@ public class SysChannelBean extends BasePageBean {
 
     public SysChannelBean setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+        return this;
+    }
+
+    public String getChannelGid() {
+        return channelGid;
+    }
+
+    public SysChannelBean setChannelGid(String channelGid) {
+        this.channelGid = channelGid;
         return this;
     }
 }

@@ -41,6 +41,7 @@ public class RecordUserTxBean extends BasePageBean {
     private Timestamp createTime;
     private Timestamp updateTime;
     private String channel;
+    private String channelGid;
 
 
     private LocalDate localDate;
@@ -330,6 +331,15 @@ public class RecordUserTxBean extends BasePageBean {
 
     public RecordUserTxBean setPlatformAddress(String platformAddress) {
         this.platformAddress = platformAddress;
+        return this;
+    }
+
+    public String getChannelGid() {
+        return channelGid;
+    }
+
+    public RecordUserTxBean setChannelGid(String channelGid) {
+        this.channelGid = channelGid;
         return this;
     }
 }

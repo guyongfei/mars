@@ -70,7 +70,7 @@ public class SysProjectServiceImpl implements SysProjectService {
     @Autowired
     private ProjectWebSiteService projectWebSiteService;
     @Autowired
-    private ProjectDailyInfoService projectDailyInfoService;
+    private ProjectStatisticService projectStatisticService;
     @Autowired
     private PlatformAddressService platformAddressService;
     @Autowired
@@ -277,7 +277,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         BeanUtils.copyProperties(sysProject, sysProjectBeanVo);
         sysProjectBeanVo.setProjectLogoLink(this.getPictureUrl(sysProjectBeanVo.getProjectLogoLink()));
 
-        BigDecimal soldAmount = projectDailyInfoService.getSoldAmount(projectGid);
+        BigDecimal soldAmount = projectStatisticService.getSoldAmount(projectGid);
         sysProjectBeanVo.setSoldAmount(soldAmount);
 
         //依此查询描述表
@@ -341,7 +341,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         BigDecimal softCap = sysProject.getSoftCap();
         BigDecimal hardCap = sysProject.getHardCap();
         BigDecimal actualGetEthAmount = BigDecimal.ZERO;
-        ProjectSummaryBean summary = projectDailyInfoService.getSummary(projectGid);
+        ProjectSummaryBean summary = projectStatisticService.getSummary(projectGid);
         if (summary != null) {
             actualGetEthAmount = summary.getActualGetEthAmount();
         }
@@ -445,7 +445,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         String projectDetailName = i18n.getProjectDetailName();
         //查找redis
         String projectStatisticKey = RedisKeyUtil.getProjectFrontKey(projectGid);
-        ProjectSummaryBean summary = projectDailyInfoService.getSummary(projectGid);
+        ProjectSummaryBean summary = projectStatisticService.getSummary(projectGid);
         BigDecimal soldAmount = summary == null ? BigDecimal.ZERO : summary.getGetEthAmount();
         BigDecimal soldTokenAmount = summary == null ? BigDecimal.ZERO : summary.getPayTokenAmount();
 //        String projectDetail = null;

@@ -1,13 +1,13 @@
 package com.witshare.mars.controller;
 
 import com.github.pagehelper.PageInfo;
-import com.witshare.mars.pojo.dto.ProjectDailyInfoBean;
+import com.witshare.mars.pojo.dto.ProjectStatisticBean;
 import com.witshare.mars.pojo.dto.ProjectSummaryBean;
 import com.witshare.mars.pojo.dto.RecordUserTxBean;
 import com.witshare.mars.pojo.util.ResponseBean;
 import com.witshare.mars.pojo.vo.DistributionStatusVo;
 import com.witshare.mars.service.ExportService;
-import com.witshare.mars.service.ProjectDailyInfoService;
+import com.witshare.mars.service.ProjectStatisticService;
 import com.witshare.mars.service.ProjectSummaryService;
 import com.witshare.mars.service.UserTxService;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class ManagementProjectStatisticController {
     @Autowired
     private ProjectSummaryService projectSummaryService;
     @Autowired
-    private ProjectDailyInfoService projectDailyInfoService;
+    private ProjectStatisticService projectStatisticService;
     @Autowired
     private UserTxService userTxService;
     @Autowired
@@ -53,9 +53,9 @@ public class ManagementProjectStatisticController {
      */
     @ResponseBody
     @RequestMapping(value = "/statistic", method = RequestMethod.GET)
-    public ResponseBean get(ProjectDailyInfoBean projectDailyInfoBean) {
+    public ResponseBean get(ProjectStatisticBean projectStatisticBean) {
 
-        PageInfo<ProjectDailyInfoBean> pageInfo = projectDailyInfoService.getList(projectDailyInfoBean);
+        PageInfo<ProjectStatisticBean> pageInfo = projectStatisticService.getList(projectStatisticBean);
         return ResponseBean.newInstanceSuccess(pageInfo);
     }
 

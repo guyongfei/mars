@@ -5,6 +5,8 @@ import java.sql.Timestamp;
 public class SysChannel {
     private Long id;
 
+    private String channelGid;
+
     private String channel;
 
     private String name;
@@ -21,6 +23,14 @@ public class SysChannel {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getChannelGid() {
+        return channelGid;
+    }
+
+    public void setChannelGid(String channelGid) {
+        this.channelGid = channelGid == null ? null : channelGid.trim();
     }
 
     public String getChannel() {

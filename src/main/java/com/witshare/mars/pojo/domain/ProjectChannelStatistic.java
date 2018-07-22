@@ -1,14 +1,18 @@
-package com.witshare.mars.pojo.dto;
+package com.witshare.mars.pojo.domain;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class ProjectSummaryBean extends BasePageBean {
+public class ProjectChannelStatistic {
     private Long id;
 
     private String projectGid;
 
     private String projectToken;
+
+    private String channel;
+
+    private String channelName;
 
     private BigDecimal getEthAmount;
 
@@ -30,128 +34,123 @@ public class ProjectSummaryBean extends BasePageBean {
 
     private Timestamp updateTime;
 
-    public ProjectSummaryBean() {
-    }
-
-    public static ProjectSummaryBean newInstance() {
-        return new ProjectSummaryBean();
-    }
-
     public Long getId() {
         return id;
     }
 
-    public ProjectSummaryBean setId(Long id) {
+    public void setId(Long id) {
         this.id = id;
-        return this;
     }
 
     public String getProjectGid() {
         return projectGid;
     }
 
-    public ProjectSummaryBean setProjectGid(String projectGid) {
-        this.projectGid = projectGid;
-        return this;
+    public void setProjectGid(String projectGid) {
+        this.projectGid = projectGid == null ? null : projectGid.trim();
     }
 
     public String getProjectToken() {
         return projectToken;
     }
 
-    public ProjectSummaryBean setProjectToken(String projectToken) {
-        this.projectToken = projectToken;
-        return this;
+    public void setProjectToken(String projectToken) {
+        this.projectToken = projectToken == null ? null : projectToken.trim();
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel == null ? null : channel.trim();
+    }
+
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public void setChannelName(String channelName) {
+        this.channelName = channelName == null ? null : channelName.trim();
     }
 
     public BigDecimal getGetEthAmount() {
         return getEthAmount;
     }
 
-    public ProjectSummaryBean setGetEthAmount(BigDecimal getEthAmount) {
+    public void setGetEthAmount(BigDecimal getEthAmount) {
         this.getEthAmount = getEthAmount;
-        return this;
     }
 
     public BigDecimal getActualGetEthAmount() {
         return actualGetEthAmount;
     }
 
-    public ProjectSummaryBean setActualGetEthAmount(BigDecimal actualGetEthAmount) {
+    public void setActualGetEthAmount(BigDecimal actualGetEthAmount) {
         this.actualGetEthAmount = actualGetEthAmount;
-        return this;
     }
 
     public BigDecimal getPayTokenAmount() {
         return payTokenAmount;
     }
 
-    public ProjectSummaryBean setPayTokenAmount(BigDecimal payTokenAmount) {
+    public void setPayTokenAmount(BigDecimal payTokenAmount) {
         this.payTokenAmount = payTokenAmount;
-        return this;
     }
 
     public BigDecimal getActualPayTokenAmount() {
         return actualPayTokenAmount;
     }
 
-    public ProjectSummaryBean setActualPayTokenAmount(BigDecimal actualPayTokenAmount) {
+    public void setActualPayTokenAmount(BigDecimal actualPayTokenAmount) {
         this.actualPayTokenAmount = actualPayTokenAmount;
-        return this;
     }
 
     public Integer getUserCount() {
         return userCount;
     }
 
-    public ProjectSummaryBean setUserCount(Integer userCount) {
+    public void setUserCount(Integer userCount) {
         this.userCount = userCount;
-        return this;
     }
 
     public Integer getActualUserCount() {
         return actualUserCount;
     }
 
-    public ProjectSummaryBean setActualUserCount(Integer actualUserCount) {
+    public void setActualUserCount(Integer actualUserCount) {
         this.actualUserCount = actualUserCount;
-        return this;
     }
 
     public Integer getTxCount() {
         return txCount;
     }
 
-    public ProjectSummaryBean setTxCount(Integer txCount) {
+    public void setTxCount(Integer txCount) {
         this.txCount = txCount;
-        return this;
     }
 
     public Integer getActualTxCount() {
         return actualTxCount;
     }
 
-    public ProjectSummaryBean setActualTxCount(Integer actualTxCount) {
+    public void setActualTxCount(Integer actualTxCount) {
         this.actualTxCount = actualTxCount;
-        return this;
     }
 
     public Timestamp getCreateTime() {
         return createTime;
     }
 
-    public ProjectSummaryBean setCreateTime(Timestamp createTime) {
+    public void setCreateTime(Timestamp createTime) {
         this.createTime = createTime;
-        return this;
     }
 
     public Timestamp getUpdateTime() {
         return updateTime;
     }
 
-    public ProjectSummaryBean setUpdateTime(Timestamp updateTime) {
+    public void setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
-        return this;
     }
-
 }

@@ -1,7 +1,7 @@
 package com.witshare.mars.service;
 
 import com.github.pagehelper.PageInfo;
-import com.witshare.mars.pojo.dto.ProjectDailyInfoBean;
+import com.witshare.mars.pojo.dto.ProjectStatisticBean;
 import com.witshare.mars.pojo.dto.ProjectSummaryBean;
 
 import java.math.BigDecimal;
@@ -10,17 +10,17 @@ import java.util.Date;
 /**
  * Created by user on 2018/6/25.
  */
-public interface ProjectDailyInfoService {
+public interface ProjectStatisticService {
 
     BigDecimal getSoldAmount(String projectGid);
 
     ProjectSummaryBean getSummary(String projectGid);
 
-    PageInfo<ProjectDailyInfoBean> getList(ProjectDailyInfoBean projectDailyInfoBean);
+    PageInfo<ProjectStatisticBean> getList(ProjectStatisticBean projectStatisticBean);
 
-    PageInfo<ProjectDailyInfoBean> getList(String projectGid);
+    PageInfo<ProjectStatisticBean> getList(String projectGid);
 
-    ProjectDailyInfoBean get(String projectGid, Date date);
+    ProjectStatisticBean get(String projectGid, Date date);
 
     void syncDailyInfo();
 }
