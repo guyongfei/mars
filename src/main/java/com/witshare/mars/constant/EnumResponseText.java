@@ -12,6 +12,7 @@ public enum EnumResponseText {
     ErrorVerifyCode(2, "验证码错误", "Error verifyCode."),
     ErrorOriginPassword(3, "原密码错误", "Error originPassword."),
     ErrorEmail(4, "邮箱不合法", "Error email."),
+    ErrorChannelRegister(4, "渠道号异常", "Error channel."),
     ErrorId(5, "id错误", "Error id."),
     ErrorProjectGId(5, "项目唯一标识错误", "Error projectGid."),
     ErrorProjectStatus(5, "项目状态错误", "Error project status."),

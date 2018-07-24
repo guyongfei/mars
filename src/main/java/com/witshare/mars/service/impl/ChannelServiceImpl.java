@@ -273,4 +273,12 @@ public class ChannelServiceImpl implements ChannelService {
         redisCommonDao.delRedisKey(redisKey);
     }
 
+    @Override
+    public String checkChannel(String channel) {
+        if (StringUtils.isNotBlank(channel) && !channel.matches(CHANNEL_REG)) {
+            throw new WitshareException(EnumResponseText.ErrorChannelRegister);
+        }
+        return StringUtils.isBlank(channel) ? "0" : channel;
+    }
+
 }

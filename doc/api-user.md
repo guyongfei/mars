@@ -57,7 +57,8 @@
     {
       "email":"",
       "password":"",
-      "verifyCode":""
+      "verifyCode":"",
+      "channel":""
     }
   ```
   >data参数说明
@@ -65,6 +66,7 @@
   |字段|类型|是否必须|说明|
   |---|---|---|---|
   |verifyCode|string|是|邮箱验证码|
+  |channel|string|否|渠道号|
 
 - response body
 

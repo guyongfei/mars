@@ -2,10 +2,7 @@ package com.witshare.mars.service;
 
 import com.github.pagehelper.PageInfo;
 import com.witshare.mars.pojo.dto.RecordUserTxBean;
-import com.witshare.mars.pojo.vo.RecordUserTxListVo;
-import com.witshare.mars.pojo.vo.RecordUserTxVo;
-import com.witshare.mars.pojo.vo.SysUserAddressVo;
-import com.witshare.mars.pojo.vo.UserTxInfoVo;
+import com.witshare.mars.pojo.vo.*;
 
 import java.util.Map;
 
@@ -16,9 +13,13 @@ public interface TransactionService {
 
     UserTxInfoVo getUserTxInfo(String projectGid);
 
+    IndexTxVo getIndexTxInfo(RecordUserTxBean recordUserTxBean);
+
     void setUserAddress(Map<String, String> requestBody);
 
     void save(RecordUserTxBean requestBody);
+
+    void saveIndexTx(RecordUserTxBean requestBody);
 
     RecordUserTxBean selectByPayTx(String payTx);
 

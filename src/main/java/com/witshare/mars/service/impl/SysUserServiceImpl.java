@@ -11,10 +11,7 @@ import com.witshare.mars.pojo.domain.SysUser;
 import com.witshare.mars.pojo.domain.SysUserExample;
 import com.witshare.mars.pojo.dto.SyncChannelRegisterCount;
 import com.witshare.mars.pojo.dto.SysUserBean;
-import com.witshare.mars.service.QingyunStorageService;
-import com.witshare.mars.service.SysProjectService;
-import com.witshare.mars.service.SysUserService;
-import com.witshare.mars.service.VerifyCodeService;
+import com.witshare.mars.service.*;
 import com.witshare.mars.util.JsonUtils;
 import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.WitshareUtils;
@@ -65,6 +62,8 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserService sysUserService;
     @Autowired
     private QingyunStorageService qingyunStorageService;
+    @Autowired
+    private ChannelService channelService;
 
     /**
      * @see SysUserService#register(Map)
@@ -82,6 +81,7 @@ public class SysUserServiceImpl implements SysUserService {
         if (StringUtils.isAnyBlank(email, password, verifyCode)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
+        String channel = channelService.checkChannel(requestBody.get(CHANNEL));
         //获取图像验证码
 //        String imgVerifyCodeDb = redisCommonDao.getAndDelete(RedisKeyUtil.getVerifyCodeImgKey(imgToken.trim()));
 //        if (!StringUtils.equals(imgVerifyCodeDb, imgVerifyCode)) {
@@ -101,6 +101,7 @@ public class SysUserServiceImpl implements SysUserService {
         sysUser.setId(userBean.getId());
         sysUser.setUserPassword(userPassword);
         sysUser.setSalt(salt);
+        sysUser.setChannel(channel);
         sysUser.setUserStatus(EnumStatus.Valid.getValue());
         sysUserMapper.updateByPrimaryKeySelective(sysUser);
 

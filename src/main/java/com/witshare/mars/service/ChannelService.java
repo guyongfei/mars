@@ -19,4 +19,6 @@ public interface ChannelService {
 
     SysChannelBean get(String channel);
 
+    String checkChannel(String channel);
+
 }
