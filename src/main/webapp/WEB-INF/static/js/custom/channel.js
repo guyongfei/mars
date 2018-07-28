@@ -251,8 +251,14 @@ $(function () {
                         message: '渠道号不能为空'
                     },
                     regexp: {
-                        regexp: /^[0-9a-zA-Z]{6}$/,
-                        message: '请输入数字或字母的组合，长度为6'
+                        // regexp: /^[0-9a-zA-Z]*[a-zA-Z][0-9a-zA-Z]*$/,
+                        regexp: /^(?=.*?[A-Za-z]+)(?=.*?[0-9]+).*$/,
+                        message: '请输入数字和字母的组合'
+                    },
+                    stringLength: {
+                        min: 6,
+                        max: 6,
+                        message: '请输入6个长度的字符'
                     }
                 }
             },
