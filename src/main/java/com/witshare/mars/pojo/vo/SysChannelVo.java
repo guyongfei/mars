@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 public class SysChannelVo {
 
     private Long id;
+    private String  channelGid;
 
     private String  channelName;
 
@@ -106,6 +107,16 @@ public class SysChannelVo {
 
     public SysChannelVo setChannelName(String channelName) {
         this.channelName = channelName;
+        return this;
+    }
+
+
+    public String getChannelGid() {
+        return channelGid;
+    }
+
+    public SysChannelVo setChannelGid(String channelGid) {
+        this.channelGid = channelGid;
         return this;
     }
 }
