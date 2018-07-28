@@ -20,6 +20,8 @@ public interface ProjectStatisticService {
 
     PageInfo<ProjectStatisticBean> getList(String projectGid);
 
+    PageInfo<ProjectStatisticBean> getChannelList(String projectGid);
+
     ProjectStatisticBean get(String projectGid, Date date);
 
     void syncDailyInfo();

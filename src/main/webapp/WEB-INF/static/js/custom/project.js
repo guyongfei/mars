@@ -461,9 +461,9 @@ function operateFormatter(value, row, index) {
 
     var arr = [];
     arr.push('<button type="button" id="editRow"  style="margin: 0 10px 0 0 " class="btn btn-primary  editRow" ><i class="fa fa-send " aria-hidden="true" ></i>编辑</button>');
-    if (row.projectStatus > 0) {
-        arr.push('<button type="button" id="editRow1"  class="statistic btn  btn-info " projectGid="' + row.projectGid + '" >统计</button>')
-    }
+    // if (row.projectStatus > 0) {
+    //     arr.push('<button type="button" id="editRow1"  class="statistic btn  btn-info " projectGid="' + row.projectGid + '" >统计</button>')
+    // }
     arr.push(' <a class="btn btn-info export" ">数据导出</button>');
 
     return arr.join('')

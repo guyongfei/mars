@@ -80,7 +80,7 @@ public class Task {
     /**
      * 同步项目统计数据
      */
-//    @Scheduled(cron = "0 2/30 * * * ?")
+//    @Scheduled(cron = "0 2 * * * ?")
     public void syncProjectDailyInfo() {
         String lockId = distributedLocker.lock(PROJECT_DAILY_INFO_LOCK, PROJECT_DAILY_INFO_REDIS_LOCK);
         if (lockId == null) {
@@ -94,7 +94,7 @@ public class Task {
     /**
      * 同步渠道注册统计数据
      */
-//    @Scheduled(cron = "0 2/30 * * * ?")
+    @Scheduled(cron = "2 * * * * ?")
     public void syncChannelRegisterCount() {
         String lockId = distributedLocker.lock(CHANNEL_REGISTER_COUNT_LOCK, CHANNEL_REGISTER_COUNT_REDIS_LOCK);
         if (lockId == null) {

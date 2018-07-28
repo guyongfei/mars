@@ -166,6 +166,20 @@ public class ProjectStatisticServiceImpl implements ProjectStatisticService {
         return this.getList(projectStatisticBean);
     }
 
+
+    @Override
+    public PageInfo<ProjectStatisticBean> getChannelList(String projectGid) {
+        if (StringUtils.isAnyBlank(projectGid)) {
+            return null;
+        }
+        ProjectStatisticBean projectStatisticBean = new ProjectStatisticBean();
+        projectStatisticBean.setProjectGid(projectGid)
+                .setPageNum(1)
+                .setPageSize(Integer.MAX_VALUE);
+        projectStatisticBean.setAction("channel");
+        return this.getList(projectStatisticBean);
+    }
+
     //更新每日统计表和汇总表
     @Override
     public void syncDailyInfo() {

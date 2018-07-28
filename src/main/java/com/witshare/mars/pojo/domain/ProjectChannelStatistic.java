@@ -10,9 +10,9 @@ public class ProjectChannelStatistic {
 
     private String projectToken;
 
-    private String channel;
-
     private String channelName;
+
+    private String channel;
 
     private BigDecimal getEthAmount;
 
@@ -58,20 +58,20 @@ public class ProjectChannelStatistic {
         this.projectToken = projectToken == null ? null : projectToken.trim();
     }
 
-    public String getChannel() {
-        return channel;
-    }
-
-    public void setChannel(String channel) {
-        this.channel = channel == null ? null : channel.trim();
-    }
-
     public String getChannelName() {
         return channelName;
     }
 
     public void setChannelName(String channelName) {
         this.channelName = channelName == null ? null : channelName.trim();
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel == null ? null : channel.trim();
     }
 
     public BigDecimal getGetEthAmount() {

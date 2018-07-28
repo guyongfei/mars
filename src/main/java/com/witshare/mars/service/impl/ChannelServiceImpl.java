@@ -232,9 +232,8 @@ public class ChannelServiceImpl implements ChannelService {
             if (StringUtils.isEmpty(lockId)) {
                 throw new WitshareException(EnumResponseText.ErrorChannel);
             }
-
             sysChannelExample.clear();
-            sysChannelExample.or().andNameEqualTo(name).andChannelGidEqualTo(channelGid);
+            sysChannelExample.or().andNameEqualTo(name).andChannelGidNotEqualTo(channelGid);
             List<SysChannel> sysChannels1 = sysChannelMapper.selectByExample(sysChannelExample);
             if (CollectionUtils.isNotEmpty(sysChannels1)) {
                 SysChannel sysChannel = sysChannels.get(0);

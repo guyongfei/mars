@@ -8,7 +8,7 @@ CREATE TABLE `project_channel_statistic` (
   `id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键',
   `project_gid` CHAR(32) NOT NULL COMMENT '项目唯一标识',
   `project_token` VARCHAR(126) NOT NULL COMMENT '项目token',
-  `channelName` VARCHAR(32) NOT NULL COMMENT '渠道名称',
+  `channel_name` VARCHAR(32) NOT NULL COMMENT '渠道名称',
   `channel` VARCHAR(20) NOT NULL COMMENT '渠道号',
   `get_eth_amount` DECIMAL(30,10) UNSIGNED NOT NULL  DEFAULT '0.00000'COMMENT '当日认购数量',
   `actual_get_eth_amount` DECIMAL(30,10) UNSIGNED NOT NULL  DEFAULT '0.00000'COMMENT '当日实际认购数量',
