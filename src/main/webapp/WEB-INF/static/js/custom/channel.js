@@ -289,7 +289,6 @@ $(function () {
         var bv = $form.data('bootstrapValidator');
         // Use Ajax to submit form data
         var dataJson = {
-            'id': channelAddMethod ? '' : channelId,
             'channel': $(' #channel').val(),
             'name': $(' #channelName').val(),
             'note': $(' #channelNote').val(),
