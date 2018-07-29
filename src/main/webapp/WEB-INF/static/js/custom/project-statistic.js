@@ -115,8 +115,8 @@ var TableInit = function () {
 
 function operateFormatter(value, row, index) {
     return [
-        '<button type="button" id="dailyStatistic" style="margin: 0 0 5px 0" class="statistic btn  btn-primary " projectGid="' + row.projectGid + '" >每日统计</button>',
-        '<button type="button" id="channelStatistic" style="margin: 5px 0 0 0"  class="statistic btn  btn-info " projectGid="' + row.projectGid + '" >渠道统计</button>'
+        '<button type="button" id="dailyStatistic" style="margin: 5px 0 5px 5px" class="statistic btn  btn-primary " projectGid="' + row.projectGid + '" >每日统计</button>',
+        '<button type="button" id="channelStatistic" style="margin: 5px 0 5px 5px"  class="statistic btn  btn-info " projectGid="' + row.projectGid + '" >渠道统计</button>'
     ].join('')
 };
 
