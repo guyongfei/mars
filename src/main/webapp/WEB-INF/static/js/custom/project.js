@@ -12,6 +12,8 @@ var projectToken;
 var tokenDecimal;
 var logoStr;
 var addMethod = true;
+var channelAddMethod = true;
+var channelId = '';
 var exportTime;
 
 function getNowFormatDate(date) {
@@ -67,7 +69,6 @@ function getAddDay(addDay) {
 }
 
 function initTimer() {
-    console.log("initTimer");
     $('#startTimePicker').datetimepicker().val(getNowFormatDate(getAddDay(1))).datetimepicker('update');
     $('#endTimePicker').datetimepicker().val(getNowFormatDate(getAddDay(3))).datetimepicker('update');
 }
@@ -433,10 +434,19 @@ window.operateEvents = {
     'click .editRow': function (e, value, row, index) {
         getProject(row)
     },
+
+    'click .btn-channel': function (e, value, row, index) {
+
+        projectGid = row.projectGid;
+        $('#channelProjectToken').html(row.projectToken);
+        $('#channelProjectGid').val(row.projectGid);
+        reloadChannelTable(1);
+        $('#channelModal').modal('show');
+    },
+
     'click .statistic': function (e, value, row, index) {
         $('#statisticProjectToken').html(row.projectToken);
         $('#statisticProjectGid').val(row.projectGid);
-
         reloadStatisticTable(1);
         $('#statisticModal').modal('show');
     },
@@ -449,17 +459,17 @@ window.operateEvents = {
 
 function operateFormatter(value, row, index) {
 
-    var arr = new Array();
+    var arr = [];
     arr.push('<button type="button" id="editRow"  style="margin: 0 10px 0 0 " class="btn btn-primary  editRow" ><i class="fa fa-send " aria-hidden="true" ></i>编辑</button>');
-    if (row.projectStatus > 0) {
-        arr.push('<button type="button" id="editRow1"  class="statistic btn  btn-info " projectGid="' + row.projectGid + '" >统计</button>')
-    }
+    // if (row.projectStatus > 0) {
+    //     arr.push('<button type="button" id="editRow1"  class="statistic btn  btn-info " projectGid="' + row.projectGid + '" >统计</button>')
+    // }
     arr.push(' <a class="btn btn-info export" ">数据导出</button>');
 
     return arr.join('')
 }
 
-//重新加载表格
+//重新加载统计表格
 function reloadStatisticTable(pageNum) {
     $('#statistic_table').bootstrapTable('refresh', {pageNumber: pageNum});
 }
@@ -718,7 +728,7 @@ function getProject(row) {
 }
 
 
-//重新加载表格
+//重新加载项目表格
 function reloadTable(pageNum) {
     $('#inner_table').bootstrapTable('refresh', {pageNumber: pageNum});
 }
@@ -861,20 +871,13 @@ $('input[type=file]').on('change', function (e) {
 
 
 $(function () {
-    //加载table
+    //加载项目table
     var oTable = new TableInit();
     oTable.Init();
 
-    //加载table
+    //加载统计table
     var oTable_ = new TableInit_();
     oTable_.Init();
-
-    // $('.statistics').click(function () {
-    //     var projectGid = $(this).attr('projectGid');
-    //     $('#statisticProjectGid').val(projectGid);
-    //     reloadStatisticTable(1);
-    // })
-
 
     $('#addEvent').bootstrapValidator({
         message: 'This value is not valid',
@@ -1315,19 +1318,13 @@ $(function () {
             }
         }
     }).on('success.form.bv', function (e) {
-
-
-
         // Prevent form submission
         e.preventDefault();
-
         // Get the form instance
         var $form = $(e.target);
-
         // Get the BootstrapValidator instance
         var bv = $form.data('bootstrapValidator');
         console.log($form.serialize())
-
         // Use Ajax to submit form data
         var projectGid = addMethod ? "" : projectNow.projectGid;
         if (!checkPrice() || !checkCap()) {

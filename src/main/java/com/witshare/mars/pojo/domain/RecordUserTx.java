@@ -14,6 +14,8 @@ public class RecordUserTx {
 
     private String projectToken;
 
+    private String channel;
+
     private Integer payCoinType;
 
     private String payTx;
@@ -92,6 +94,14 @@ public class RecordUserTx {
 
     public void setProjectToken(String projectToken) {
         this.projectToken = projectToken == null ? null : projectToken.trim();
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel == null ? null : channel.trim();
     }
 
     public Integer getPayCoinType() {

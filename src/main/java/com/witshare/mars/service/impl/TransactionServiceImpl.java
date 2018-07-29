@@ -18,15 +18,14 @@ import com.witshare.mars.pojo.domain.RecordUserTxExample;
 import com.witshare.mars.pojo.domain.SysUserAddress;
 import com.witshare.mars.pojo.domain.SysUserAddressExample;
 import com.witshare.mars.pojo.dto.*;
+import com.witshare.mars.pojo.vo.IndexTxVo;
 import com.witshare.mars.pojo.vo.RecordUserTxListVo;
 import com.witshare.mars.pojo.vo.RecordUserTxVo;
 import com.witshare.mars.pojo.vo.UserTxInfoVo;
-import com.witshare.mars.service.SysProjectService;
-import com.witshare.mars.service.SysUserService;
-import com.witshare.mars.service.TokenDistributeService;
-import com.witshare.mars.service.TransactionService;
+import com.witshare.mars.service.*;
 import com.witshare.mars.util.HttpClientUtil;
 import com.witshare.mars.util.RedisKeyUtil;
+import com.witshare.mars.util.WitshareUtils;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -37,6 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.LinkedList;
@@ -69,12 +69,23 @@ public class TransactionServiceImpl implements TransactionService {
     @Autowired
     private TokenDistributeService tokenDistributeService;
     @Autowired
+    private ChannelService channelService;
+    @Autowired
     private RedisCommonDao redisCommonDao;
     @Autowired
     private DistributedLocker distributedLocker;
     private final static String USER_TX_LOCK = "userTxLock:";
     private final static int USER_TX_LOCK_TIME = 5;
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
+
+
+    @Override
+    public IndexTxVo getIndexTxInfo(RecordUserTxBean recordUserTxBean) {
+        String projectGid = recordUserTxBean.getProjectGid();
+        IndexTxVo indexTxVo = IndexTxVo.newInstance();
+        return indexTxVo.setTxInfo(this.getUserTxInfo(projectGid))
+                .setTxList(this.selectList(recordUserTxBean));
+    }
 
     @Override
     public UserTxInfoVo getUserTxInfo(String projectGid) {
@@ -107,6 +118,28 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
+    public void saveIndexTx(RecordUserTxBean recordUserTxBean) {
+        Map<String, String> stringMap = WitshareUtils.objectToRedisMap(recordUserTxBean);
+        String payEthAddress = recordUserTxBean.getPayEthAddress();
+        //无则设置，有则跳过
+        if (StringUtils.isNotBlank(payEthAddress)) {
+            this.setUserAddress(stringMap);
+        } else {
+            String projectGid = recordUserTxBean.getProjectGid();
+            SysUserBean currentUser = sysUserService.getCurrentUser();
+            String userGid = currentUser.getUserGid();
+            SysUserAddressExample sysUserAddressExample = new SysUserAddressExample();
+            sysUserAddressExample.or().andProjectGidEqualTo(projectGid).andUserGidEqualTo(userGid);
+            List<SysUserAddress> sysUserAddresses = sysUserAddressMapper.selectByExample(sysUserAddressExample);
+            if (CollectionUtils.isEmpty(sysUserAddresses)) {
+                throw new WitshareException(EnumResponseText.AddressMust);
+            }
+        }
+        this.save(recordUserTxBean);
+    }
+
+    @Override
     public void setUserAddress(Map<String, String> requestBody) {
         if (MapUtils.isEmpty(requestBody)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
@@ -126,7 +159,6 @@ public class TransactionServiceImpl implements TransactionService {
         if (sysProjectBean == null) {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
-
         SysUserAddressExample sysUserAddressExample = new SysUserAddressExample();
         sysUserAddressExample.or().andProjectGidEqualTo(projectGid).andUserGidEqualTo(userGid);
         List<SysUserAddress> sysUserAddresses = sysUserAddressMapper.selectByExample(sysUserAddressExample);
@@ -160,6 +192,7 @@ public class TransactionServiceImpl implements TransactionService {
         }
         SysUserBean currentUser = sysUserService.getCurrentUser();
         String projectGid = recordUserTxBean.getProjectGid();
+        String channel = channelService.checkChannel(recordUserTxBean.getChannel());
         String payTx = recordUserTxBean.getPayTx();
         BigDecimal priceRate = recordUserTxBean.getPriceRate();
         BigDecimal payAmount = recordUserTxBean.getPayAmount();
@@ -205,6 +238,7 @@ public class TransactionServiceImpl implements TransactionService {
         String userGid = currentUser.getUserGid();
         recordUserTxBean.setUserGid(userGid)
                 .setUserEmail(currentUser.getEmail())
+                .setChannel(channel)
                 .setProjectToken(sysProjectBean.getProjectToken())
                 .setTime(current);
 

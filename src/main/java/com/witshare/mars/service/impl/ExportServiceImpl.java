@@ -7,21 +7,12 @@ import com.witshare.mars.constant.EnumProjectStatus;
 import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.constant.EnumUserTxStatus;
 import com.witshare.mars.exception.WitshareException;
-import com.witshare.mars.pojo.dto.ProjectDailyInfoBean;
-import com.witshare.mars.pojo.dto.ProjectDescriptionBean;
-import com.witshare.mars.pojo.dto.ProjectSummaryBean;
-import com.witshare.mars.pojo.dto.RecordUserTxBean;
+import com.witshare.mars.pojo.dto.*;
 import com.witshare.mars.pojo.vo.DistributionStatusVo;
 import com.witshare.mars.pojo.vo.SysProjectBeanVo;
-import com.witshare.mars.service.ExportService;
-import com.witshare.mars.service.ProjectDailyInfoService;
-import com.witshare.mars.service.SysProjectService;
-import com.witshare.mars.service.UserTxService;
+import com.witshare.mars.service.*;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFCellStyle;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -50,9 +41,11 @@ public class ExportServiceImpl implements ExportService {
     @Autowired
     private SysProjectService sysProjectService;
     @Autowired
-    private ProjectDailyInfoService projectDailyInfoService;
+    private ProjectStatisticService projectStatisticService;
     @Autowired
     private UserTxService userTxService;
+    @Autowired
+    private ChannelService channelService;
 
     @Override
     public void exportProjectExcel(String projectGid) {
@@ -73,6 +66,7 @@ public class ExportServiceImpl implements ExportService {
 
             HSSFSheet projectInfoSheet = book.getSheet("项目详情");
             HSSFSheet dailyInfoSheet = book.getSheet("每日统计");
+            HSSFSheet channelStatisticInfoSheet = book.getSheet("渠道统计");
             HSSFSheet txSheet = book.getSheet("交易统计");
             HSSFSheet distributeSheet = book.getSheet("打币统计");
             HSSFSheet txInfoSheet = book.getSheet("交易明细");
@@ -84,10 +78,16 @@ public class ExportServiceImpl implements ExportService {
                 LOG.error("exportProjectExcel fail projectGid:{},assembleProjectInfo .", projectGid, e);
             }
 
-            ProjectSummaryBean summary = projectDailyInfoService.getSummary(projectGid);
-            PageInfo<ProjectDailyInfoBean> dailyInfoList = projectDailyInfoService.getList(projectGid);
+            ProjectSummaryBean summary = projectStatisticService.getSummary(projectGid);
+            PageInfo<ProjectStatisticBean> dailyInfoList = projectStatisticService.getList(projectGid);
             try {
                 this.assembleStatisticInfo(dailyInfoSheet, summary, dailyInfoList, cellStyleLeft, cellStyleCenter, cellStyleRight);
+            } catch (Exception e) {
+                LOG.error("exportProjectExcel fail projectGid:{},assembleStatisticInfo .", projectGid, e);
+            }
+            PageInfo<ProjectStatisticBean> channelList = projectStatisticService.getChannelList(projectGid);
+            try {
+                this.assembleChannelStatisticInfo(channelStatisticInfoSheet, summary, channelList, cellStyleLeft, cellStyleCenter, cellStyleRight);
             } catch (Exception e) {
                 LOG.error("exportProjectExcel fail projectGid:{},assembleStatisticInfo .", projectGid, e);
             }
@@ -221,19 +221,19 @@ public class ExportServiceImpl implements ExportService {
     /**
      * 组装统计信息表
      */
-    private void assembleStatisticInfo(HSSFSheet sheet, ProjectSummaryBean projectSummaryBean, PageInfo<ProjectDailyInfoBean> dailyInfoList, HSSFCellStyle... cellStyleLeft) {
+    private void assembleStatisticInfo(HSSFSheet sheet, ProjectSummaryBean projectSummaryBean, PageInfo<ProjectStatisticBean> dailyInfoList, HSSFCellStyle... cellStyleLeft) {
         if (projectSummaryBean == null || dailyInfoList == null) {
             return;
         }
-        List<ProjectDailyInfoBean> list = dailyInfoList.getList();
-        ProjectDailyInfoBean projectDailyInfoBean = ProjectDailyInfoBean.newInstance();
-        BeanUtils.copyProperties(projectSummaryBean, projectDailyInfoBean);
-        list.add(0, projectDailyInfoBean);
+        List<ProjectStatisticBean> list = dailyInfoList.getList();
+        ProjectStatisticBean projectStatisticBean = ProjectStatisticBean.newInstance();
+        BeanUtils.copyProperties(projectSummaryBean, projectStatisticBean);
+        list.add(0, projectStatisticBean);
         int size = list.size();
         int column = 0;
         for (int row = 1; row < size + 1; row++) {
             sheet.createRow(row);
-            ProjectDailyInfoBean bean = list.get(row - 1);
+            ProjectStatisticBean bean = list.get(row - 1);
             Date currentDay = bean.getCurrentDay();
             BigDecimal getEthAmount = bean.getGetEthAmount();
             BigDecimal actualGetEthAmount = bean.getActualGetEthAmount();
@@ -266,6 +266,55 @@ public class ExportServiceImpl implements ExportService {
     }
 
     /**
+     * 组装统计信息表
+     */
+    private void assembleChannelStatisticInfo(HSSFSheet sheet, ProjectSummaryBean projectSummaryBean, PageInfo<ProjectStatisticBean> dailyInfoList, HSSFCellStyle... cellStyleLeft) {
+        if (projectSummaryBean == null || dailyInfoList == null) {
+            return;
+        }
+        List<ProjectStatisticBean> list = dailyInfoList.getList();
+        ProjectStatisticBean projectStatisticBean = ProjectStatisticBean.newInstance();
+        BeanUtils.copyProperties(projectSummaryBean, projectStatisticBean);
+        list.add(0, projectStatisticBean);
+        int size = list.size();
+        int column = 1;
+        for (int row = 1; row < size + 1; row++) {
+            sheet.createRow(row);
+            ProjectStatisticBean bean = list.get(row - 1);
+            BigDecimal getEthAmount = bean.getGetEthAmount();
+            BigDecimal actualGetEthAmount = bean.getActualGetEthAmount();
+            BigDecimal payTokenAmount = bean.getPayTokenAmount();
+            BigDecimal actualPayTokenAmount = bean.getActualPayTokenAmount();
+            Integer userCount = bean.getUserCount();
+            Integer actualUserCount = bean.getActualUserCount();
+            Integer txCount = bean.getTxCount();
+            Integer actualTxCount = bean.getActualTxCount();
+            String channel = bean.getChannel();
+            if (row != 1) {
+                sheet.getRow(row).createCell(0).setCellValue(channel);
+            }
+            SysChannelBean sysChannelBean = channelService.get(channel);
+            sheet.getRow(row).createCell(column++).setCellValue(row == 1 ? "汇总" : sysChannelBean == null ? "" : sysChannelBean.getName());
+            sheet.getRow(row).createCell(column++).setCellValue(getEthAmount.stripTrailingZeros().toPlainString());
+            sheet.getRow(row).createCell(column++).setCellValue(actualGetEthAmount.stripTrailingZeros().toPlainString());
+            sheet.getRow(row).createCell(column++).setCellValue(payTokenAmount.stripTrailingZeros().toPlainString());
+            sheet.getRow(row).createCell(column++).setCellValue(actualPayTokenAmount.stripTrailingZeros().toPlainString());
+            sheet.getRow(row).createCell(column++).setCellValue(userCount);
+            sheet.getRow(row).createCell(column++).setCellValue(actualUserCount);
+            sheet.getRow(row).createCell(column++).setCellValue(txCount);
+            sheet.getRow(row).createCell(column++).setCellValue(actualTxCount);
+            for (int i = 0; i < column - 2; i++) {
+                HSSFCell cell = sheet.getRow(row).getCell(i);
+                if (cell == null) {
+                    cell = sheet.getRow(row).createCell(i);
+                }
+                cell.setCellStyle(cellStyleLeft[2]);
+            }
+            column = 1;
+        }
+    }
+
+    /**
      * 组装打币信息表
      */
     private void assembleUserTxInfo(HSSFSheet sheet, PageInfo<RecordUserTxBean> txList, HSSFCellStyle... cellStyleLeft) {
@@ -276,6 +325,9 @@ public class ExportServiceImpl implements ExportService {
         int row = 1;
         for (RecordUserTxBean p : list) {
             String userEmail = p.getUserEmail();
+            String channel = p.getChannel();
+            SysChannelBean sysChannelBean = channelService.get(channel);
+            String channelName = sysChannelBean == null ? "" : sysChannelBean.getName();
             Long id = p.getId();
             String payTx = p.getPayTx();
             Timestamp createTime = p.getCreateTime();
@@ -292,6 +344,8 @@ public class ExportServiceImpl implements ExportService {
             int column = 0;
             row_.createCell(column++).setCellValue(row);
             row_.createCell(column++).setCellValue(userEmail);
+            row_.createCell(column++).setCellValue(channel);
+            row_.createCell(column++).setCellValue(channelName);
             row_.createCell(column++).setCellValue(id + 10000);
             row_.createCell(column++).setCellValue(payTx);
             row_.createCell(column++).setCellValue(createTime.toLocalDateTime().toString());
@@ -321,7 +375,7 @@ public class ExportServiceImpl implements ExportService {
             DistributionStatusVo distributionStatusVo = list.get(i);
             Integer order = distributionStatusVo.getOrder();
             EnumUserTxStatus orderStatus = EnumUserTxStatus.getByOrder(order);
-            sheet.getRow(i + 1).createCell(column).setCellValue(i+1);
+            sheet.getRow(i + 1).createCell(column).setCellValue(i + 1);
             sheet.getRow(i + 1).createCell(column + 1).setCellValue(orderStatus.getDes());
             sheet.getRow(i + 1).createCell(column + 2).setCellValue(distributionStatusVo.getCount());
         }

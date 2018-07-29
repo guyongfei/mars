@@ -40,11 +40,14 @@ public class RecordUserTxBean extends BasePageBean {
     private Timestamp distributionTime;
     private Timestamp createTime;
     private Timestamp updateTime;
+    private String channel;
+    private String channelGid;
 
 
     private LocalDate localDate;
     private String email;
     private String payEthAddress;
+    private String getTokenAddress;
     private String platformAddress;
 
     private RecordUserTxBean() {
@@ -58,6 +61,15 @@ public class RecordUserTxBean extends BasePageBean {
         this.updateTime = time;
         this.createTime = time;
         this.distributionTime = time;
+        return this;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public RecordUserTxBean setChannel(String channel) {
+        this.channel = channel;
         return this;
     }
 
@@ -320,6 +332,24 @@ public class RecordUserTxBean extends BasePageBean {
 
     public RecordUserTxBean setPlatformAddress(String platformAddress) {
         this.platformAddress = platformAddress;
+        return this;
+    }
+
+    public String getChannelGid() {
+        return channelGid;
+    }
+
+    public RecordUserTxBean setChannelGid(String channelGid) {
+        this.channelGid = channelGid;
+        return this;
+    }
+
+    public String getGetTokenAddress() {
+        return getTokenAddress;
+    }
+
+    public RecordUserTxBean setGetTokenAddress(String getTokenAddress) {
+        this.getTokenAddress = getTokenAddress;
         return this;
     }
 }

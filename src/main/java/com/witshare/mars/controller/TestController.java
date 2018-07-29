@@ -4,7 +4,8 @@ package com.witshare.mars.controller;
 import com.witshare.mars.pojo.util.ResponseBean;
 import com.witshare.mars.service.ExportService;
 import com.witshare.mars.service.PlatformAddressService;
-import com.witshare.mars.service.ProjectDailyInfoService;
+import com.witshare.mars.service.ProjectStatisticService;
+import com.witshare.mars.service.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,18 +19,21 @@ public class TestController {
 
 
     @Autowired
-    private ProjectDailyInfoService projectDailyInfoService;
+    private ProjectStatisticService projectStatisticService;
 
     @Autowired
     private PlatformAddressService platformAddressService;
+    @Autowired
+    private SysUserService sysUserService;
 
     @Autowired
     private ExportService exportService;
 
     @ResponseBody
-    @RequestMapping(value = "/sync-project-summary")
+    @RequestMapping(value = "/sync-project-user-summary")
     public ResponseBean syncProjectSummary() {
-        projectDailyInfoService.syncDailyInfo();
+        projectStatisticService.syncDailyInfo();
+        sysUserService.syncChannelRegisterCount();
         return ResponseBean.newInstanceSuccess();
     }
 

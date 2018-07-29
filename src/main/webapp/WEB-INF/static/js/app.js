@@ -170,6 +170,9 @@ $("li").on("click", "#indexPage", function () {
 $("li").on("click", "#gotoProjectPage", function () {
     $('#content').load(contextPath + '/management/page/project');
 });
+$("li").on("click", "#gotoChannelPage", function () {
+    $('#content').load(contextPath + '/management/page/channel');
+});
 $("li").on("click", "#gotoPlatformAddressPage", function () {
     $('#content').load(contextPath + '/management/page/platformAddress');
 });
@@ -182,18 +185,7 @@ $("li").on("click", "#gotoUserTxInfoPage", function () {
 $("li").on("click", "#gotoProjectTxInfoPage", function () {
     $('#content').load(contextPath + '/management/page/platform-tx-info');
 });
-$("li").on("click", "#gotoProjectType", function () {
-    $('#content').load(contextPath + '/management/page/projecttype');
-});
-$("li").on("click", "#gotoSensitive", function () {
-    $('#content').load(contextPath + '/management/page/sensitive');
-});
-$("li").on("click", "#gotoComment", function () {
-    $('#content').load(contextPath + '/management/page/comment');
-});
-$("li").on("click", "#gotoBaseConfig", function () {
-    $('#content').load(contextPath + '/management/page/baseconfig');
-});
+
 
 
 

@@ -1,8 +1,5 @@
 package com.witshare.mars.util;
 
-import com.witshare.mars.config.CurrentThreadContext;
-import com.witshare.mars.constant.EnumI18NProject;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
 import org.slf4j.Logger;
@@ -11,7 +8,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
-import javax.servlet.http.HttpServletRequest;
 import java.beans.PropertyDescriptor;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -19,7 +15,6 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -240,6 +235,25 @@ public class WitshareUtils {
             }
         }
 
+        return map;
+    }
+
+    public static Map<String, String> objectToRedisMap(Object obj) {
+        if (obj == null) {
+            return null;
+        }
+        Map<String, String> map = new HashMap<String, String>();
+
+        Field[] declaredFields = obj.getClass().getDeclaredFields();
+        for (Field field : declaredFields) {
+            field.setAccessible(true);
+            try {
+                map.put(field.getName(), String.valueOf(field.get(obj)));
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new RuntimeException();
+            }
+        }
         return map;
     }
 

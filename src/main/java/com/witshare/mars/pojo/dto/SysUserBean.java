@@ -9,6 +9,7 @@ public class SysUserBean {
     public static final String ORIGIN_PASSWORD = "originPassword";
     public static final String EMAIL = "email";
     public static final String VERIFY_CODE = "verifyCode";
+    public static final String CHANNEL = "channel";
     public static final String IMG_VERIFY_CODE = "imgVerifyCode";
     public static final String IMG_TOKEN = "imgToken";
     public static final String EMAIL_LIKE = "emailLike";
@@ -38,6 +39,7 @@ public class SysUserBean {
     private Integer projectNum;
     private Integer commentNum;
     private Integer userStatus;
+    private String channel;
     private Timestamp createTime;
     private Timestamp updateTime;
 
@@ -228,6 +230,15 @@ public class SysUserBean {
 
     public SysUserBean setUpdateTime(Timestamp updateTime) {
         this.updateTime = updateTime;
+        return this;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public SysUserBean setChannel(String channel) {
+        this.channel = channel;
         return this;
     }
 }

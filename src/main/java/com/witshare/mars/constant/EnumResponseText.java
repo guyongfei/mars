@@ -12,6 +12,7 @@ public enum EnumResponseText {
     ErrorVerifyCode(2, "验证码错误", "Error verifyCode."),
     ErrorOriginPassword(3, "原密码错误", "Error originPassword."),
     ErrorEmail(4, "邮箱不合法", "Error email."),
+    ErrorChannelRegister(4, "渠道号异常", "Error channel."),
     ErrorId(5, "id错误", "Error id."),
     ErrorProjectGId(5, "项目唯一标识错误", "Error projectGid."),
     ErrorProjectStatus(5, "项目状态错误", "Error project status."),
@@ -36,6 +37,7 @@ public enum EnumResponseText {
     HAVEFOLLOWEDBEFORE(23, "已经关注过了", "have already followed"),
     CANNOTBLOCKEDYOURSELF(24, "不能冻结自己", "can't blocked yourself"),
     CannotRepeatSetting(25, "已有值，不能重复设置", "can't repeat setting"),
+    AddressMust(25, "请先设置地址", "Please set the address first."),
     ErrorPriceRate(25, "错误的价格", "error price rate."),
     ErrorSaveS3(25, "S3保存失败", "fail upload to s3."),
     ErrorSql(25, "sql异常", "error sql."),
@@ -44,6 +46,8 @@ public enum EnumResponseText {
     NotReachMinPurchaseAmount(25, "不满足最低认购数量", "The minimum purchase amount is not reached."),
     NotReachMaxPurchaseAmount(25, "已达到最高认购数量", "The maximum purchase amount is  reached."),
     NoPlatformAddress(25, "项目平台地址已用完", "The project platform address has been used up."),
+    ErrorChannel(25, "渠道号不能使用", "Channel  cannot be used."),
+    ErrorChannelName(25, "渠道名称不能使用", "Channel name cannot be used."),
     ReachTxMax(25, "用户达到交易上线", "Reach Number of transactions max."),;
 
     private int value;

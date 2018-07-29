@@ -46,6 +46,14 @@ public class ManagementPageController {
     }
 
     /**
+     * 渠道页面
+     */
+    @RequestMapping(value = "/channel", method = RequestMethod.GET)
+    public String channelPage(Map<String, Object> model) throws Exception {
+        return "views/channel";
+    }
+
+    /**
      * 项目统计
      */
     @RequestMapping(value = "/project-statistic", method = RequestMethod.GET)

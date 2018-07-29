@@ -3,6 +3,7 @@ package com.witshare.mars.controller;
 import com.github.pagehelper.PageInfo;
 import com.witshare.mars.pojo.dto.RecordUserTxBean;
 import com.witshare.mars.pojo.util.ResponseBean;
+import com.witshare.mars.pojo.vo.IndexTxVo;
 import com.witshare.mars.pojo.vo.RecordUserTxListVo;
 import com.witshare.mars.pojo.vo.RecordUserTxVo;
 import com.witshare.mars.pojo.vo.UserTxInfoVo;
@@ -68,6 +69,27 @@ public class TransactionController {
 
         RecordUserTxVo recordUserTxVo = transactionService.select(payTxId);
         return ResponseBean.newInstanceSuccess(recordUserTxVo);
+    }
+
+
+    /**
+     * 获取首页交易信息
+     */
+    @RequestMapping(value = "/index-transaction", method = RequestMethod.GET)
+    public ResponseBean indexTx(RecordUserTxBean recordUserTxBean) throws Exception {
+
+        IndexTxVo indexTxInfo = transactionService.getIndexTxInfo(recordUserTxBean);
+        return ResponseBean.newInstanceSuccess(indexTxInfo);
+    }
+
+    /**
+     * 提交首页交易信息
+     */
+    @RequestMapping(value = "/index-transaction", method = RequestMethod.POST)
+    public ResponseBean saveIndexTx(@RequestBody RecordUserTxBean recordUserTxBean) throws Exception {
+
+        transactionService.saveIndexTx(recordUserTxBean);
+        return ResponseBean.newInstanceSuccess();
     }
 
 

@@ -25,25 +25,36 @@
             </div>
         </div>
 
-        <div class="modal fade" id="statisticModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal fade" id="dailyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
             <div class="modal-dialog" role="document" style="width:80%;height:auto;">
                 <div class="modal-content" style="padding: 30px;">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                                 aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="myStatisticModal">统计</h4>
+                        <h4 class="modal-title" id="myDailyModal">每日统计</h4>
                         <label style="display: none" id="statisticProjectGid"></label>
-
                     </div>
                     <div class="modal-body">
-                        <label id="statisticProjectToken"></label>
-                        <table id="statistic_table"></table>
+                        <table id="dailyTable"></table>
                     </div>
                 </div>
             </div>
         </div>
 
-
+        <div class="modal fade" id="channelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document" style="width:80%;height:auto;">
+                <div class="modal-content" style="padding: 30px;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myChannelModal">渠道统计</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table id="channelTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <script th:src="@{/js/custom/project-statistic.js}"></script>

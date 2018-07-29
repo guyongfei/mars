@@ -123,6 +123,7 @@ public class LogAspect implements ThrowsAdvice {
         String body = (String) requestBody;
         try {
             Map<String, Object> map = JsonUtils.jsonToPojo((String) requestBody, Map.class);
+
             HashMap<String, Object> newMap = new HashMap<>();
             Set<Map.Entry<String, Object>> entries = map.entrySet();
             Iterator<Map.Entry<String, Object>> iterator = entries.iterator();
@@ -146,7 +147,6 @@ public class LogAspect implements ThrowsAdvice {
             }
             requestMap.put("requestBody", newMap);
         } catch (Exception e) {
-            e.printStackTrace();
             requestMap.put("requestBody", JSONObject.stringToValue((String) requestBody));
         }
 

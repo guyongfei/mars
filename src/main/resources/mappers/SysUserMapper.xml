@@ -10,6 +10,7 @@
     <result column="user_password" property="userPassword" jdbcType="CHAR" />
     <result column="salt" property="salt" jdbcType="CHAR" />
     <result column="project_num" property="projectNum" jdbcType="INTEGER" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
     <result column="user_status" property="userStatus" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, user_gid, email, nickname, head_img_url, user_password, salt, project_num, user_status, 
-    create_time, update_time
+    id, user_gid, email, nickname, head_img_url, user_password, salt, project_num, channel, 
+    user_status, create_time, update_time
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.witshare.mars.pojo.domain.SysUserExample" >
     select
@@ -110,12 +111,12 @@
   <insert id="insert" parameterType="com.witshare.mars.pojo.domain.SysUser" useGeneratedKeys="true" keyProperty="id" >
     insert into sys_user (user_gid, email, nickname, 
       head_img_url, user_password, salt, 
-      project_num, user_status, create_time, 
-      update_time)
+      project_num, channel, user_status, 
+      create_time, update_time)
     values (#{userGid,jdbcType=CHAR}, #{email,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, 
       #{headImgUrl,jdbcType=VARCHAR}, #{userPassword,jdbcType=CHAR}, #{salt,jdbcType=CHAR}, 
-      #{projectNum,jdbcType=INTEGER}, #{userStatus,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{projectNum,jdbcType=INTEGER}, #{channel,jdbcType=VARCHAR}, #{userStatus,jdbcType=TINYINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.witshare.mars.pojo.domain.SysUser" useGeneratedKeys="true" keyProperty="id" >
     insert into sys_user
@@ -140,6 +141,9 @@
       </if>
       <if test="projectNum != null" >
         project_num,
+      </if>
+      <if test="channel != null" >
+        channel,
       </if>
       <if test="userStatus != null" >
         user_status,
@@ -172,6 +176,9 @@
       </if>
       <if test="projectNum != null" >
         #{projectNum,jdbcType=INTEGER},
+      </if>
+      <if test="channel != null" >
+        #{channel,jdbcType=VARCHAR},
       </if>
       <if test="userStatus != null" >
         #{userStatus,jdbcType=TINYINT},
@@ -217,6 +224,9 @@
       <if test="record.projectNum != null" >
         project_num = #{record.projectNum,jdbcType=INTEGER},
       </if>
+      <if test="record.channel != null" >
+        channel = #{record.channel,jdbcType=VARCHAR},
+      </if>
       <if test="record.userStatus != null" >
         user_status = #{record.userStatus,jdbcType=TINYINT},
       </if>
@@ -241,6 +251,7 @@
       user_password = #{record.userPassword,jdbcType=CHAR},
       salt = #{record.salt,jdbcType=CHAR},
       project_num = #{record.projectNum,jdbcType=INTEGER},
+      channel = #{record.channel,jdbcType=VARCHAR},
       user_status = #{record.userStatus,jdbcType=TINYINT},
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP}
@@ -272,6 +283,9 @@
       <if test="projectNum != null" >
         project_num = #{projectNum,jdbcType=INTEGER},
       </if>
+      <if test="channel != null" >
+        channel = #{channel,jdbcType=VARCHAR},
+      </if>
       <if test="userStatus != null" >
         user_status = #{userStatus,jdbcType=TINYINT},
       </if>
@@ -293,6 +307,7 @@
       user_password = #{userPassword,jdbcType=CHAR},
       salt = #{salt,jdbcType=CHAR},
       project_num = #{projectNum,jdbcType=INTEGER},
+      channel = #{channel,jdbcType=VARCHAR},
       user_status = #{userStatus,jdbcType=TINYINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP}

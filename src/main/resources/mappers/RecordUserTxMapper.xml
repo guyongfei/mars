@@ -7,6 +7,7 @@
     <result column="user_email" property="userEmail" jdbcType="VARCHAR" />
     <result column="project_gid" property="projectGid" jdbcType="CHAR" />
     <result column="project_token" property="projectToken" jdbcType="VARCHAR" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
     <result column="pay_coin_type" property="payCoinType" jdbcType="TINYINT" />
     <result column="pay_tx" property="payTx" jdbcType="VARCHAR" />
     <result column="pay_amount" property="payAmount" jdbcType="DECIMAL" />
@@ -87,8 +88,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, user_gid, user_email, project_gid, project_token, pay_coin_type, pay_tx, pay_amount, 
-    price_rate, hope_get_amount, should_get_amount, actual_pay_amount, actual_get_amount, 
+    id, user_gid, user_email, project_gid, project_token, channel, pay_coin_type, pay_tx, 
+    pay_amount, price_rate, hope_get_amount, should_get_amount, actual_pay_amount, actual_get_amount, 
     actual_sending_address, actual_receiving_address, actual_tx_time, tx_verification_time, 
     user_tx_status, platform_tx, eth_fee, platform_tx_status, distribution_time, create_time, 
     update_time, distribution_batch_id
@@ -126,23 +127,25 @@
   </delete>
   <insert id="insert" parameterType="com.witshare.mars.pojo.domain.RecordUserTx" useGeneratedKeys="true" keyProperty="id" >
     insert into record_user_tx (user_gid, user_email, project_gid, 
-      project_token, pay_coin_type, pay_tx, 
-      pay_amount, price_rate, hope_get_amount, 
-      should_get_amount, actual_pay_amount, actual_get_amount, 
-      actual_sending_address, actual_receiving_address, 
-      actual_tx_time, tx_verification_time, user_tx_status, 
-      platform_tx, eth_fee, platform_tx_status, 
-      distribution_time, create_time, update_time, 
-      distribution_batch_id)
+      project_token, channel, pay_coin_type, 
+      pay_tx, pay_amount, price_rate, 
+      hope_get_amount, should_get_amount, actual_pay_amount, 
+      actual_get_amount, actual_sending_address, 
+      actual_receiving_address, actual_tx_time, 
+      tx_verification_time, user_tx_status, platform_tx, 
+      eth_fee, platform_tx_status, distribution_time, 
+      create_time, update_time, distribution_batch_id
+      )
     values (#{userGid,jdbcType=CHAR}, #{userEmail,jdbcType=VARCHAR}, #{projectGid,jdbcType=CHAR}, 
-      #{projectToken,jdbcType=VARCHAR}, #{payCoinType,jdbcType=TINYINT}, #{payTx,jdbcType=VARCHAR}, 
-      #{payAmount,jdbcType=DECIMAL}, #{priceRate,jdbcType=DECIMAL}, #{hopeGetAmount,jdbcType=DECIMAL}, 
-      #{shouldGetAmount,jdbcType=DECIMAL}, #{actualPayAmount,jdbcType=DECIMAL}, #{actualGetAmount,jdbcType=DECIMAL}, 
-      #{actualSendingAddress,jdbcType=VARCHAR}, #{actualReceivingAddress,jdbcType=VARCHAR}, 
-      #{actualTxTime,jdbcType=TIMESTAMP}, #{txVerificationTime,jdbcType=TIMESTAMP}, #{userTxStatus,jdbcType=TINYINT}, 
-      #{platformTx,jdbcType=VARCHAR}, #{ethFee,jdbcType=DECIMAL}, #{platformTxStatus,jdbcType=TINYINT}, 
-      #{distributionTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{distributionBatchId,jdbcType=VARCHAR})
+      #{projectToken,jdbcType=VARCHAR}, #{channel,jdbcType=VARCHAR}, #{payCoinType,jdbcType=TINYINT}, 
+      #{payTx,jdbcType=VARCHAR}, #{payAmount,jdbcType=DECIMAL}, #{priceRate,jdbcType=DECIMAL}, 
+      #{hopeGetAmount,jdbcType=DECIMAL}, #{shouldGetAmount,jdbcType=DECIMAL}, #{actualPayAmount,jdbcType=DECIMAL}, 
+      #{actualGetAmount,jdbcType=DECIMAL}, #{actualSendingAddress,jdbcType=VARCHAR}, 
+      #{actualReceivingAddress,jdbcType=VARCHAR}, #{actualTxTime,jdbcType=TIMESTAMP}, 
+      #{txVerificationTime,jdbcType=TIMESTAMP}, #{userTxStatus,jdbcType=TINYINT}, #{platformTx,jdbcType=VARCHAR}, 
+      #{ethFee,jdbcType=DECIMAL}, #{platformTxStatus,jdbcType=TINYINT}, #{distributionTime,jdbcType=TIMESTAMP}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{distributionBatchId,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.witshare.mars.pojo.domain.RecordUserTx" useGeneratedKeys="true" keyProperty="id" >
     insert into record_user_tx
@@ -158,6 +161,9 @@
       </if>
       <if test="projectToken != null" >
         project_token,
+      </if>
+      <if test="channel != null" >
+        channel,
       </if>
       <if test="payCoinType != null" >
         pay_coin_type,
@@ -232,6 +238,9 @@
       </if>
       <if test="projectToken != null" >
         #{projectToken,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null" >
+        #{channel,jdbcType=VARCHAR},
       </if>
       <if test="payCoinType != null" >
         #{payCoinType,jdbcType=TINYINT},
@@ -319,6 +328,9 @@
       <if test="record.projectToken != null" >
         project_token = #{record.projectToken,jdbcType=VARCHAR},
       </if>
+      <if test="record.channel != null" >
+        channel = #{record.channel,jdbcType=VARCHAR},
+      </if>
       <if test="record.payCoinType != null" >
         pay_coin_type = #{record.payCoinType,jdbcType=TINYINT},
       </if>
@@ -391,6 +403,7 @@
       user_email = #{record.userEmail,jdbcType=VARCHAR},
       project_gid = #{record.projectGid,jdbcType=CHAR},
       project_token = #{record.projectToken,jdbcType=VARCHAR},
+      channel = #{record.channel,jdbcType=VARCHAR},
       pay_coin_type = #{record.payCoinType,jdbcType=TINYINT},
       pay_tx = #{record.payTx,jdbcType=VARCHAR},
       pay_amount = #{record.payAmount,jdbcType=DECIMAL},
@@ -429,6 +442,9 @@
       </if>
       <if test="projectToken != null" >
         project_token = #{projectToken,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null" >
+        channel = #{channel,jdbcType=VARCHAR},
       </if>
       <if test="payCoinType != null" >
         pay_coin_type = #{payCoinType,jdbcType=TINYINT},
@@ -499,6 +515,7 @@
       user_email = #{userEmail,jdbcType=VARCHAR},
       project_gid = #{projectGid,jdbcType=CHAR},
       project_token = #{projectToken,jdbcType=VARCHAR},
+      channel = #{channel,jdbcType=VARCHAR},
       pay_coin_type = #{payCoinType,jdbcType=TINYINT},
       pay_tx = #{payTx,jdbcType=VARCHAR},
       pay_amount = #{payAmount,jdbcType=DECIMAL},

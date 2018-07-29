@@ -9,11 +9,9 @@ import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.pojo.domain.SysUser;
 import com.witshare.mars.pojo.domain.SysUserExample;
+import com.witshare.mars.pojo.dto.SyncChannelRegisterCount;
 import com.witshare.mars.pojo.dto.SysUserBean;
-import com.witshare.mars.service.QingyunStorageService;
-import com.witshare.mars.service.SysProjectService;
-import com.witshare.mars.service.SysUserService;
-import com.witshare.mars.service.VerifyCodeService;
+import com.witshare.mars.service.*;
 import com.witshare.mars.util.JsonUtils;
 import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.WitshareUtils;
@@ -28,8 +26,10 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.Cookie;
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import static com.witshare.mars.constant.CacheConsts.COOKIE_USER_TOKEN;
 import static com.witshare.mars.constant.CacheConsts.SHIRO_SESSION_EXPIRE_TIME;
@@ -62,6 +62,8 @@ public class SysUserServiceImpl implements SysUserService {
     private SysUserService sysUserService;
     @Autowired
     private QingyunStorageService qingyunStorageService;
+    @Autowired
+    private ChannelService channelService;
 
     /**
      * @see SysUserService#register(Map)
@@ -79,6 +81,7 @@ public class SysUserServiceImpl implements SysUserService {
         if (StringUtils.isAnyBlank(email, password, verifyCode)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
+        String channel = channelService.checkChannel(requestBody.get(CHANNEL));
         //获取图像验证码
 //        String imgVerifyCodeDb = redisCommonDao.getAndDelete(RedisKeyUtil.getVerifyCodeImgKey(imgToken.trim()));
 //        if (!StringUtils.equals(imgVerifyCodeDb, imgVerifyCode)) {
@@ -98,6 +101,7 @@ public class SysUserServiceImpl implements SysUserService {
         sysUser.setId(userBean.getId());
         sysUser.setUserPassword(userPassword);
         sysUser.setSalt(salt);
+        sysUser.setChannel(channel);
         sysUser.setUserStatus(EnumStatus.Valid.getValue());
         sysUserMapper.updateByPrimaryKeySelective(sysUser);
 
@@ -495,6 +499,33 @@ public class SysUserServiceImpl implements SysUserService {
         String token = redisCommonDao.getHash(RedisKeyUtil.getEmailTokenKey(), email);
         redisCommonDao.delHash(RedisKeyUtil.getEmailTokenKey(), email);
         redisCommonDao.delHash(RedisKeyUtil.getTokenEmailKey(), token);
+
+    }
+
+
+    @Override
+    public void syncChannelRegisterCount() {
+
+        String redisKey = RedisKeyUtil.getChannelRegisterCountKey();
+        List<SyncChannelRegisterCount> list = staticSysUserMapper.syncChannelRegisterCount();
+        LinkedHashMap<String, String> map = new LinkedHashMap<>();
+        if (CollectionUtils.isEmpty(list)) {
+            redisCommonDao.delRedisKey(redisKey);
+            return;
+        }
+
+        list.forEach(p -> {
+            String channel = p.getChannel();
+            Integer registerCount = p.getRegisterCount();
+            map.put(channel, String.valueOf(registerCount));
+        });
+
+        Integer total = list.stream().filter(p -> p.getRegisterCount() != null)
+                .mapToInt(SyncChannelRegisterCount::getRegisterCount).sum();
+        map.put("total", String.valueOf(total));
+
+        redisCommonDao.delRedisKey(redisKey);
+        redisCommonDao.putMapAll(redisKey, map, 1, TimeUnit.HOURS);
 
     }
 }

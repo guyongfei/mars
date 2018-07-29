@@ -254,3 +254,67 @@
 |createTime|number|是|认筹时间|
 |platformTxStatus|number|否|打币校验状态|
 |distribution|number|否|打币时间|
+
+
+
+
+## 6.首页用户项目交易信息 (分页)
+
+- url：/index-transaction
+- method:get
+- request param
+  - projectGid 项目唯一标识
+  - 分页相关
+- response body
+
+  ```json
+    {
+      "message": "",
+      "success": true,
+      "data":  {
+        "txInfo":{
+            // /transactions/info 接口信息
+        },
+        "txList":{
+            // /transactions 接口信息
+         }
+       
+       }
+    }
+  ```
+## 7.首页提交交易信息
+
+- url：/index-transaction
+- method:post
+- request body
+
+  ```json
+  {
+    "projectGid":"",
+    "payEthAddress":"",
+    "getTokenAddress":"",
+    "priceRate":200.0,
+    "payAmount":2.0,
+    "payCoinType":0,
+    "payTx":"0xdc9f30b716597999eafa0cabaa0b33423845e2f13d4c30d845018d4cf7bad959",
+    "hopeGetAmount":400,
+    "channel":"xxx123"
+  }
+
+  ```
+- response body
+
+  ```json
+    {
+      "message": "",
+      "success": true
+    }
+  ```
+
+> 请求字段详解
+
+|字段|类型|是否必须|说明|
+|---|---|---|---|
+|channel|string|否|渠道号|
+|payEthAddress|string|否|支付Eth地址|
+|getTokenAddress|string|否|接受token地址|

@@ -5,7 +5,8 @@ import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.dao.redis.RedisCommonDao;
 import com.witshare.mars.exception.WitshareException;
 import com.witshare.mars.service.EmailService;
-import com.witshare.mars.service.ProjectDailyInfoService;
+import com.witshare.mars.service.ProjectStatisticService;
+import com.witshare.mars.service.SysUserService;
 import com.witshare.mars.service.TransactionService;
 import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.WitshareUtils;
@@ -27,8 +28,10 @@ import static com.witshare.mars.constant.CacheConsts.PHONE_NO_VERIFY_CODE_EXPIRE
 public class Task {
     public final static int GAS_PRICE_REDIS_LOCK = 60;
     public final static int PROJECT_DAILY_INFO_REDIS_LOCK = 60;
+    public final static int CHANNEL_REGISTER_COUNT_REDIS_LOCK = 60;
     private final static String GAS_PRICE_LOCK = "gasPrice";
     private final static String PROJECT_DAILY_INFO_LOCK = "projectDailyInfo";
+    private final static String CHANNEL_REGISTER_COUNT_LOCK = "channelRegisterCount";
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Autowired
     private EmailService emailService;
@@ -39,7 +42,9 @@ public class Task {
     @Autowired
     private TransactionService transactionService;
     @Autowired
-    private ProjectDailyInfoService projectDailyInfoService;
+    private ProjectStatisticService projectStatisticService;
+    @Autowired
+    private SysUserService sysUserService;
 
     //    @Async(TASK_EXECUTOR)
     public void sendEmailVerifyCode(String email, boolean register) {
@@ -62,7 +67,7 @@ public class Task {
     /**
      * 同步Moon价格
      */
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "1 0 */1 * * ?")
     public void syncGasPrice() {
         String lockId = distributedLocker.lock(GAS_PRICE_LOCK, GAS_PRICE_REDIS_LOCK);
         if (lockId == null) {
@@ -75,14 +80,28 @@ public class Task {
     /**
      * 同步项目统计数据
      */
-    @Scheduled(cron = "0 2/30 * * * ?")
+    @Scheduled(cron = "3 0 */1 * * ?")
     public void syncProjectDailyInfo() {
         String lockId = distributedLocker.lock(PROJECT_DAILY_INFO_LOCK, PROJECT_DAILY_INFO_REDIS_LOCK);
         if (lockId == null) {
             LOGGER.info("syncProjectDailyInfo pushTask-other_is_execute");
             return;
         }
-        projectDailyInfoService.syncDailyInfo();
+        projectStatisticService.syncDailyInfo();
+    }
+
+
+    /**
+     * 同步渠道注册统计数据
+     */
+    @Scheduled(cron = "2 0 */1 * * ?")
+    public void syncChannelRegisterCount() {
+        String lockId = distributedLocker.lock(CHANNEL_REGISTER_COUNT_LOCK, CHANNEL_REGISTER_COUNT_REDIS_LOCK);
+        if (lockId == null) {
+            LOGGER.info("syncChannelRegisterCount pushTask-other_is_execute");
+            return;
+        }
+        sysUserService.syncChannelRegisterCount();
     }
 
 }

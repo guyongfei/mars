@@ -53,6 +53,9 @@ public class CacheConsts {
     public static final String REDIS_KEY_PLATFORM_ADDRESS = REDIS_PREFIX + "db:platform-address";
     public static final String REDIS_KEY_USER_ADDRESS = REDIS_PREFIX + "db:user-address";
 
+    public static final String REDIS_KEY_CHANNEL_REGISTER_COUNT = REDIS_PREFIX + "db:channel-register-count";
+    public static final String REDIS_KEY_CHANNEL_INFO = REDIS_PREFIX + "db:channel-info";
+
     public static final String REDIS_KEY_WALLET_V3JSON = REDIS_PREFIX + "db:walletV3Json";
 
 }

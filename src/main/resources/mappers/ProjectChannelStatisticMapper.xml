@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.witshare.mars.dao.mysql.ProjectChannelStatisticMapper" >
+  <resultMap id="BaseResultMap" type="com.witshare.mars.pojo.domain.ProjectChannelStatistic" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="project_gid" property="projectGid" jdbcType="CHAR" />
+    <result column="project_token" property="projectToken" jdbcType="VARCHAR" />
+    <result column="channel_name" property="channelName" jdbcType="VARCHAR" />
+    <result column="channel" property="channel" jdbcType="VARCHAR" />
+    <result column="get_eth_amount" property="getEthAmount" jdbcType="DECIMAL" />
+    <result column="actual_get_eth_amount" property="actualGetEthAmount" jdbcType="DECIMAL" />
+    <result column="pay_token_amount" property="payTokenAmount" jdbcType="DECIMAL" />
+    <result column="actual_pay_token_amount" property="actualPayTokenAmount" jdbcType="DECIMAL" />
+    <result column="user_count" property="userCount" jdbcType="INTEGER" />
+    <result column="actual_user_count" property="actualUserCount" jdbcType="INTEGER" />
+    <result column="tx_count" property="txCount" jdbcType="INTEGER" />
+    <result column="actual_tx_count" property="actualTxCount" jdbcType="INTEGER" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, project_gid, project_token, channel_name, channel, get_eth_amount, actual_get_eth_amount, 
+    pay_token_amount, actual_pay_token_amount, user_count, actual_user_count, tx_count, 
+    actual_tx_count, create_time, update_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.witshare.mars.pojo.domain.ProjectChannelStatisticExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from project_channel_statistic
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from project_channel_statistic
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from project_channel_statistic
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.witshare.mars.pojo.domain.ProjectChannelStatisticExample" >
+    delete from project_channel_statistic
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.witshare.mars.pojo.domain.ProjectChannelStatistic" useGeneratedKeys="true" keyProperty="id" >
+    insert into project_channel_statistic (project_gid, project_token, channel_name, 
+      channel, get_eth_amount, actual_get_eth_amount, 
+      pay_token_amount, actual_pay_token_amount, user_count, 
+      actual_user_count, tx_count, actual_tx_count, 
+      create_time, update_time)
+    values (#{projectGid,jdbcType=CHAR}, #{projectToken,jdbcType=VARCHAR}, #{channelName,jdbcType=VARCHAR}, 
+      #{channel,jdbcType=VARCHAR}, #{getEthAmount,jdbcType=DECIMAL}, #{actualGetEthAmount,jdbcType=DECIMAL}, 
+      #{payTokenAmount,jdbcType=DECIMAL}, #{actualPayTokenAmount,jdbcType=DECIMAL}, #{userCount,jdbcType=INTEGER}, 
+      #{actualUserCount,jdbcType=INTEGER}, #{txCount,jdbcType=INTEGER}, #{actualTxCount,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.witshare.mars.pojo.domain.ProjectChannelStatistic" useGeneratedKeys="true" keyProperty="id" >
+    insert into project_channel_statistic
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="projectGid != null" >
+        project_gid,
+      </if>
+      <if test="projectToken != null" >
+        project_token,
+      </if>
+      <if test="channelName != null" >
+        channel_name,
+      </if>
+      <if test="channel != null" >
+        channel,
+      </if>
+      <if test="getEthAmount != null" >
+        get_eth_amount,
+      </if>
+      <if test="actualGetEthAmount != null" >
+        actual_get_eth_amount,
+      </if>
+      <if test="payTokenAmount != null" >
+        pay_token_amount,
+      </if>
+      <if test="actualPayTokenAmount != null" >
+        actual_pay_token_amount,
+      </if>
+      <if test="userCount != null" >
+        user_count,
+      </if>
+      <if test="actualUserCount != null" >
+        actual_user_count,
+      </if>
+      <if test="txCount != null" >
+        tx_count,
+      </if>
+      <if test="actualTxCount != null" >
+        actual_tx_count,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="projectGid != null" >
+        #{projectGid,jdbcType=CHAR},
+      </if>
+      <if test="projectToken != null" >
+        #{projectToken,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null" >
+        #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="getEthAmount != null" >
+        #{getEthAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="actualGetEthAmount != null" >
+        #{actualGetEthAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payTokenAmount != null" >
+        #{payTokenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPayTokenAmount != null" >
+        #{actualPayTokenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="userCount != null" >
+        #{userCount,jdbcType=INTEGER},
+      </if>
+      <if test="actualUserCount != null" >
+        #{actualUserCount,jdbcType=INTEGER},
+      </if>
+      <if test="txCount != null" >
+        #{txCount,jdbcType=INTEGER},
+      </if>
+      <if test="actualTxCount != null" >
+        #{actualTxCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.witshare.mars.pojo.domain.ProjectChannelStatisticExample" resultType="java.lang.Integer" >
+    select count(*) from project_channel_statistic
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update project_channel_statistic
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.projectGid != null" >
+        project_gid = #{record.projectGid,jdbcType=CHAR},
+      </if>
+      <if test="record.projectToken != null" >
+        project_token = #{record.projectToken,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channelName != null" >
+        channel_name = #{record.channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.channel != null" >
+        channel = #{record.channel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.getEthAmount != null" >
+        get_eth_amount = #{record.getEthAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.actualGetEthAmount != null" >
+        actual_get_eth_amount = #{record.actualGetEthAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.payTokenAmount != null" >
+        pay_token_amount = #{record.payTokenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.actualPayTokenAmount != null" >
+        actual_pay_token_amount = #{record.actualPayTokenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="record.userCount != null" >
+        user_count = #{record.userCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.actualUserCount != null" >
+        actual_user_count = #{record.actualUserCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.txCount != null" >
+        tx_count = #{record.txCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.actualTxCount != null" >
+        actual_tx_count = #{record.actualTxCount,jdbcType=INTEGER},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update project_channel_statistic
+    set id = #{record.id,jdbcType=INTEGER},
+      project_gid = #{record.projectGid,jdbcType=CHAR},
+      project_token = #{record.projectToken,jdbcType=VARCHAR},
+      channel_name = #{record.channelName,jdbcType=VARCHAR},
+      channel = #{record.channel,jdbcType=VARCHAR},
+      get_eth_amount = #{record.getEthAmount,jdbcType=DECIMAL},
+      actual_get_eth_amount = #{record.actualGetEthAmount,jdbcType=DECIMAL},
+      pay_token_amount = #{record.payTokenAmount,jdbcType=DECIMAL},
+      actual_pay_token_amount = #{record.actualPayTokenAmount,jdbcType=DECIMAL},
+      user_count = #{record.userCount,jdbcType=INTEGER},
+      actual_user_count = #{record.actualUserCount,jdbcType=INTEGER},
+      tx_count = #{record.txCount,jdbcType=INTEGER},
+      actual_tx_count = #{record.actualTxCount,jdbcType=INTEGER},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.witshare.mars.pojo.domain.ProjectChannelStatistic" >
+    update project_channel_statistic
+    <set >
+      <if test="projectGid != null" >
+        project_gid = #{projectGid,jdbcType=CHAR},
+      </if>
+      <if test="projectToken != null" >
+        project_token = #{projectToken,jdbcType=VARCHAR},
+      </if>
+      <if test="channelName != null" >
+        channel_name = #{channelName,jdbcType=VARCHAR},
+      </if>
+      <if test="channel != null" >
+        channel = #{channel,jdbcType=VARCHAR},
+      </if>
+      <if test="getEthAmount != null" >
+        get_eth_amount = #{getEthAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="actualGetEthAmount != null" >
+        actual_get_eth_amount = #{actualGetEthAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="payTokenAmount != null" >
+        pay_token_amount = #{payTokenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="actualPayTokenAmount != null" >
+        actual_pay_token_amount = #{actualPayTokenAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="userCount != null" >
+        user_count = #{userCount,jdbcType=INTEGER},
+      </if>
+      <if test="actualUserCount != null" >
+        actual_user_count = #{actualUserCount,jdbcType=INTEGER},
+      </if>
+      <if test="txCount != null" >
+        tx_count = #{txCount,jdbcType=INTEGER},
+      </if>
+      <if test="actualTxCount != null" >
+        actual_tx_count = #{actualTxCount,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.witshare.mars.pojo.domain.ProjectChannelStatistic" >
+    update project_channel_statistic
+    set project_gid = #{projectGid,jdbcType=CHAR},
+      project_token = #{projectToken,jdbcType=VARCHAR},
+      channel_name = #{channelName,jdbcType=VARCHAR},
+      channel = #{channel,jdbcType=VARCHAR},
+      get_eth_amount = #{getEthAmount,jdbcType=DECIMAL},
+      actual_get_eth_amount = #{actualGetEthAmount,jdbcType=DECIMAL},
+      pay_token_amount = #{payTokenAmount,jdbcType=DECIMAL},
+      actual_pay_token_amount = #{actualPayTokenAmount,jdbcType=DECIMAL},
+      user_count = #{userCount,jdbcType=INTEGER},
+      actual_user_count = #{actualUserCount,jdbcType=INTEGER},
+      tx_count = #{txCount,jdbcType=INTEGER},
+      actual_tx_count = #{actualTxCount,jdbcType=INTEGER},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
