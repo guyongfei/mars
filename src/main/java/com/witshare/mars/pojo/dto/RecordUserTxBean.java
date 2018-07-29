@@ -47,6 +47,7 @@ public class RecordUserTxBean extends BasePageBean {
     private LocalDate localDate;
     private String email;
     private String payEthAddress;
+    private String getTokenAddress;
     private String platformAddress;
 
     private RecordUserTxBean() {
@@ -340,6 +341,15 @@ public class RecordUserTxBean extends BasePageBean {
 
     public RecordUserTxBean setChannelGid(String channelGid) {
         this.channelGid = channelGid;
+        return this;
+    }
+
+    public String getGetTokenAddress() {
+        return getTokenAddress;
+    }
+
+    public RecordUserTxBean setGetTokenAddress(String getTokenAddress) {
+        this.getTokenAddress = getTokenAddress;
         return this;
     }
 }

@@ -86,7 +86,7 @@ public class TransactionController {
      * 提交首页交易信息
      */
     @RequestMapping(value = "/index-transaction", method = RequestMethod.POST)
-    public ResponseBean saveIndexTx(RecordUserTxBean recordUserTxBean) throws Exception {
+    public ResponseBean saveIndexTx(@RequestBody RecordUserTxBean recordUserTxBean) throws Exception {
 
         transactionService.saveIndexTx(recordUserTxBean);
         return ResponseBean.newInstanceSuccess();

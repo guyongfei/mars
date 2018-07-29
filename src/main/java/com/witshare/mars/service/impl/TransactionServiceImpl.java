@@ -121,7 +121,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Transactional(rollbackOn = Exception.class)
     public void saveIndexTx(RecordUserTxBean recordUserTxBean) {
         Map<String, String> stringMap = WitshareUtils.objectToRedisMap(recordUserTxBean);
-        this.setUserAddress(stringMap);
+        String payEthAddress = recordUserTxBean.getPayEthAddress();
+        if (StringUtils.isNotBlank(payEthAddress)) {
+            this.setUserAddress(stringMap);
+        }
         this.save(recordUserTxBean);
     }
 
