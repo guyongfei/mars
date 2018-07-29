@@ -67,7 +67,7 @@ public class Task {
     /**
      * 同步Moon价格
      */
-    @Scheduled(cron = "0 0/5 * * * ?")
+    @Scheduled(cron = "1 0 */1 * * ?")
     public void syncGasPrice() {
         String lockId = distributedLocker.lock(GAS_PRICE_LOCK, GAS_PRICE_REDIS_LOCK);
         if (lockId == null) {
@@ -80,7 +80,7 @@ public class Task {
     /**
      * 同步项目统计数据
      */
-//    @Scheduled(cron = "0 2 * * * ?")
+    @Scheduled(cron = "3 0 */1 * * ?")
     public void syncProjectDailyInfo() {
         String lockId = distributedLocker.lock(PROJECT_DAILY_INFO_LOCK, PROJECT_DAILY_INFO_REDIS_LOCK);
         if (lockId == null) {
@@ -94,7 +94,7 @@ public class Task {
     /**
      * 同步渠道注册统计数据
      */
-    @Scheduled(cron = "2 * * * * ?")
+    @Scheduled(cron = "2 0 */1 * * ?")
     public void syncChannelRegisterCount() {
         String lockId = distributedLocker.lock(CHANNEL_REGISTER_COUNT_LOCK, CHANNEL_REGISTER_COUNT_REDIS_LOCK);
         if (lockId == null) {
