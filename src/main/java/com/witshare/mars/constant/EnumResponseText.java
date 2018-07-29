@@ -37,6 +37,7 @@ public enum EnumResponseText {
     HAVEFOLLOWEDBEFORE(23, "已经关注过了", "have already followed"),
     CANNOTBLOCKEDYOURSELF(24, "不能冻结自己", "can't blocked yourself"),
     CannotRepeatSetting(25, "已有值，不能重复设置", "can't repeat setting"),
+    AddressMust(25, "请先设置地址", "Please set the address first."),
     ErrorPriceRate(25, "错误的价格", "error price rate."),
     ErrorSaveS3(25, "S3保存失败", "fail upload to s3."),
     ErrorSql(25, "sql异常", "error sql."),

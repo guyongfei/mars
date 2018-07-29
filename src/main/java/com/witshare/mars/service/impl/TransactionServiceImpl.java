@@ -122,8 +122,19 @@ public class TransactionServiceImpl implements TransactionService {
     public void saveIndexTx(RecordUserTxBean recordUserTxBean) {
         Map<String, String> stringMap = WitshareUtils.objectToRedisMap(recordUserTxBean);
         String payEthAddress = recordUserTxBean.getPayEthAddress();
+        //无则设置，有则跳过
         if (StringUtils.isNotBlank(payEthAddress)) {
             this.setUserAddress(stringMap);
+        } else {
+            String projectGid = recordUserTxBean.getProjectGid();
+            SysUserBean currentUser = sysUserService.getCurrentUser();
+            String userGid = currentUser.getUserGid();
+            SysUserAddressExample sysUserAddressExample = new SysUserAddressExample();
+            sysUserAddressExample.or().andProjectGidEqualTo(projectGid).andUserGidEqualTo(userGid);
+            List<SysUserAddress> sysUserAddresses = sysUserAddressMapper.selectByExample(sysUserAddressExample);
+            if (CollectionUtils.isEmpty(sysUserAddresses)) {
+                throw new WitshareException(EnumResponseText.AddressMust);
+            }
         }
         this.save(recordUserTxBean);
     }
