@@ -49,8 +49,8 @@ public class StartupRunnerDefault implements CommandLineRunner {
     @Override
     public void run(String... args) {
         //本地第一次加载不容易成功，所以把第一次给系统吧
-//        InputStream objects = qingObjStoreAWS3.getObjects(propertiesConfig.qingyunBucket, "test/pdfEn/TOPC_1522663766728.pdf");
-//        LOGGER.info("uploadToQingyun, objects is null {}", WitshareUtils.isObjectEmpty(objects));
+        InputStream objects = qingObjStoreAWS3.getObjects(propertiesConfig.qingyunBucket, "test/pdfEn/TOPC_1522663766728.pdf");
+        LOGGER.info("uploadToQingyun, objects is null {}", WitshareUtils.isObjectEmpty(objects));
         //加载权限信息至内存
         splitToSet(propertiesConfig.authFree, freeAuthSet);
         splitToSet(propertiesConfig.authAdminPath, adminPathSet);
