@@ -29,6 +29,7 @@ public class RecordUserTxBean extends BasePageBean {
     private Long payTxId;
     private BigDecimal payAmount;
     private BigDecimal priceRate;
+    private BigDecimal freeGiveRate;
     private BigDecimal hopeGetAmount;
     private BigDecimal shouldGetAmount;
     private BigDecimal actualPayAmount;
@@ -350,6 +351,15 @@ public class RecordUserTxBean extends BasePageBean {
 
     public RecordUserTxBean setGetTokenAddress(String getTokenAddress) {
         this.getTokenAddress = getTokenAddress;
+        return this;
+    }
+
+    public BigDecimal getFreeGiveRate() {
+        return freeGiveRate;
+    }
+
+    public RecordUserTxBean setFreeGiveRate(BigDecimal freeGiveRate) {
+        this.freeGiveRate = freeGiveRate;
         return this;
     }
 }

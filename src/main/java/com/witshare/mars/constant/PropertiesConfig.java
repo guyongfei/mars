@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+
 /**
  * 配置文件类
  */
@@ -79,6 +81,11 @@ public class PropertiesConfig extends RuntimeException implements CommandLineRun
     @Value("${moon.token_header_name}")
     public String moonTokenName;
 
+    @Value("${tx.free.give.rate}")
+    public BigDecimal freeGiveRate;
+    @Value("${tx.free.give.period}")
+    public Long freeGivePeriod;
+
 
     @Override
     public void run(String... args) {
@@ -109,9 +116,13 @@ public class PropertiesConfig extends RuntimeException implements CommandLineRun
                 ", sendGridUserName='" + sendGridUserName + '\'' +
                 ", sendGridPassword='" + sendGridPassword + '\'' +
                 ", sendGridSender='" + sendGridSender + '\'' +
+                ", projectUserTxMax=" + projectUserTxMax +
                 ", moonHost='" + moonHost + '\'' +
                 ", moonAk='" + moonAk + '\'' +
+                ", moonSk='" + moonSk + '\'' +
                 ", moonTokenName='" + moonTokenName + '\'' +
+                ", freeGiveRate=" + freeGiveRate +
+                ", freeGivePeriod=" + freeGivePeriod +
                 '}';
     }
 }

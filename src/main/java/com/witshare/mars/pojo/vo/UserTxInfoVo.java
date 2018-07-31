@@ -24,6 +24,10 @@ public class UserTxInfoVo {
 
     private BigDecimal priceRate;
 
+    private BigDecimal freeGiveRate;
+
+    private Timestamp freeGiveEnd;
+
     private String projectToken;
 
     private String platformAddress;
@@ -31,6 +35,8 @@ public class UserTxInfoVo {
     private BigDecimal minPurchaseAmount;
 
     private BigDecimal maxPurchaseAmount;
+
+    private Timestamp startTime;
 
     private Timestamp endTime;
 
@@ -166,6 +172,24 @@ public class UserTxInfoVo {
 
     public UserTxInfoVo setMaxPurchaseAmount(BigDecimal maxPurchaseAmount) {
         this.maxPurchaseAmount = maxPurchaseAmount;
+        return this;
+    }
+
+    public BigDecimal getFreeGiveRate() {
+        return freeGiveRate;
+    }
+
+    public UserTxInfoVo setFreeGiveRate(BigDecimal freeGiveRate) {
+        this.freeGiveRate = freeGiveRate;
+        return this;
+    }
+
+    public Timestamp getFreeGiveEnd() {
+        return freeGiveEnd;
+    }
+
+    public UserTxInfoVo setFreeGiveEnd(Timestamp freeGiveEnd) {
+        this.freeGiveEnd = freeGiveEnd;
         return this;
     }
 }

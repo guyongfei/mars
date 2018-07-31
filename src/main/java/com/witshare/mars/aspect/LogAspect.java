@@ -119,9 +119,15 @@ public class LogAspect implements ThrowsAdvice {
         }
         requestMap.put("requestParam", requestParam);
 
+        requestMap.put("startTime", new Date());
+
         //将请求体置入
         String body = (String) requestBody;
+        if(StringUtils.isBlank(body)){
+            return requestMap;
+        }
         try {
+
             Map<String, Object> map = JsonUtils.jsonToPojo((String) requestBody, Map.class);
 
             HashMap<String, Object> newMap = new HashMap<>();
@@ -151,7 +157,7 @@ public class LogAspect implements ThrowsAdvice {
         }
 
 
-        requestMap.put("startTime", new Date());
+
 
         return requestMap;
     }

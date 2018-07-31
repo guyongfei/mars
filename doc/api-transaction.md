@@ -49,6 +49,8 @@
         "payEthAddress":"",
         "getTokenAddress":"",
         "priceRate":5.0,
+        "freeGiveRate":0.1,
+        "freeGiveEnd":1521234561000,
         "platformAddress":"",
         "minPurchaseAmount":5.0,
         "maxPurchaseAmount":100.0,
@@ -85,6 +87,8 @@
 | gasPrice     | number |是|当前gasPrice，单位wei  |
 | gasPriceGWei | string |是| 当前gasPrice，单位gwei |
 | ethGasLimit  | number |是| ETH转账默认的gasLimit  |
+| freeGiveRate  | number |是| 受赠比率  |
+| freeGiveEnd  | date |是| 受赠结束时间戳  |
 
 
 ## 2.设置用户交易地址
@@ -318,3 +322,4 @@
 |channel|string|否|渠道号|
 |payEthAddress|string|否|支付Eth地址|
 |getTokenAddress|string|否|接受token地址|
+|hopeGetAmount|number|是|期望得到的token数量（payAmount * priceRate *（1 + freeGiveRate ））|

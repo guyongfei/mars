@@ -24,6 +24,8 @@ public class RecordUserTx {
 
     private BigDecimal priceRate;
 
+    private BigDecimal freeGiveRate;
+
     private BigDecimal hopeGetAmount;
 
     private BigDecimal shouldGetAmount;
@@ -134,6 +136,14 @@ public class RecordUserTx {
 
     public void setPriceRate(BigDecimal priceRate) {
         this.priceRate = priceRate;
+    }
+
+    public BigDecimal getFreeGiveRate() {
+        return freeGiveRate;
+    }
+
+    public void setFreeGiveRate(BigDecimal freeGiveRate) {
+        this.freeGiveRate = freeGiveRate;
     }
 
     public BigDecimal getHopeGetAmount() {
