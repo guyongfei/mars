@@ -322,4 +322,4 @@
 |channel|string|否|渠道号|
 |payEthAddress|string|否|支付Eth地址|
 |getTokenAddress|string|否|接受token地址|
-|hopeGetAmount|number|是|期望得到的token数量（payAmount * priceRate *（1 + freeGiveRate ））|
+|hopeGetAmount|number|是|期望得到的token数量（payAmount  X  priceRate  X （1 + freeGiveRate ））|
