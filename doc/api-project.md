@@ -90,6 +90,8 @@
                     "reddit":""
                 },
             "priceRate":0.00,
+            "freeGiveRate":0.1,
+            "freeGiveEnd":1521234561000,
             "minPurchaseAmount":0.00,
             "maxPurchaseAmount":0.00,
             "soldAmount":3215456,

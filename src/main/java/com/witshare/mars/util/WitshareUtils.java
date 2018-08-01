@@ -18,9 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.*;
 
 import static com.witshare.mars.constant.CacheConsts.PARAM_PASSWORD_ENCRYPTION_ALGORITHM;
@@ -55,6 +53,11 @@ public class WitshareUtils {
         ZoneId zoneId = ZoneId.systemDefault();
         ZonedDateTime zdt = localDate.atStartOfDay(zoneId);
         return Date.from(zdt.toInstant());
+    }
+
+    public static Timestamp getPeriodEndTime(Timestamp startTime, long period) {
+        LocalDateTime startLocalTime = startTime.toLocalDateTime().plusDays(period);
+        return Timestamp.valueOf(LocalDateTime.of(startLocalTime.toLocalDate(), LocalTime.MAX));
     }
 
 

@@ -766,6 +766,66 @@ public class RecordUserTxExample {
             return (Criteria) this;
         }
 
+        public Criteria andFreeGiveRateIsNull() {
+            addCriterion("free_give_rate is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreeGiveRateIsNotNull() {
+            addCriterion("free_give_rate is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreeGiveRateEqualTo(BigDecimal value) {
+            addCriterion("free_give_rate =", value, "freeGiveRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreeGiveRateNotEqualTo(BigDecimal value) {
+            addCriterion("free_give_rate <>", value, "freeGiveRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreeGiveRateGreaterThan(BigDecimal value) {
+            addCriterion("free_give_rate >", value, "freeGiveRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreeGiveRateGreaterThanOrEqualTo(BigDecimal value) {
+            addCriterion("free_give_rate >=", value, "freeGiveRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreeGiveRateLessThan(BigDecimal value) {
+            addCriterion("free_give_rate <", value, "freeGiveRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreeGiveRateLessThanOrEqualTo(BigDecimal value) {
+            addCriterion("free_give_rate <=", value, "freeGiveRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreeGiveRateIn(List<BigDecimal> values) {
+            addCriterion("free_give_rate in", values, "freeGiveRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreeGiveRateNotIn(List<BigDecimal> values) {
+            addCriterion("free_give_rate not in", values, "freeGiveRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreeGiveRateBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("free_give_rate between", value1, value2, "freeGiveRate");
+            return (Criteria) this;
+        }
+
+        public Criteria andFreeGiveRateNotBetween(BigDecimal value1, BigDecimal value2) {
+            addCriterion("free_give_rate not between", value1, value2, "freeGiveRate");
+            return (Criteria) this;
+        }
+
         public Criteria andHopeGetAmountIsNull() {
             addCriterion("hope_get_amount is null");
             return (Criteria) this;

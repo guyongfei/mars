@@ -96,6 +96,7 @@ public class TransactionServiceImpl implements TransactionService {
         String userGid = currentUser.getUserGid();
         UserTxInfoVo userTxInfoVo = UserTxInfoVo.newInstance().setUserGid(userGid);
         SysProjectBean sysProjectBean = sysProjectService.selectByProjectGid(projectGid);
+        Timestamp startTime = sysProjectBean.getStartTime();
         if (sysProjectBean == null) {
             throw new WitshareException(EnumResponseText.ErrorProjectGId);
         }
@@ -114,6 +115,11 @@ public class TransactionServiceImpl implements TransactionService {
         //交易价格
         MoonGetPriceResponseBean.Result gasPrice = this.getGasPrice();
         userTxInfoVo.setGasPrice(gasPrice);
+
+        //计算免费赠送的结束时间
+        Timestamp periodEndTime = WitshareUtils.getPeriodEndTime(startTime, propertiesConfig.freeGivePeriod);
+        userTxInfoVo.setFreeGiveRate(propertiesConfig.freeGiveRate);
+        userTxInfoVo.setFreeGiveEnd(periodEndTime);
         return userTxInfoVo;
     }
 
@@ -223,12 +229,17 @@ public class TransactionServiceImpl implements TransactionService {
         if (sysProjectBean.getMaxPurchaseAmount().compareTo(payAmount) < 0) {
             throw new WitshareException(EnumResponseText.NotReachMaxPurchaseAmount);
         }
+        Timestamp startTime = sysProjectBean.getStartTime();
+        Timestamp periodEndTime = WitshareUtils.getPeriodEndTime(startTime, propertiesConfig.freeGivePeriod);
+        boolean hasFreeGive = periodEndTime.after(new Timestamp(System.currentTimeMillis()));
+        BigDecimal requestPriceRate = payAmount.multiply(BigDecimal.ONE.add(hasFreeGive ? propertiesConfig.freeGiveRate : BigDecimal.ZERO));
         //价格判断
         BigDecimal price = sysProjectBean.getPriceRate();
-        if (price.compareTo(priceRate) != 0
-                || price.compareTo(hopeGetAmount.divide(payAmount, 10, 4)) != 0) {
+        if (price.compareTo(priceRate) != 0   //价格比是否一致
+                || price.compareTo(hopeGetAmount.divide(requestPriceRate, 10, 4)) != 0) {
             throw new WitshareException(EnumResponseText.ErrorPriceRate);
         }
+
         // 交易号判断
         RecordUserTxBean recordUserTxDb = this.selectByPayTx(payTx);
         if (recordUserTxDb != null) {
@@ -237,6 +248,7 @@ public class TransactionServiceImpl implements TransactionService {
         Timestamp current = new Timestamp(System.currentTimeMillis());
         String userGid = currentUser.getUserGid();
         recordUserTxBean.setUserGid(userGid)
+                .setFreeGiveRate(hasFreeGive ? propertiesConfig.freeGiveRate : BigDecimal.ZERO)
                 .setUserEmail(currentUser.getEmail())
                 .setChannel(channel)
                 .setProjectToken(sysProjectBean.getProjectToken())

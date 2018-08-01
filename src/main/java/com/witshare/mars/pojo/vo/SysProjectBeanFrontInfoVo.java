@@ -33,6 +33,10 @@ public class SysProjectBeanFrontInfoVo {
     private Long nextPriceInterval;
 
 
+    private BigDecimal freeGiveRate;
+    private Timestamp freeGiveEnd;
+
+
     private Map<String, String> websites = new LinkedHashMap<>();
 
     public SysProjectBeanFrontInfoVo() {
@@ -237,6 +241,24 @@ public class SysProjectBeanFrontInfoVo {
 
     public SysProjectBeanFrontInfoVo setMaxPurchaseAmount(BigDecimal maxPurchaseAmount) {
         this.maxPurchaseAmount = maxPurchaseAmount;
+        return this;
+    }
+
+    public BigDecimal getFreeGiveRate() {
+        return freeGiveRate;
+    }
+
+    public SysProjectBeanFrontInfoVo setFreeGiveRate(BigDecimal freeGiveRate) {
+        this.freeGiveRate = freeGiveRate;
+        return this;
+    }
+
+    public Timestamp getFreeGiveEnd() {
+        return freeGiveEnd;
+    }
+
+    public SysProjectBeanFrontInfoVo setFreeGiveEnd(Timestamp freeGiveEnd) {
+        this.freeGiveEnd = freeGiveEnd;
         return this;
     }
 }
