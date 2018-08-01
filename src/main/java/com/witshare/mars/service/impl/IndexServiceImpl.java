@@ -31,7 +31,7 @@ public class IndexServiceImpl implements IndexService {
             Timestamp startTime = defaultProject.getStartTime();
             Timestamp periodEndTime = WitshareUtils.getPeriodEndTime(startTime, propertiesConfig.freeGivePeriod);
             defaultProject.setFreeGiveRate(propertiesConfig.freeGiveRate);
-            defaultProject.setFreeGiveEnd(periodEndTime);
+            defaultProject.setFreeGiveEnd(periodEndTime.getTime() - System.currentTimeMillis());
         } catch (Exception e) {
             LOG.info("defaultProject is null.", e);
         }
