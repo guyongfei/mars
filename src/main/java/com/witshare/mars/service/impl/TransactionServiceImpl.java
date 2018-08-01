@@ -119,7 +119,7 @@ public class TransactionServiceImpl implements TransactionService {
         //计算免费赠送的结束时间
         Timestamp periodEndTime = WitshareUtils.getPeriodEndTime(startTime, propertiesConfig.freeGivePeriod);
         userTxInfoVo.setFreeGiveRate(propertiesConfig.freeGiveRate);
-        userTxInfoVo.setFreeGiveEnd(periodEndTime);
+        userTxInfoVo.setFreeGiveEnd(periodEndTime.getTime() - System.currentTimeMillis());
         return userTxInfoVo;
     }
 

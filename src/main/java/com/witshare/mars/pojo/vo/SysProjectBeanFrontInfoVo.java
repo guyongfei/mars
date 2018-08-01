@@ -34,7 +34,7 @@ public class SysProjectBeanFrontInfoVo {
 
 
     private BigDecimal freeGiveRate;
-    private Timestamp freeGiveEnd;
+    private Long freeGiveEnd;
 
 
     private Map<String, String> websites = new LinkedHashMap<>();
@@ -253,11 +253,11 @@ public class SysProjectBeanFrontInfoVo {
         return this;
     }
 
-    public Timestamp getFreeGiveEnd() {
+    public Long getFreeGiveEnd() {
         return freeGiveEnd;
     }
 
-    public SysProjectBeanFrontInfoVo setFreeGiveEnd(Timestamp freeGiveEnd) {
+    public SysProjectBeanFrontInfoVo setFreeGiveEnd(Long freeGiveEnd) {
         this.freeGiveEnd = freeGiveEnd;
         return this;
     }

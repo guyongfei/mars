@@ -26,7 +26,7 @@ public class UserTxInfoVo {
 
     private BigDecimal freeGiveRate;
 
-    private Timestamp freeGiveEnd;
+    private Long freeGiveEnd;
 
     private String projectToken;
 
@@ -184,12 +184,21 @@ public class UserTxInfoVo {
         return this;
     }
 
-    public Timestamp getFreeGiveEnd() {
+    public Long getFreeGiveEnd() {
         return freeGiveEnd;
     }
 
-    public UserTxInfoVo setFreeGiveEnd(Timestamp freeGiveEnd) {
+    public UserTxInfoVo setFreeGiveEnd(Long freeGiveEnd) {
         this.freeGiveEnd = freeGiveEnd;
+        return this;
+    }
+
+    public Timestamp getStartTime() {
+        return startTime;
+    }
+
+    public UserTxInfoVo setStartTime(Timestamp startTime) {
+        this.startTime = startTime;
         return this;
     }
 }
