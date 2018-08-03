@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 @Service
@@ -31,7 +32,9 @@ public class IndexServiceImpl implements IndexService {
             Timestamp startTime = defaultProject.getStartTime();
             Timestamp periodEndTime = WitshareUtils.getPeriodEndTime(startTime, propertiesConfig.freeGivePeriod);
             defaultProject.setFreeGiveRate(propertiesConfig.freeGiveRate);
-            defaultProject.setFreeGiveEnd(periodEndTime.getTime() - System.currentTimeMillis());
+            Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+            defaultProject.setFreeGiveEnd(periodEndTime.getTime() - currentTime.getTime());
+            defaultProject.setCurrentTime(currentTime);
         } catch (Exception e) {
             LOG.info("defaultProject is null.", e);
         }
