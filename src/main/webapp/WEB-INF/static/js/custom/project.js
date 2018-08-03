@@ -700,8 +700,8 @@ function getProject(row) {
                 //根据项目状态判断是否能更改
                 var projectStatus = project.projectStatus;
                 if (projectStatus > 0) {
-                    // $('#startPrice').disable();
-                    // $('#startTimePicker').disable();
+                    // $('#startPrice').attr("disabled","");
+                    $('#startTimePicker').attr("disabled","");
                 }
                 if (projectStatus > 1) {
                     // $('#softCap').disable();
@@ -712,6 +712,8 @@ function getProject(row) {
                     // $('#endTimePicker').disable();
                     // $('#minPurchaseAmount').disable();
                 }
+
+
 
                 $('#addModal').modal('show');
                 addMethod = false
