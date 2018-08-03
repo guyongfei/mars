@@ -2,10 +2,8 @@ package com.witshare.mars.service.impl;
 
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGridException;
-import com.sun.xml.internal.ws.api.message.Attachment;
 import com.witshare.mars.constant.PropertiesConfig;
 import com.witshare.mars.service.EmailService;
-import org.apache.http.entity.ContentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
