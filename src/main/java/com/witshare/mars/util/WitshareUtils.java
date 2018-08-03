@@ -2,6 +2,7 @@ package com.witshare.mars.util;
 
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.util.ByteSource;
+import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -56,10 +57,14 @@ public class WitshareUtils {
     }
 
     public static Timestamp getPeriodEndTime(Timestamp startTime, long period) {
-        LocalDateTime startLocalTime = startTime.toLocalDateTime().plusDays(period);
-        return Timestamp.valueOf(LocalDateTime.of(startLocalTime.toLocalDate(), LocalTime.MAX));
+        LocalDateTime startLocalTime = startTime.toLocalDateTime().plusMonths(period);
+        return Timestamp.valueOf(LocalDateTime.of(startLocalTime.toLocalDate(), LocalTime.MIN));
     }
 
+    public void test1() {
+        Timestamp periodEndTime = getPeriodEndTime(Timestamp.valueOf("2018-08-1 00:01:00"), 1);
+        System.out.println(periodEndTime.toString());
+    }
 
     public static Timestamp getCurrentTimeStamp() {
         return new Timestamp(System.currentTimeMillis());
