@@ -52,6 +52,11 @@ public class ExportServiceImpl implements ExportService {
         if (StringUtils.isAnyBlank(projectGid)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
+        try {
+            projectStatisticService.syncDailyInfo();
+        } catch (Exception e) {
+            LOG.error("exportProjectExcel fail projectGid:{}.", projectGid, e);
+        }
         try (HSSFWorkbook book = this.loadExcelTemplate(FILEPATH_PROJECT_INFO_TEMPLATE)) {
             if (book == null) {
                 LOG.info("exportProjectExcel fail projectGid:{},FILEPATH_PROJECT_INFO_TEMPLATE unload", projectGid);
