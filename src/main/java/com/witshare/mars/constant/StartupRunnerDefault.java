@@ -57,9 +57,9 @@ public class StartupRunnerDefault implements CommandLineRunner {
         splitToSet(propertiesConfig.authAdminUser, adminUserSet);
         LOGGER.info("authInfo, freeAuthSet:{}, adminPathSet:{}, adminUserSet:{}", GSON.toJson(freeAuthSet), GSON.toJson(adminPathSet), GSON.toJson(adminUserSet));
         //同步统计数据
-//        task.syncGasPrice();
-//        task.syncChannelRegisterCount();
-//        task.syncProjectDailyInfo();
+        task.syncGasPrice();
+        task.syncChannelRegisterCount();
+        task.syncProjectDailyInfo();
     }
 
     private void splitToSet(String string, Collection collection) {
