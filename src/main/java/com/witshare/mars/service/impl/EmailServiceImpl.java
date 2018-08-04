@@ -22,8 +22,44 @@ import static org.apache.commons.codec.CharEncoding.UTF_8;
  */
 @Service
 public class EmailServiceImpl implements EmailService {
-    private final String VERIFY_CODE = "Verification code";
-    private final String VERIFY_CODE_STR = "%s is your TOKENPIE verification code.The code expires after 15 minutes.";
+    private final String VERIFY_CODE = "Your TokenPie Security Code";
+    private final String VERIFY_CODE_STR = "<html>\n" +
+            "<head></head>\n" +
+            "<body>\n" +
+            "<img alt=\"tokenpie\" src=\"https://tokenpie.s3-ap-northeast-1.amazonaws.com/doc/logo/69b04f15a07145eca5f48f19a3436019.jpeg?_d=1533341481634\">\n" +
+            "<div>\n" +
+            "    <table>\n" +
+            "        <tr>\n" +
+            "            <td>Hello,</td>\n" +
+            "        </tr>\n" +
+            "        <tr >\n" +
+            "            <td > <p style=\"margin-left: 50px\">You have received instructions to enter an one-time authentication code. Your code is:</p></td>\n" +
+            "        </tr>\n" +
+            "        <tr>\n" +
+            "            <td align=\"center\">\n" +
+            "                <label style=\"color: white;background-color: dodgerblue;margin-left: 50px\">%s\n" +
+            "                </label>\n" +
+            "            </td>\n" +
+            "        </tr>\n" +
+            "        <tr>\n" +
+            "            <td><p style=\"margin-left: 50px\">For security reasons, this code will expire in 15 minutes.</p></td>\n" +
+            "        </tr>\n" +
+            "        <tr>\n" +
+            "            <td><p style=\"margin-left: 50px\">TokenPie Team</p></td>\n" +
+            "        </tr>\n" +
+            "        <tr style=\"height: 60px\"><td></td></tr>\n" +
+            "        <tr>\n" +
+            "            <td align=\"center\">Follow us on:<a href=\"https://0.plus/#/joinchat/HvF0VRA8EMf4P-1lhUfoJg\">Telegram\n" +
+            "                Messager</a>\n" +
+            "            </td>\n" +
+            "        </tr>\n" +
+            "        <tr>\n" +
+            "            <td align=\"center\">Sent by © TokenPie.<a href=\" https://www.tokenpie.io/\"> https://www.tokenpie.io/</a></td>\n" +
+            "        </tr>\n" +
+            "    </table>\n" +
+            "</div>\n" +
+            "</body>\n" +
+            "</html>";
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
 
     @Resource(name = "office365MailSender")
@@ -77,7 +113,7 @@ public class EmailServiceImpl implements EmailService {
                 .setFrom(propertiesConfig.sendGridSender)
                 .setFromName(propertiesConfig.mailSubjectName)
                 .setSubject(VERIFY_CODE)
-                .setText(String.format(VERIFY_CODE_STR, verifyCode));
+                .setHtml(String.format(VERIFY_CODE_STR, verifyCode));
         try {
             SendGrid.Response response = sendgrid.send(email);
             if (response.getCode() == 200) {

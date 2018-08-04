@@ -36,6 +36,8 @@ public class SysProjectBeanFrontInfoVo {
     private BigDecimal freeGiveRate;
     private Long freeGiveEnd;
 
+    private Timestamp currentTime;
+
 
     private Map<String, String> websites = new LinkedHashMap<>();
 
@@ -259,6 +261,15 @@ public class SysProjectBeanFrontInfoVo {
 
     public SysProjectBeanFrontInfoVo setFreeGiveEnd(Long freeGiveEnd) {
         this.freeGiveEnd = freeGiveEnd;
+        return this;
+    }
+
+    public Timestamp getCurrentTime() {
+        return currentTime;
+    }
+
+    public SysProjectBeanFrontInfoVo setCurrentTime(Timestamp currentTime) {
+        this.currentTime = currentTime;
         return this;
     }
 }
