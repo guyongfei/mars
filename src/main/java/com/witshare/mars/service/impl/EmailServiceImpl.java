@@ -26,7 +26,6 @@ public class EmailServiceImpl implements EmailService {
     private final String VERIFY_CODE_STR = "<html>\n" +
             "<head></head>\n" +
             "<body>\n" +
-            "<img alt=\"tokenpie\" src=\"https://tokenpie.s3-ap-northeast-1.amazonaws.com/doc/logo/69b04f15a07145eca5f48f19a3436019.jpeg?_d=1533341481634\">\n" +
             "<div>\n" +
             "    <table>\n" +
             "        <tr>\n" +
@@ -48,6 +47,11 @@ public class EmailServiceImpl implements EmailService {
             "            <td><p style=\"margin-left: 50px\">TokenPie Team</p></td>\n" +
             "        </tr>\n" +
             "        <tr style=\"height: 60px\"><td></td></tr>\n" +
+            "        <tr>\n" +
+            "            <td align=\"center\">\n" +
+            "                <img alt=\"tokenpie\" width=\"25px\" src=\"https://tokenpie.s3-ap-northeast-1.amazonaws.com/doc/logo/69b04f15a07145eca5f48f19a3436019.jpeg?_d=1533341481634\">\n" +
+            "            </td>\n" +
+            "        </tr>\n" +
             "        <tr>\n" +
             "            <td align=\"center\">Follow us on:<a href=\"https://0.plus/#/joinchat/HvF0VRA8EMf4P-1lhUfoJg\">Telegram\n" +
             "                Messager</a>\n" +
