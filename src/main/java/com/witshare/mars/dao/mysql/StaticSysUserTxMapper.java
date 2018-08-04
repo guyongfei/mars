@@ -1,5 +1,6 @@
 package com.witshare.mars.dao.mysql;
 
+import com.witshare.mars.pojo.dto.ProjectSummaryBean;
 import com.witshare.mars.pojo.dto.RecordUserTxBean;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface StaticSysUserTxMapper {
     int insert(RecordUserTxBean record);
 
     List<RecordUserTxBean> select(RecordUserTxBean record);
+
+    ProjectSummaryBean summaryToken();
 }

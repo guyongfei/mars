@@ -28,5 +28,11 @@
         where user_gid = #{userGid} AND project_gid = #{projectGid}
     </select>
 
+    <select id="summaryToken" resultType="com.witshare.mars.pojo.dto.ProjectSummaryBean">
+        SELECT SUM(`pay_amount`) getEthAmount ,SUM(`hope_get_amount`) payTokenAmount ,`project_gid`
+        FROM `record_user_tx`
+        WHERE `project_gid`= (SELECT `project_gid` FROM `sys_project` WHERE `default_project`=1  LIMIT 0,1);
+    </select>
+
 
 </mapper>

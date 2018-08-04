@@ -46,6 +46,9 @@ public final class RedisKeyUtil {
     public static String getProjectStatisticKey(String projectGid) {
         return String.format("%s:%s", REDIS_KEY_PROJECT_STATISTIC, projectGid);
     }
+    public static String getSummaryTokenKey(String projectGid) {
+        return String.format("%s:%s", REDIS_KEY_SUMMARY_TOKEN_STATISTIC, projectGid);
+    }
 
     public static String getIndexUserKey() {
         StringBuilder redisKey = new StringBuilder(REDIS_KEY_INDEX_USER);

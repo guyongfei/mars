@@ -25,4 +25,8 @@ public interface ProjectStatisticService {
     ProjectStatisticBean get(String projectGid, Date date);
 
     void syncDailyInfo();
+
+    void syncSummaryToken();
+
+    ProjectSummaryBean getSummaryToken(String projectGid);
 }
