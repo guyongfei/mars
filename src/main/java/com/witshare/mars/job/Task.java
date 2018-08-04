@@ -29,9 +29,11 @@ public class Task {
     public final static int GAS_PRICE_REDIS_LOCK = 60;
     public final static int PROJECT_DAILY_INFO_REDIS_LOCK = 60;
     public final static int CHANNEL_REGISTER_COUNT_REDIS_LOCK = 60;
+    public final static int SUMMARY_TOKEN_REDIS_LOCK = 2;
     private final static String GAS_PRICE_LOCK = "gasPrice";
     private final static String PROJECT_DAILY_INFO_LOCK = "projectDailyInfo";
     private final static String CHANNEL_REGISTER_COUNT_LOCK = "channelRegisterCount";
+    private final static String SUMMARY_TOKEN_LOCK = "summaryTokenCount";
     private final Logger LOGGER = LoggerFactory.getLogger(getClass());
     @Autowired
     private EmailService emailService;
@@ -102,6 +104,19 @@ public class Task {
             return;
         }
         sysUserService.syncChannelRegisterCount();
+    }
+
+    /**
+     * 同步渠道注册统计数据
+     */
+    @Scheduled(cron = "*/2 * * * * ?")
+    public void syncSummaryToken() {
+        String lockId = distributedLocker.lock(SUMMARY_TOKEN_LOCK, SUMMARY_TOKEN_REDIS_LOCK);
+        if (lockId == null) {
+            LOGGER.info("syncSummaryToken pushTask-other_is_execute");
+            return;
+        }
+        projectStatisticService.syncSummaryToken();
     }
 
 }

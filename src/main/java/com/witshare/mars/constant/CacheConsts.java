@@ -49,6 +49,8 @@ public class CacheConsts {
     public static final String REDIS_KEY_PROJECT = REDIS_PREFIX + "cache:project";
     public static final String REDIS_KEY_PROJECT_STATISTIC = REDIS_PREFIX + "cache:project-statistic";
 
+    public static final String REDIS_KEY_SUMMARY_TOKEN_STATISTIC = REDIS_PREFIX + "cache:summary-token";
+
     public static final String REDIS_KEY_GAS_PRICE = REDIS_PREFIX + "db:gas-price";
     public static final String REDIS_KEY_PLATFORM_ADDRESS = REDIS_PREFIX + "db:platform-address";
     public static final String REDIS_KEY_USER_ADDRESS = REDIS_PREFIX + "db:user-address";

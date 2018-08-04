@@ -3,6 +3,7 @@ package com.witshare.mars.service.impl;
 import com.alibaba.dubbo.common.utils.CollectionUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.Gson;
 import com.witshare.mars.constant.EnumResponseText;
 import com.witshare.mars.dao.mysql.*;
 import com.witshare.mars.dao.redis.RedisCommonDao;
@@ -14,6 +15,8 @@ import com.witshare.mars.pojo.dto.RecordUserTxBean;
 import com.witshare.mars.pojo.dto.SysChannelBean;
 import com.witshare.mars.service.ChannelService;
 import com.witshare.mars.service.ProjectStatisticService;
+import com.witshare.mars.service.SysProjectService;
+import com.witshare.mars.util.RedisKeyUtil;
 import com.witshare.mars.util.WitshareUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -49,6 +52,10 @@ public class ProjectStatisticServiceImpl implements ProjectStatisticService {
     private ChannelService channelService;
     @Autowired
     private RedisCommonDao redisCommonDao;
+    @Autowired
+    private StaticSysUserTxMapper staticSysUserTxMapper;
+    @Autowired
+    private SysProjectService sysProjectService;
 
     public final static SimpleDateFormat SF = new SimpleDateFormat("0000-00-00");
 
@@ -79,6 +86,24 @@ public class ProjectStatisticServiceImpl implements ProjectStatisticService {
         }
         return null;
     }
+
+    @Override
+    public void syncSummaryToken() {
+        ProjectSummaryBean projectSummaryBean = staticSysUserTxMapper.summaryToken();
+        String summaryTokenKey = RedisKeyUtil.getSummaryTokenKey(projectSummaryBean.getProjectGid());
+        redisCommonDao.setString(summaryTokenKey, new Gson().toJson(projectSummaryBean));
+    }
+
+    @Override
+    public ProjectSummaryBean getSummaryToken(String projectGid) {
+        String summaryTokenKey = RedisKeyUtil.getSummaryTokenKey(projectGid);
+        String string = redisCommonDao.getString(summaryTokenKey);
+        if (StringUtils.isBlank(string)) {
+            return staticSysUserTxMapper.summaryToken();
+        }
+        return new Gson().fromJson(string, ProjectSummaryBean.class);
+    }
+
 
     @Override
     public ProjectStatisticBean get(String projectGid, Date date) {

@@ -445,7 +445,7 @@ public class SysProjectServiceImpl implements SysProjectService {
         String projectDetailName = i18n.getProjectDetailName();
         //查找redis
         String projectStatisticKey = RedisKeyUtil.getProjectFrontKey(projectGid);
-        ProjectSummaryBean summary = projectStatisticService.getSummary(projectGid);
+        ProjectSummaryBean summary = projectStatisticService.getSummaryToken(projectGid);
         BigDecimal soldAmount = summary == null ? BigDecimal.ZERO : summary.getGetEthAmount();
         BigDecimal soldTokenAmount = summary == null ? BigDecimal.ZERO : summary.getPayTokenAmount();
 //        String projectDetail = null;
