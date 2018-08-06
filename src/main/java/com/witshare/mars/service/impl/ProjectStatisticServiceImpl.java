@@ -237,9 +237,10 @@ public class ProjectStatisticServiceImpl implements ProjectStatisticService {
 
         //将所有交易按照渠道号分组
         //2.按照渠道号分组
+
         Map<String, Map<String, List<RecordUserTxBean>>> channelCollect = recordUserTxBeans.stream()
                 .collect(Collectors.groupingBy(RecordUserTxBean::getProjectGid,
-                        Collectors.groupingBy(RecordUserTxBean::getChannel,
+                        Collectors.groupingBy(RecordUserTxBean::getLowerCaseChannel,
                                 Collectors.toList())));
         channelCollect.forEach((projectGid, v1) -> {
             v1.forEach((channel, v2) -> {

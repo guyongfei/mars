@@ -69,6 +69,10 @@ public class RecordUserTxBean extends BasePageBean {
         return channel;
     }
 
+    public String getLowerCaseChannel() {
+        return channel == null ? null : channel.toLowerCase();
+    }
+
     public RecordUserTxBean setChannel(String channel) {
         this.channel = channel;
         return this;
