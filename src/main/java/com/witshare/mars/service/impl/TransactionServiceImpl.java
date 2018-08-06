@@ -34,9 +34,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.LinkedList;
@@ -124,8 +124,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    @Transactional(rollbackOn = Exception.class)
-    public void saveIndexTx(RecordUserTxBean recordUserTxBean) {
+    @Transactional
+    public void saveIndexTx(RecordUserTxBean recordUserTxBean) throws Exception{
         Map<String, String> stringMap = WitshareUtils.objectToRedisMap(recordUserTxBean);
         String payEthAddress = recordUserTxBean.getPayEthAddress();
         //无则设置，有则跳过
@@ -146,7 +146,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public void setUserAddress(Map<String, String> requestBody) {
+    public void setUserAddress(Map<String, String> requestBody) throws Exception {
         if (MapUtils.isEmpty(requestBody)) {
             throw new WitshareException(EnumResponseText.ErrorRequest);
         }
@@ -191,7 +191,7 @@ public class TransactionServiceImpl implements TransactionService {
      * 保存交易
      */
     @Override
-    public void save(RecordUserTxBean recordUserTxBean) {
+    public void save(RecordUserTxBean recordUserTxBean) throws Exception {
 
         if (recordUserTxBean == null) {
             throw new WitshareException(EnumResponseText.ErrorRequest);

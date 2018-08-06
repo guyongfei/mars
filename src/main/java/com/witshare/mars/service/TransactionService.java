@@ -15,11 +15,11 @@ public interface TransactionService {
 
     IndexTxVo getIndexTxInfo(RecordUserTxBean recordUserTxBean);
 
-    void setUserAddress(Map<String, String> requestBody);
+    void setUserAddress(Map<String, String> requestBody) throws Exception;
 
-    void save(RecordUserTxBean requestBody);
+    void save(RecordUserTxBean requestBody) throws Exception;
 
-    void saveIndexTx(RecordUserTxBean requestBody);
+    void saveIndexTx(RecordUserTxBean requestBody) throws Exception;
 
     RecordUserTxBean selectByPayTx(String payTx);
 

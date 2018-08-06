@@ -67,8 +67,9 @@
     </bean>
     <!-- transaction manager -->
     <bean id="shpTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="primaryDatasource"/>
+        <property name="dataSource" ref="dynamicDataSource"/>
     </bean>
     <!-- enable annotation driven of transaction manager -->
     <tx:annotation-driven transaction-manager="shpTransactionManager"/>
+
 </beans>
