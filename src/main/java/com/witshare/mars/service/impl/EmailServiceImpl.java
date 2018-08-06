@@ -54,7 +54,7 @@ public class EmailServiceImpl implements EmailService {
             "        </tr>\n" +
             "        <tr>\n" +
             "            <td align=\"center\">Follow us on:<a href=\"https://t.me/joinchat/H28ZCVFCu6gnWuFp2wXnYg\">Telegram\n" +
-            "                Messager</a>\n" +
+            "                Messenger</a>\n" +
             "            </td>\n" +
             "        </tr>\n" +
             "        <tr>\n" +
